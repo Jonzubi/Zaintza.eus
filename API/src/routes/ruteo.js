@@ -1,16 +1,16 @@
-
 'use strict';
 module.exports = function(app) {
-  var controlador = require('../controladores/controlador');
-
-    app.route("/Inicio/")
-        .get(controlador.inicio);
-    
+    var controlador = require('../controllers/controlador');
 
     //TODO Hacer el ruteo de consumo de datos
-    //app.route("/getAll/:tabla/")
-    //    .get(controlador.getAll);
-    //
+    //app.route("/Inicio/")
+    //    .get(controlador.inicio);
+    app.route("/")
+        .get(controlador.inicio)
+
+    app.route("/getAll/:tabla/")
+        .get(controlador.getAll);
+    
     //app.route("/getRow/:tabla/:id")
     //    .get(controlador.getRow);
     //
@@ -22,10 +22,10 @@ module.exports = function(app) {
     //
     //app.route("/deleteRow/:tabla/:id")
     //    .delete(controlador.deleteRow);
-//
-    //app.route("/insertRow/:tabla/")
-    //    .post(controlador.insertRow);
-    //
+
+    app.route("/insertRow/:tabla/")
+        .post(controlador.insertRow);
+    
     //app.route("/updateRow/:tabla/:id")
     //    .patch(controlador.updateRow);    
 

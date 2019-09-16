@@ -2,7 +2,7 @@ var express = require('express'),
   app = express(),
   port = process.env.PORT || 3000;
 
-var routes = require('./src/rutas/ruteo');
+var routes = require('./src/routes/ruteo');
 routes(app);
 
 app.use((req, res, next) => {
