@@ -1,8 +1,17 @@
-var mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost/myappdatabase");
-
 exports.inicio = function(req,res){
-    res.send("<h1>Inicio</h1>");
+    var cuid = require("../models/cuidador");
+
+    var vCuid = new cuid({
+        id : 1,
+        nombre : "Jon",
+        apellido : "Zubi"
+    });
+
+    vCuid.save().then((doc) => {
+        res.send("<h1>Cuidadora guardado</h1><p>{doc}</p>");
+    }).catch(err => {
+        console.log(err);
+    });
 }
 
 exports.insertRow = function(req,res){
