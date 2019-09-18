@@ -10,7 +10,8 @@ var cuidador = new mongoose.Schema({
     direcFoto : String,
     descripcion : String,
     ubicaciones : Map,
-    publicoCuidar : Map
+    publicoCuidar : Map,
+    email : String
 });
 
 var Cuidador = mongoose.model("Cuidador",cuidador,"cuidadores");
