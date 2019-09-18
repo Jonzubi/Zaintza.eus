@@ -5,8 +5,6 @@ module.exports = function(app) {
     //TODO Hacer el ruteo de consumo de datos
     //app.route("/Inicio/")
     //    .get(controlador.inicio);
-    app.route("/")
-        .get(controlador.inicio)
 
     app.route("/getAll/:tabla/")
         .get(controlador.getAll);

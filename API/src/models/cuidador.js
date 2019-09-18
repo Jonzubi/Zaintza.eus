@@ -11,7 +11,10 @@ var cuidador = new mongoose.Schema({
     descripcion : String,
     ubicaciones : Map,
     publicoCuidar : Map,
-    email : String
+    email : String,
+    telefono : String,
+    isPublic : Boolean,
+    precioPorPublico : Map
 });
 
 var Cuidador = mongoose.model("Cuidador",cuidador,"cuidadores");

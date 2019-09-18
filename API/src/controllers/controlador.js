@@ -1,6 +1,3 @@
-exports.inicio = function(req,res){
-}
-
 exports.insertRow = function(req,res){
     console.log(req);
     var tabla = req.params.tabla;
@@ -8,7 +5,10 @@ exports.insertRow = function(req,res){
 
     //TODO recorrer req.body para cargar dinamicamente lo que se va a insertar
     //De esta forma se va a hacer cualquier insert en una funcion.
-    modeloConfiged;
+    modeloConfiged = new modelo(req.body);
+    modelo.save().then((doc) => {
+        res.send("Guardado <br/><p>" + doc + "</p>");
+    });
 
     //TODO guardar la instancia del modelo configurado con los datos que han venido
 
