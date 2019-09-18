@@ -1,3 +1,4 @@
 var mongoose = require("mongoose");
+mongoose.connect('mongodb://localhost:27017/zainduz', {useNewUrlParser: true});
 
-module.exports = mongoose.createConnection("mongodb+srv://admin:<admin>@jonzubicloud-7eg52.azure.mongodb.net/test?retryWrites=true&w=majority", {useNewUrlParser: true});
+module.exports = mongoose;

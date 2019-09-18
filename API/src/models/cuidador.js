@@ -1,5 +1,4 @@
-const conexion = require("../public/bdConnection");
-const mongoose = require("mongoose");
+const mongoose = require("../public/bdConnection");
 
 var cuidador = new mongoose.Schema({
     idCuidador : Number,
@@ -14,6 +13,6 @@ var cuidador = new mongoose.Schema({
     publicoCuidar : Map
 });
 
-var Cuidador = conexion.model("Cuidador",cuidador);
+var Cuidador = mongoose.model("Cuidador",cuidador,"cuidadores");
 
 module.exports = Cuidador;
