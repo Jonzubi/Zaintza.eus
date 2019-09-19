@@ -9,12 +9,12 @@ exports.insertRow = function(req,res){
     //De esta forma se va a hacer cualquier insert en una funcion.
     var modeloConfiged = new modelo(req.body);
     console.log(modeloConfiged);
+    console.log(req.body);   
+
+    //TODO guardar la instancia del modelo configurado con los datos que han venido
     modeloConfiged.save().then((doc) => {
         res.send("Guardado <br/><p>" + doc + "</p>");
     });
-
-    //TODO guardar la instancia del modelo configurado con los datos que han venido
-
 }
 
 exports.getAll = function(req,res){
