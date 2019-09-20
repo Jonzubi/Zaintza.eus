@@ -3,8 +3,9 @@ module.exports = function(app) {
     var controlador = require('../controllers/controlador');
 
     //TODO Hacer el ruteo de consumo de datos
-    //app.route("/Inicio/")
-    //    .get(controlador.inicio);
+    //Inicio es una prueba para comprobar la respuesta
+    app.route("/Inicio/")
+        .get(controlador.inicio);
 
     app.route("/getAll/:tabla/")
         .get(controlador.getAll);

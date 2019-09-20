@@ -14,7 +14,7 @@ class App extends React.Component {
       idCuidador: 1,
       nombre: "Iraitz"
     }; 
-
+    
     axios.post("http://" + ipMaquina + ":3001/insertRow/cuidador" , json)
       .then(res => {
         this.setState(

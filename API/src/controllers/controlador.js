@@ -10,7 +10,7 @@ exports.insertRow = function(req,res){
     var modeloConfiged = new modelo(req.body);
     console.log(modeloConfiged);
     console.log(req.body);   
-
+    console.log("insertando dato");
     //TODO guardar la instancia del modelo configurado con los datos que han venido
     modeloConfiged.save().then((doc) => {
         res.send("Guardado <br/><p>" + doc + "</p>");
@@ -28,4 +28,10 @@ exports.getAll = function(req,res){
     }).catch((err) => {
         res.send(err);
     });
+}
+
+//Funcion para ver si el server esta en linea
+exports.inicio = function(req,res){
+    console.log("Solicitud recibida");
+    res.send("<h1>Solicitud recibida</h1>");
 }
