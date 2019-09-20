@@ -1,6 +1,6 @@
 var express = require('express'),
   app = express(),
-  port = process.env.PORT || 3001;
+  port = 3001;
 
 var routes = require('./src/routes/ruteo');
 routes(app);

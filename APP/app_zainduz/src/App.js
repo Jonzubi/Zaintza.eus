@@ -1,29 +1,35 @@
-import React from 'react';
-import "bootstrap/dist/css/bootstrap.min.css";
-const ipMaquina = require("./ipMaquina");
+import React from "react";
+import axios from "axios";
+const ipMaquina = require("./util/ipMaquina");
 
-function App() {
-  var json = {
-    idCuidador : 1,
-    nombre : "Iraitz"
+class App extends React.Component {
+  
+  state = {
+    respuesta : [],
+    hecho : false
+  }
+
+  componentDidMount(){
+    const json = {
+      idCuidador: 1,
+      nombre: "Iraitz"
+    }; 
+
+    axios.post("http://" + ipMaquina + ":3001/insertRow/cuidador" , json)
+      .then(res => {
+        this.setState(
+          { 
+            respuesta : res.data , hecho : true
+          }
+        )
+      });
+  }
+
+  render() {    
+    return (
+      <h1>{this.state.hecho}</h1>
+    );
   };
-  var res;
-
-  var xhr = new XMLHttpRequest();
-
-  $.ajax({
-    type: "get",
-    url: "http://"+ipMaquina + ":3001/insertRow/cuidador",
-    data: JSON.stringify(json),
-    dataType: "json",
-    success: function (response) {
-      res=response;
-    }
-  });
-
-  return (
-    res
-  );
 }
 
 export default App;

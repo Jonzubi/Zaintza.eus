@@ -14,6 +14,8 @@ exports.insertRow = function(req,res){
     //TODO guardar la instancia del modelo configurado con los datos que han venido
     modeloConfiged.save().then((doc) => {
         res.send("Guardado <br/><p>" + doc + "</p>");
+    }).catch(err => {
+        res.send(err);
     });
 }
 
