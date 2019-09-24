@@ -8,18 +8,16 @@ exports.insertRow = function(req,res){
 
     //TODO recorrer req.body para cargar dinamicamente lo que se va a insertar
     //De esta forma se va a hacer cualquier insert en una funcion.
-    //var modeloConfiged = new modelo(req.body);
-    //console.log(modeloConfiged);
-    //console.log(req.body);   
-    //console.log("insertando dato");
-    ////TODO guardar la instancia del modelo configurado con los datos que han venido
-    //modeloConfiged.save().then((doc) => {
-    //    res.send("Guardado <br/><p>" + doc + "</p>");
-    //}).catch(err => {
-    //    res.send(err);
-    //});
-
-    res.send("InsertRow");
+    var modeloConfiged = new modelo(req.body);
+    console.log(modeloConfiged);
+    console.log(req.body);   
+    console.log("insertando dato");
+    //TODO guardar la instancia del modelo configurado con los datos que han venido
+    modeloConfiged.save().then((doc) => {
+        res.send("Guardado :" + doc);
+    }).catch(err => {
+        res.send(err);
+    });
 }
 
 exports.getAll = function(req,res){

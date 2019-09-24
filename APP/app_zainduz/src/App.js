@@ -1,36 +1,42 @@
 import React from "react";
 import axios from "axios";
 const ipMaquina = require("./util/ipMaquina");
+const cabecera = require("./util/headerAxios");
 
 class App extends React.Component {
   state = {
-    respuesta: [],
+    respuesta: "No especificado",
     hecho: false
   };
 
   componentDidMount() {
-    const json = {
-      idCuidador: 1,
-      nombre: "Iraitz"
-    };
-
     console.log(ipMaquina);
 
-    axios
-      .get("http://" + ipMaquina + ":3001/Inicio", { headers: {'Content-Type': 'application/json','Access-Control-Allow-Origin': '*', } })
-      .then(res => {
+    axios({
+      method: "POST",
+      url: 'http://' + ipMaquina + ':3001/insertRow/cuidador',
+      headers: cabecera,
+      data: {
+        idCuidador: 2,
+        nombre: "Iraitz"
+      }
+    }).then(res => {
         this.setState({
           respuesta: res.data,
           hecho: true
         });
-      })
-      .catch(err => {
-        this.setState({ respuesta: err, hecho: "ERROR" });
-      });
+    }).catch(err => {
+        this.setState({ respuesta: err.message, hecho: "ERROR" });
+    });
   }
 
   render() {
-    return <h1>{this.state.hecho.toString()}</h1>;
+    return (
+      <div>
+        <h1>{this.state.hecho.toString()}</h1>
+        <b>{this.state.respuesta}</b>
+      </div>
+    );
   }
 }
 
