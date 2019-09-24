@@ -12,22 +12,40 @@ class App extends React.Component {
   componentDidMount() {
     console.log(ipMaquina);
 
+    //GET Inicio axios
     axios({
-      method: "POST",
-      url: 'http://' + ipMaquina + ':3001/insertRow/cuidador',
-      headers: cabecera,
-      data: {
-        idCuidador: 2,
-        nombre: "Iraitz"
-      }
+      method: "GET",
+      url: "http://" + ipMaquina + ":3001/Inicio/",
+      headers: cabecera
     }).then(res => {
-        this.setState({
-          respuesta: res.data,
-          hecho: true
-        });
+      this.setState({
+        respuesta: res.data,
+        hecho:true
+      });
     }).catch(err => {
-        this.setState({ respuesta: err.message, hecho: "ERROR" });
+      this.setState({
+        respuesta: err.message,
+        hecho:false
+      });
     });
+
+    //POST axios
+    //axios({
+    //  method: "POST",
+    //  url: 'http://' + ipMaquina + ':3001/insertRow/cuidador',
+    //  headers: cabecera,
+    //  data: {
+    //    idCuidador: 2,
+    //    nombre: "Iraitz"
+    //  }
+    //}).then(res => {
+    //    this.setState({
+    //      respuesta: res.data,
+    //      hecho: true
+    //    });
+    //}).catch(err => {
+    //    this.setState({ respuesta: err.message, hecho: "ERROR" });
+    //});
   }
 
   render() {

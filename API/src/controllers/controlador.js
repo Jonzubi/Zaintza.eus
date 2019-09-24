@@ -34,5 +34,5 @@ exports.getAll = function(req,res){
 //Funcion para ver si el server esta en linea
 exports.inicio = function(req,res){
     console.log("Solicitud recibida");
-    res.send("<h1>Solicitud recibida</h1>");
+    res.send("Solicitud recibida");
 }
