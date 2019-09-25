@@ -1,7 +1,6 @@
 const mongoose = require("../../util/bdConnection");
 
 var cuidador = new mongoose.Schema({
-    idCuidador : Number,
     nombre : String,
     apellido1 : String,
     apellido2 : String,

@@ -8,32 +8,45 @@ exports.insertRow = function(req,res){
     if(typeof modelo == "undefined")
         res.send("MODELO IS UNDEFINED");
 
-    //TODO recorrer req.body para cargar dinamicamente lo que se va a insertar
-    //De esta forma se va a hacer cualquier insert en una funcion.
     var modeloConfiged = new modelo(req.body);
-    console.log(modeloConfiged);
-    console.log(req);   
-    console.log("insertando dato");
-    //TODO guardar la instancia del modelo configurado con los datos que han venido
+
+    res.writeHead(200,headerResponse);
     modeloConfiged.save().then((doc) => {
-        res.send("Guardado :" + doc);
+        res.write("Guardado :" + doc);
     }).catch(err => {
-        res.send(err);
+        res.write(err);
+    }).finally((err) => {
+        res.end();
     });
 }
 
 exports.getAll = function(req,res){
     var tabla = req.params.tabla;    
     var modelo = require("../models/" + tabla);
-    res.writeHead(200,headerResponse);
 
+    res.writeHead(200,headerResponse);
     modelo.find().then((doc) => {
-        res.write(doc);
+        res.write(JSON.stringify(doc));
     }).catch((err) => {
         res.write(err);
-    });
+    }).finally((fin) => {
+        res.end();
+    });    
+}
 
-    res.end();
+exports.getRow = function(req,res){
+    var tabla = req.params.tabla;
+    var id = req.params.id;
+    var modelo = require("../models/" + tabla);
+
+    res.writeHead(200,headerResponse);
+    modelo.findById(id).then((doc) => {
+        res.write(JSON.stringify(doc));
+    }).catch((err) => {
+        res.write(err);
+    }).finally((fin) => {
+        res.end();
+    });  
 }
 
 //Funcion para ver si el server esta en linea

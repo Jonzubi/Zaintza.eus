@@ -10,9 +10,9 @@ module.exports = function(app) {
     app.route("/getAll/:tabla/")
         .get(controlador.getAll);
     
-    //app.route("/getRow/:tabla/:id")
-    //    .get(controlador.getRow);
-    //
+    app.route("/getRow/:tabla/:id")
+        .get(controlador.getRow);
+
     //app.route("/getOne/:tabla/:id/:column")
     //    .get(controlador.getOne);
 //
