@@ -13,39 +13,39 @@ class App extends React.Component {
     console.log(ipMaquina);
 
     //GET Inicio axios
-    axios({
-      method: "GET",
-      url: "http://" + ipMaquina + ":3001/Inicio/",
-      headers: cabecera
-    }).then(res => {
-      this.setState({
-        respuesta: res.data,
-        hecho:true
-      });
-    }).catch(err => {
-      this.setState({
-        respuesta: err.message,
-        hecho:false
-      });
-    });
+    //axios({
+    //  method: "GET",
+    //  url: "http://" + ipMaquina + ":3001/Inicio/",
+    //  headers: cabecera
+    //}).then(res => {
+    //  this.setState({
+    //    respuesta: res.data,
+    //    hecho:true
+    //  });
+    //}).catch(err => {
+    //  this.setState({
+    //    respuesta: err.message,
+    //    hecho:false
+    //  });
+    //});
 
     //POST axios
-    //axios({
-    //  method: "POST",
-    //  url: 'http://' + ipMaquina + ':3001/insertRow/cuidador',
-    //  headers: cabecera,
-    //  data: {
-    //    idCuidador: 2,
-    //    nombre: "Iraitz"
-    //  }
-    //}).then(res => {
-    //    this.setState({
-    //      respuesta: res.data,
-    //      hecho: true
-    //    });
-    //}).catch(err => {
-    //    this.setState({ respuesta: err.message, hecho: "ERROR" });
-    //});
+    axios({
+      method: "POST",
+      url: 'http://' + ipMaquina + ':3001/insertRow/cuidador',
+      headers: cabecera,
+      data: {
+        idCuidador: 3,
+        nombre: "Telmooooo"
+      }
+    }).then(res => {
+        this.setState({
+          respuesta: res.data,
+          hecho: true
+        });
+    }).catch(err => {
+        this.setState({ respuesta: err.message, hecho: "ERROR" });
+    });
   }
 
   render() {

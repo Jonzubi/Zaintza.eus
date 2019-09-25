@@ -1,3 +1,5 @@
+const headerResponse = require("../../util/headerResponse");
+
 exports.insertRow = function(req,res){
     console.log("BEGIN INSERT ROW");
     var tabla = req.params.tabla;
@@ -10,7 +12,7 @@ exports.insertRow = function(req,res){
     //De esta forma se va a hacer cualquier insert en una funcion.
     var modeloConfiged = new modelo(req.body);
     console.log(modeloConfiged);
-    console.log(req.body);   
+    console.log(req);   
     console.log("insertando dato");
     //TODO guardar la instancia del modelo configurado con los datos que han venido
     modeloConfiged.save().then((doc) => {
@@ -23,16 +25,21 @@ exports.insertRow = function(req,res){
 exports.getAll = function(req,res){
     var tabla = req.params.tabla;    
     var modelo = require("../models/" + tabla);
+    res.writeHead(200,headerResponse);
 
     modelo.find().then((doc) => {
-        res.send(doc);
+        res.write(doc);
     }).catch((err) => {
-        res.send(err);
+        res.write(err);
     });
+
+    res.end();
 }
 
 //Funcion para ver si el server esta en linea
 exports.inicio = function(req,res){
     console.log("Solicitud recibida");
-    res.send("Solicitud recibida");
+    res.writeHead(200,headerResponse);
+    res.write("Solicitud recibida");
+    res.end();
 }

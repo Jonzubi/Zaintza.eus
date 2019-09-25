@@ -1,4 +1,4 @@
-const mongoose = require("../public/bdConnection");
+const mongoose = require("../../util/bdConnection");
 
 var provincia = new mongoose.Schema({
     idProvincia : Number,
