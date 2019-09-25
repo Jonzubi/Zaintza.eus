@@ -11,19 +11,19 @@ class App extends React.Component {
 
   componentDidMount(){
     axios({
-      method: "GET",
-      url: "http://" + ipMaquina + ":3001/Inicio/",
-      headers: cabecera
+      method: "POST",
+      url: 'http://' + ipMaquina + ':3001/insertRow/cuidador',
+      headers: cabecera,
+      data: {
+        nombre: "Antonio"
+      }
     }).then(res => {
-      this.setState({
-        respuesta: res.data,
-        hecho:true
-      });
+        this.setState({
+          respuesta: res.data,
+          hecho: true
+        });
     }).catch(err => {
-      this.setState({
-        respuesta: err.message,
-        hecho:false
-      });
+        this.setState({ respuesta: err.message, hecho: "ERROR" });
     });
   }
 
