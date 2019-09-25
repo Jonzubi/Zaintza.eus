@@ -16,9 +16,9 @@ module.exports = function(app) {
     app.route("/getOne/:tabla/:id/:columna")
         .get(controlador.getOne);
 
-    //app.route("/getCol/:tabla/:column")
-    //    .get(controlador.getCol);
-    //
+    app.route("/getCol/:tabla/:columna")
+        .get(controlador.getCol);
+    
     //app.route("/deleteRow/:tabla/:id")
     //    .delete(controlador.deleteRow);
 

@@ -65,7 +65,7 @@ exports.getOne = function(req, res) {
   var id = req.params.id;
   var columna = req.params.columna;
   var modelo = require("../models/" + tabla);
-  
+
   res.writeHead(200, headerResponse);
   modelo
     .findById(id)
@@ -79,6 +79,25 @@ exports.getOne = function(req, res) {
       res.end();
     });
 };
+
+exports.getCol = function(req, res) {
+    var tabla = req.params.tabla;
+    var columna = req.params.columna;
+    var modelo = require("../models/" + tabla);
+
+    res.writeHead(200, headerResponse);
+    modelo
+      .find({},columna)
+      .then(doc => {
+        res.write(JSON.stringify(doc));
+      })
+      .catch(err => {
+        res.write(err);
+      })
+      .finally(fin => {
+        res.end();
+      });
+  };
 
 //Funcion para ver si el server esta en linea
 exports.inicio = function(req, res) {
