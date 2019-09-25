@@ -81,23 +81,41 @@ exports.getOne = function(req, res) {
 };
 
 exports.getCol = function(req, res) {
-    var tabla = req.params.tabla;
-    var columna = req.params.columna;
-    var modelo = require("../models/" + tabla);
+  var tabla = req.params.tabla;
+  var columna = req.params.columna;
+  var modelo = require("../models/" + tabla);
 
-    res.writeHead(200, headerResponse);
-    modelo
-      .find({},columna)
-      .then(doc => {
-        res.write(JSON.stringify(doc));
-      })
-      .catch(err => {
-        res.write(err);
-      })
-      .finally(fin => {
-        res.end();
-      });
-  };
+  res.writeHead(200, headerResponse);
+  modelo
+    .find({}, columna)
+    .then(doc => {
+      res.write(JSON.stringify(doc));
+    })
+    .catch(err => {
+      res.write(err);
+    })
+    .finally(fin => {
+      res.end();
+    });
+};
+
+exports.deleteRow = function(req, res) {
+  var tabla = req.params.tabla;
+  var id = req.params.id;
+  var modelo = require("../models/" + tabla);
+
+  modelo
+    .remove({ _id: id })
+    .then(doc => {
+      res.write("DELETED");
+    })
+    .catch(err => {
+      res.write(err);
+    })
+    .finally(fin => {
+      res.end();
+    });
+};
 
 //Funcion para ver si el server esta en linea
 exports.inicio = function(req, res) {

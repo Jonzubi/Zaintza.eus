@@ -19,8 +19,8 @@ module.exports = function(app) {
     app.route("/getCol/:tabla/:columna")
         .get(controlador.getCol);
     
-    //app.route("/deleteRow/:tabla/:id")
-    //    .delete(controlador.deleteRow);
+    app.route("/deleteRow/:tabla/:id")
+        .delete(controlador.deleteRow);
 
     app.route("/insertRow/:tabla/")
         .post(controlador.insertRow);
