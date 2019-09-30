@@ -6,14 +6,17 @@ var cuidador = new mongoose.Schema({
     apellido2 : String,
     fechaNacimiento : Date,
     sexo : String,
-    direcFoto : String,
+    direcFoto : [String],
     descripcion : String,
-    ubicaciones : Map,
-    publicoCuidar : Map,
+    ubicaciones : [String],
+    publicoCuidar : [String],
     email : String,
-    telefono : String,
+    telefono : Map,
     isPublic : Boolean,
-    precioPorPublico : Map
+    precioPorPublico : Map,
+    diasDisponible : Map,
+    valoracionMedia : Number,
+    puntosExp : Number
 });
 
 var Cuidador = mongoose.model("Cuidador",cuidador,"cuidadores");
