@@ -11,11 +11,11 @@ class App extends React.Component {
 
   componentDidMount(){
     axios({
-      method: "POST",
-      url: 'http://' + ipMaquina + ':3001/insertRow/cuidador',
+      method: "PATCH",
+      url: 'http://' + ipMaquina + ':3001/updateRow/cuidador/5d935550bb3b770558c2510b',
       headers: cabecera,
       data: {
-        nombre: "Antonio"
+        nombre: "Antonius"
       }
     }).then(res => {
         this.setState({
