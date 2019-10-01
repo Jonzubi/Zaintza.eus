@@ -25,7 +25,7 @@ module.exports = function(app) {
     app.route("/insertRow/:tabla/")
         .post(controlador.insertRow);
     
-    //app.route("/updateRow/:tabla/:id")
-    //    .patch(controlador.updateRow);    
+    app.route("/updateRow/:tabla/:id")
+        .patch(controlador.updateRow);    
 
 }

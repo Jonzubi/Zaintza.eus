@@ -2,6 +2,7 @@ const headerResponse = require("../../util/headerResponse");
 
 exports.insertRow = function(req, res) {
   console.log("BEGIN INSERT ROW");
+  console.log(req.body);
   var tabla = req.params.tabla;
   var modelo = require("../models/" + tabla);
 
@@ -104,6 +105,7 @@ exports.deleteRow = function(req, res) {
   var id = req.params.id;
   var modelo = require("../models/" + tabla);
 
+  res.writeHead(200, headerResponse);
   modelo
     .remove({ _id: id })
     .then(doc => {
@@ -116,6 +118,24 @@ exports.deleteRow = function(req, res) {
       res.end();
     });
 };
+
+exports.updateRow = function(req,res){
+  var tabla = req.params.tabla;
+  var id =req.params.id;
+  var modelo = require("../models/" + tabla);
+
+  res.writeHead(200, headerResponse);
+  modelo.findByIdAndUpdate(id,req.body)
+    .then(doc => {
+      res.write("Updated");
+    })
+    .catch(err => {
+      res.write(err);
+    })
+    .finally(fin => {
+      res.end();
+    });
+}
 
 //Funcion para ver si el server esta en linea
 exports.inicio = function(req, res) {
