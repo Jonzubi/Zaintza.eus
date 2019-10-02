@@ -1,11 +1,12 @@
 import React from "react";
+import Headroom from "react-headroom";
 
 class Header extends React.Component {
   render() {
     return (
-      <div>
-        <h1>Zainduz</h1>
-      </div>
+        <Headroom>
+            <h1>Zainduz</h1>
+        </Headroom>
     );
   }
 }
