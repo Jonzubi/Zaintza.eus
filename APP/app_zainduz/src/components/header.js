@@ -1,5 +1,13 @@
-import react from "react";
+import React from "react";
 
-class Header extends react.Component {
-    
+class Header extends React.Component {
+  render() {
+    return (
+      <div>
+        
+      </div>
+    );
+  }
 }
+
+export default Header;
