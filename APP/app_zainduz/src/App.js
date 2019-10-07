@@ -6,7 +6,7 @@ class App extends React.Component {
   
   render() {
     return (
-      <div className="container-fluid">
+      <div style={{height:2000}} className="container-fluid">
         <Cabecera />       
       </div>
     );

@@ -5,15 +5,15 @@ class MenuPerfil extends React.Component {
   render() {
     return (
       <BurgerMenu right>
-        <a id="home" className="menu-item" href="/">
+        <button id="home" type="button" className="menu-item" href="#">
           Home
-        </a>
-        <a id="about" className="menu-item" href="/about">
+        </button>
+        <button id="about" type="button" className="menu-item" href="#">
           About
-        </a>
-        <a id="contact" className="menu-item" href="/contact">
+        </button>
+        <button id="contact" type="button" className="menu-item" href="">
           Contact
-        </a>
+        </button>
       </BurgerMenu>
     );
   }
