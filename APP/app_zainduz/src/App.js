@@ -4,6 +4,7 @@ import Headroom from "react-headroom";
 import Avatar from "react-avatar";
 import SlideTab from "./components/slideTab";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import "./components/styles/header.css";
 
 class App extends React.Component {
   constructor(props) {
@@ -22,10 +23,11 @@ class App extends React.Component {
   }
 
   render() {
+    
     return (
       <div id="outer-container" style={{ height: 2000 }} className="w-100">
         <BurgerMenu
-          customCrossIcon = {<FontAwesomeIcon icon="times" />}
+          customCrossIcon = {<i className={"far fa-times-circle"}></i>}
           onStateChange = {(state) => this.handleStateChange(state)}
           outerContainerId={"outer-container"}
           className="bg-dark"
@@ -70,13 +72,13 @@ class App extends React.Component {
             </button>
           </div>
         </BurgerMenu>
-        <Headroom id="headRoom" className="bg-dark text-center">
+        <Headroom id="headRoom" className="bg-dark text-center w-100">
           <h1 className="w-100 d-inline display-1 text-light">
             Zainduz
           </h1>
           <Avatar
             onClick={() => this.toggleMenu()}
-            className="float-right"
+            className="float-right mt-1 align-middle"
             size={100}
             round="50px"
             src="https://scontent-sea1-1.cdninstagram.com/vp/5eed5e235373aa8292b4ad220a3a388c/5E34F02F/t51.2885-15/e35/51132313_441179589754437_7832601837240715709_n.jpg?_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=109&ig_cache_key=MTk4NDQwMjIyODMwNTEzNzYyMA%3D%3D.2"
