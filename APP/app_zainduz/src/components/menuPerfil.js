@@ -1,30 +1,21 @@
 import React from "react";
 import {slide as BurgerMenu} from "react-burger-menu";
 import Avatar from 'react-avatar';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import imgPerfil from "../util/fotosPrueba/image.jpg";
+import "./styles/menuPerfil.css";
 
 class MenuPerfil extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      isOpened : false
-    }
-  }
-
-  //Abre o cierra el menu segun el estado actual
-  toggleMenu () {
-    this.setState(state => ({menuOpen: !state.menuOpen}))
-  }
-
   render() {
     return (
       <BurgerMenu
           customBurgerIcon={false}
           customCrossIcon={<FontAwesomeIcon icon={faTimes} />}
-          onStateChange={state => this.handleStateChange(state)}
+          onStateChange={state => this.props.myHandleStateChange(state)}
           outerContainerId={"outer-container"}
           className="bg-dark"
-          isOpen={this.state.isOpenMenuPerfil}
+          isOpen={this.props.myIsOpenMenuPerfil}
           pageWrapId={"headRoom"}
           right
         >
