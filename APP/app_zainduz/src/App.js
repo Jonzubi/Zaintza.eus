@@ -93,7 +93,7 @@ class App extends React.Component {
               <p className="card-text">
                 Hola, soy un puto pederasta y me gusta violar
               </p>
-              <a href="#" className="btn btn-success">
+              <a href="#" className="mr-0 w-100 btn btn-success">
                
                 Contactar 
                 <FontAwesomeIcon className="ml-2" icon={faPhone}/>
