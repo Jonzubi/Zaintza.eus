@@ -34,14 +34,12 @@ class MenuPerfil extends React.Component {
             <button
               type="button"
               className="w-100 btn btn-secondary"
-              href="#"
             >
               Calendario
             </button>
             <button
               type="button"
               className="w-100 btn btn-secondary"
-              href="#"
             >
               Contratos
             </button>            
@@ -49,7 +47,6 @@ class MenuPerfil extends React.Component {
           <button
               type="button"
               className="mt-5 w-100 btn btn-danger"
-              href=""
             >
               <FontAwesomeIcon className="mt-1 float-left" icon={faTimes} />
               Salir
