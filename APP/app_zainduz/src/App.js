@@ -1,7 +1,8 @@
 import React from "react";
 import MenuPerfil from "./components/menuPerfil";
 import Cabecera from "./components/header";
-import Tabla from "./components/tabla";
+import Tabla from "./components/tablaCuidadores";
+import SlideTab from "./components/slideTab";
 
 class App extends React.Component {
   constructor(props) {
@@ -24,7 +25,7 @@ class App extends React.Component {
       <div id="outer-container" style={{ height:3000 }} className="w-100">
         <MenuPerfil myIsOpenMenuPerfil={this.state.isOpenMenuPerfil} myHandleStateChange={this.handleStateChange.bind(this)} />
         <Cabecera myToogleMenu= {this.toggleMenu.bind(this)} />
-        <Tabla />
+        <SlideTab />
       </div>
     );
   }

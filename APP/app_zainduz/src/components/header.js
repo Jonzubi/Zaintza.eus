@@ -9,6 +9,7 @@ class Header extends React.Component {
       <Headroom style={{background:"#343a40"}} id="headRoom" className="text-center w-100">
           <h1 className="w-100 d-inline display-1 text-light">Zainduz</h1>
           <Avatar
+            style={{cursor:"pointer"}}
             onClick={() => this.props.myToogleMenu()}
             className="float-right mt-1 align-middle"
             size={100}

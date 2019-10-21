@@ -14,10 +14,11 @@ class MenuPerfil extends React.Component {
           customCrossIcon={<FontAwesomeIcon icon={faTimes} />}
           onStateChange={state => this.props.myHandleStateChange(state)}
           outerContainerId={"outer-container"}
-          className="bg-dark"
+          className=""
           isOpen={this.props.myIsOpenMenuPerfil}
           pageWrapId={"headRoom"}
           right
+          styles={{background:"#343a40"}}
         >
           <Avatar
             name=""
