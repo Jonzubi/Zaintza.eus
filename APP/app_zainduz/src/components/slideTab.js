@@ -31,11 +31,13 @@ class SlideTab extends React.Component {
       <div>
         <Tabs value={index} fullWidth centered onChange={this.handleChange}>
           <Tab
+            style={{ outline: "none" }}
             className="w-50"
             icon={<FontAwesomeIcon icon={faUserMd} />}
             label="Cuidadores"
           />
           <Tab
+            style={{ outline: "none" }}
             className="w-50"
             icon={<FontAwesomeIcon icon={faUserFriends} />}
             label="Clientes"

@@ -29,10 +29,9 @@ class MenuPerfil extends React.Component {
           />
           <div
             id="menu-perfil-opciones"
-            className="container-fluid mt-5 btn-group-vertical"
+            className="w-100 mt-5 btn-group-vertical"
           >
             <button
-              id="home"
               type="button"
               className="w-100 btn btn-secondary"
               href="#"
@@ -40,22 +39,21 @@ class MenuPerfil extends React.Component {
               Calendario
             </button>
             <button
-              id="about"
               type="button"
               className="w-100 btn btn-secondary"
               href="#"
             >
               Contratos
-            </button>
-            <button
-              id="contact"
+            </button>            
+          </div>
+          <button
               type="button"
-              className="w-100 btn btn-secondary"
+              className="mt-5 w-100 btn btn-danger"
               href=""
             >
+              <FontAwesomeIcon className="mt-1 float-left" icon={faTimes} />
               Salir
             </button>
-          </div>
         </BurgerMenu>
     );
   }
