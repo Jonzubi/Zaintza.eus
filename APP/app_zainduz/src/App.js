@@ -1,7 +1,6 @@
 import React from "react";
 import MenuPerfil from "./components/menuPerfil";
 import Cabecera from "./components/header";
-import Tabla from "./components/tablaCuidadores";
 import SlideTab from "./components/slideTab";
 
 class App extends React.Component {
