@@ -7,25 +7,16 @@ module.exports = function(app) {
     app.route("/Inicio/")
         .get(controlador.inicio);
 
-    app.route("/getAll/:tabla/")
-        .get(controlador.getAll);
+    app.route("/:tabla/:id?")
+        .get(controlador.get);
     
-    app.route("/getRow/:tabla/:id")
-        .get(controlador.getRow);
+    app.route("/:tabla/:id")
+        .delete(controlador.delete);
 
-    app.route("/getOne/:tabla/:id/:columna")
-        .get(controlador.getOne);
-
-    app.route("/getCol/:tabla/:columna")
-        .get(controlador.getCol);
+    app.route("/:tabla/")
+        .post(controlador.insert);
     
-    app.route("/deleteRow/:tabla/:id")
-        .delete(controlador.deleteRow);
-
-    app.route("/insertRow/:tabla/")
-        .post(controlador.insertRow);
-    
-    app.route("/updateRow/:tabla/:id")
-        .patch(controlador.updateRow);    
+    app.route("/:tabla/:id")
+        .patch(controlador.update);
 
 }

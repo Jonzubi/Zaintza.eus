@@ -1,6 +1,44 @@
 const headerResponse = require("../../util/headerResponse");
 
-exports.insertRow = function(req, res) {
+exports.get = function(req, res) {
+  var tabla = req.params.tabla;
+  var id = req.params.id;
+  //La idea es en query mandar un string columnas = "nombre apellido1 apellido2" asi se lo incrusto directo a la query
+  var strFilters = req.query.columnas || null;
+  var modelo = require("../models/" + tabla);
+
+  if (typeof id == "undefined") {
+    modelo
+      .find(strFilters)
+      .then(doc => {
+        res.writeHead(200, headerResponse);
+        res.write(JSON.stringify(doc));
+      })
+      .catch(err => {
+        res.writeHead(500, headerResponse);
+        res.write(err);
+      })
+      .finally(fin => {
+        res.end();
+      });
+  } else {
+    modelo
+      .findById(id)
+      .then(doc => {
+        res.writeHead(200, headerResponse);
+        res.write(JSON.stringify(doc));
+      })
+      .catch(err => {
+        res.writeHead(500, headerResponse);
+        res.write(err);
+      })
+      .finally(fin => {
+        res.end();
+      });
+  }
+};
+
+exports.insert = function(req, res) {
   console.log("BEGIN INSERT ROW");
   console.log(req.body);
   var tabla = req.params.tabla;
@@ -24,34 +62,16 @@ exports.insertRow = function(req, res) {
     });
 };
 
-exports.getAll = function(req, res) {
-  var tabla = req.params.tabla;
-  var modelo = require("../models/" + tabla);
-
-  res.writeHead(200, headerResponse);
-  modelo
-    .find()
-    .then(doc => {
-      res.write(JSON.stringify(doc));
-    })
-    .catch(err => {
-      res.write(err);
-    })
-    .finally(fin => {
-      res.end();
-    });
-};
-
-exports.getRow = function(req, res) {
+exports.update = function(req, res) {
   var tabla = req.params.tabla;
   var id = req.params.id;
   var modelo = require("../models/" + tabla);
 
   res.writeHead(200, headerResponse);
   modelo
-    .findById(id)
+    .findByIdAndUpdate(id, req.body)
     .then(doc => {
-      res.write(JSON.stringify(doc));
+      res.write("Updated");
     })
     .catch(err => {
       res.write(err);
@@ -61,46 +81,7 @@ exports.getRow = function(req, res) {
     });
 };
 
-exports.getOne = function(req, res) {
-  var tabla = req.params.tabla;
-  var id = req.params.id;
-  var columna = req.params.columna;
-  var modelo = require("../models/" + tabla);
-
-  res.writeHead(200, headerResponse);
-  modelo
-    .findById(id)
-    .then(doc => {
-      res.write(JSON.stringify(doc[columna]));
-    })
-    .catch(err => {
-      res.write(err);
-    })
-    .finally(fin => {
-      res.end();
-    });
-};
-
-exports.getCol = function(req, res) {
-  var tabla = req.params.tabla;
-  var columna = req.params.columna;
-  var modelo = require("../models/" + tabla);
-
-  res.writeHead(200, headerResponse);
-  modelo
-    .find({}, columna)
-    .then(doc => {
-      res.write(JSON.stringify(doc));
-    })
-    .catch(err => {
-      res.write(err);
-    })
-    .finally(fin => {
-      res.end();
-    });
-};
-
-exports.deleteRow = function(req, res) {
+exports.delete = function(req, res) {
   var tabla = req.params.tabla;
   var id = req.params.id;
   var modelo = require("../models/" + tabla);
@@ -118,24 +99,6 @@ exports.deleteRow = function(req, res) {
       res.end();
     });
 };
-
-exports.updateRow = function(req,res){
-  var tabla = req.params.tabla;
-  var id =req.params.id;
-  var modelo = require("../models/" + tabla);
-
-  res.writeHead(200, headerResponse);
-  modelo.findByIdAndUpdate(id,req.body)
-    .then(doc => {
-      res.write("Updated");
-    })
-    .catch(err => {
-      res.write(err);
-    })
-    .finally(fin => {
-      res.end();
-    });
-}
 
 //Funcion para ver si el server esta en linea
 exports.inicio = function(req, res) {

@@ -39,7 +39,7 @@ class Header extends React.Component {
     const IconAvatar = this.getAvatar.bind(this);
     return (      
       <Headroom style={{background:"#343a40"}} id="headRoom" className="text-center w-100">
-          <h1 className="w-100 d-inline display-1 text-light">Zainduz</h1>
+          <a href="#" style={{textDecoration : "none"}}><h1 className="w-100 d-inline display-1 text-light">Zainduz</h1></a>
           <IconAvatar />
       </Headroom>
     );

@@ -93,11 +93,12 @@ class MenuPerfil extends React.Component {
     } else {
       //TODO Devolver el menu que va a tener la aplicacion
       return (
-        <div id="menu-perfil-content" className="w-100 mt-5 btn-group-vertical">
+        <div id="menu-perfil-content" className="w-100">
           <div
-            id="menu-perfil-opciones"            
+            id="menu-perfil-opciones"
+            className="btn-group-vertical w-100 mt-5"            
           >
-            <button type="button" className="w-100 btn btn-secondary">
+            <button type="button" className="w-100 btn btn-secondary ">
               Calendario
             </button>
             <button type="button" className="w-100 btn btn-secondary">
