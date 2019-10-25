@@ -5,6 +5,5 @@ var cliente = new mongoose.Schema({
     ubicacion : String,
     precioPorHora : Number,
     elCuidado : Map,
-    valoracionMedia : Number,
-    puntosExp : Number
+    valoracionMedia : Number
 });
