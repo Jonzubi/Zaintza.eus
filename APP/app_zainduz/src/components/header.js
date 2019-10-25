@@ -27,7 +27,7 @@ class Header extends React.Component {
       return <Avatar
             style={{cursor:"pointer"}}
             onClick={() => this.props.myToogleMenu()}
-            className="float-right mt-1 align-middle"
+            className="float-right align-middle"
             size={100}
             round="50px"
             src="https://scontent-sea1-1.cdninstagram.com/vp/5eed5e235373aa8292b4ad220a3a388c/5E34F02F/t51.2885-15/e35/51132313_441179589754437_7832601837240715709_n.jpg?_nc_ht=scontent-sea1-1.cdninstagram.com&_nc_cat=109&ig_cache_key=MTk4NDQwMjIyODMwNTEzNzYyMA%3D%3D.2"
