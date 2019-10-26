@@ -22,6 +22,8 @@ class MenuPerfil extends React.Component {
   handleRegistrar(){
     //TODO Devolver formulario para registrarse
     console.log("Register");
+    this.props.myToogleMenu();
+    this.props.myChangeFormContent("registrar");
   }
 
   getAvatar() {
@@ -84,7 +86,7 @@ class MenuPerfil extends React.Component {
           <button onClick={this.handleLogIn} name="btnLogIn" type="button" class="btn btn-primary">
             Iniciar sesion
           </button>
-          <button onClick={this.handleRegistrar} name="btnRegistrar" type="button" class="btn btn-success">
+          <button onClick={this.handleRegistrar.bind(this)} name="btnRegistrar" type="button" class="btn btn-success">
             Registrarse
           </button>
           </div>

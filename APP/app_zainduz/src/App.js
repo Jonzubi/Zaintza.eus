@@ -2,12 +2,14 @@ import React from "react";
 import MenuPerfil from "./components/menuPerfil";
 import Cabecera from "./components/header";
 import SlideTab from "./components/slideTab";
+import RegisterForm from "./components/registerForm";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpenMenuPerfil: false
+      isOpenMenuPerfil: false,
+      formContent : "tabla"
     };
   }
   handleStateChange(state) {
@@ -19,12 +21,29 @@ class App extends React.Component {
     this.setState(state => ({ isOpenMenuPerfil: !state.isOpenMenuPerfil }));
   }
 
+  changeFormContent(form){
+    this.setState({
+      formContent : form
+    });
+  }
+
+  getContent(){
+    switch (this.state.formContent){
+      case "tabla":
+        return <SlideTab />;
+      case "registrar":
+        return <RegisterForm />;
+    }
+  }
+
   render() {
+    const AppContent = this.getContent.bind(this);
+
     return (
       <div id="outer-container" style={{ height:3000 }} className="w-100">
-        <MenuPerfil myIsOpenMenuPerfil={this.state.isOpenMenuPerfil} myHandleStateChange={this.handleStateChange.bind(this)} />
+        <MenuPerfil myChangeFormContent = {this.changeFormContent.bind(this)} myToogleMenu = {this.toggleMenu.bind(this)} myIsOpenMenuPerfil={this.state.isOpenMenuPerfil} myHandleStateChange={this.handleStateChange.bind(this)} />
         <Cabecera myToogleMenu= {this.toggleMenu.bind(this)} />
-        <SlideTab />
+        <AppContent />
       </div>
     );
   }
