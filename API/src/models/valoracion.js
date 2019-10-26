@@ -9,6 +9,6 @@ var valoracion = new mongoose.Schema({
     cuidadorACliente : Boolean
 });
 
-var Valoracion = mongoose.model("Valoracion",valoracion);
+var Valoracion = mongoose.model("Valoracion",valoracion, "Valoraciones");
 
 module.exports = Valoracion;

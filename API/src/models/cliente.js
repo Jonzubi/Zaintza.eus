@@ -7,3 +7,7 @@ var cliente = new mongoose.Schema({
     elCuidado : Map,
     valoracionMedia : Number
 });
+
+var Cliente = mongoose.model("Cliente", acuerdo, "Clientes");
+
+module.exports = Cliente;

@@ -11,6 +11,6 @@ var acuerdo = new mongoose.Schema({
     dateFinAcuerdo : Date
 });
 
-var Acuerdo = mongoose.model("Acuerdo", acuerdo);
+var Acuerdo = mongoose.model("Acuerdo", acuerdo, "Acuerdos");
 
 module.exports = Acuerdo;

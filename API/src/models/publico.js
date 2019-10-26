@@ -6,6 +6,6 @@ var publico = new mongoose.Schema({
     direcFoto : String
 });
 
-var Publico = mongoose.model("Publico",publico);
+var Publico = mongoose.model("Publico",publico, "Publicos");
 
 module.exports = Publico

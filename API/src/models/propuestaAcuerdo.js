@@ -11,5 +11,5 @@ var propuestaAcuerdo = new mongoose.Schema({
     datePropuesta : Date
 });
 
-var PropuestaAcuerdo = mongoose.model("PropuestaAcuerdo", propuestaAcuerdo);
+var PropuestaAcuerdo = mongoose.model("PropuestaAcuerdo", propuestaAcuerdo, "PropuestaAcuerdos");
 module.exports = PropuestaAcuerdo;

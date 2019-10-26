@@ -19,6 +19,6 @@ var cuidador = new mongoose.Schema({
     valoracionMedia : Number
 });
 
-var Cuidador = mongoose.model("Cuidador",cuidador,"cuidadores");
+var Cuidador = mongoose.model("Cuidador",cuidador, "Cuidadores");
 
 module.exports = Cuidador;

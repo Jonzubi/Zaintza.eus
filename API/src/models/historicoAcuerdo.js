@@ -11,6 +11,6 @@ var historicoAcuerdo = new mongoose.Schema({
     dateFinAcuerdo : Date
 });
 
-var HistoricoAcuerdo = mongoose.model("HistoricoAcuerdo", historicoAcuerdo);
+var HistoricoAcuerdo = mongoose.model("HistoricoAcuerdo", historicoAcuerdo, "HistoricoAcuerdos");
 
 module.exports = HistoricoAcuerdo;
