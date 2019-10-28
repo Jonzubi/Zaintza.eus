@@ -1,6 +1,9 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMale, faFemale } from "@fortawesome/free-solid-svg-icons";
+//import Modal from "boron";
+import axios from "axios";
+import ipMaquina from "../util/ipMaquinaAPI";
 
 class RegisterForm extends React.Component {
   constructor(props) {
@@ -10,8 +13,8 @@ class RegisterForm extends React.Component {
       txtApellido1: "",
       txtApellido2: "",
       txtEmail: "",
-      txtSexo: "M",
-      txtContraseña: "",
+      txtSexo: "",
+      txtContrasena: "",
       txtDescripcion: ""
     };
   }
@@ -37,6 +40,23 @@ class RegisterForm extends React.Component {
     */
     //TODO llamar a la api para insertar
 
+    var formData = {
+      nombre : this.state.txtNombre,
+      apellido1 : this.state.txtApellido1,
+      apellido2 : this.state.txtApellido2,
+      sexo : this.state.txtSexo,
+      email : this.state.txtEmail,
+      contrasena : this.state.txtContrasena,
+      descripcion : this.state.txtDescripcion
+    };
+
+    axios.post("http://" + ipMaquina + ":3001/cuidador", formData)
+      .then(resultado => {
+        return <h1>Insert hechooooooooooo</h1>;
+      })
+      .catch(err => {
+
+      });
     console.log(this.state);
   }
 

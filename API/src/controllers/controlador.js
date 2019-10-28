@@ -47,10 +47,11 @@ exports.insert = function(req, res) {
 
   var modeloConfiged = new modelo(req.body);
 
-  res.writeHead(200, headerResponse);
+  
   modeloConfiged
     .save()
     .then(doc => {
+      res.writeHead(200, headerResponse);
       res.write("Guardado :" + doc);
     })
     .catch(err => {
