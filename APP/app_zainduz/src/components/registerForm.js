@@ -28,6 +28,7 @@ class RegisterForm extends React.Component {
   }
 
   handleSexChange(e) {
+    console.log(e.target);
     var sex = e.target.id == "txtSexM" ? "M" : "F";
     this.setState({
       txtSexo: sex
@@ -41,22 +42,21 @@ class RegisterForm extends React.Component {
     //TODO llamar a la api para insertar
 
     var formData = {
-      nombre : this.state.txtNombre,
-      apellido1 : this.state.txtApellido1,
-      apellido2 : this.state.txtApellido2,
-      sexo : this.state.txtSexo,
-      email : this.state.txtEmail,
-      contrasena : this.state.txtContrasena,
-      descripcion : this.state.txtDescripcion
+      nombre: this.state.txtNombre,
+      apellido1: this.state.txtApellido1,
+      apellido2: this.state.txtApellido2,
+      sexo: this.state.txtSexo,
+      email: this.state.txtEmail,
+      contrasena: this.state.txtContrasena,
+      descripcion: this.state.txtDescripcion
     };
 
-    axios.post("http://" + ipMaquina + ":3001/cuidador", formData)
+    axios
+      .post("http://" + ipMaquina + ":3001/cuidador", formData)
       .then(resultado => {
         return <h1>Insert hechooooooooooo</h1>;
       })
-      .catch(err => {
-
-      });
+      .catch(err => {});
     console.log(this.state);
   }
 
@@ -107,23 +107,21 @@ class RegisterForm extends React.Component {
          *****************************************/}
 
           <div class="form-group row">
-            <div className="form-group col-6 text-center">
-              <FontAwesomeIcon
-                id="txtSexM"
-                onClick={this.handleSexChange.bind(this)}
-                style={{ cursor: "pointer" }}
-                className="fa-5x"
-                icon={faMale}
-              />
+            <div
+              className="form-group col-6 text-center"
+              onClick={this.handleSexChange.bind(this)}
+              id="txtSexM"
+              style={{ cursor: "pointer" }}
+            >
+              <FontAwesomeIcon className="fa-5x" icon={faMale} />
             </div>
-            <div className="form-group col-6 text-center">
-              <FontAwesomeIcon
-                id="txtSexF"
-                onClick={this.handleSexChange.bind(this)}
-                style={{ cursor: "pointer" }}
-                className="fa-5x"
-                icon={faFemale}
-              />
+            <div
+              className="form-group col-6 text-center"
+              id="txtSexF"
+              onClick={this.handleSexChange.bind(this)}
+              style={{ cursor: "pointer" }}
+            >
+              <FontAwesomeIcon className="fa-5x" icon={faFemale} />
             </div>
           </div>
 
