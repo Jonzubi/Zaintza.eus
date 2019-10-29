@@ -1,6 +1,7 @@
 import React from "react";
 import { slide as BurgerMenu } from "react-burger-menu";
 import Avatar from "react-avatar";
+import LogInForm from "./logInForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import imgPerfil from "../util/fotosPrueba/image.jpg";
@@ -52,45 +53,7 @@ class MenuPerfil extends React.Component {
     if (!this.state.isLogIn) {
       //TODO Devolver el formulario de inicio de sesion
       return (
-        <form className="mt-5">
-          <div>
-            <label for="exampleInputEmail1">Email</label>
-            <input
-              type="email"
-              class="form-control"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              placeholder="Insertar email..."
-            />
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Contraseña</label>
-            <input
-              type="password"
-              class="form-control"
-              id="exampleInputPassword1"
-              placeholder="Insertar contraseña..."
-            />
-          </div>
-          <div class="form-group form-check">
-            <input
-              type="checkbox"
-              class="form-check-input"
-              id="exampleCheck1"
-            />
-            <label class="form-check-label" for="exampleCheck1">
-              Recordarme
-            </label>
-          </div>
-          <div className="btn-group mt-3">
-          <button onClick={this.handleLogIn} name="btnLogIn" type="button" class="btn btn-primary">
-            Iniciar sesion
-          </button>
-          <button onClick={this.handleRegistrar.bind(this)} name="btnRegistrar" type="button" class="btn btn-success">
-            Registrarse
-          </button>
-          </div>
-        </form>
+        <LogInForm myHandleRegistrar = {this.handleRegistrar.bind(this)} />
       );
     } else {
       //TODO Devolver el menu que va a tener la aplicacion
