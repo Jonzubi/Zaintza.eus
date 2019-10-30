@@ -4,11 +4,12 @@ exports.get = function(req, res) {
   var tabla = req.params.tabla;
   var id = req.params.id;
   //La idea es en query mandar un string columnas = "nombre apellido1 apellido2" asi se lo incrusto directo a la query
-  var strFilters = req.query.columnas;
+  var strColumnas = req.query.columnas;
+  var objFilter = req.query.filtros;
   var modelo = require("../models/" + tabla);
   if (typeof id == "undefined") {
     modelo
-      .find({}, strFilters)
+      .find(objFilter, strColumnas)
       .then(doc => {
         res.writeHead(200, headerResponse);
         res.write(JSON.stringify(doc));
@@ -22,7 +23,7 @@ exports.get = function(req, res) {
       });
   } else {
     modelo
-      .findById(id, strFilters)
+      .findById(id, strColumnas)
       .then(doc => {
         res.writeHead(200, headerResponse);
         res.write(JSON.stringify(doc));

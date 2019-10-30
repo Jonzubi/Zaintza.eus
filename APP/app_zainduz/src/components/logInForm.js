@@ -14,7 +14,7 @@ class LogInForm extends React.Component {
       const contrasena = this.state.txtContrasena;
 
       console.log("Email:" + email);
-      console.log("Contrasena" + contrasena);
+      console.log("Contrasena:" + contrasena);
   }
 
   handleInputChange(e) {
