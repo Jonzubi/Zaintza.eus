@@ -89,7 +89,7 @@ exports.delete = function(req, res) {
 
   res.writeHead(200, headerResponse);
   modelo
-    .remove({ _id: id })
+    .deleteOne({ _id: id })
     .then(doc => {
       res.write("DELETED");
     })
