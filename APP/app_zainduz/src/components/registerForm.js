@@ -4,6 +4,7 @@ import { faMale, faFemale } from "@fortawesome/free-solid-svg-icons";
 //import Modal from "boron";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
+import Avatar, { Avatar as AvatarUpload } from "react-avatar-edit";
 
 class RegisterForm extends React.Component {
   constructor(props) {
@@ -15,8 +16,21 @@ class RegisterForm extends React.Component {
       txtEmail: "",
       txtSexo: "",
       txtContrasena: "",
-      txtDescripcion: ""
+      txtDescripcion: "",
+      avatarSrc: "",
+      avatarPreview: ""
     };
+
+    this.onCrop = this.onCrop.bind(this);
+    this.onClose = this.onClose.bind(this);
+  }
+
+  onClose() {
+    this.setState({ avatarPreview: null });
+  }
+
+  onCrop(preview) {
+    this.setState({ avatarPreview: preview });
   }
 
   handleInputChange(e) {
@@ -67,41 +81,66 @@ class RegisterForm extends React.Component {
         style={{ margin: "10rem", marginTop: "5rem" }}
       >
         <form>
-          <div class="form-group">
-            <label for="exampleInputEmail1">Nombre</label>
-            <input
-              onChange={this.handleInputChange.bind(this)}
-              type="text"
-              class="form-control"
-              id="txtNombre"
-              aria-describedby="txtNombreHelp"
-              placeholder="Introducir nombre..."
-            />
-          </div>
-          <div class="form-group row">
-            <div className="form-group col">
-              <label for="exampleInputEmail1">Apellido 1</label>
-              <input
-                onChange={this.handleInputChange.bind(this)}
-                type="text"
-                class="form-control"
-                id="txtApellido1"
-                aria-describedby="txtNombreHelp"
-                placeholder="Introducir apellido 1..."
-              />
+          <div className="form-group row">
+            <div className="form-group col row justify-content-center">
+              {/* Meter un componente para subir imagen */}
+              <div className="col">
+                <Avatar
+                  label="Elige tu Avatar"
+                  height={150}
+                  width={150}
+                  onCrop={this.onCrop}
+                  onClose={this.onClose}
+                  src={this.state.avatarSrc}
+                />
+              </div>
+              <div className="col">
+                <img
+                  style={{width:"150px", height:"150px"}}
+                  src={this.state.avatarPreview}
+                  alt="La imagen de perfil se previsualizara aqui"
+                />
+              </div>
             </div>
             <div className="form-group col">
-              <label for="exampleInputEmail1">Apellido 2</label>
-              <input
-                onChange={this.handleInputChange.bind(this)}
-                type="text"
-                class="form-control"
-                id="txtApellido2"
-                aria-describedby="txtNombreHelp"
-                placeholder="Introducir apellido 2..."
-              />
+              <div class="form-group">
+                <label for="exampleInputEmail1">Nombre</label>
+                <input
+                  onChange={this.handleInputChange.bind(this)}
+                  type="text"
+                  class="form-control"
+                  id="txtNombre"
+                  aria-describedby="txtNombreHelp"
+                  placeholder="Introducir nombre..."
+                />
+              </div>
+              <div class="form-group row">
+                <div className="form-group col">
+                  <label for="exampleInputEmail1">Apellido 1</label>
+                  <input
+                    onChange={this.handleInputChange.bind(this)}
+                    type="text"
+                    class="form-control"
+                    id="txtApellido1"
+                    aria-describedby="txtNombreHelp"
+                    placeholder="Introducir apellido 1..."
+                  />
+                </div>
+                <div className="form-group col">
+                  <label for="exampleInputEmail1">Apellido 2</label>
+                  <input
+                    onChange={this.handleInputChange.bind(this)}
+                    type="text"
+                    class="form-control"
+                    id="txtApellido2"
+                    aria-describedby="txtNombreHelp"
+                    placeholder="Introducir apellido 2..."
+                  />
+                </div>
+              </div>
             </div>
           </div>
+
           {/****************************************
           Meter fecha nacimiento aqui en un futuro        
          *****************************************/}
