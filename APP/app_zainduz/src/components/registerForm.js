@@ -23,6 +23,8 @@ class RegisterForm extends React.Component {
 
     this.onCrop = this.onCrop.bind(this);
     this.onClose = this.onClose.bind(this);
+    this.handleSexChange = this.handleSexChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   onClose() {
@@ -41,9 +43,7 @@ class RegisterForm extends React.Component {
     });
   }
 
-  handleSexChange(e) {
-    console.log(e.target);
-    var sex = e.target.id == "txtSexM" ? "M" : "F";
+  handleSexChange(sex) {
     this.setState({
       txtSexo: sex
     });
@@ -106,7 +106,7 @@ class RegisterForm extends React.Component {
               <div class="form-group">
                 <label for="exampleInputEmail1">Nombre</label>
                 <input
-                  onChange={this.handleInputChange.bind(this)}
+                  onChange={this.handleInputChange}
                   type="text"
                   class="form-control"
                   id="txtNombre"
@@ -118,7 +118,7 @@ class RegisterForm extends React.Component {
                 <div className="form-group col">
                   <label for="exampleInputEmail1">Apellido 1</label>
                   <input
-                    onChange={this.handleInputChange.bind(this)}
+                    onChange={this.handleInputChange}
                     type="text"
                     class="form-control"
                     id="txtApellido1"
@@ -129,7 +129,7 @@ class RegisterForm extends React.Component {
                 <div className="form-group col">
                   <label for="exampleInputEmail1">Apellido 2</label>
                   <input
-                    onChange={this.handleInputChange.bind(this)}
+                    onChange={this.handleInputChange}
                     type="text"
                     class="form-control"
                     id="txtApellido2"
@@ -148,7 +148,7 @@ class RegisterForm extends React.Component {
           <div class="form-group row">
             <div
               className="form-group col-6 text-center"
-              onClick={this.handleSexChange.bind(this)}
+              onClick={() => this.handleSexChange("M")}
               id="txtSexM"
               style={{ cursor: "pointer" }}
             >
@@ -157,7 +157,7 @@ class RegisterForm extends React.Component {
             <div
               className="form-group col-6 text-center"
               id="txtSexF"
-              onClick={this.handleSexChange.bind(this)}
+              onClick={() => this.handleSexChange("F")}
               style={{ cursor: "pointer" }}
             >
               <FontAwesomeIcon className="fa-5x" icon={faFemale} />
@@ -168,7 +168,7 @@ class RegisterForm extends React.Component {
             <div class="form-group col">
               <label for="exampleInputEmail1">Email</label>
               <input
-                onChange={this.handleInputChange.bind(this)}
+                onChange={this.handleInputChange}
                 type="email"
                 class="form-control"
                 id="txtEmail"
@@ -179,7 +179,7 @@ class RegisterForm extends React.Component {
             <div class="form-group col">
               <label for="exampleInputPassword1">Contraseña</label>
               <input
-                onChange={this.handleInputChange.bind(this)}
+                onChange={this.handleInputChange}
                 type="password"
                 class="form-control"
                 id="txtContrasena"
@@ -191,7 +191,7 @@ class RegisterForm extends React.Component {
           <div class="form-group">
             <label for="comment">Descripcion</label>
             <textarea
-              onChange={this.handleInputChange.bind(this)}
+              onChange={this.handleInputChange}
               class="form-control"
               rows="5"
               id="txtDescripcion"
@@ -199,7 +199,7 @@ class RegisterForm extends React.Component {
             ></textarea>
           </div>
           <button
-            onClick={this.handleRegistrarse.bind(this)}
+            onClick={this.handleRegistrarse}
             type="button"
             className="w-100 mt-5 btn btn-success text-center"
           >
