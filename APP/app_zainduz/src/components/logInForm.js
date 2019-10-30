@@ -7,7 +7,8 @@ class LogInForm extends React.Component {
     super(props);
     this.state = {
       txtEmail: "",
-      txtContrasena: ""
+      txtContrasena: "",
+      objUsuario:{}
     };
   }
 
@@ -30,7 +31,10 @@ class LogInForm extends React.Component {
       })
       .then(doc => {
         if(typeof doc != "undefined"){
-          console.table(doc);
+          console.log(doc.data[0]);
+          this.setState({
+            objUsuario : doc.data[0]
+          });
         }else{
           console.log("No hay registros con esos datos");
         }
