@@ -5,11 +5,14 @@ exports.get = function(req, res) {
   var id = req.params.id;
   //La idea es en query mandar un string columnas = "nombre apellido1 apellido2" asi se lo incrusto directo a la query
   var strColumnas = req.query.columnas;
-  var objFilter = req.query.filtros;
+  var objFilter;
+  if(typeof req.query.filtros!="undefined"){
+    var objFilter = JSON.parse(req.query.filtros);
+  }
   var modelo = require("../models/" + tabla);
   if (typeof id == "undefined") {
     modelo
-      .find(objFilter, strColumnas)
+      .find(objFilter,strColumnas)
       .then(doc => {
         res.writeHead(200, headerResponse);
         res.write(JSON.stringify(doc));
@@ -47,7 +50,6 @@ exports.insert = function(req, res) {
   if (typeof modelo == "undefined") res.send("MODELO IS UNDEFINED");
 
   var modeloConfiged = new modelo(req.body);
-
   
   modeloConfiged
     .save()

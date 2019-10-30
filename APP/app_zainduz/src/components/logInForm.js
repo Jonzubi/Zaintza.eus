@@ -1,4 +1,6 @@
 import React from "react";
+import axios from "axios";
+import ipMaquina from "../util/ipMaquinaAPI";
 
 class LogInForm extends React.Component {
   constructor(props) {
@@ -10,11 +12,29 @@ class LogInForm extends React.Component {
   }
 
   handleLogIn(){
-      const email = this.state.txtEmail;
-      const contrasena = this.state.txtContrasena;
+      const vEmail = this.state.txtEmail;
+      const vContrasena = this.state.txtContrasena;
 
-      console.log("Email:" + email);
-      console.log("Contrasena:" + contrasena);
+      console.log("Email:" + vEmail);
+      console.log("Contrasena:" + vContrasena);
+
+      var objFiltros = {
+        email : vEmail,
+        contrasena: vContrasena
+      }
+
+      axios.get("http://" + ipMaquina + ":3001/cuidador", {
+        params : {
+          filtros : JSON.stringify(objFiltros)
+        }
+      })
+      .then(doc => {
+        if(typeof doc != "undefined"){
+          console.table(doc);
+        }else{
+          console.log("No hay registros con esos datos");
+        }
+      });
   }
 
   handleInputChange(e) {
