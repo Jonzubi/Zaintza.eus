@@ -25,6 +25,7 @@ class RegisterForm extends React.Component {
     this.onClose = this.onClose.bind(this);
     this.handleSexChange = this.handleSexChange.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleRegistrarse = this.handleRegistrarse.bind(this);
   }
 
   onClose() {
@@ -44,6 +45,7 @@ class RegisterForm extends React.Component {
   }
 
   handleSexChange(sex) {
+    console.log(sex);
     this.setState({
       txtSexo: sex
     });
@@ -82,25 +84,17 @@ class RegisterForm extends React.Component {
       >
         <form>
           <div className="form-group row">
-            <div className="form-group col row justify-content-center">
+            <div className="form-group col">
               {/* Meter un componente para subir imagen */}
-              <div className="col">
-                <Avatar
-                  label="Elige tu Avatar"
-                  height={150}
-                  width={150}
-                  onCrop={this.onCrop}
-                  onClose={this.onClose}
-                  src={this.state.avatarSrc}
-                />
-              </div>
-              <div className="col">
-                <img
-                  style={{width:"150px", height:"150px"}}
-                  src={this.state.avatarPreview}
-                  alt="La imagen de perfil se previsualizara aqui"
-                />
-              </div>
+
+              <Avatar
+                label="Elige tu Avatar"
+                height={200}
+                width={200}
+                onCrop={this.onCrop}
+                onClose={this.onClose}
+                src={this.state.avatarSrc}
+              />
             </div>
             <div className="form-group col">
               <div class="form-group">
@@ -147,18 +141,18 @@ class RegisterForm extends React.Component {
 
           <div class="form-group row">
             <div
-              className="form-group col-6 text-center"
+              className="form-group col-6 text-center p-1"
               onClick={() => this.handleSexChange("M")}
               id="txtSexM"
-              style={{ cursor: "pointer" }}
+              style={{borderRadius:"8px" , cursor: "pointer", background: this.state.txtSexo == "M" ? "#28a745" : "", color: this.state.txtSexo == "M" ? "white" : "black" }}
             >
               <FontAwesomeIcon className="fa-5x" icon={faMale} />
             </div>
             <div
-              className="form-group col-6 text-center"
+              className="form-group col-6 text-center p-1"
               id="txtSexF"
               onClick={() => this.handleSexChange("F")}
-              style={{ cursor: "pointer" }}
+              style={{borderRadius:"8px" ,cursor: "pointer", background: this.state.txtSexo == "F" ? "#28a745" : "", color: this.state.txtSexo == "F" ? "white" : "black" }}
             >
               <FontAwesomeIcon className="fa-5x" icon={faFemale} />
             </div>
