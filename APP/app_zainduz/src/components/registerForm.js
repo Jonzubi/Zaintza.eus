@@ -5,6 +5,8 @@ import { faMale, faFemale } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import Avatar, { Avatar as AvatarUpload } from "react-avatar-edit";
+import {ReactDatez as Calendario} from "react-datez";
+import 'react-datez/dist/css/react-datez.css';
 
 class RegisterForm extends React.Component {
   constructor(props) {
@@ -15,6 +17,7 @@ class RegisterForm extends React.Component {
       txtApellido2: "",
       txtEmail: "",
       txtSexo: "",
+      txtFechaNacimiento: "",
       txtContrasena: "",
       txtDescripcion: "",
       avatarSrc: "",
@@ -77,6 +80,7 @@ class RegisterForm extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     return (
       <div
         className="border border-dark rounded p-5"
@@ -134,14 +138,10 @@ class RegisterForm extends React.Component {
               </div>
             </div>
           </div>
-
-          {/****************************************
-          Meter fecha nacimiento aqui en un futuro        
-         *****************************************/}
-
           <div class="form-group row">
-            <div className="form-group col-6 text-center">
-              <h3>Insertar caja fecha aqui</h3>
+            <div className="form-group col-6">
+              <label for="txtFechaNacimiento">Fecha de nacimiento</label><br/>
+              <Calendario inputStyle={{width:"100%"}} className="w-100" allowPast={true} allowFuture={false} id="txtFechaNacimiento" handleChange = {this.handleInputChange} value={this.state.txtFechaNacimiento} />
             </div>
             <div
               className="form-group col-3 text-center p-1"
