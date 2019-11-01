@@ -140,8 +140,11 @@ class RegisterForm extends React.Component {
          *****************************************/}
 
           <div class="form-group row">
+            <div className="form-group col-6 text-center">
+              <h3>Insertar caja fecha aqui</h3>
+            </div>
             <div
-              className="form-group col-6 text-center p-1"
+              className="form-group col-3 text-center p-1"
               onClick={() => this.handleSexChange("M")}
               id="txtSexM"
               style={{borderRadius:"8px" , cursor: "pointer", background: this.state.txtSexo == "M" ? "#28a745" : "", color: this.state.txtSexo == "M" ? "white" : "black" }}
@@ -149,7 +152,7 @@ class RegisterForm extends React.Component {
               <FontAwesomeIcon className="fa-5x" icon={faMale} />
             </div>
             <div
-              className="form-group col-6 text-center p-1"
+              className="form-group col-3 text-center p-1"
               id="txtSexF"
               onClick={() => this.handleSexChange("F")}
               style={{borderRadius:"8px" ,cursor: "pointer", background: this.state.txtSexo == "F" ? "#28a745" : "", color: this.state.txtSexo == "F" ? "white" : "black" }}
