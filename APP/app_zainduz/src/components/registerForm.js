@@ -29,6 +29,7 @@ class RegisterForm extends React.Component {
     this.handleSexChange = this.handleSexChange.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleRegistrarse = this.handleRegistrarse.bind(this);
+    this.handleCalendarChange = this.handleCalendarChange.bind(this);
   }
 
   onClose() {
@@ -37,6 +38,12 @@ class RegisterForm extends React.Component {
 
   onCrop(preview) {
     this.setState({ avatarPreview: preview });
+  }
+
+  handleCalendarChange(valor){
+    this.setState({
+      txtFechaNacimiento:valor
+    });
   }
 
   handleInputChange(e) {
@@ -48,7 +55,6 @@ class RegisterForm extends React.Component {
   }
 
   handleSexChange(sex) {
-    console.log(sex);
     this.setState({
       txtSexo: sex
     });
@@ -80,7 +86,6 @@ class RegisterForm extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     return (
       <div
         className="border border-dark rounded p-5"
@@ -141,7 +146,7 @@ class RegisterForm extends React.Component {
           <div class="form-group row">
             <div className="form-group col-6">
               <label for="txtFechaNacimiento">Fecha de nacimiento</label><br/>
-              <Calendario inputStyle={{width:"100%"}} className="w-100" allowPast={true} allowFuture={false} id="txtFechaNacimiento" handleChange = {this.handleInputChange} value={this.state.txtFechaNacimiento} />
+              <Calendario inputStyle={{width:"100%"}} className="w-100" allowPast={true} allowFuture={false} id="txtFechaNacimiento" handleChange = {this.handleCalendarChange} value={this.state.txtFechaNacimiento} />
             </div>
             <div
               className="form-group col-3 text-center p-1"
