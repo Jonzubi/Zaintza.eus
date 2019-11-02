@@ -6,7 +6,9 @@ import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import Avatar, { Avatar as AvatarUpload } from "react-avatar-edit";
 import { ReactDatez as Calendario } from "react-datez";
+import Switch from "react-switch";
 import "react-datez/dist/css/react-datez.css";
+import loadGif from "../util/gifs/loadGif.gif";
 
 class RegisterForm extends React.Component {
   constructor(props) {
@@ -22,10 +24,12 @@ class RegisterForm extends React.Component {
       txtMovil: "",
       txtTelefono: "",
       txtDescripcion: "",
+      isPublic: true,
       avatarSrc: "",
       avatarPreview: "",
       hoverSexoM: false,
-      hoverSexoF: false
+      hoverSexoF: false,
+      isLoading: false
     };
 
     this.onCrop = this.onCrop.bind(this);
@@ -34,6 +38,7 @@ class RegisterForm extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleRegistrarse = this.handleRegistrarse.bind(this);
     this.handleCalendarChange = this.handleCalendarChange.bind(this);
+    this.handleIsPublicChange = this.handleIsPublicChange.bind(this);
   }
 
   onClose() {
@@ -50,14 +55,19 @@ class RegisterForm extends React.Component {
     });
   }
 
+  handleIsPublicChange(valor) {
+    this.setState({
+      isPublic: valor
+    });
+  }
+
   handleInputChange(e) {
-    
     //La idea es recoger el nombre del componente y asignarselo al estado, algo como, this.setState({this.state[name] = e.target.value});
     var stateId = e.target.id;
     //No vamos a dejar que el usuario meta mas de 9 digitos para el telefono
-    if(stateId == "txtMovil" || stateId == "txtTelefono"){
-      if(e.target.value.toString() > 9){
-        e.target.value = e.target.value.slice(0,9);
+    if (stateId == "txtMovil" || stateId == "txtTelefono") {
+      if (e.target.value.toString() > 9) {
+        e.target.value = e.target.value.slice(0, 9);
       }
     }
     this.setState({
@@ -92,16 +102,43 @@ class RegisterForm extends React.Component {
       sexo: this.state.txtSexo,
       email: this.state.txtEmail,
       contrasena: this.state.txtContrasena,
-      descripcion: this.state.txtDescripcion
+      descripcion: this.state.txtDescripcion,
+      telefono: {
+        movil: {
+          etiqueta: "Movil",
+          numero: this.state.txtMovil
+        },
+        fijo: {
+          etiqueta: "Fijo",
+          numero: this.state.txtTelefono
+        }
+      }
     };
+
+    this.setState({ isLoading: true });
 
     axios
       .post("http://" + ipMaquina + ":3001/cuidador", formData)
       .then(resultado => {
-        return <h1>Insert hechooooooooooo</h1>;
+        this.setState({
+          txtNombre: "",
+          txtApellido1: "",
+          txtApellido2: "",
+          txtEmail: "",
+          txtSexo: "",
+          txtFechaNacimiento: "",
+          txtContrasena: "",
+          txtMovil: "",
+          txtTelefono: "",
+          txtDescripcion: "",
+          avatarSrc: "",
+          avatarPreview: "",
+          hoverSexoM: false,
+          hoverSexoF: false,
+          isLoading: false
+        });
       })
       .catch(err => {});
-    console.log(this.state);
   }
 
   render() {
@@ -134,6 +171,7 @@ class RegisterForm extends React.Component {
                   id="txtNombre"
                   aria-describedby="txtNombreHelp"
                   placeholder="Introducir nombre..."
+                  value={this.state.txtNombre}
                 />
               </div>
               <div class="form-group row">
@@ -146,6 +184,7 @@ class RegisterForm extends React.Component {
                     id="txtApellido1"
                     aria-describedby="txtNombreHelp"
                     placeholder="Introducir apellido 1..."
+                    value={this.state.txtApellido1}
                   />
                 </div>
                 <div className="form-group col">
@@ -157,6 +196,7 @@ class RegisterForm extends React.Component {
                     id="txtApellido2"
                     aria-describedby="txtNombreHelp"
                     placeholder="Introducir apellido 2..."
+                    value={this.state.txtApellido2}
                   />
                 </div>
               </div>
@@ -236,18 +276,22 @@ class RegisterForm extends React.Component {
                 id="txtEmail"
                 aria-describedby="emailHelp"
                 placeholder="Introducir email..."
+                value={this.state.txtEmail}
               />
-              <label className="pt-2" for="exampleInputPassword1">Contraseña</label>
+              <label className="pt-2" for="exampleInputPassword1">
+                Contraseña
+              </label>
               <input
                 onChange={this.handleInputChange}
                 type="password"
                 class="form-control"
                 id="txtContrasena"
                 placeholder="Introducir contraseña..."
+                value={this.state.txtContrasena}
               />
             </div>
             <div class="form-group col">
-            <label for="">Telefono Movil</label>
+              <label for="">Telefono Movil</label>
               <input
                 onChange={this.handleInputChange}
                 type="number"
@@ -255,14 +299,18 @@ class RegisterForm extends React.Component {
                 id="txtMovil"
                 aria-describedby="emailHelp"
                 placeholder="Introducir movil..."
+                value={this.state.txtMovil}
               />
-              <label className="pt-2" for="">Telefono Fijo</label>
+              <label className="pt-2" for="">
+                Telefono Fijo
+              </label>
               <input
                 onChange={this.handleInputChange}
                 type="number"
                 class="form-control"
                 id="txtTelefono"
                 placeholder="Introducir telefono fijo..."
+                value={this.state.txtTelefono}
               />
             </div>
           </div>
@@ -275,15 +323,33 @@ class RegisterForm extends React.Component {
               rows="5"
               id="txtDescripcion"
               placeholder="Tu descripcion..."
+              value={this.state.txtDescripcion}
             ></textarea>
           </div>
-          <button
-            onClick={this.handleRegistrarse}
-            type="button"
-            className="w-100 mt-5 btn btn-success text-center"
-          >
-            Registrarse
-          </button>
+
+          <div>
+            <Switch
+              onChange={this.handleIsPublicChange}
+              checked={this.state.isPublic}
+              id="isPublic"
+            />
+            <br />
+            <small>Publicar automáticamente despues del registro</small>
+          </div>
+
+          <div id="loaderOrButton" className="w-100 mt-5 text-center">
+            {this.state.isLoading ? (
+              <img src={loadGif} height={50} width={50} />
+            ) : (
+              <button
+                onClick={this.handleRegistrarse}
+                type="button"
+                className="w-100 btn btn-success "
+              >
+                Registrarse
+              </button>
+            )}
+          </div>
         </form>
       </div>
     );
