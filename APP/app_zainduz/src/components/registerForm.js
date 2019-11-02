@@ -19,6 +19,8 @@ class RegisterForm extends React.Component {
       txtSexo: "",
       txtFechaNacimiento: "",
       txtContrasena: "",
+      txtMovil: "",
+      txtTelefono: "",
       txtDescripcion: "",
       avatarSrc: "",
       avatarPreview: "",
@@ -49,8 +51,15 @@ class RegisterForm extends React.Component {
   }
 
   handleInputChange(e) {
+    
     //La idea es recoger el nombre del componente y asignarselo al estado, algo como, this.setState({this.state[name] = e.target.value});
     var stateId = e.target.id;
+    //No vamos a dejar que el usuario meta mas de 9 digitos para el telefono
+    if(stateId == "txtMovil" || stateId == "txtTelefono"){
+      if(e.target.value.toString() > 9){
+        e.target.value = e.target.value.slice(0,9);
+      }
+    }
     this.setState({
       [stateId]: e.target.value
     });
@@ -228,15 +237,32 @@ class RegisterForm extends React.Component {
                 aria-describedby="emailHelp"
                 placeholder="Introducir email..."
               />
-            </div>
-            <div class="form-group col">
-              <label for="exampleInputPassword1">Contraseña</label>
+              <label className="pt-2" for="exampleInputPassword1">Contraseña</label>
               <input
                 onChange={this.handleInputChange}
                 type="password"
                 class="form-control"
                 id="txtContrasena"
                 placeholder="Introducir contraseña..."
+              />
+            </div>
+            <div class="form-group col">
+            <label for="">Telefono Movil</label>
+              <input
+                onChange={this.handleInputChange}
+                type="number"
+                class="form-control"
+                id="txtMovil"
+                aria-describedby="emailHelp"
+                placeholder="Introducir movil..."
+              />
+              <label className="pt-2" for="">Telefono Fijo</label>
+              <input
+                onChange={this.handleInputChange}
+                type="number"
+                class="form-control"
+                id="txtTelefono"
+                placeholder="Introducir telefono fijo..."
               />
             </div>
           </div>
