@@ -1,10 +1,10 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMale, faFemale } from "@fortawesome/free-solid-svg-icons";
-//import Modal from "boron";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import Avatar, { Avatar as AvatarUpload } from "react-avatar-edit";
+import cogoToast from "cogo-toast";
 import { ReactDatez as Calendario } from "react-datez";
 import Switch from "react-switch";
 import "react-datez/dist/css/react-datez.css";
@@ -137,6 +137,12 @@ class RegisterForm extends React.Component {
           hoverSexoF: false,
           isLoading: false
         });
+        cogoToast.success(
+          <div>
+            <h5>Registro completado correctamente!</h5>
+            <small><b>Gracias por confiar en Zainduz</b></small>
+          </div>
+        );
       })
       .catch(err => {});
   }
