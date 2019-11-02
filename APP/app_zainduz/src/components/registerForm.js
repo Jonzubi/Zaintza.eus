@@ -5,8 +5,8 @@ import { faMale, faFemale } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import Avatar, { Avatar as AvatarUpload } from "react-avatar-edit";
-import {ReactDatez as Calendario} from "react-datez";
-import 'react-datez/dist/css/react-datez.css';
+import { ReactDatez as Calendario } from "react-datez";
+import "react-datez/dist/css/react-datez.css";
 
 class RegisterForm extends React.Component {
   constructor(props) {
@@ -21,7 +21,9 @@ class RegisterForm extends React.Component {
       txtContrasena: "",
       txtDescripcion: "",
       avatarSrc: "",
-      avatarPreview: ""
+      avatarPreview: "",
+      hoverSexoM: false,
+      hoverSexoF: false
     };
 
     this.onCrop = this.onCrop.bind(this);
@@ -40,9 +42,9 @@ class RegisterForm extends React.Component {
     this.setState({ avatarPreview: preview });
   }
 
-  handleCalendarChange(valor){
+  handleCalendarChange(valor) {
     this.setState({
-      txtFechaNacimiento:valor
+      txtFechaNacimiento: valor
     });
   }
 
@@ -58,6 +60,14 @@ class RegisterForm extends React.Component {
     this.setState({
       txtSexo: sex
     });
+  }
+
+  handleSexHover(sex) {
+    this.setState({ [sex]: true });
+  }
+
+  handleSexLeave(sex) {
+    this.setState({ [sex]: false });
   }
 
   handleRegistrarse() {
@@ -145,14 +155,40 @@ class RegisterForm extends React.Component {
           </div>
           <div class="form-group row">
             <div className="form-group col-6">
-              <label for="txtFechaNacimiento">Fecha de nacimiento</label><br/>
-              <Calendario inputStyle={{width:"100%"}} className="w-100" allowPast={true} allowFuture={false} id="txtFechaNacimiento" handleChange = {this.handleCalendarChange} value={this.state.txtFechaNacimiento} />
+              <label for="txtFechaNacimiento">Fecha de nacimiento</label>
+              <br />
+              <Calendario
+                dateFormat="YYYY/MM/DD"
+                inputClassName="form-control"
+                inputStyle={{ width: "100%" }}
+                className="w-100"
+                allowPast={true}
+                allowFuture={false}
+                id="txtFechaNacimiento"
+                handleChange={this.handleCalendarChange}
+                value={this.state.txtFechaNacimiento}
+              />
             </div>
             <div
               className="form-group col-3 text-center p-1"
               onClick={() => this.handleSexChange("M")}
+              onMouseEnter={() => this.handleSexHover("hoverSexoM")}
+              onMouseLeave={() => this.handleSexLeave("hoverSexoM")}
               id="txtSexM"
-              style={{borderRadius:"8px" , cursor: "pointer", background: this.state.txtSexo == "M" ? "#28a745" : "", color: this.state.txtSexo == "M" ? "white" : "black" }}
+              style={{
+                borderRadius: "8px",
+                cursor: "pointer",
+                background:
+                  this.state.txtSexo == "M"
+                    ? "#28a745"
+                    : this.state.hoverSexoM
+                    ? "#545b62"
+                    : "",
+                color:
+                  this.state.txtSexo == "M" || this.state.hoverSexoM
+                    ? "white"
+                    : "black"
+              }}
             >
               <FontAwesomeIcon className="fa-5x" icon={faMale} />
             </div>
@@ -160,7 +196,22 @@ class RegisterForm extends React.Component {
               className="form-group col-3 text-center p-1"
               id="txtSexF"
               onClick={() => this.handleSexChange("F")}
-              style={{borderRadius:"8px" ,cursor: "pointer", background: this.state.txtSexo == "F" ? "#28a745" : "", color: this.state.txtSexo == "F" ? "white" : "black" }}
+              onMouseEnter={() => this.handleSexHover("hoverSexoF")}
+              onMouseLeave={() => this.handleSexLeave("hoverSexoF")}
+              style={{
+                borderRadius: "8px",
+                cursor: "pointer",
+                background:
+                  this.state.txtSexo == "F"
+                    ? "#28a745"
+                    : this.state.hoverSexoF
+                    ? "#545b62"
+                    : "",
+                color:
+                  this.state.txtSexo == "F" || this.state.hoverSexoF
+                    ? "white"
+                    : "black"
+              }}
             >
               <FontAwesomeIcon className="fa-5x" icon={faFemale} />
             </div>
