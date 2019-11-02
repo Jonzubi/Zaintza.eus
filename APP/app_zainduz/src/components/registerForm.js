@@ -1,6 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMale, faFemale } from "@fortawesome/free-solid-svg-icons";
+import { faMale, faFemale, faPlus } from "@fortawesome/free-solid-svg-icons";
+import AddDiasDisponible from "../util/iconos/addDiasDisponible.svg";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import Avatar, { Avatar as AvatarUpload } from "react-avatar-edit";
@@ -320,7 +321,27 @@ class RegisterForm extends React.Component {
               />
             </div>
           </div>
-
+          <div className="form-group row">
+              <div className="form-group col">
+                {/* Insertar dias disponibles aqui */}
+                <label className="w-100 text-center lead">Dias Disponible:</label><br />
+                <div className="mt-2" id="diasDisponible">{/* Aqui iran los dias dinamicamente */}
+                  <img style={{cursor:"pointer"}} src={AddDiasDisponible} width="70px" height="70px" />
+                </div>
+                                
+              </div>
+              <div className="form-group col">
+                {/* Insertar ubicaciones disponibles aqui */}
+              </div>
+          </div>
+          <div className="form-group row">
+              <div className="form-group col">
+                {/* Insertar publico disponibles aqui */}
+              </div>
+              <div className="form-group col">
+                {/* Insertar precioPublico disponibles aqui */}
+              </div>
+          </div>
           <div class="form-group">
             <label for="comment">Descripcion</label>
             <textarea
