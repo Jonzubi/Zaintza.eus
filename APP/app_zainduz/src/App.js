@@ -42,7 +42,7 @@ class App extends React.Component {
     return (
       <div id="outer-container" style={{ height:3000 }} className="w-100">
         <MenuPerfil myChangeFormContent = {this.changeFormContent.bind(this)} myToogleMenu = {this.toggleMenu.bind(this)} myIsOpenMenuPerfil={this.state.isOpenMenuPerfil} myHandleStateChange={this.handleStateChange.bind(this)} />
-        <Cabecera myToogleMenu= {this.toggleMenu.bind(this)} />
+        <Cabecera myChangeFormContent = {this.changeFormContent.bind(this)} myToogleMenu= {this.toggleMenu.bind(this)} />
         <AppContent />
       </div>
     );
