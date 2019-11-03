@@ -163,7 +163,12 @@ class RegisterForm extends React.Component {
           </div>
         );
       })
-      .catch(err => {});
+      .catch(err => {
+        this.setState({
+          isLoading: false
+        });
+        cogoToast.error(<h5>Algo ha ido mal!</h5>);
+      });
   }
 
   render() {
@@ -347,26 +352,36 @@ class RegisterForm extends React.Component {
               <div className="w-100 mt-2" id="diasDisponible">
                 {/* Aqui iran los dias dinamicamente */}
                 {this.state.diasDisponible.map((objDia, indice) => {
-                 return( <div
-                    className="col-6 text-center d-flex justify-content-center"
-                    id={"diaDisponible" + indice}
-                  >
-                    <div className="w-100">
-                      <select className="d-inline" id={"dias" + indice}>
-                        <option>Elige un dia</option>
-                        <option>Lunes</option>
-                        <option>Martes</option>
-                        <option>Miercoles</option>
-                        <option>Jueves</option>
-                        <option>Viernes</option>
-                        <option>Sabado</option>
-                        <option>Domingo</option>
-                      </select><br/>
-                      <TimeInput initTime="00:00" className="mt-1 text-center d-inline form-control" />
-                      <TimeInput initTime="00:00" className="mt-1 text-center d-inline form-control" />
+                  return (
+                    <div
+                      className="col-6 mx-auto text-center"
+                      id={"diaDisponible" + indice}
+                    >
+                      <div className="mt-2 w-100">
+                        <select className="d-inline" id={"dias" + indice}>
+                          <option>Elige un dia</option>
+                          <option value="">Lunes</option>
+                          <option>Martes</option>
+                          <option>Miercoles</option>
+                          <option>Jueves</option>
+                          <option>Viernes</option>
+                          <option>Sabado</option>
+                          <option>Domingo</option>
+                        </select>
+                        <br />
+                        <TimeInput
+                        id={"horaInicio" + indice}
+                          initTime="00:00"
+                          className="mt-1 text-center d-inline form-control"
+                        />
+                        <TimeInput
+                        id={"horaFin" + indice}
+                          initTime="00:00"
+                          className="mt-1 text-center d-inline form-control"
+                        />
+                      </div>
                     </div>
-                    
-                  </div>);
+                  );
                 })}
                 <img
                   style={{ cursor: "pointer" }}
