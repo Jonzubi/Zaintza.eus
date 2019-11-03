@@ -8,6 +8,7 @@ import Avatar, { Avatar as AvatarUpload } from "react-avatar-edit";
 import cogoToast from "cogo-toast";
 import { ReactDatez as Calendario } from "react-datez";
 import Switch from "react-switch";
+import TimeInput from "react-time-input";
 import "react-datez/dist/css/react-datez.css";
 import loadGif from "../util/gifs/loadGif.gif";
 
@@ -24,6 +25,7 @@ class RegisterForm extends React.Component {
       txtContrasena: "",
       txtMovil: "",
       txtTelefono: "",
+      diasDisponible: [],
       txtDescripcion: "",
       isPublic: true,
       avatarSrc: "",
@@ -40,6 +42,7 @@ class RegisterForm extends React.Component {
     this.handleRegistrarse = this.handleRegistrarse.bind(this);
     this.handleCalendarChange = this.handleCalendarChange.bind(this);
     this.handleIsPublicChange = this.handleIsPublicChange.bind(this);
+    this.addDiasDisponible = this.addDiasDisponible.bind(this);
   }
 
   onClose() {
@@ -59,6 +62,19 @@ class RegisterForm extends React.Component {
   handleIsPublicChange(valor) {
     this.setState({
       isPublic: valor
+    });
+  }
+
+  addDiasDisponible() {
+    let auxDiasDisponible = this.state.diasDisponible;
+    auxDiasDisponible.push({
+      dia: "",
+      horaInicio: "00:00",
+      horaFin: "00:00"
+    });
+    console.log(auxDiasDisponible);
+    this.setState({
+      diasDisponible: auxDiasDisponible
     });
   }
 
@@ -141,7 +157,9 @@ class RegisterForm extends React.Component {
         cogoToast.success(
           <div>
             <h5>Registro completado correctamente!</h5>
-            <small><b>Gracias por confiar en Zainduz</b></small>
+            <small>
+              <b>Gracias por confiar en Zainduz</b>
+            </small>
           </div>
         );
       })
@@ -322,25 +340,54 @@ class RegisterForm extends React.Component {
             </div>
           </div>
           <div className="form-group row">
-              <div className="form-group col">
-                {/* Insertar dias disponibles aqui */}
-                <label className="w-100 text-center lead">Dias Disponible:</label><br />
-                <div className="mt-2" id="diasDisponible">{/* Aqui iran los dias dinamicamente */}
-                  <img style={{cursor:"pointer"}} src={AddDiasDisponible} width="70px" height="70px" />
-                </div>
-                                
+            <div className="form-group col">
+              {/* Insertar dias disponibles aqui */}
+              <label className="w-100 text-center lead">Dias Disponible:</label>
+              <br />
+              <div className="w-100 mt-2" id="diasDisponible">
+                {/* Aqui iran los dias dinamicamente */}
+                {this.state.diasDisponible.map((objDia, indice) => {
+                 return( <div
+                    className="col-3"
+                    id={"diaDisponible" + indice}
+                  >
+                    <div className="text-center">
+                      <select className="d-inline" id={"dias" + indice}>
+                        <option>Elige un dia</option>
+                        <option>Lunes</option>
+                        <option>Martes</option>
+                        <option>Miercoles</option>
+                        <option>Jueves</option>
+                        <option>Viernes</option>
+                        <option>Sabado</option>
+                        <option>Domingo</option>
+                      </select><br/>
+                      <TimeInput className="form-control" />
+                      <TimeInput className="form-control" />
+                    </div>
+                    
+                  </div>);
+                })}
+                <img
+                  style={{ cursor: "pointer" }}
+                  src={AddDiasDisponible}
+                  onClick={this.addDiasDisponible}
+                  width="70px"
+                  height="70px"
+                />
               </div>
-              <div className="form-group col">
-                {/* Insertar ubicaciones disponibles aqui */}
-              </div>
+            </div>
+            <div className="form-group col">
+              {/* Insertar ubicaciones disponibles aqui */}
+            </div>
           </div>
           <div className="form-group row">
-              <div className="form-group col">
-                {/* Insertar publico disponibles aqui */}
-              </div>
-              <div className="form-group col">
-                {/* Insertar precioPublico disponibles aqui */}
-              </div>
+            <div className="form-group col">
+              {/* Insertar publico disponibles aqui */}
+            </div>
+            <div className="form-group col">
+              {/* Insertar precioPublico disponibles aqui */}
+            </div>
           </div>
           <div class="form-group">
             <label for="comment">Descripcion</label>

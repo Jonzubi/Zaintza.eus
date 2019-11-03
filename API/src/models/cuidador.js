@@ -15,7 +15,7 @@ var cuidador = new mongoose.Schema({
     telefono : Map,
     isPublic : Boolean,
     precioPorPublico : Map,
-    diasDisponible : Map,
+    diasDisponible : [Map],
     valoracionMedia : Number
 });
 
