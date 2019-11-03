@@ -348,10 +348,10 @@ class RegisterForm extends React.Component {
                 {/* Aqui iran los dias dinamicamente */}
                 {this.state.diasDisponible.map((objDia, indice) => {
                  return( <div
-                    className="col-3"
+                    className="col-6 text-center d-flex justify-content-center"
                     id={"diaDisponible" + indice}
                   >
-                    <div className="text-center">
+                    <div className="w-100">
                       <select className="d-inline" id={"dias" + indice}>
                         <option>Elige un dia</option>
                         <option>Lunes</option>
@@ -362,8 +362,8 @@ class RegisterForm extends React.Component {
                         <option>Sabado</option>
                         <option>Domingo</option>
                       </select><br/>
-                      <TimeInput className="form-control" />
-                      <TimeInput className="form-control" />
+                      <TimeInput initTime="00:00" className="mt-1 text-center d-inline form-control" />
+                      <TimeInput initTime="00:00" className="mt-1 text-center d-inline form-control" />
                     </div>
                     
                   </div>);
