@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMale, faFemale, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faMale, faFemale, faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
 import AddDiasDisponible from "../util/iconos/addDiasDisponible.svg";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
@@ -43,6 +43,7 @@ class RegisterForm extends React.Component {
     this.handleCalendarChange = this.handleCalendarChange.bind(this);
     this.handleIsPublicChange = this.handleIsPublicChange.bind(this);
     this.addDiasDisponible = this.addDiasDisponible.bind(this);
+    this.removeDiasDisponible = this.removeDiasDisponible.bind(this);
   }
 
   onClose() {
@@ -72,9 +73,16 @@ class RegisterForm extends React.Component {
       horaInicio: "00:00",
       horaFin: "00:00"
     });
-    console.log(auxDiasDisponible);
+
     this.setState({
       diasDisponible: auxDiasDisponible
+    });
+  }
+
+  removeDiasDisponible(){
+
+    this.setState({
+      diasDisponible: typeof this.state.diasDisponible.pop() != "undefined" ? this.state.diasDisponible : []
     });
   }
 
@@ -383,13 +391,12 @@ class RegisterForm extends React.Component {
                     </div>
                   );
                 })}
-                <img
-                  style={{ cursor: "pointer" }}
-                  src={AddDiasDisponible}
-                  onClick={this.addDiasDisponible}
-                  width="70px"
-                  height="70px"
-                />
+                <div id="botonesDiasDisponible" className="w-100 mt-2">             
+                {
+                  this.state.diasDisponible.length > 0 ? <FontAwesomeIcon onClick={this.removeDiasDisponible} style={{width:"50px", height:"50px", float:"left", cursor:"pointer"}} icon={faMinusCircle} /> : ""
+                }
+                <FontAwesomeIcon onClick={this.addDiasDisponible} style={{width:"50px", height:"50px", cursor:"pointer" , float:"right"}} icon={faPlusCircle} />
+                </div>   
               </div>
             </div>
             <div className="form-group col">
