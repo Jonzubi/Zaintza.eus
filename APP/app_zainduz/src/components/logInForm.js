@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
+import cogoToast from "cogo-toast";
 
 class LogInForm extends React.Component {
   constructor(props) {
@@ -30,14 +31,22 @@ class LogInForm extends React.Component {
         }
       })
       .then(doc => {
-        if(typeof doc != "undefined"){
-          console.log(doc.data[0]);
+        if(doc.data != "Vacio"){
           this.setState({
             objUsuario : doc.data[0]
           });
+        cogoToast.success(
+          <h5>Sesion iniciada correctamente!</h5>
+        );
         }else{
-          console.log("No hay registros con esos datos");
+          cogoToast.error(
+            <h5>Nombre de usuario o contraseña son incorrectos...</h5>
+          );
         }
+      }).catch(err => {
+        cogoToast.error(
+          <h5>Hay un error en la conexion...</h5>
+        );
       });
   }
 
