@@ -44,6 +44,7 @@ class RegisterForm extends React.Component {
     this.handleIsPublicChange = this.handleIsPublicChange.bind(this);
     this.addDiasDisponible = this.addDiasDisponible.bind(this);
     this.removeDiasDisponible = this.removeDiasDisponible.bind(this);
+    this.handleDiasDisponibleChange = this.handleDiasDisponibleChange.bind(this);
   }
 
   onClose() {
@@ -69,7 +70,7 @@ class RegisterForm extends React.Component {
   addDiasDisponible() {
     let auxDiasDisponible = this.state.diasDisponible;
     auxDiasDisponible.push({
-      dia: "",
+      dia: 0,
       horaInicio: "00:00",
       horaFin: "00:00"
     });
@@ -77,6 +78,36 @@ class RegisterForm extends React.Component {
     this.setState({
       diasDisponible: auxDiasDisponible
     });
+  }
+
+  handleDiasDisponibleChange(e,indice){
+    if(typeof indice == "undefined"){
+      //Significa que lo que se ha cambiado es el combo de los dias
+      var origen = e.target;
+      var indice = parseInt(origen.id.substr(origen.id.length - 1));
+      var valor = origen.value;
+
+      let auxDiasDisponible = this.state.diasDisponible;
+      auxDiasDisponible[indice]['dia'] = valor;
+      
+      this.setState({
+        diasDisponible : auxDiasDisponible
+      });
+    }
+    else{
+      //Significa que ha cambiado la hora, no se sabe si inicio o fin, eso esta en "indice"
+      let atributo = indice.substr(0, indice.length - 1);
+      indice = indice.substr(indice.length - 1);
+
+      let auxDiasDisponible = this.state.diasDisponible;
+      auxDiasDisponible[indice][atributo] = e;
+      
+      this.setState({
+        diasDisponible : auxDiasDisponible
+      });
+    }
+
+    console.log(this.state.diasDisponible);
   }
 
   removeDiasDisponible(){
@@ -366,27 +397,33 @@ class RegisterForm extends React.Component {
                       id={"diaDisponible" + indice}
                     >
                       <div className="mt-2 w-100">
-                        <select className="d-inline" id={"dias" + indice}>
+                        <select value={this.state.diasDisponible[indice].dia} onChange={this.handleDiasDisponibleChange} className="d-inline" id={"dia" + indice}>
                           <option>Elige un dia</option>
-                          <option value="">Lunes</option>
-                          <option>Martes</option>
-                          <option>Miercoles</option>
-                          <option>Jueves</option>
-                          <option>Viernes</option>
-                          <option>Sabado</option>
-                          <option>Domingo</option>
+                          <option value="1">Lunes</option>
+                          <option value="2">Martes</option>
+                          <option value="3">Miercoles</option>
+                          <option value="4">Jueves</option>
+                          <option value="5">Viernes</option>
+                          <option value="6">Sabado</option>
+                          <option value="7">Domingo</option>
                         </select>
                         <br />
-                        <TimeInput
-                        id={"horaInicio" + indice}
-                          initTime="00:00"
+                        <br />
+                        <b>Hora de inicio :</b><TimeInput
+                          onTimeChange={(valor) => {this.handleDiasDisponibleChange(valor, "horaInicio" + indice)}}
+                          id={"horaInicio" + indice}
+                          initTime={this.state.diasDisponible[indice].horaInicio != "00:00" ? this.state.diasDisponible[indice].horaInicio : "00:00"}
                           className="mt-1 text-center d-inline form-control"
                         />
-                        <TimeInput
-                        id={"horaFin" + indice}
-                          initTime="00:00"
+                        <br />
+                        <b>Hora de fin :</b><TimeInput
+                          onTimeChange={(valor) => {this.handleDiasDisponibleChange(valor, "horaFin" + indice)}}
+                          id={"horaFin" + indice}
+                          initTime={this.state.diasDisponible[indice].horaFin != "00:00" ? this.state.diasDisponible[indice].horaFin : "00:00"}
                           className="mt-1 text-center d-inline form-control"
                         />
+                        <br />
+                        <br />
                       </div>
                     </div>
                   );
