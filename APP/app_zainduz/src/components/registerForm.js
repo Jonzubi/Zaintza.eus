@@ -386,7 +386,7 @@ class RegisterForm extends React.Component {
           <div className="form-group row">
             <div className="form-group col">
               {/* Insertar dias disponibles aqui */}
-              <label className="w-100 text-center lead">Dias Disponible:</label>
+              <label className="w-100 text-center lead">Dias disponible:</label>
               <br />
               <div className="w-100 mt-2" id="diasDisponible">
                 {/* Aqui iran los dias dinamicamente */}
@@ -438,6 +438,8 @@ class RegisterForm extends React.Component {
             </div>
             <div className="form-group col">
               {/* Insertar ubicaciones disponibles aqui */}
+              <label className="w-100 text-center lead">Pueblos disponible:</label>
+              <br />
             </div>
           </div>
           <div className="form-group row">
