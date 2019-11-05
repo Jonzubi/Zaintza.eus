@@ -63,7 +63,9 @@ class RegisterForm extends React.Component {
     this.handleIsPublicChange = this.handleIsPublicChange.bind(this);
     this.addDiasDisponible = this.addDiasDisponible.bind(this);
     this.removeDiasDisponible = this.removeDiasDisponible.bind(this);
-    this.handleDiasDisponibleChange = this.handleDiasDisponibleChange.bind(this);
+    this.handleDiasDisponibleChange = this.handleDiasDisponibleChange.bind(
+      this
+    );
     this.handleAuxAddPuebloChange = this.handleAuxAddPuebloChange.bind(this);
     this.handleAddPueblo = this.handleAddPueblo.bind(this);
     this.handleRemovePueblo = this.handleRemovePueblo.bind(this);
@@ -682,6 +684,85 @@ class RegisterForm extends React.Component {
             </div>
             <div className="form-group col">
               {/* Insertar precioPublico disponibles aqui */}
+              <label className="w-100 text-center lead">
+                Precio para cada publico:
+              </label>
+              <div className="list-group md-2">
+                {this.state.publicoDisponible.nino ? (
+                  <div className="list-group-item form-group text-center p-1">
+                    <small>
+                      <b>Niños</b>
+                    </small>
+                    <input
+                      className="form-control"
+                      type="number"
+                      placeholder="Introducir precio €"
+                    />
+                  </div>
+                ) : (
+                  <div className="list-group-item form-group text-center p-1">
+                    <small>
+                      <b>Niños</b>
+                    </small>
+                    <input
+                      className="form-control"
+                      disabled
+                      type="number"
+                      placeholder="Introducir precio €"
+                    />
+                  </div>
+                )}
+
+                {this.state.publicoDisponible.terceraEdad ? (
+                  <div className="list-group-item form-group text-center p-1">
+                    <small>
+                      <b>Tercera Edad</b>
+                    </small>
+                    <input
+                      className="form-control"
+                      type="number"
+                      placeholder="Introducir precio €"
+                    />
+                  </div>
+                ) : (
+                  <div className="list-group-item form-group text-center p-1">
+                    <small>
+                      <b>Tercera Edad</b>
+                    </small>
+                    <input
+                      disabled
+                      className="form-control"
+                      type="number"
+                      placeholder="Introducir precio €"
+                    />
+                  </div>
+                )}
+
+                {this.state.publicoDisponible.necesidadEspecial ? (
+                  <div className="list-group-item form-group text-center p-1">
+                    <small>
+                      <b>Necesidades especiales</b>
+                    </small>
+                    <input
+                      className="form-control"
+                      type="number"
+                      placeholder="Introducir precio €"
+                    />
+                  </div>
+                ) : (
+                  <div className="list-group-item form-group text-center p-1">
+                    <small>
+                      <b>Necesidades especiales</b>
+                    </small>
+                    <input
+                      disabled
+                      className="form-control"
+                      type="number"
+                      placeholder="Introducir precio €"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           <div class="form-group">
