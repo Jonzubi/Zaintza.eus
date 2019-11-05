@@ -35,12 +35,12 @@ class RegisterForm extends React.Component {
       txtMovil: "",
       txtTelefono: "",
       diasDisponible: [],
-      publicoDisponible:{
-        nino : false,
-        terceraEdad : false,
-        necesidadEspecial : false
+      publicoDisponible: {
+        nino: false,
+        terceraEdad: false,
+        necesidadEspecial: false
       },
-      ubicaciones:[],
+      ubicaciones: [],
       txtDescripcion: "",
       isPublic: true,
       avatarSrc: "",
@@ -48,7 +48,7 @@ class RegisterForm extends React.Component {
       hoverSexoM: false,
       hoverSexoF: false,
       isLoading: false,
-      auxAddPueblo:"",
+      auxAddPueblo: "",
       hoverNino: false,
       hoverTerceraEdad: false,
       hoverNecesidadEspecial: false
@@ -92,35 +92,35 @@ class RegisterForm extends React.Component {
     });
   }
 
-  handleAuxAddPuebloChange(e){    
+  handleAuxAddPuebloChange(e) {
     this.setState({
-      auxAddPueblo : e.target.value
+      auxAddPueblo: e.target.value
     });
   }
 
-  handleAddPueblo(){
+  handleAddPueblo() {
     let pueblo = this.state.auxAddPueblo;
-    if(pueblo == "")
-      return;
-    for(var clave in this.state.ubicaciones){
-      if(this.state.ubicaciones[clave] == pueblo){
-        cogoToast.error(
-          <h5>Ese pueblo ya esta insertado!</h5>
-        );
+    if (pueblo == "") return;
+    for (var clave in this.state.ubicaciones) {
+      if (this.state.ubicaciones[clave] == pueblo) {
+        cogoToast.error(<h5>Ese pueblo ya esta insertado!</h5>);
         return;
       }
     }
     this.state.ubicaciones.push(pueblo);
     this.setState({
-      ubicaciones : this.state.ubicaciones,
-      auxAddPueblo : ""
+      ubicaciones: this.state.ubicaciones,
+      auxAddPueblo: ""
     });
   }
 
-  handleRemovePueblo(){
+  handleRemovePueblo() {
     this.setState({
-      ubicaciones : typeof this.state.ubicaciones.pop() != "undefined" ? this.state.ubicaciones : []
-    })
+      ubicaciones:
+        typeof this.state.ubicaciones.pop() != "undefined"
+          ? this.state.ubicaciones
+          : []
+    });
   }
 
   addDiasDisponible() {
@@ -202,19 +202,19 @@ class RegisterForm extends React.Component {
     this.setState({ [sex]: false });
   }
 
-  handlePublicoHover(publico){
+  handlePublicoHover(publico) {
     this.setState({
-      [publico]:true
-    })
+      [publico]: true
+    });
   }
 
-  handlePublicoLeave(publico){
+  handlePublicoLeave(publico) {
     this.setState({
-      [publico]:false
-    })
+      [publico]: false
+    });
   }
 
-  handlePublicoChange(publico){
+  handlePublicoChange(publico) {
     let auxPublicoDisponible = this.state.publicoDisponible;
     auxPublicoDisponible[publico] = !auxPublicoDisponible[publico];
     this.setState({
@@ -541,19 +541,21 @@ class RegisterForm extends React.Component {
                 })}
                 <div id="botonesDiasDisponible" className="w-100 mt-2">
                   {this.state.diasDisponible.length > 0 ? (
-                    <a 
-                      onClick={this.removeDiasDisponible} className="btn btn-danger float-left text-light">
-                    Eliminar dia <FontAwesomeIcon
-                      
-                      icon={faMinusCircle}
-                    /></a>
+                    <a
+                      onClick={this.removeDiasDisponible}
+                      className="btn btn-danger float-left text-light"
+                    >
+                      Eliminar dia <FontAwesomeIcon icon={faMinusCircle} />
+                    </a>
                   ) : (
                     ""
                   )}
-                  <a onClick={this.addDiasDisponible} className="btn btn-success float-right text-light">
-                    Añadir <FontAwesomeIcon                    
-                    icon={faPlusCircle}
-                  /></a>
+                  <a
+                    onClick={this.addDiasDisponible}
+                    className="btn btn-success float-right text-light"
+                  >
+                    Añadir <FontAwesomeIcon icon={faPlusCircle} />
+                  </a>
                 </div>
               </div>
             </div>
@@ -570,16 +572,33 @@ class RegisterForm extends React.Component {
                   placeholder="Introduce el pueblo..."
                   value={this.state.auxAddPueblo}
                 />
-                <a onClick={this.handleAddPueblo} className="btn btn-success float-right text-light">Añadir <FontAwesomeIcon icon={faPlusCircle} /></a>
-                {this.state.ubicaciones.length > 0 ? (<h5 className="mt-2 lead">Pueblos Seleccionados:</h5>) : ""}
-              
-                  <ul className="list-group">
+                <a
+                  onClick={this.handleAddPueblo}
+                  className="btn btn-success float-right text-light"
+                >
+                  Añadir <FontAwesomeIcon icon={faPlusCircle} />
+                </a>
+                {this.state.ubicaciones.length > 0 ? (
+                  <h5 className="mt-2 lead">Pueblos Seleccionados:</h5>
+                ) : (
+                  ""
+                )}
+
+                <ul className="list-group">
                   {this.state.ubicaciones.map(pueblo => {
-                    return(<li className="list-group-item">{pueblo}</li>);
-                  })
-                  }
-                  </ul>
-                {this.state.ubicaciones.length > 0 ? (<a onClick={this.handleRemovePueblo} className="mt-4 btn btn-danger float-right text-light">Eliminar pueblo <FontAwesomeIcon icon={faMinusCircle} /></a>) : ""}
+                    return <li className="list-group-item">{pueblo}</li>;
+                  })}
+                </ul>
+                {this.state.ubicaciones.length > 0 ? (
+                  <a
+                    onClick={this.handleRemovePueblo}
+                    className="mt-4 btn btn-danger float-right text-light"
+                  >
+                    Eliminar pueblo <FontAwesomeIcon icon={faMinusCircle} />
+                  </a>
+                ) : (
+                  ""
+                )}
               </div>
               <br />
             </div>
@@ -591,18 +610,74 @@ class RegisterForm extends React.Component {
                 Público disponible:
               </label>
               <div className="row md-2">
-                  <div onClick={() => {this.handlePublicoChange("nino")}} onMouseEnter={() =>{this.handlePublicoHover("hoverNino")}} onMouseLeave={() => {this.handlePublicoLeave("hoverNino")}} className="col-4 text-center p-1" style={{background: this.state.hoverNino || this.state.publicoDisponible.nino ? "#28a745" : ""}}>
-                    <img src={imgNino} className="w-100 h-100" />
-                    <small className="font-weight-bold">Niños</small>
-                  </div>
-                  <div onClick={() => {this.handlePublicoChange("terceraEdad")}} onMouseEnter={() =>{this.handlePublicoHover("hoverTerceraEdad")}} onMouseLeave={() => {this.handlePublicoLeave("hoverTerceraEdad")}} className="col-4 text-center p-1" style={{background: this.state.hoverTerceraEdad || this.state.publicoDisponible.terceraEdad ? "#28a745" : ""}}>
-                    <img src={imgTerceraEdad} className="w-100 h-100" />
-                    <small className="font-weight-bold">Tercera edad</small>
-                  </div>
-                  <div onClick={() => {this.handlePublicoChange("necesidadEspecial")}} onMouseEnter={() =>{this.handlePublicoHover("hoverNecesidadEspecial")}} onMouseLeave={() => {this.handlePublicoLeave("hoverNecesidadEspecial")}} className="col-4 text-center p-1" style={{background: this.state.hoverNecesidadEspecial || this.state.publicoDisponible.necesidadEspecial ? "#28a745" : ""}}>
-                    <img src={imgNecesidadEspecial} className="w-100 h-100" />
-                    <small className="font-weight-bold">Necesidades especiales</small>
-                  </div>
+                <div
+                  onClick={() => {
+                    this.handlePublicoChange("nino");
+                  }}
+                  onMouseEnter={() => {
+                    this.handlePublicoHover("hoverNino");
+                  }}
+                  onMouseLeave={() => {
+                    this.handlePublicoLeave("hoverNino");
+                  }}
+                  className="col-4 text-center p-1"
+                  style={{
+                    background: this.state.publicoDisponible.nino
+                      ? "#28a745"
+                      : this.state.hoverNino
+                      ? "#545b62"
+                      : ""
+                  }}
+                >
+                  <img src={imgNino} className="w-100 h-100" />
+                  <small className="font-weight-bold">Niños</small>
+                </div>
+                <div
+                  onClick={() => {
+                    this.handlePublicoChange("terceraEdad");
+                  }}
+                  onMouseEnter={() => {
+                    this.handlePublicoHover("hoverTerceraEdad");
+                  }}
+                  onMouseLeave={() => {
+                    this.handlePublicoLeave("hoverTerceraEdad");
+                  }}
+                  className="col-4 text-center p-1"
+                  style={{
+                    background: this.state.publicoDisponible.terceraEdad
+                      ? "#28a745"
+                      : this.state.hoverTerceraEdad
+                      ? "#545b62"
+                      : ""
+                  }}
+                >
+                  <img src={imgTerceraEdad} className="w-100 h-100" />
+                  <small className="font-weight-bold">Tercera edad</small>
+                </div>
+                <div
+                  onClick={() => {
+                    this.handlePublicoChange("necesidadEspecial");
+                  }}
+                  onMouseEnter={() => {
+                    this.handlePublicoHover("hoverNecesidadEspecial");
+                  }}
+                  onMouseLeave={() => {
+                    this.handlePublicoLeave("hoverNecesidadEspecial");
+                  }}
+                  className="col-4 text-center p-1"
+                  style={{
+                    background: this.state.publicoDisponible.necesidadEspecial
+                      ? "#28a745"
+                      : this.state.hoverNecesidadEspecial
+                      ? "#545b62"
+                      : ""
+                  }}
+                >
+                  <img src={imgNecesidadEspecial} className="w-100 h-100" />
+                  <small className="font-weight-bold">
+                    Necesidades especiales
+                  </small>
+                </div>
               </div>
             </div>
             <div className="form-group col">

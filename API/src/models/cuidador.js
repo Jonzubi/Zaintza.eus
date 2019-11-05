@@ -9,7 +9,7 @@ var cuidador = new mongoose.Schema({
     direcFoto : [String],
     descripcion : String,
     ubicaciones : [String],
-    publicoDisponible : [String],
+    publicoDisponible : Map,
     email : String,
     contrasena : String,
     telefono : Map,
