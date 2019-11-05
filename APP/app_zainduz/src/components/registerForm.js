@@ -17,6 +17,9 @@ import Switch from "react-switch";
 import TimeInput from "react-time-input";
 import "react-datez/dist/css/react-datez.css";
 import loadGif from "../util/gifs/loadGif.gif";
+import imgNino from "../util/images/nino.png";
+import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
+import imgTerceraEdad from "../util/images/terceraEdad.png";
 
 class RegisterForm extends React.Component {
   constructor(props) {
@@ -32,6 +35,11 @@ class RegisterForm extends React.Component {
       txtMovil: "",
       txtTelefono: "",
       diasDisponible: [],
+      publicoDisponible:{
+        nino : false,
+        terceraEdad : false,
+        necesidadEspecial : false
+      },
       ubicaciones:[],
       txtDescripcion: "",
       isPublic: true,
@@ -40,7 +48,10 @@ class RegisterForm extends React.Component {
       hoverSexoM: false,
       hoverSexoF: false,
       isLoading: false,
-      auxAddPueblo:""
+      auxAddPueblo:"",
+      hoverNino: false,
+      hoverTerceraEdad: false,
+      hoverNecesidadEspecial: false
     };
 
     this.onCrop = this.onCrop.bind(this);
@@ -56,6 +67,9 @@ class RegisterForm extends React.Component {
     this.handleAuxAddPuebloChange = this.handleAuxAddPuebloChange.bind(this);
     this.handleAddPueblo = this.handleAddPueblo.bind(this);
     this.handleRemovePueblo = this.handleRemovePueblo.bind(this);
+    this.handlePublicoHover = this.handlePublicoHover.bind(this);
+    this.handlePublicoLeave = this.handlePublicoLeave.bind(this);
+    this.handlePublicoChange = this.handlePublicoChange.bind(this);
   }
 
   onClose() {
@@ -186,6 +200,26 @@ class RegisterForm extends React.Component {
 
   handleSexLeave(sex) {
     this.setState({ [sex]: false });
+  }
+
+  handlePublicoHover(publico){
+    this.setState({
+      [publico]:true
+    })
+  }
+
+  handlePublicoLeave(publico){
+    this.setState({
+      [publico]:false
+    })
+  }
+
+  handlePublicoChange(publico){
+    let auxPublicoDisponible = this.state.publicoDisponible;
+    auxPublicoDisponible[publico] = !auxPublicoDisponible[publico];
+    this.setState({
+      publicoDisponible: auxPublicoDisponible
+    });
   }
 
   handleRegistrarse() {
@@ -552,6 +586,23 @@ class RegisterForm extends React.Component {
           <div className="form-group row">
             <div className="form-group col">
               {/* Insertar publico disponibles aqui */}
+              <label className="w-100 text-center lead">
+                Público disponible:
+              </label>
+              <div className="row md-2">
+                  <div onClick={() => {this.handlePublicoChange("nino")}} onMouseEnter={() =>{this.handlePublicoHover("hoverNino")}} onMouseLeave={() => {this.handlePublicoLeave("hoverNino")}} className="col-4 text-center p-1" style={{background: this.state.hoverNino || this.state.publicoDisponible.nino ? "#28a745" : ""}}>
+                    <img src={imgNino} className="w-100 h-100" />
+                    <small className="font-weight-bold">Niños</small>
+                  </div>
+                  <div onClick={() => {this.handlePublicoChange("terceraEdad")}} onMouseEnter={() =>{this.handlePublicoHover("hoverTerceraEdad")}} onMouseLeave={() => {this.handlePublicoLeave("hoverTerceraEdad")}} className="col-4 text-center p-1" style={{background: this.state.hoverTerceraEdad || this.state.publicoDisponible.terceraEdad ? "#28a745" : ""}}>
+                    <img src={imgTerceraEdad} className="w-100 h-100" />
+                    <small className="font-weight-bold">Tercera edad</small>
+                  </div>
+                  <div onClick={() => {this.handlePublicoChange("necesidadEspecial")}} onMouseEnter={() =>{this.handlePublicoHover("hoverNecesidadEspecial")}} onMouseLeave={() => {this.handlePublicoLeave("hoverNecesidadEspecial")}} className="col-4 text-center p-1" style={{background: this.state.hoverNecesidadEspecial || this.state.publicoDisponible.necesidadEspecial ? "#28a745" : ""}}>
+                    <img src={imgNecesidadEspecial} className="w-100 h-100" />
+                    <small className="font-weight-bold">Necesidades especiales</small>
+                  </div>
+              </div>
             </div>
             <div className="form-group col">
               {/* Insertar precioPublico disponibles aqui */}
