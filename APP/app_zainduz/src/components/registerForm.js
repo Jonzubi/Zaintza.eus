@@ -1,6 +1,12 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMale, faFemale, faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMale,
+  faFemale,
+  faPlusCircle,
+  faMinusCircle,
+  faPlusSquare
+} from "@fortawesome/free-solid-svg-icons";
 import AddDiasDisponible from "../util/iconos/addDiasDisponible.svg";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
@@ -26,13 +32,15 @@ class RegisterForm extends React.Component {
       txtMovil: "",
       txtTelefono: "",
       diasDisponible: [],
+      ubicaciones:[],
       txtDescripcion: "",
       isPublic: true,
       avatarSrc: "",
       avatarPreview: "",
       hoverSexoM: false,
       hoverSexoF: false,
-      isLoading: false
+      isLoading: false,
+      auxAddPueblo:""
     };
 
     this.onCrop = this.onCrop.bind(this);
@@ -45,6 +53,9 @@ class RegisterForm extends React.Component {
     this.addDiasDisponible = this.addDiasDisponible.bind(this);
     this.removeDiasDisponible = this.removeDiasDisponible.bind(this);
     this.handleDiasDisponibleChange = this.handleDiasDisponibleChange.bind(this);
+    this.handleAuxAddPuebloChange = this.handleAuxAddPuebloChange.bind(this);
+    this.handleAddPueblo = this.handleAddPueblo.bind(this);
+    this.handleRemovePueblo = this.handleRemovePueblo.bind(this);
   }
 
   onClose() {
@@ -67,6 +78,37 @@ class RegisterForm extends React.Component {
     });
   }
 
+  handleAuxAddPuebloChange(e){    
+    this.setState({
+      auxAddPueblo : e.target.value
+    });
+  }
+
+  handleAddPueblo(){
+    let pueblo = this.state.auxAddPueblo;
+    if(pueblo == "")
+      return;
+    for(var clave in this.state.ubicaciones){
+      if(this.state.ubicaciones[clave] == pueblo){
+        cogoToast.error(
+          <h5>Ese pueblo ya esta insertado!</h5>
+        );
+        return;
+      }
+    }
+    this.state.ubicaciones.push(pueblo);
+    this.setState({
+      ubicaciones : this.state.ubicaciones,
+      auxAddPueblo : ""
+    });
+  }
+
+  handleRemovePueblo(){
+    this.setState({
+      ubicaciones : typeof this.state.ubicaciones.pop() != "undefined" ? this.state.ubicaciones : []
+    })
+  }
+
   addDiasDisponible() {
     let auxDiasDisponible = this.state.diasDisponible;
     auxDiasDisponible.push({
@@ -80,40 +122,41 @@ class RegisterForm extends React.Component {
     });
   }
 
-  handleDiasDisponibleChange(e,indice){
-    if(typeof indice == "undefined"){
+  handleDiasDisponibleChange(e, indice) {
+    if (typeof indice == "undefined") {
       //Significa que lo que se ha cambiado es el combo de los dias
       var origen = e.target;
       var indice = parseInt(origen.id.substr(origen.id.length - 1));
       var valor = origen.value;
 
       let auxDiasDisponible = this.state.diasDisponible;
-      auxDiasDisponible[indice]['dia'] = valor;
-      
+      auxDiasDisponible[indice]["dia"] = valor;
+
       this.setState({
-        diasDisponible : auxDiasDisponible
+        diasDisponible: auxDiasDisponible
       });
-    }
-    else{
+    } else {
       //Significa que ha cambiado la hora, no se sabe si inicio o fin, eso esta en "indice"
       let atributo = indice.substr(0, indice.length - 1);
       indice = indice.substr(indice.length - 1);
 
       let auxDiasDisponible = this.state.diasDisponible;
       auxDiasDisponible[indice][atributo] = e;
-      
+
       this.setState({
-        diasDisponible : auxDiasDisponible
+        diasDisponible: auxDiasDisponible
       });
     }
 
     console.log(this.state.diasDisponible);
   }
 
-  removeDiasDisponible(){
-
+  removeDiasDisponible() {
     this.setState({
-      diasDisponible: typeof this.state.diasDisponible.pop() != "undefined" ? this.state.diasDisponible : []
+      diasDisponible:
+        typeof this.state.diasDisponible.pop() != "undefined"
+          ? this.state.diasDisponible
+          : []
     });
   }
 
@@ -168,7 +211,11 @@ class RegisterForm extends React.Component {
           etiqueta: "Fijo",
           numero: this.state.txtTelefono
         }
-      }
+      },
+      isPublic: this.state.isPublic,
+      diasDisponible: this.state.diasDisponible,
+      fechaNacimiento: this.state.txtFechaNacimiento,
+      ubicaciones: this.state.ubicaciones
     };
 
     this.setState({ isLoading: true });
@@ -186,7 +233,10 @@ class RegisterForm extends React.Component {
           txtContrasena: "",
           txtMovil: "",
           txtTelefono: "",
+          diasDisponible: [],
+          ubicaciones: [],
           txtDescripcion: "",
+          isPublic: true,
           avatarSrc: "",
           avatarPreview: "",
           hoverSexoM: false,
@@ -396,8 +446,13 @@ class RegisterForm extends React.Component {
                       className="col-6 mx-auto text-center"
                       id={"diaDisponible" + indice}
                     >
-                      <div className="mt-2 w-100">
-                        <select value={this.state.diasDisponible[indice].dia} onChange={this.handleDiasDisponibleChange} className="d-inline" id={"dia" + indice}>
+                      <div className="form-control mt-4 w-100">
+                        <select
+                          value={this.state.diasDisponible[indice].dia}
+                          onChange={this.handleDiasDisponibleChange}
+                          className="d-inline"
+                          id={"dia" + indice}
+                        >
                           <option>Elige un dia</option>
                           <option value="1">Lunes</option>
                           <option value="2">Martes</option>
@@ -409,17 +464,38 @@ class RegisterForm extends React.Component {
                         </select>
                         <br />
                         <br />
-                        <b>Hora de inicio :</b><TimeInput
-                          onTimeChange={(valor) => {this.handleDiasDisponibleChange(valor, "horaInicio" + indice)}}
+                        <b>Hora de inicio :</b>
+                        <TimeInput
+                          onTimeChange={valor => {
+                            this.handleDiasDisponibleChange(
+                              valor,
+                              "horaInicio" + indice
+                            );
+                          }}
                           id={"horaInicio" + indice}
-                          initTime={this.state.diasDisponible[indice].horaInicio != "00:00" ? this.state.diasDisponible[indice].horaInicio : "00:00"}
+                          initTime={
+                            this.state.diasDisponible[indice].horaInicio !=
+                            "00:00"
+                              ? this.state.diasDisponible[indice].horaInicio
+                              : "00:00"
+                          }
                           className="mt-1 text-center d-inline form-control"
                         />
                         <br />
-                        <b>Hora de fin :</b><TimeInput
-                          onTimeChange={(valor) => {this.handleDiasDisponibleChange(valor, "horaFin" + indice)}}
+                        <b>Hora de fin :</b>
+                        <TimeInput
+                          onTimeChange={valor => {
+                            this.handleDiasDisponibleChange(
+                              valor,
+                              "horaFin" + indice
+                            );
+                          }}
                           id={"horaFin" + indice}
-                          initTime={this.state.diasDisponible[indice].horaFin != "00:00" ? this.state.diasDisponible[indice].horaFin : "00:00"}
+                          initTime={
+                            this.state.diasDisponible[indice].horaFin != "00:00"
+                              ? this.state.diasDisponible[indice].horaFin
+                              : "00:00"
+                          }
                           className="mt-1 text-center d-inline form-control"
                         />
                         <br />
@@ -428,17 +504,48 @@ class RegisterForm extends React.Component {
                     </div>
                   );
                 })}
-                <div id="botonesDiasDisponible" className="w-100 mt-2">             
-                {
-                  this.state.diasDisponible.length > 0 ? <FontAwesomeIcon onClick={this.removeDiasDisponible} style={{width:"50px", height:"50px", float:"left", cursor:"pointer"}} icon={faMinusCircle} /> : ""
-                }
-                <FontAwesomeIcon onClick={this.addDiasDisponible} style={{width:"50px", height:"50px", cursor:"pointer" , float:"right"}} icon={faPlusCircle} />
-                </div>   
+                <div id="botonesDiasDisponible" className="w-100 mt-2">
+                  {this.state.diasDisponible.length > 0 ? (
+                    <a 
+                      onClick={this.removeDiasDisponible} className="btn btn-danger float-left text-light">
+                    Eliminar dia <FontAwesomeIcon
+                      
+                      icon={faMinusCircle}
+                    /></a>
+                  ) : (
+                    ""
+                  )}
+                  <a onClick={this.addDiasDisponible} className="btn btn-success float-right text-light">
+                    Añadir <FontAwesomeIcon                    
+                    icon={faPlusCircle}
+                  /></a>
+                </div>
               </div>
             </div>
             <div className="form-group col">
               {/* Insertar ubicaciones disponibles aqui */}
-              <label className="w-100 text-center lead">Pueblos disponible:</label>
+              <label className="w-100 text-center lead">
+                Pueblos disponible:
+              </label>
+              <div class="form-group mt-2">
+                <input
+                  onChange={this.handleAuxAddPuebloChange}
+                  class="form-control d-inline w-75"
+                  id="txtAddPueblos"
+                  placeholder="Introduce el pueblo..."
+                  value={this.state.auxAddPueblo}
+                />
+                <a onClick={this.handleAddPueblo} className="btn btn-success float-right text-light">Añadir <FontAwesomeIcon icon={faPlusCircle} /></a>
+                {this.state.ubicaciones.length > 0 ? (<h5 className="mt-2 lead">Pueblos Seleccionados:</h5>) : ""}
+              
+                  <ul className="list-group">
+                  {this.state.ubicaciones.map(pueblo => {
+                    return(<li className="list-group-item">{pueblo}</li>);
+                  })
+                  }
+                  </ul>
+                {this.state.ubicaciones.length > 0 ? (<a onClick={this.handleRemovePueblo} className="mt-4 btn btn-danger float-right text-light">Eliminar pueblo <FontAwesomeIcon icon={faMinusCircle} /></a>) : ""}
+              </div>
               <br />
             </div>
           </div>
