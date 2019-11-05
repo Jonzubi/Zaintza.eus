@@ -249,7 +249,8 @@ class RegisterForm extends React.Component {
       isPublic: this.state.isPublic,
       diasDisponible: this.state.diasDisponible,
       fechaNacimiento: this.state.txtFechaNacimiento,
-      ubicaciones: this.state.ubicaciones
+      ubicaciones: this.state.ubicaciones,
+      publicoDisponible: this.state.publicoDisponible
     };
 
     this.setState({ isLoading: true });
