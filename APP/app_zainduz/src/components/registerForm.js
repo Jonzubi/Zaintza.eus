@@ -40,6 +40,11 @@ class RegisterForm extends React.Component {
         terceraEdad: false,
         necesidadEspecial: false
       },
+      precioPorPublico: {
+        nino: "",
+        terceraEdad: "",
+        necesidadEspecial: ""
+      },
       ubicaciones: [],
       txtDescripcion: "",
       isPublic: true,
@@ -72,6 +77,7 @@ class RegisterForm extends React.Component {
     this.handlePublicoHover = this.handlePublicoHover.bind(this);
     this.handlePublicoLeave = this.handlePublicoLeave.bind(this);
     this.handlePublicoChange = this.handlePublicoChange.bind(this);
+    this.handlePrecioChange = this.handlePrecioChange.bind(this);
   }
 
   onClose() {
@@ -224,6 +230,14 @@ class RegisterForm extends React.Component {
     });
   }
 
+  handlePrecioChange(atributo, valor) {
+    let auxPrecioPublico = this.state.precioPorPublico;
+    auxPrecioPublico[atributo] = valor;
+    this.setState({
+      precioPorPublico: auxPrecioPublico
+    });
+  }
+
   handleRegistrarse() {
     /*TODO primero validar todo
 
@@ -252,7 +266,8 @@ class RegisterForm extends React.Component {
       diasDisponible: this.state.diasDisponible,
       fechaNacimiento: this.state.txtFechaNacimiento,
       ubicaciones: this.state.ubicaciones,
-      publicoDisponible: this.state.publicoDisponible
+      publicoDisponible: this.state.publicoDisponible,
+      precioPorPublico: this.state.precioPorPublico
     };
 
     this.setState({ isLoading: true });
@@ -271,6 +286,16 @@ class RegisterForm extends React.Component {
           txtMovil: "",
           txtTelefono: "",
           diasDisponible: [],
+          publicoDisponible: {
+            nino: false,
+            terceraEdad: false,
+            necesidadEspecial: false
+          },
+          precioPorPublico: {
+            nino: "",
+            terceraEdad: "",
+            necesidadEspecial: ""
+          },
           ubicaciones: [],
           txtDescripcion: "",
           isPublic: true,
@@ -278,7 +303,11 @@ class RegisterForm extends React.Component {
           avatarPreview: "",
           hoverSexoM: false,
           hoverSexoF: false,
-          isLoading: false
+          isLoading: false,
+          auxAddPueblo: "",
+          hoverNino: false,
+          hoverTerceraEdad: false,
+          hoverNecesidadEspecial: false
         });
         cogoToast.success(
           <div>
@@ -694,9 +723,12 @@ class RegisterForm extends React.Component {
                       <b>Niños</b>
                     </small>
                     <input
+                      onChange={event => {
+                        this.handlePrecioChange("nino", event.target.value);
+                      }}
                       className="form-control"
                       type="number"
-                      placeholder="Introducir precio €"
+                      placeholder="Introducir precio €/h"
                     />
                   </div>
                 ) : (
@@ -705,10 +737,13 @@ class RegisterForm extends React.Component {
                       <b>Niños</b>
                     </small>
                     <input
+                      onChange={event => {
+                        this.handlePrecioChange("nino", event.target.value);
+                      }}
                       className="form-control"
                       disabled
                       type="number"
-                      placeholder="Introducir precio €"
+                      placeholder="Introducir precio €/h"
                     />
                   </div>
                 )}
@@ -719,9 +754,15 @@ class RegisterForm extends React.Component {
                       <b>Tercera Edad</b>
                     </small>
                     <input
+                      onChange={event => {
+                        this.handlePrecioChange(
+                          "terceraEdad",
+                          event.target.value
+                        );
+                      }}
                       className="form-control"
                       type="number"
-                      placeholder="Introducir precio €"
+                      placeholder="Introducir precio €/h"
                     />
                   </div>
                 ) : (
@@ -730,10 +771,16 @@ class RegisterForm extends React.Component {
                       <b>Tercera Edad</b>
                     </small>
                     <input
+                      onChange={event => {
+                        this.handlePrecioChange(
+                          "terceraEdad",
+                          event.target.value
+                        );
+                      }}
                       disabled
                       className="form-control"
                       type="number"
-                      placeholder="Introducir precio €"
+                      placeholder="Introducir precio €/h"
                     />
                   </div>
                 )}
@@ -744,9 +791,15 @@ class RegisterForm extends React.Component {
                       <b>Necesidades especiales</b>
                     </small>
                     <input
+                      onChange={event => {
+                        this.handlePrecioChange(
+                          "necesidadEspecial",
+                          event.target.value
+                        );
+                      }}
                       className="form-control"
                       type="number"
-                      placeholder="Introducir precio €"
+                      placeholder="Introducir precio €/h"
                     />
                   </div>
                 ) : (
@@ -755,10 +808,16 @@ class RegisterForm extends React.Component {
                       <b>Necesidades especiales</b>
                     </small>
                     <input
+                      onChange={event => {
+                        this.handlePrecioChange(
+                          "necesidadEspecial",
+                          event.target.value
+                        );
+                      }}
                       disabled
                       className="form-control"
                       type="number"
-                      placeholder="Introducir precio €"
+                      placeholder="Introducir precio €/h"
                     />
                   </div>
                 )}
