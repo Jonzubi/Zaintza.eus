@@ -108,6 +108,10 @@ exports.delete = function(req, res) {
     });
 };
 
+exports.postAvatar = function(req,res){
+  
+}
+
 //Funcion para ver si el server esta en linea
 exports.inicio = function(req, res) {
   console.log("Solicitud recibida");

@@ -20,6 +20,7 @@ import loadGif from "../util/gifs/loadGif.gif";
 import imgNino from "../util/images/nino.png";
 import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
 import imgTerceraEdad from "../util/images/terceraEdad.png";
+import getRandomString from "../util/funciones";
 
 class RegisterForm extends React.Component {
   constructor(props) {
@@ -238,13 +239,24 @@ class RegisterForm extends React.Component {
     });
   }
 
-  handleRegistrarse() {
+  async handleRegistrarse() {
     /*TODO primero validar todo
 
     */
     //TODO llamar a la api para insertar
+    this.setState({ isLoading: true });
+    
+    var imageId = getRandomString();
+    var formData;
+    if(this.state.avatarPreview){
+      //Como el tratado del avatar es diferente(hay que guardar el fichero arriba) haremos dos peticiones
+      formData = {
+        avatar: this.state.avatarPreview
+      }
+      await axios.post("http://" + ipMaquina + ":3001/avatar/" + imageId, formData);
+    }
 
-    var formData = {
+    formData = {
       nombre: this.state.txtNombre,
       apellido1: this.state.txtApellido1,
       apellido2: this.state.txtApellido2,
@@ -268,9 +280,7 @@ class RegisterForm extends React.Component {
       ubicaciones: this.state.ubicaciones,
       publicoDisponible: this.state.publicoDisponible,
       precioPorPublico: this.state.precioPorPublico
-    };
-
-    this.setState({ isLoading: true });
+    };    
 
     axios
       .post("http://" + ipMaquina + ":3001/cuidador", formData)
