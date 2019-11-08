@@ -245,16 +245,6 @@ class RegisterForm extends React.Component {
     */
     //TODO llamar a la api para insertar
     this.setState({ isLoading: true });
-    
-    var imageId = getRandomString();
-    var formData;
-    if(this.state.avatarPreview){
-      //Como el tratado del avatar es diferente(hay que guardar el fichero arriba) haremos dos peticiones
-      formData = {
-        avatar: this.state.avatarPreview
-      }
-      await axios.post("http://" + ipMaquina + ":3001/avatar/" + imageId, formData);
-    }
 
     formData = {
       nombre: this.state.txtNombre,

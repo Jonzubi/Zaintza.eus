@@ -17,8 +17,4 @@ module.exports = function(app) {
     
     app.route("/:tabla/:id")
         .patch(controlador.update);
-    
-    app.route("/avatar/:id")
-        .post(controlador.postAvatar);
-
 }
