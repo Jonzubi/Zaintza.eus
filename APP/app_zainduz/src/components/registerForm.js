@@ -89,6 +89,16 @@ class RegisterForm extends React.Component {
     this.setState({ avatarPreview: preview });
   }
 
+  onBeforeFileLoad(elem) {
+    console.log(elem.target.files[0].size);
+    if(elem.target.files[0].size > 71680){
+      cogoToast.error(
+        <h5>La imagen es demasiado grande!</h5>
+      );
+      elem.target.value = "";
+    };
+  }
+
   handleCalendarChange(valor) {
     this.setState({
       txtFechaNacimiento: valor
@@ -246,7 +256,7 @@ class RegisterForm extends React.Component {
     //TODO llamar a la api para insertar
     this.setState({ isLoading: true });
 
-    formData = {
+    var formData = {
       nombre: this.state.txtNombre,
       apellido1: this.state.txtApellido1,
       apellido2: this.state.txtApellido2,
@@ -343,6 +353,7 @@ class RegisterForm extends React.Component {
                 width={200}
                 onCrop={this.onCrop}
                 onClose={this.onClose}
+                onBeforeFileLoad={this.onBeforeFileLoad}
                 src={this.state.avatarSrc}
               />
             </div>
