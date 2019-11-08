@@ -20,7 +20,6 @@ import loadGif from "../util/gifs/loadGif.gif";
 import imgNino from "../util/images/nino.png";
 import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
 import imgTerceraEdad from "../util/images/terceraEdad.png";
-import getRandomString from "../util/funciones";
 
 class RegisterForm extends React.Component {
   constructor(props) {
@@ -249,7 +248,7 @@ class RegisterForm extends React.Component {
     });
   }
 
-  async handleRegistrarse() {
+  handleRegistrarse() {
     /*TODO primero validar todo
 
     */
@@ -280,7 +279,7 @@ class RegisterForm extends React.Component {
       ubicaciones: this.state.ubicaciones,
       publicoDisponible: this.state.publicoDisponible,
       precioPorPublico: this.state.precioPorPublico
-    };    
+    };
 
     axios
       .post("http://" + ipMaquina + ":3001/cuidador", formData)
