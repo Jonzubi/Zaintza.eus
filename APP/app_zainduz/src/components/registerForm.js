@@ -20,6 +20,7 @@ import loadGif from "../util/gifs/loadGif.gif";
 import imgNino from "../util/images/nino.png";
 import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
 import imgTerceraEdad from "../util/images/terceraEdad.png";
+import {getRandomString} from "../util/funciones";
 
 class RegisterForm extends React.Component {
   constructor(props) {
@@ -90,12 +91,10 @@ class RegisterForm extends React.Component {
 
   onBeforeFileLoad(elem) {
     console.log(elem.target.files[0].size);
-    if(elem.target.files[0].size > 71680){
-      cogoToast.error(
-        <h5>La imagen es demasiado grande!</h5>
-      );
+    if (elem.target.files[0].size > 71680) {
+      cogoToast.error(<h5>La imagen es demasiado grande!</h5>);
       elem.target.value = "";
-    };
+    }
   }
 
   handleCalendarChange(valor) {
@@ -250,82 +249,96 @@ class RegisterForm extends React.Component {
 
   handleRegistrarse() {
     /*TODO primero validar todo
-
+    
     */
     //TODO llamar a la api para insertar
     this.setState({ isLoading: true });
 
-    var formData = {
-      nombre: this.state.txtNombre,
-      apellido1: this.state.txtApellido1,
-      apellido2: this.state.txtApellido2,
-      sexo: this.state.txtSexo,
-      email: this.state.txtEmail,
-      contrasena: this.state.txtContrasena,
-      descripcion: this.state.txtDescripcion,
-      telefono: {
-        movil: {
-          etiqueta: "Movil",
-          numero: this.state.txtMovil
-        },
-        fijo: {
-          etiqueta: "Fijo",
-          numero: this.state.txtTelefono
-        }
-      },
-      isPublic: this.state.isPublic,
-      diasDisponible: this.state.diasDisponible,
-      fechaNacimiento: this.state.txtFechaNacimiento,
-      ubicaciones: this.state.ubicaciones,
-      publicoDisponible: this.state.publicoDisponible,
-      precioPorPublico: this.state.precioPorPublico
-    };
-
+    var codAvatar = getRandomString(20);
     axios
-      .post("http://" + ipMaquina + ":3001/cuidador", formData)
-      .then(resultado => {
-        this.setState({
-          txtNombre: "",
-          txtApellido1: "",
-          txtApellido2: "",
-          txtEmail: "",
-          txtSexo: "",
-          txtFechaNacimiento: "",
-          txtContrasena: "",
-          txtMovil: "",
-          txtTelefono: "",
-          diasDisponible: [],
-          publicoDisponible: {
-            nino: false,
-            terceraEdad: false,
-            necesidadEspecial: false
+      .post("http://" + ipMaquina + ":3001/avatar/" + codAvatar, {
+        avatarB64: this.state.avatarPreview
+      })
+      .then(done => {
+        var formData = {
+          nombre: this.state.txtNombre,
+          apellido1: this.state.txtApellido1,
+          apellido2: this.state.txtApellido2,
+          sexo: this.state.txtSexo,
+          direcFoto: codAvatar,
+          email: this.state.txtEmail,
+          contrasena: this.state.txtContrasena,
+          descripcion: this.state.txtDescripcion,
+          telefono: {
+            movil: {
+              etiqueta: "Movil",
+              numero: this.state.txtMovil
+            },
+            fijo: {
+              etiqueta: "Fijo",
+              numero: this.state.txtTelefono
+            }
           },
-          precioPorPublico: {
-            nino: "",
-            terceraEdad: "",
-            necesidadEspecial: ""
-          },
-          ubicaciones: [],
-          txtDescripcion: "",
-          isPublic: true,
-          avatarSrc: "",
-          avatarPreview: "",
-          hoverSexoM: false,
-          hoverSexoF: false,
-          isLoading: false,
-          auxAddPueblo: "",
-          hoverNino: false,
-          hoverTerceraEdad: false,
-          hoverNecesidadEspecial: false
-        });
-        cogoToast.success(
-          <div>
-            <h5>Registro completado correctamente!</h5>
-            <small>
-              <b>Gracias por confiar en Zainduz</b>
-            </small>
-          </div>
-        );
+          isPublic: this.state.isPublic,
+          diasDisponible: this.state.diasDisponible,
+          fechaNacimiento: this.state.txtFechaNacimiento,
+          ubicaciones: this.state.ubicaciones,
+          publicoDisponible: this.state.publicoDisponible,
+          precioPorPublico: this.state.precioPorPublico
+        };
+
+        axios
+          .post("http://" + ipMaquina + ":3001/cuidador", formData)
+          .then(resultado => {
+            this.setState({
+              txtNombre: "",
+              txtApellido1: "",
+              txtApellido2: "",
+              txtEmail: "",
+              txtSexo: "",
+              txtFechaNacimiento: "",
+              txtContrasena: "",
+              txtMovil: "",
+              txtTelefono: "",
+              diasDisponible: [],
+              publicoDisponible: {
+                nino: false,
+                terceraEdad: false,
+                necesidadEspecial: false
+              },
+              precioPorPublico: {
+                nino: "",
+                terceraEdad: "",
+                necesidadEspecial: ""
+              },
+              ubicaciones: [],
+              txtDescripcion: "",
+              isPublic: true,
+              avatarSrc: "",
+              avatarPreview: "",
+              hoverSexoM: false,
+              hoverSexoF: false,
+              isLoading: false,
+              auxAddPueblo: "",
+              hoverNino: false,
+              hoverTerceraEdad: false,
+              hoverNecesidadEspecial: false
+            });
+            cogoToast.success(
+              <div>
+                <h5>Registro completado correctamente!</h5>
+                <small>
+                  <b>Gracias por confiar en Zainduz</b>
+                </small>
+              </div>
+            );
+          })
+          .catch(err => {
+            this.setState({
+              isLoading: false
+            });
+            cogoToast.error(<h5>Algo ha ido mal!</h5>);
+          });
       })
       .catch(err => {
         this.setState({

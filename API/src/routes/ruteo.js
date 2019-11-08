@@ -19,5 +19,8 @@ module.exports = function(app) {
         .patch(controlador.update);
 
     app.route("/avatar/:id")
-        .post(controlador.avatar);
+        .post(controlador.postAvatar);
+    
+    app.route("/avatar/:id")
+        .get(controlador.getAvatar);
 }

@@ -5,8 +5,8 @@ var express = require("express"),
   port = 3001;
 
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({extended: true, limit:"50mb"}));
 
 var routes = require("./src/routes/ruteo");
 routes(app);

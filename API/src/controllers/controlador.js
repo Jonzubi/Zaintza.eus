@@ -1,4 +1,5 @@
 const headerResponse = require("../../util/headerResponse");
+const fs = require("fs");
 
 exports.get = function(req, res) {
   var tabla = req.params.tabla;
@@ -13,7 +14,7 @@ exports.get = function(req, res) {
   if (typeof id == "undefined") {
     modelo
       .find(objFilter, strColumnas)
-      .then(doc => {        
+      .then(doc => {
         if (doc.length == 0) {
           res.writeHead(200, headerResponse);
           res.write("Vacio");
@@ -106,6 +107,33 @@ exports.delete = function(req, res) {
     .finally(fin => {
       res.end();
     });
+};
+
+exports.postAvatar = (req, res) => {
+  var idAvatar = req.params.id;
+  var avatarBase64 = req.body.avatarB64;
+  var avatarDirPath = (__dirname).substring(0,__dirname.lastIndexOf('\\'));
+  avatarDirPath = avatarDirPath.substring(0,avatarDirPath.lastIndexOf("\\")) + "\\util\\avatares\\" + idAvatar + ".png";
+  fs.writeFileSync(
+    avatarDirPath,
+    avatarBase64,
+    "base64",
+    (err, data) => {
+      console.log("Image guardado");
+      if (!err) {
+        res.writeHead(200, headerResponse);
+        res.write("Image posted");
+      } else {
+        res.writeHead(500, headerResponse);
+        res.write(err);
+      }
+      res.end();
+    }
+  );
+};
+
+exports.getAvatar = (req, res) => {
+  var idAvatar = req.params.id;
 };
 
 //Funcion para ver si el server esta en linea
