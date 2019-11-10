@@ -111,25 +111,24 @@ exports.delete = function(req, res) {
 
 exports.postAvatar = (req, res) => {
   var idAvatar = req.params.id;
-  var avatarBase64 = req.body.avatarB64;
-  var avatarDirPath = (__dirname).substring(0,__dirname.lastIndexOf('\\'));
-  avatarDirPath = avatarDirPath.substring(0,avatarDirPath.lastIndexOf("\\")) + "\\util\\avatares\\" + idAvatar + ".png";
-  fs.writeFileSync(
-    avatarDirPath,
-    avatarBase64,
-    "base64",
-    (err, data) => {
-      console.log("Image guardado");
-      if (!err) {
-        res.writeHead(200, headerResponse);
-        res.write("Image posted");
-      } else {
-        res.writeHead(500, headerResponse);
-        res.write(err);
-      }
-      res.end();
-    }
-  );
+  var avatarBase64 = req.body.avatarB64.replace(/^data:image\/png;base64,/, "");
+  var avatarDirPath = __dirname.substring(0, __dirname.lastIndexOf("\\"));
+  avatarDirPath =
+    avatarDirPath.substring(0, avatarDirPath.lastIndexOf("\\")) +
+    "\\util\\avatares\\" +
+    idAvatar +
+    ".png";
+  try {
+    fs.writeFileSync(avatarDirPath, avatarBase64, "base64");
+
+    res.writeHead(200, headerResponse);
+    res.write("Image posted");
+  } catch (error) {
+    res.writeHead(500, headerResponse);
+    res.write(error);
+  } finally {
+    res.end();
+  }
 };
 
 exports.getAvatar = (req, res) => {

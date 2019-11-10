@@ -90,7 +90,6 @@ class RegisterForm extends React.Component {
   }
 
   onBeforeFileLoad(elem) {
-    console.log(elem.target.files[0].size);
     if (elem.target.files[0].size > 71680) {
       cogoToast.error(<h5>La imagen es demasiado grande!</h5>);
       elem.target.value = "";
@@ -255,6 +254,7 @@ class RegisterForm extends React.Component {
     this.setState({ isLoading: true });
 
     var codAvatar = getRandomString(20);
+    
     axios
       .post("http://" + ipMaquina + ":3001/avatar/" + codAvatar, {
         avatarB64: this.state.avatarPreview
@@ -314,8 +314,8 @@ class RegisterForm extends React.Component {
               ubicaciones: [],
               txtDescripcion: "",
               isPublic: true,
-              avatarSrc: "",
-              avatarPreview: "",
+              avatarSrc: null,
+              avatarPreview: null,
               hoverSexoM: false,
               hoverSexoF: false,
               isLoading: false,
