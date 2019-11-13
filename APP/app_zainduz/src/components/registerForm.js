@@ -296,6 +296,7 @@ class RegisterForm extends React.Component {
               apellido2: this.state.txtApellido2,
               sexo: this.state.txtSexo,
               direcFoto: codAvatar,
+              direcFotoContacto: codContactImg,
               email: this.state.txtEmail,
               contrasena: this.state.txtContrasena,
               descripcion: this.state.txtDescripcion,
