@@ -7,6 +7,7 @@ var cuidador = new mongoose.Schema({
     fechaNacimiento : Date,
     sexo : String,
     direcFoto : String,
+    direcFotoContacto: String,
     descripcion : String,
     ubicaciones : [String],
     publicoDisponible : Map,

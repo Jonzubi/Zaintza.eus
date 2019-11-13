@@ -1,26 +1,19 @@
-'use strict';
+"use strict";
 module.exports = function(app) {
-    var controlador = require('../controllers/controlador');
+  var controlador = require("../controllers/controlador");
 
-    //Inicio es una prueba para comprobar la respuesta
-    app.route("/Inicio/")
-        .get(controlador.inicio);
+  //Inicio es una prueba para comprobar la respuesta
+  app.route("/image/:id").post(controlador.postImage);
 
-    app.route("/:tabla/:id?")
-        .get(controlador.get);
-    
-    app.route("/:tabla/:id")
-        .delete(controlador.delete);
+  app.route("/image/:id").get(controlador.getImage);
+  
+  app.route("/Inicio/").get(controlador.inicio);
 
-    app.route("/:tabla/")
-        .post(controlador.insert);
-    
-    app.route("/:tabla/:id")
-        .patch(controlador.update);
+  app.route("/:tabla/:id?").get(controlador.get);
 
-    app.route("/avatar/:id")
-        .post(controlador.postAvatar);
-    
-    app.route("/avatar/:id")
-        .get(controlador.getAvatar);
-}
+  app.route("/:tabla/:id").delete(controlador.delete);
+
+  app.route("/:tabla/").post(controlador.insert);
+
+  app.route("/:tabla/:id").patch(controlador.update);
+};

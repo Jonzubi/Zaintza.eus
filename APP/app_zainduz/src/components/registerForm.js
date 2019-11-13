@@ -21,7 +21,7 @@ import loadGif from "../util/gifs/loadGif.gif";
 import imgNino from "../util/images/nino.png";
 import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
 import imgTerceraEdad from "../util/images/terceraEdad.png";
-import {getRandomString} from "../util/funciones";
+import { getRandomString, toBase64 } from "../util/funciones";
 
 class RegisterForm extends React.Component {
   constructor(props) {
@@ -36,11 +36,13 @@ class RegisterForm extends React.Component {
       txtContrasena: "",
       txtMovil: "",
       txtTelefono: "",
-      diasDisponible: [{
-        dia:0,
-        horaInicio:"00:00",
-        horaFin:"00:00"
-      }],
+      diasDisponible: [
+        {
+          dia: 0,
+          horaInicio: "00:00",
+          horaFin: "00:00"
+        }
+      ],
       publicoDisponible: {
         nino: false,
         terceraEdad: false,
@@ -56,7 +58,7 @@ class RegisterForm extends React.Component {
       isPublic: true,
       avatarSrc: "",
       avatarPreview: "",
-      imgContact:"",
+      imgContact: null,
       hoverSexoM: false,
       hoverSexoF: false,
       isLoading: false,
@@ -85,6 +87,7 @@ class RegisterForm extends React.Component {
     this.handlePublicoLeave = this.handlePublicoLeave.bind(this);
     this.handlePublicoChange = this.handlePublicoChange.bind(this);
     this.handlePrecioChange = this.handlePrecioChange.bind(this);
+    this.onChangeContactImg = this.onChangeContactImg.bind(this);
   }
 
   onClose() {
@@ -102,10 +105,11 @@ class RegisterForm extends React.Component {
     }
   }
 
-  onChangeContactImg(picture){
+  onChangeContactImg(picture) {
+    console.log(picture);
     this.setState({
       imgContact: picture
-  });
+    });
   }
 
   handleCalendarChange(valor) {
@@ -258,7 +262,7 @@ class RegisterForm extends React.Component {
     });
   }
 
-  handleRegistrarse() {
+  async handleRegistrarse() {
     /*TODO primero validar todo
     
     */
@@ -266,84 +270,105 @@ class RegisterForm extends React.Component {
     this.setState({ isLoading: true });
 
     var codAvatar = getRandomString(20);
-    
+    var codContactImg = getRandomString(20);
+    var imgContactB64 = await toBase64(this.state.imgContact[0]);
+
+    if (imgContactB64 instanceof Error) {
+      cogoToast.error(
+        <h5>Ha habido un error con la resolucion de la imagen</h5>
+      );
+      return;
+    }
+
     axios
-      .post("http://" + ipMaquina + ":3001/avatar/" + codAvatar, {
-        avatarB64: this.state.avatarPreview
+      .post("http://" + ipMaquina + ":3001/image/" + codAvatar, {
+        imageB64: this.state.avatarPreview
       })
       .then(done => {
-        var formData = {
-          nombre: this.state.txtNombre,
-          apellido1: this.state.txtApellido1,
-          apellido2: this.state.txtApellido2,
-          sexo: this.state.txtSexo,
-          direcFoto: codAvatar,
-          email: this.state.txtEmail,
-          contrasena: this.state.txtContrasena,
-          descripcion: this.state.txtDescripcion,
-          telefono: {
-            movil: {
-              etiqueta: "Movil",
-              numero: this.state.txtMovil
-            },
-            fijo: {
-              etiqueta: "Fijo",
-              numero: this.state.txtTelefono
-            }
-          },
-          isPublic: this.state.isPublic,
-          diasDisponible: this.state.diasDisponible,
-          fechaNacimiento: this.state.txtFechaNacimiento,
-          ubicaciones: this.state.ubicaciones,
-          publicoDisponible: this.state.publicoDisponible,
-          precioPorPublico: this.state.precioPorPublico
-        };
-
         axios
-          .post("http://" + ipMaquina + ":3001/cuidador", formData)
-          .then(resultado => {
-            this.setState({
-              txtNombre: "",
-              txtApellido1: "",
-              txtApellido2: "",
-              txtEmail: "",
-              txtSexo: "",
-              txtFechaNacimiento: "",
-              txtContrasena: "",
-              txtMovil: "",
-              txtTelefono: "",
-              diasDisponible: [],
-              publicoDisponible: {
-                nino: false,
-                terceraEdad: false,
-                necesidadEspecial: false
+          .post("http://" + ipMaquina + ":3001/image/" + codContactImg, {
+            imageB64: imgContactB64
+          })
+          .then(() => {
+            var formData = {
+              nombre: this.state.txtNombre,
+              apellido1: this.state.txtApellido1,
+              apellido2: this.state.txtApellido2,
+              sexo: this.state.txtSexo,
+              direcFoto: codAvatar,
+              email: this.state.txtEmail,
+              contrasena: this.state.txtContrasena,
+              descripcion: this.state.txtDescripcion,
+              telefono: {
+                movil: {
+                  etiqueta: "Movil",
+                  numero: this.state.txtMovil
+                },
+                fijo: {
+                  etiqueta: "Fijo",
+                  numero: this.state.txtTelefono
+                }
               },
-              precioPorPublico: {
-                nino: "",
-                terceraEdad: "",
-                necesidadEspecial: ""
-              },
-              ubicaciones: [],
-              txtDescripcion: "",
-              isPublic: true,
-              avatarSrc: null,
-              avatarPreview: null,
-              hoverSexoM: false,
-              hoverSexoF: false,
-              isLoading: false,
-              auxAddPueblo: "",
-              hoverNino: false,
-              hoverTerceraEdad: false,
-              hoverNecesidadEspecial: false
-            });
-            cogoToast.success(
-              <div>
-                <h5>Registro completado correctamente!</h5>
-                <small>
-                  <b>Gracias por confiar en Zainduz</b>
-                </small>
-              </div>
-            );
+              isPublic: this.state.isPublic,
+              diasDisponible: this.state.diasDisponible,
+              fechaNacimiento: this.state.txtFechaNacimiento,
+              ubicaciones: this.state.ubicaciones,
+              publicoDisponible: this.state.publicoDisponible,
+              precioPorPublico: this.state.precioPorPublico
+            };
+
+            axios
+              .post("http://" + ipMaquina + ":3001/cuidador", formData)
+              .then(resultado => {
+                this.setState({
+                  txtNombre: "",
+                  txtApellido1: "",
+                  txtApellido2: "",
+                  txtEmail: "",
+                  txtSexo: "",
+                  txtFechaNacimiento: "",
+                  txtContrasena: "",
+                  txtMovil: "",
+                  txtTelefono: "",
+                  diasDisponible: [],
+                  publicoDisponible: {
+                    nino: false,
+                    terceraEdad: false,
+                    necesidadEspecial: false
+                  },
+                  precioPorPublico: {
+                    nino: "",
+                    terceraEdad: "",
+                    necesidadEspecial: ""
+                  },
+                  ubicaciones: [],
+                  txtDescripcion: "",
+                  isPublic: true,
+                  avatarSrc: null,
+                  avatarPreview: null,
+                  hoverSexoM: false,
+                  hoverSexoF: false,
+                  isLoading: false,
+                  auxAddPueblo: "",
+                  hoverNino: false,
+                  hoverTerceraEdad: false,
+                  hoverNecesidadEspecial: false
+                });
+                cogoToast.success(
+                  <div>
+                    <h5>Registro completado correctamente!</h5>
+                    <small>
+                      <b>Gracias por confiar en Zainduz</b>
+                    </small>
+                  </div>
+                );
+              })
+              .catch(err => {
+                this.setState({
+                  isLoading: false
+                });
+                cogoToast.error(<h5>Algo ha ido mal!</h5>);
+              });
           })
           .catch(err => {
             this.setState({
@@ -368,26 +393,50 @@ class RegisterForm extends React.Component {
       >
         <form>
           <div className="form-group row">
-            <div className="form-group col-6">
+            <div className="form-group col-3">
               {/* Meter un componente para subir imagen */}
               <Avatar
                 label="Elige tu Avatar"
-                labelStyle={{fontSize:"15px", fontWeight:"bold", cursor:"pointer", width:"100%", height:"100%"}}
-                height={250}
-                width={250}
+                labelStyle={{
+                  fontSize: "15px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  width: "100%",
+                  height: "100%"
+                }}
+                height={200}
+                width={200}
                 onCrop={this.onCrop}
                 onClose={this.onClose}
                 onBeforeFileLoad={this.onBeforeFileLoad}
                 src={this.state.avatarSrc}
               />
-              <ImageUploader
-                withIcon={true}
-                buttonText='Choose images'
-                onChange={this.onChangeContactImg}
-                imgExtension={['.jpg', '.gif', '.png', '.gif']}
-                maxFileSize={5242880}
-            />
             </div>
+            <div className="col-3 mx-auto">
+              <ImageUploader
+                fileContainerStyle={
+                  this.state.imgContact != null ? { background: "#28a745" } : {}
+                }
+                buttonClassName={
+                  this.state.imgContact != null ? "bg-light text-dark" : ""
+                }
+                errorClass="bg-danger text-light"
+                fileSizeError="es demasiado grande"
+                fileTypeError="no tiene un formato correcto"
+                singleImage={true}
+                label="Tamaño maximo: 5MB"
+                withIcon={true}
+                buttonText={
+                  this.state.imgContact != null
+                    ? "Actualizar imagen de contacto"
+                    : "Elegir imagen de contacto"
+                }
+                onChange={this.onChangeContactImg}
+                imgExtension={[".jpg", ".gif", ".png", ".gif", ".jpeg"]}
+                maxFileSize={5242880}
+              />
+            </div>
+
             <div className="form-group col-6">
               <div class="form-group">
                 <label for="exampleInputEmail1">Nombre</label>
