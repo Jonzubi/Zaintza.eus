@@ -11,6 +11,7 @@ import AddDiasDisponible from "../util/iconos/addDiasDisponible.svg";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import Avatar, { Avatar as AvatarUpload } from "react-avatar-edit";
+import ImageUploader from "react-images-upload";
 import cogoToast from "cogo-toast";
 import { ReactDatez as Calendario } from "react-datez";
 import Switch from "react-switch";
@@ -55,6 +56,7 @@ class RegisterForm extends React.Component {
       isPublic: true,
       avatarSrc: "",
       avatarPreview: "",
+      imgContact:"",
       hoverSexoM: false,
       hoverSexoF: false,
       isLoading: false,
@@ -98,6 +100,12 @@ class RegisterForm extends React.Component {
       cogoToast.error(<h5>La imagen es demasiado grande!</h5>);
       elem.target.value = "";
     }
+  }
+
+  onChangeContactImg(picture){
+    this.setState({
+      imgContact: picture
+  });
   }
 
   handleCalendarChange(valor) {
@@ -372,6 +380,13 @@ class RegisterForm extends React.Component {
                 onBeforeFileLoad={this.onBeforeFileLoad}
                 src={this.state.avatarSrc}
               />
+              <ImageUploader
+                withIcon={true}
+                buttonText='Choose images'
+                onChange={this.onChangeContactImg}
+                imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                maxFileSize={5242880}
+            />
             </div>
             <div className="form-group col-6">
               <div class="form-group">
