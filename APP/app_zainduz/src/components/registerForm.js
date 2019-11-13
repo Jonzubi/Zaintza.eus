@@ -424,7 +424,8 @@ class RegisterForm extends React.Component {
                 fileSizeError="es demasiado grande"
                 fileTypeError="no tiene un formato correcto"
                 singleImage={true}
-                label="Tamaño maximo: 5MB"
+                label={this.state.imgContact != null ? "Tamaño maximo: 5MB | " + this.state.imgContact[0].name + " (" + (this.state.imgContact[0].size / 1024 / 1024).toFixed(2) + " MB)" : "Tamaño maximo: 5MB"}
+                labelClass={this.state.imgContact != null ? "text-light font-weight-bold" : ""}
                 withIcon={true}
                 buttonText={
                   this.state.imgContact != null
