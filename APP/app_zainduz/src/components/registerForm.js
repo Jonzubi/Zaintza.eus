@@ -360,26 +360,11 @@ class RegisterForm extends React.Component {
       >
         <form>
           <div className="form-group row">
-            <div className="form-group col-3">
+            <div className="form-group col-6">
               {/* Meter un componente para subir imagen */}
-
               <Avatar
                 label="Elige tu Avatar"
-                labelStyle={{fontSize:"15px", fontWeight:"bold", cursor:"pointer"}}
-                height={250}
-                width={250}
-                onCrop={this.onCrop}
-                onClose={this.onClose}
-                onBeforeFileLoad={this.onBeforeFileLoad}
-                src={this.state.avatarSrc}
-              />
-            </div>
-            <div className="form-group col-3">
-              {/* Meter un componente para subir imagen */}
-
-              <Avatar
-                label="Elige tu imagen de contacto"
-                labelStyle={{fontSize:"15px", fontWeight:"bold", cursor:"pointer"}}
+                labelStyle={{fontSize:"15px", fontWeight:"bold", cursor:"pointer", width:"100%", height:"100%"}}
                 height={250}
                 width={250}
                 onCrop={this.onCrop}
