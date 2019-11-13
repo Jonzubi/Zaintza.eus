@@ -7,8 +7,8 @@ class Tabla extends React.Component {
   render() {
     return (
       <table className="table">
-        <tr scope="row">
-            <td>
+        <tr className="row" scope="row">
+            <td className="col-3">
           <div className="card w-20 m-4" style={{ width: "18rem" }}>
             <img
                 src={ imgPerfil }
@@ -27,7 +27,7 @@ class Tabla extends React.Component {
             </div>
            </div></td>
 
-            <td>
+            <td className="col-3">
             <div className="card w-20 m-4" style={{ width: "18rem" }}>
             <img
                 src={ imgPerfil }
@@ -46,7 +46,7 @@ class Tabla extends React.Component {
             </div>
            </div></td>
 
-          <td>
+          <td className="col-3">
           <div className="card w-20 m-4" style={{ width: "18rem" }}>
               <img
                 src={ imgPerfil }
@@ -65,7 +65,7 @@ class Tabla extends React.Component {
             </div>
            </div></td>
 
-            <td>
+            <td className="col-3">
            <div className="card w-20 m-4" style={{ width: "18rem" }}>
               <img
                 src={ imgPerfil }
@@ -85,8 +85,8 @@ class Tabla extends React.Component {
           </div></td>
         </tr>
 
-        <tr scope="row">
-            <td>
+        <tr className="row" scope="row">
+            <td className="col-3">
           <div className="card w-20 m-4" style={{ width: "18rem" }}>
             <img
                 src={ imgPerfil }
@@ -105,7 +105,7 @@ class Tabla extends React.Component {
             </div>
            </div></td>
 
-            <td>
+            <td className="col-3">
             <div className="card w-20 m-4" style={{ width: "18rem" }}>
             <img
                 src={ imgPerfil }
@@ -124,7 +124,7 @@ class Tabla extends React.Component {
             </div>
            </div></td>
 
-          <td>
+          <td className="col-3">
           <div className="card w-20 m-4" style={{ width: "18rem" }}>
               <img
                 src={ imgPerfil }
@@ -143,7 +143,7 @@ class Tabla extends React.Component {
             </div>
            </div></td>
 
-            <td>
+            <td className="col-3">
            <div className="card w-20 m-4" style={{ width: "18rem" }}>
               <img
                 src={ imgPerfil }

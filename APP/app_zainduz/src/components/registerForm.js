@@ -35,7 +35,11 @@ class RegisterForm extends React.Component {
       txtContrasena: "",
       txtMovil: "",
       txtTelefono: "",
-      diasDisponible: [],
+      diasDisponible: [{
+        dia:0,
+        horaInicio:"00:00",
+        horaFin:"00:00"
+      }],
       publicoDisponible: {
         nino: false,
         terceraEdad: false,
@@ -356,20 +360,35 @@ class RegisterForm extends React.Component {
       >
         <form>
           <div className="form-group row">
-            <div className="form-group col">
+            <div className="form-group col-3">
               {/* Meter un componente para subir imagen */}
 
               <Avatar
                 label="Elige tu Avatar"
-                height={200}
-                width={200}
+                labelStyle={{fontSize:"15px", fontWeight:"bold", cursor:"pointer"}}
+                height={250}
+                width={250}
                 onCrop={this.onCrop}
                 onClose={this.onClose}
                 onBeforeFileLoad={this.onBeforeFileLoad}
                 src={this.state.avatarSrc}
               />
             </div>
-            <div className="form-group col">
+            <div className="form-group col-3">
+              {/* Meter un componente para subir imagen */}
+
+              <Avatar
+                label="Elige tu imagen de contacto"
+                labelStyle={{fontSize:"15px", fontWeight:"bold", cursor:"pointer"}}
+                height={250}
+                width={250}
+                onCrop={this.onCrop}
+                onClose={this.onClose}
+                onBeforeFileLoad={this.onBeforeFileLoad}
+                src={this.state.avatarSrc}
+              />
+            </div>
+            <div className="form-group col-6">
               <div class="form-group">
                 <label for="exampleInputEmail1">Nombre</label>
                 <input
