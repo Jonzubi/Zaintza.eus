@@ -111,13 +111,31 @@ exports.delete = function(req, res) {
 
 exports.postImage = (req, res) => {
   var idImage = req.params.id;
-  var imageBase64 = req.body.imageB64.replace(/^data:image\/png;base64,/, "");
+  var imageBase64 = req.body.imageB64.split(",")[1];
+  var formatBase64 = imageBase64.charAt(0);
+
+  switch(formatBase64){    
+    case "/" : 
+          formatBase64 = ".jpg";
+          break;
+    case "i" :
+          formatBase64 = ".png";
+          break;
+    case "R" :
+          formatBase64 = ".gif";
+          break;
+    default:
+        res.writeHead(500, headerResponse);
+        res.write("imagen no compatible");
+        res.end();
+        return;
+  }
   var avatarDirPath = __dirname.substring(0, __dirname.lastIndexOf("\\"));
   avatarDirPath =
     avatarDirPath.substring(0, avatarDirPath.lastIndexOf("\\")) +
     "\\util\\imagenes\\" +
     idImage +
-    ".png";
+    formatBase64;
   try {
     fs.writeFileSync(avatarDirPath, imageBase64, "base64");
 

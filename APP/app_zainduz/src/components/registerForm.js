@@ -363,6 +363,7 @@ class RegisterForm extends React.Component {
                     </small>
                   </div>
                 );
+                
               })
               .catch(err => {
                 this.setState({
@@ -434,7 +435,7 @@ class RegisterForm extends React.Component {
                     : "Elegir imagen de contacto"
                 }
                 onChange={this.onChangeContactImg}
-                imgExtension={[".jpg", ".gif", ".png", ".gif", ".jpeg"]}
+                imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
                 maxFileSize={5242880}
               />
             </div>
