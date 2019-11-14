@@ -363,7 +363,7 @@ class RegisterForm extends React.Component {
                     </small>
                   </div>
                 );
-                
+                this.props.myChangeFormContent("tabla");
               })
               .catch(err => {
                 this.setState({

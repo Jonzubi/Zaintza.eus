@@ -32,7 +32,7 @@ class App extends React.Component {
       case "tabla":
         return <SlideTab />;
       case "registrar":
-        return <RegisterForm />;
+        return <RegisterForm myChangeFormContent = {this.changeFormContent.bind(this)} />;
     }
   }
 
@@ -40,7 +40,7 @@ class App extends React.Component {
     const AppContent = this.getContent.bind(this);
 
     return (
-      <div id="outer-container" style={{ height:3000 }} className="w-100">
+      <div id="outer-container" className="w-100">
         <MenuPerfil myChangeFormContent = {this.changeFormContent.bind(this)} myToogleMenu = {this.toggleMenu.bind(this)} myIsOpenMenuPerfil={this.state.isOpenMenuPerfil} myHandleStateChange={this.handleStateChange.bind(this)} />
         <Cabecera myChangeFormContent = {this.changeFormContent.bind(this)} myToogleMenu= {this.toggleMenu.bind(this)} />
         <AppContent />
