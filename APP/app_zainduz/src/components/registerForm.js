@@ -99,7 +99,7 @@ class RegisterForm extends React.Component {
   }
 
   onBeforeFileLoad(elem) {
-    if (elem.target.files[0].size > 71680) {
+    if (elem.target.files[0].size > 5242880) {
       cogoToast.error(<h5>La imagen es demasiado grande!</h5>);
       elem.target.value = "";
     }
