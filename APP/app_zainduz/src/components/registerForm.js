@@ -26,6 +26,25 @@ import { getRandomString, toBase64 } from "../util/funciones";
 class RegisterForm extends React.Component {
   constructor(props) {
     super(props);
+    this.requiredStates = [
+      "txtNombre",
+      "txtEmail",
+      "txtSexo",
+      "txtFechaNacimiento",
+      "txtContrasena",
+      "txtMovil",
+      "ubicaciones"
+    ];
+    //El array de abajo es para traducir el error
+    this.requiredStatesTraduc = {
+      txtNombre: "Nombre",
+      txtSexo: "Sexo",
+      txtEmail: "Email",
+      txtFechaNacimiento: "Fecha de nacimiento",
+      txtContrasena: "Contraseña",
+      txtMovil: "Movil",
+      ubicaciones: "Pueblos Disponible"
+    };
     this.state = {
       txtNombre: "",
       txtApellido1: "",
@@ -65,7 +84,16 @@ class RegisterForm extends React.Component {
       auxAddPueblo: "",
       hoverNino: false,
       hoverTerceraEdad: false,
-      hoverNecesidadEspecial: false
+      hoverNecesidadEspecial: false,
+      error: {
+        txtNombre: false,
+        txtEmail: false,
+        txtSexo: false,
+        txtFechaNacimiento: false,
+        txtContrasena: false,
+        txtMovil: false,
+        ubicaciones: false
+      }
     };
 
     this.onCrop = this.onCrop.bind(this);
@@ -263,9 +291,27 @@ class RegisterForm extends React.Component {
   }
 
   async handleRegistrarse() {
-    /*TODO primero validar todo
-    
-    */
+    //TODO primero validar todo
+    for (var clave in this.state) {
+      if (
+        this.state[clave].length == 0 &&
+        this.requiredStates.includes(clave)
+      ) {
+        cogoToast.error(
+          <h5>
+            Rellena todos los campos obligatorios (
+            {this.requiredStatesTraduc[clave]})
+          </h5>
+        );
+        let auxError = this.state.error;
+        auxError[clave] = true;
+        this.setState({
+          error: auxError
+        });
+        return;
+      }
+    }
+
     //TODO llamar a la api para insertar
     this.setState({ isLoading: true });
 
@@ -426,8 +472,20 @@ class RegisterForm extends React.Component {
                 fileSizeError="es demasiado grande"
                 fileTypeError="no tiene un formato correcto"
                 singleImage={true}
-                label={this.state.imgContact != null ? "Tamaño maximo: 5MB | " + this.state.imgContact[0].name + " (" + (this.state.imgContact[0].size / 1024 / 1024).toFixed(2) + " MB)" : "Tamaño maximo: 5MB"}
-                labelClass={this.state.imgContact != null ? "text-light font-weight-bold" : ""}
+                label={
+                  this.state.imgContact != null
+                    ? "Tamaño maximo: 5MB | " +
+                      this.state.imgContact[0].name +
+                      " (" +
+                      (this.state.imgContact[0].size / 1024 / 1024).toFixed(2) +
+                      " MB)"
+                    : "Tamaño maximo: 5MB"
+                }
+                labelClass={
+                  this.state.imgContact != null
+                    ? "text-light font-weight-bold"
+                    : ""
+                }
                 withIcon={true}
                 buttonText={
                   this.state.imgContact != null
@@ -442,11 +500,16 @@ class RegisterForm extends React.Component {
 
             <div className="form-group col-6">
               <div class="form-group">
-                <label for="exampleInputEmail1">Nombre</label>
+                <label for="exampleInputEmail1">Nombre</label> (
+                <span className="text-danger font-weight-bold">*</span>)
                 <input
                   onChange={this.handleInputChange}
                   type="text"
-                  class="form-control"
+                  class={
+                    this.state.error.txtNombre
+                      ? "border border-danger form-control"
+                      : "form-control"
+                  }
                   id="txtNombre"
                   aria-describedby="txtNombreHelp"
                   placeholder="Introducir nombre..."
@@ -483,13 +546,18 @@ class RegisterForm extends React.Component {
           </div>
           <div class="form-group row">
             <div className="form-group col-6">
-              <label for="txtFechaNacimiento">Fecha de nacimiento</label>
+              <label for="txtFechaNacimiento">Fecha de nacimiento</label> (
+              <span className="text-danger font-weight-bold">*</span>)
               <br />
               <Calendario
                 dateFormat="YYYY/MM/DD"
                 inputClassName="form-control"
                 inputStyle={{ width: "100%" }}
-                className="w-100"
+                className={
+                  this.state.error.txtNombre
+                    ? "border border-danger w-100"
+                    : "w-100"
+                }
                 allowPast={true}
                 allowFuture={false}
                 id="txtFechaNacimiento"
@@ -498,7 +566,11 @@ class RegisterForm extends React.Component {
               />
             </div>
             <div
-              className="form-group col-3 text-center p-1"
+              className={
+                this.state.error.txtSexo
+                  ? "form-group col-3 text-center p-1 border border-danger"
+                  : "form-group col-3 text-center p-1"
+              }
               onClick={() => this.handleSexChange("M")}
               onMouseEnter={() => this.handleSexHover("hoverSexoM")}
               onMouseLeave={() => this.handleSexLeave("hoverSexoM")}
@@ -521,7 +593,11 @@ class RegisterForm extends React.Component {
               <FontAwesomeIcon className="fa-5x" icon={faMale} />
             </div>
             <div
-              className="form-group col-3 text-center p-1"
+              className={
+                this.state.error.txtSexo
+                  ? "form-group col-3 text-center p-1 border border-danger"
+                  : "form-group col-3 text-center p-1"
+              }
               id="txtSexF"
               onClick={() => this.handleSexChange("F")}
               onMouseEnter={() => this.handleSexHover("hoverSexoF")}
@@ -547,11 +623,16 @@ class RegisterForm extends React.Component {
 
           <div className="form-group row">
             <div class="form-group col">
-              <label for="exampleInputEmail1">Email</label>
+              <label for="exampleInputEmail1">Email</label> (
+              <span className="text-danger font-weight-bold">*</span>)
               <input
                 onChange={this.handleInputChange}
                 type="email"
-                class="form-control"
+                class={
+                  this.state.error.txtNombre
+                    ? "border border-danger form-control"
+                    : "form-control"
+                }
                 id="txtEmail"
                 aria-describedby="emailHelp"
                 placeholder="Introducir email..."
@@ -559,7 +640,8 @@ class RegisterForm extends React.Component {
               />
               <label className="pt-2" for="exampleInputPassword1">
                 Contraseña
-              </label>
+              </label>{" "}
+              (<span className="text-danger font-weight-bold">*</span>)
               <input
                 onChange={this.handleInputChange}
                 type="password"
@@ -570,11 +652,16 @@ class RegisterForm extends React.Component {
               />
             </div>
             <div class="form-group col">
-              <label for="">Telefono Movil</label>
+              <label for="">Telefono Movil</label> (
+              <span className="text-danger font-weight-bold">*</span>)
               <input
                 onChange={this.handleInputChange}
                 type="number"
-                class="form-control"
+                class={
+                  this.state.error.txtNombre
+                    ? "border border-danger form-control"
+                    : "form-control"
+                }
                 id="txtMovil"
                 aria-describedby="emailHelp"
                 placeholder="Introducir movil..."
@@ -688,11 +775,16 @@ class RegisterForm extends React.Component {
               {/* Insertar ubicaciones disponibles aqui */}
               <label className="w-100 text-center lead">
                 Pueblos disponible:
-              </label>
+              </label>{" "}
+              (<span className="text-danger font-weight-bold">*</span>)
               <div class="form-group mt-2">
                 <input
                   onChange={this.handleAuxAddPuebloChange}
-                  class="form-control d-inline w-75"
+                  class={
+                    this.state.error.txtNombre
+                      ? "border border-danger form-control d-inline w-75"
+                      : "form-control d-inline w-75"
+                  }
                   id="txtAddPueblos"
                   placeholder="Introduce el pueblo..."
                   value={this.state.auxAddPueblo}
