@@ -155,7 +155,6 @@ exports.getImage = (req, res) => {
   avatarDirPath =
     avatarDirPath.substring(0, avatarDirPath.lastIndexOf("\\")) +
     "\\util\\imagenes\\";
-  let done =false;
   fs.readdir(avatarDirPath, (err, files) => {
     if (err) console.log(err);
     else {
@@ -168,40 +167,33 @@ exports.getImage = (req, res) => {
               res.writeHead(500, headerResponse);
               res.write(error);
               res.end();
-              done =true;
               return;
             } else {
               const formatImage = data.charAt(0);
               console.log(formatImage);
               switch (formatImage) {
                 case "/":
-                  data = "data:image/jpg;base64," + data;
-                  res.writeHead(200, {'Access-Control-Allow-Origin': '*', 'Content-Type': 'image/jpg'});
+                  //data = "data:image/jpg;base64," + data;
+                  res.writeHead(200, {'Access-Control-Allow-Origin': '*', 'Content-Type': 'image/jpeg'});
                   res.write(data);
                   res.end();
-                  done =true;
-                  break;
+                  return;
                 case "i":
-                  data = "data:image/png;base64," + data;
+                  //data = "data:image/png;base64," + data;
                   res.writeHead(200, {'Access-Control-Allow-Origin': '*', 'Content-Type': 'image/png'});
                   res.write(data);
                   res.end();
-                  done =true;
                   return;
-                  break;
                 case "R":
-                  data = "data:image/gif;base64," + data;
+                  //data = "data:image/gif;base64," + data;
                   res.writeHead(200, {'Access-Control-Allow-Origin': '*', 'Content-Type': 'image/gif'});
                   res.write(data);
                   res.end();
-                  done =true;
                   return;
-                  break;
                 default:
                   res.writeHead(500, headerResponse);
                   res.write("imagen no compatible");
                   res.end();
-                  done =true;
                   return;
               }       
             }
