@@ -160,44 +160,20 @@ exports.getImage = (req, res) => {
     else {
       files.map(archivo => {
         if (archivo.includes(idImage)) {
-          fs.readFile(avatarDirPath + "\\" + archivo, {
-            encoding: "base64"
-          },(error, data) => {
-            if (error) {
-              res.writeHead(500, headerResponse);
-              res.write(error);
-              res.end();
-              return;
-            } else {
-              const formatImage = data.charAt(0);
-              console.log(formatImage);
-              switch (formatImage) {
-                case "/":
-                  //data = "data:image/jpg;base64," + data;
-                  res.writeHead(200, {'Access-Control-Allow-Origin': '*', 'Content-Type': 'image/jpeg'});
-                  res.write(data);
-                  res.end();
-                  return;
-                case "i":
-                  //data = "data:image/png;base64," + data;
-                  res.writeHead(200, {'Access-Control-Allow-Origin': '*', 'Content-Type': 'image/png'});
-                  res.write(data);
-                  res.end();
-                  return;
-                case "R":
-                  //data = "data:image/gif;base64," + data;
-                  res.writeHead(200, {'Access-Control-Allow-Origin': '*', 'Content-Type': 'image/gif'});
-                  res.write(data);
-                  res.end();
-                  return;
-                default:
-                  res.writeHead(500, headerResponse);
-                  res.write("imagen no compatible");
-                  res.end();
-                  return;
-              }       
-            }
-          });
+          let stream = fs.createReadStream(avatarDirPath + "\\" + archivo);
+          let formato = archivo.split('.')[1];
+          switch(formato){
+            case "png":
+              res.setHeader('Content-Type', 'image/png');
+              break;
+            case "jpg":
+                res.setHeader('Content-Type', 'image/jpeg');
+                break;
+            case "gif":
+                res.setHeader('Content-Type', 'image/gif');
+                break;
+          }
+          stream.pipe(res);
         }
       });
     }
