@@ -36,10 +36,10 @@ class Tabla extends React.Component {
                       />
                       <div className="card-body">
                         <h5 className="card-title mt-2">
-                          Telmo Lizancos - NIÑOOS
+                          {cuidador.nombre + " " + cuidador.apellido1}
                         </h5>
                         <p className="card-text">
-                          Hola, soy un puto pederasta y me gusta violar
+                          {cuidador.descripcion}
                         </p>
                         <a href="#" className="mr-0 w-100 btn btn-success">
                           Contactar
