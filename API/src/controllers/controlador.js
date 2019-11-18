@@ -114,21 +114,21 @@ exports.postImage = (req, res) => {
   var imageBase64 = req.body.imageB64.split(",")[1];
   var formatBase64 = imageBase64.charAt(0);
 
-  switch(formatBase64){    
-    case "/" : 
-          formatBase64 = ".jpg";
-          break;
-    case "i" :
-          formatBase64 = ".png";
-          break;
-    case "R" :
-          formatBase64 = ".gif";
-          break;
+  switch (formatBase64) {
+    case "/":
+      formatBase64 = ".jpg";
+      break;
+    case "i":
+      formatBase64 = ".png";
+      break;
+    case "R":
+      formatBase64 = ".gif";
+      break;
     default:
-        res.writeHead(500, headerResponse);
-        res.write("imagen no compatible");
-        res.end();
-        return;
+      res.writeHead(500, headerResponse);
+      res.write("imagen no compatible");
+      res.end();
+      return;
   }
   var avatarDirPath = __dirname.substring(0, __dirname.lastIndexOf("\\"));
   avatarDirPath =
@@ -154,28 +154,61 @@ exports.getImage = (req, res) => {
   var avatarDirPath = __dirname.substring(0, __dirname.lastIndexOf("\\"));
   avatarDirPath =
     avatarDirPath.substring(0, avatarDirPath.lastIndexOf("\\")) +
-    "\\util\\imagenes\\"
+    "\\util\\imagenes\\";
+  let done =false;
   fs.readdir(avatarDirPath, (err, files) => {
-    if(err)
-      console.log(err);
-    else{
+    if (err) console.log(err);
+    else {
       files.map(archivo => {
-        if(archivo.includes(idImage)){
-          fs.readFile(avatarDirPath + "\\" + archivo, {encoding : "base64"}).then((error,data) => {
-            if(error){
+        if (archivo.includes(idImage)) {
+          fs.readFile(avatarDirPath + "\\" + archivo, {
+            encoding: "base64"
+          },(error, data) => {
+            if (error) {
+              res.writeHead(500, headerResponse);
               res.write(error);
               res.end();
-            }else{
-              res.write(data);
-              res.end();
+              done =true;
+              return;
+            } else {
+              const formatImage = data.charAt(0);
+              console.log(formatImage);
+              switch (formatImage) {
+                case "/":
+                  data = "data:image/jpg;base64," + data;
+                  res.writeHead(200, {'Access-Control-Allow-Origin': '*', 'Content-Type': 'image/jpg'});
+                  res.write(data);
+                  res.end();
+                  done =true;
+                  break;
+                case "i":
+                  data = "data:image/png;base64," + data;
+                  res.writeHead(200, {'Access-Control-Allow-Origin': '*', 'Content-Type': 'image/png'});
+                  res.write(data);
+                  res.end();
+                  done =true;
+                  return;
+                  break;
+                case "R":
+                  data = "data:image/gif;base64," + data;
+                  res.writeHead(200, {'Access-Control-Allow-Origin': '*', 'Content-Type': 'image/gif'});
+                  res.write(data);
+                  res.end();
+                  done =true;
+                  return;
+                  break;
+                default:
+                  res.writeHead(500, headerResponse);
+                  res.write("imagen no compatible");
+                  res.end();
+                  done =true;
+                  return;
+              }       
             }
           });
-          
         }
       });
     }
-    res.write("No image found");
-    res.end();
   });
 };
 
