@@ -150,7 +150,33 @@ exports.postImage = (req, res) => {
 };
 
 exports.getImage = (req, res) => {
-  var idAvatar = req.params.id;
+  var idImage = req.params.id;
+  var avatarDirPath = __dirname.substring(0, __dirname.lastIndexOf("\\"));
+  avatarDirPath =
+    avatarDirPath.substring(0, avatarDirPath.lastIndexOf("\\")) +
+    "\\util\\imagenes\\"
+  fs.readdir(avatarDirPath, (err, files) => {
+    if(err)
+      console.log(err);
+    else{
+      files.map(archivo => {
+        if(archivo.includes(idImage)){
+          fs.readFile(avatarDirPath + "\\" + archivo, {encoding : "base64"}).then((error,data) => {
+            if(error){
+              res.write(error);
+              res.end();
+            }else{
+              res.write(data);
+              res.end();
+            }
+          });
+          
+        }
+      });
+    }
+    res.write("No image found");
+    res.end();
+  });
 };
 
 //Funcion para ver si el server esta en linea
