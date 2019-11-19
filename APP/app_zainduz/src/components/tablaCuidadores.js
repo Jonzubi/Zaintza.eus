@@ -27,7 +27,7 @@ class Tabla extends React.Component {
           {typeof this.state.jsonCuidadores.map != "undefined"
             ? this.state.jsonCuidadores.map((cuidador, indice) => {
                 return (
-                  <td className="col-3">
+                  <td className="col-3 border-top-0">
                     <div className="card w-20 m-4" style={{ width: "18rem" }}>
                       <img
                         src={"http://" + ipMaquina + ":3001/image/" + cuidador.direcFotoContacto}
@@ -39,7 +39,7 @@ class Tabla extends React.Component {
                           {cuidador.nombre + " " + cuidador.apellido1}
                         </h5>
                         <p className="card-text">
-                          {cuidador.descripcion}
+                          {cuidador.descripcion || " a"}
                         </p>
                         <a href="#" className="mr-0 w-100 btn btn-success">
                           Contactar

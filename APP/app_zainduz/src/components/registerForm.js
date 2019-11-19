@@ -33,7 +33,9 @@ class RegisterForm extends React.Component {
       "txtFechaNacimiento",
       "txtContrasena",
       "txtMovil",
-      "ubicaciones"
+      "ubicaciones",
+      "txtDescripcion",
+      "imgContact"
     ];
     //El array de abajo es para traducir el error
     this.requiredStatesTraduc = {
@@ -43,7 +45,9 @@ class RegisterForm extends React.Component {
       txtFechaNacimiento: "Fecha de nacimiento",
       txtContrasena: "Contraseña",
       txtMovil: "Movil",
-      ubicaciones: "Pueblos Disponible"
+      ubicaciones: "Pueblos Disponible",
+      txtDescripcion: "Descripcion",
+      imgContact: "Imagen de contacto"
     };
     this.state = {
       txtNombre: "",
@@ -92,7 +96,9 @@ class RegisterForm extends React.Component {
         txtFechaNacimiento: false,
         txtContrasena: false,
         txtMovil: false,
-        ubicaciones: false
+        ubicaciones: false,
+        txtDescripcion: false,
+        imgContact: false
       }
     };
 
@@ -294,7 +300,7 @@ class RegisterForm extends React.Component {
     //TODO primero validar todo
     for (var clave in this.state) {
       if (
-        this.state[clave].length == 0 &&
+        (this.state[clave].length == 0 || !this.state[clave]) &&
         this.requiredStates.includes(clave)
       ) {
         cogoToast.error(
@@ -305,6 +311,7 @@ class RegisterForm extends React.Component {
         );
         let auxError = this.state.error;
         auxError[clave] = true;
+        console.log(auxError);
         this.setState({
           error: auxError
         });
@@ -326,97 +333,90 @@ class RegisterForm extends React.Component {
       return;
     }
 
-    axios
-      .post("http://" + ipMaquina + ":3001/image/" + codAvatar, {
+    if (this.state.avatarPreview.length > 0) {
+      await axios.post("http://" + ipMaquina + ":3001/image/" + codAvatar, {
         imageB64: this.state.avatarPreview
+      });
+    }
+    axios
+      .post("http://" + ipMaquina + ":3001/image/" + codContactImg, {
+        imageB64: imgContactB64
       })
-      .then(done => {
-        axios
-          .post("http://" + ipMaquina + ":3001/image/" + codContactImg, {
-            imageB64: imgContactB64
-          })
-          .then(() => {
-            var formData = {
-              nombre: this.state.txtNombre,
-              apellido1: this.state.txtApellido1,
-              apellido2: this.state.txtApellido2,
-              sexo: this.state.txtSexo,
-              direcFoto: codAvatar,
-              direcFotoContacto: codContactImg,
-              email: this.state.txtEmail,
-              contrasena: this.state.txtContrasena,
-              descripcion: this.state.txtDescripcion,
-              telefono: {
-                movil: {
-                  etiqueta: "Movil",
-                  numero: this.state.txtMovil
-                },
-                fijo: {
-                  etiqueta: "Fijo",
-                  numero: this.state.txtTelefono
-                }
-              },
-              isPublic: this.state.isPublic,
-              diasDisponible: this.state.diasDisponible,
-              fechaNacimiento: this.state.txtFechaNacimiento,
-              ubicaciones: this.state.ubicaciones,
-              publicoDisponible: this.state.publicoDisponible,
-              precioPorPublico: this.state.precioPorPublico
-            };
+      .then(() => {
+        var formData = {
+          nombre: this.state.txtNombre,
+          apellido1: this.state.txtApellido1,
+          apellido2: this.state.txtApellido2,
+          sexo: this.state.txtSexo,
+          direcFoto: codAvatar,
+          direcFotoContacto: codContactImg,
+          email: this.state.txtEmail,
+          contrasena: this.state.txtContrasena,
+          descripcion: this.state.txtDescripcion,
+          telefono: {
+            movil: {
+              etiqueta: "Movil",
+              numero: this.state.txtMovil
+            },
+            fijo: {
+              etiqueta: "Fijo",
+              numero: this.state.txtTelefono
+            }
+          },
+          isPublic: this.state.isPublic,
+          diasDisponible: this.state.diasDisponible,
+          fechaNacimiento: this.state.txtFechaNacimiento,
+          ubicaciones: this.state.ubicaciones,
+          publicoDisponible: this.state.publicoDisponible,
+          precioPorPublico: this.state.precioPorPublico
+        };
 
-            axios
-              .post("http://" + ipMaquina + ":3001/cuidador", formData)
-              .then(resultado => {
-                this.setState({
-                  txtNombre: "",
-                  txtApellido1: "",
-                  txtApellido2: "",
-                  txtEmail: "",
-                  txtSexo: "",
-                  txtFechaNacimiento: "",
-                  txtContrasena: "",
-                  txtMovil: "",
-                  txtTelefono: "",
-                  diasDisponible: [],
-                  publicoDisponible: {
-                    nino: false,
-                    terceraEdad: false,
-                    necesidadEspecial: false
-                  },
-                  precioPorPublico: {
-                    nino: "",
-                    terceraEdad: "",
-                    necesidadEspecial: ""
-                  },
-                  ubicaciones: [],
-                  txtDescripcion: "",
-                  isPublic: true,
-                  avatarSrc: null,
-                  avatarPreview: null,
-                  hoverSexoM: false,
-                  hoverSexoF: false,
-                  isLoading: false,
-                  auxAddPueblo: "",
-                  hoverNino: false,
-                  hoverTerceraEdad: false,
-                  hoverNecesidadEspecial: false
-                });
-                cogoToast.success(
-                  <div>
-                    <h5>Registro completado correctamente!</h5>
-                    <small>
-                      <b>Gracias por confiar en Zainduz</b>
-                    </small>
-                  </div>
-                );
-                this.props.myChangeFormContent("tabla");
-              })
-              .catch(err => {
-                this.setState({
-                  isLoading: false
-                });
-                cogoToast.error(<h5>Algo ha ido mal!</h5>);
-              });
+        axios
+          .post("http://" + ipMaquina + ":3001/cuidador", formData)
+          .then(resultado => {
+            this.setState({
+              txtNombre: "",
+              txtApellido1: "",
+              txtApellido2: "",
+              txtEmail: "",
+              txtSexo: "",
+              txtFechaNacimiento: "",
+              txtContrasena: "",
+              txtMovil: "",
+              txtTelefono: "",
+              diasDisponible: [],
+              publicoDisponible: {
+                nino: false,
+                terceraEdad: false,
+                necesidadEspecial: false
+              },
+              precioPorPublico: {
+                nino: "",
+                terceraEdad: "",
+                necesidadEspecial: ""
+              },
+              ubicaciones: [],
+              txtDescripcion: "",
+              isPublic: true,
+              avatarSrc: null,
+              avatarPreview: null,
+              hoverSexoM: false,
+              hoverSexoF: false,
+              isLoading: false,
+              auxAddPueblo: "",
+              hoverNino: false,
+              hoverTerceraEdad: false,
+              hoverNecesidadEspecial: false
+            });
+            cogoToast.success(
+              <div>
+                <h5>Registro completado correctamente!</h5>
+                <small>
+                  <b>Gracias por confiar en Zainduz</b>
+                </small>
+              </div>
+            );
+            this.props.myChangeFormContent("tabla");
           })
           .catch(err => {
             this.setState({
@@ -463,7 +463,11 @@ class RegisterForm extends React.Component {
             <div className="col-3 mx-auto">
               <ImageUploader
                 fileContainerStyle={
-                  this.state.imgContact != null ? { background: "#28a745" } : {}
+                  this.state.imgContact != null
+                    ? { background: "#28a745" }
+                    : this.state.error.txtNombre
+                    ? { background: "#dc3545" }
+                    : {}
                 }
                 buttonClassName={
                   this.state.imgContact != null ? "bg-light text-dark" : ""
@@ -567,7 +571,7 @@ class RegisterForm extends React.Component {
             </div>
             <div
               className={
-                this.state.error.txtSexo
+                this.state.error.txtNombre
                   ? "form-group col-3 text-center p-1 border border-danger"
                   : "form-group col-3 text-center p-1"
               }
@@ -594,7 +598,7 @@ class RegisterForm extends React.Component {
             </div>
             <div
               className={
-                this.state.error.txtSexo
+                this.state.error.txtNombre
                   ? "form-group col-3 text-center p-1 border border-danger"
                   : "form-group col-3 text-center p-1"
               }
@@ -645,7 +649,7 @@ class RegisterForm extends React.Component {
               <input
                 onChange={this.handleInputChange}
                 type="password"
-                class="form-control"
+                class={this.state.error.txtNombre ? "border border-danger form-control" : "form-control"}
                 id="txtContrasena"
                 placeholder="Introducir contraseña..."
                 value={this.state.txtContrasena}
@@ -1011,10 +1015,15 @@ class RegisterForm extends React.Component {
             </div>
           </div>
           <div class="form-group">
-            <label for="comment">Descripcion</label>
+            <label for="comment">Descripcion</label> (
+            <span className="text-danger font-weight-bold">*</span>)
             <textarea
               onChange={this.handleInputChange}
-              class="form-control"
+              class={
+                this.state.error.txtNombre
+                  ? "border border-danger form-control"
+                  : "form-control"
+              }
               rows="5"
               id="txtDescripcion"
               placeholder="Tu descripcion..."
