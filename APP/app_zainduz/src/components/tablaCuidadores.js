@@ -44,7 +44,7 @@ class Tabla extends React.Component {
                           {cuidador.nombre + " " + cuidador.apellido1}
                         </h5>
                         <p className="card-text">
-                          {cuidador.descripcion || " a"}
+                          {cuidador.descripcion}
                         </p>
                       </div>
                       <div className="card-body">
