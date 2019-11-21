@@ -5,14 +5,16 @@ import LogInForm from "./logInForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import imgPerfil from "../util/fotosPrueba/image.jpg";
+import {connect} from "react-redux";
 import "./styles/menuPerfil.css";
 
 class MenuPerfil extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      isLogIn: false
-    };
+      isLogIn:false
+    }
   }
 
   handleLogIn(){
@@ -101,4 +103,8 @@ class MenuPerfil extends React.Component {
   }
 }
 
-export default MenuPerfil;
+const mapStateToProps = state => {
+  return {isOpened: state.isOpened}
+}
+
+export default connect(mapStateToProps)(MenuPerfil);
