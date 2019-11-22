@@ -1,7 +1,7 @@
 import {TOOGLE_MENUPERFIL} from "../constants/menuPerfil";
 
 const initialState = {
-    isOpened : false
+        isOpened : false      
 };
 
 function reducer(state = initialState, action){

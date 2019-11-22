@@ -6,7 +6,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import imgPerfil from "../util/fotosPrueba/image.jpg";
 import {connect} from "react-redux";
+import {toogleMenuPerfil} from "../redux/actions/menuPerfil";
 import "./styles/menuPerfil.css";
+
+const mapStateToProps = state => {
+  return {isOpened: state.menuPerfil.isOpened}
+}
+
+const mapDispachToProps = dispatch => {
+  return {toogleMenuPerfil: () => dispatch(toogleMenuPerfil())}
+}
 
 class MenuPerfil extends React.Component {
   constructor(props) {
@@ -25,7 +34,8 @@ class MenuPerfil extends React.Component {
   handleRegistrar(){
     //TODO Devolver formulario para registrarse
     console.log("Register");
-    this.props.myToogleMenu();
+    //this.props.myToogleMenu(); EN VEZ DE COMO ANTES VOY A REEMPLZARLO POR UNA ACTION DE REDUX
+    this.props.toogleMenuPerfil();
     this.props.myChangeFormContent("registrar");
   }
 
@@ -82,6 +92,8 @@ class MenuPerfil extends React.Component {
   }
 
   render() {
+    console.log("Menuuuu");
+    console.log(this.props);
     const IconAvatar = this.getAvatar.bind(this);
     const MenuContent = this.getMenuContent.bind(this);
     return (
@@ -91,7 +103,7 @@ class MenuPerfil extends React.Component {
         onStateChange={state => this.props.myHandleStateChange(state)}
         outerContainerId={"outer-container"}
         className=""
-        isOpen={this.props.myIsOpenMenuPerfil}
+        isOpen={this.props.isOpened}
         pageWrapId={"headRoom"}
         right
         styles={{ background: "#343a40" }}
@@ -103,8 +115,4 @@ class MenuPerfil extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {isOpened: state.isOpened}
-}
-
-export default connect(mapStateToProps)(MenuPerfil);
+export default connect(mapStateToProps,mapDispachToProps)(MenuPerfil);
