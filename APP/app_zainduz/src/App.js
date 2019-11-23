@@ -6,7 +6,6 @@ import RegisterForm from "./components/registerForm";
 import {connect} from "react-redux";
 
 const mapStateToProps = state => {
-  console.log(state);
   return {formContent: state.app.formContent}
 }
 
@@ -18,9 +17,6 @@ class App extends React.Component {
       formContent : "tabla"
     };
   }
-  handleStateChange(state) {
-    this.setState({ isOpenMenuPerfil: state.isOpen });
-  }
 
   //Abre o cierra el menu segun el estado actual
 
@@ -29,7 +25,7 @@ class App extends React.Component {
       case "tabla":
         return <SlideTab />;
       case "registrar":
-        return <RegisterForm myChangeFormContent = {this.changeFormContent.bind(this)} />;
+        return <RegisterForm />;
     }
   }
 

@@ -13,8 +13,8 @@ const mapStateToProps = state => {
   return {isOpened: state.menuPerfil.isOpened}
 }
 
-const mapDispachToProps = dispatch => {
-  return {toogleMenuPerfil: () => dispatch(toogleMenuPerfil())}
+const mapDispatchToProps = dispatch => {
+  return {toogleMenuPerfil: (payload) => dispatch(toogleMenuPerfil(payload))}
 }
 
 class MenuPerfil extends React.Component {
@@ -24,17 +24,6 @@ class MenuPerfil extends React.Component {
     this.state = {
       isLogIn:false
     }
-  }
-
-  handleLogIn(){
-    //TODO Hacer llamada al servidor y loguearte
-    console.log("Login");
-  }
-
-  handleRegistrar(){
-    //TODO Devolver formulario para registrarse
-    this.props.toogleMenuPerfil();
-    this.props.myChangeFormContent("registrar");
   }
 
   getAvatar() {  
@@ -52,7 +41,7 @@ class MenuPerfil extends React.Component {
     if (!this.state.isLogIn) {
       //TODO Devolver el formulario de inicio de sesion
       return (
-        <LogInForm myHandleRegistrar = {this.handleRegistrar.bind(this)} />
+        <LogInForm />
       );
     } else {
       //TODO Devolver el menu que va a tener la aplicacion
@@ -85,7 +74,7 @@ class MenuPerfil extends React.Component {
       <BurgerMenu
         customBurgerIcon={false}
         customCrossIcon={<FontAwesomeIcon icon={faTimes} />}
-        onStateChange={(state) => !state.isOpen ? this.props.toogleMenuPerfil() : null}
+        onStateChange={(state) => {console.log(state.isOpen);}}
         outerContainerId={"outer-container"}
         className=""
         isOpen={this.props.isOpened}
@@ -100,4 +89,4 @@ class MenuPerfil extends React.Component {
   }
 }
 
-export default connect(mapStateToProps,mapDispachToProps)(MenuPerfil);
+export default connect(mapStateToProps,mapDispatchToProps)(MenuPerfil);

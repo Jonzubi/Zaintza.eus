@@ -2,6 +2,17 @@ import React from "react";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import cogoToast from "cogo-toast";
+import {connect} from "react-redux";
+import {changeFormContent} from "../redux/actions/app";
+import {toogleMenuPerfil} from "../redux/actions/menuPerfil";
+
+const mapDispatchToProps = dispatch => {
+  return {
+  changeFormContent: (form) => dispatch(changeFormContent(form)),
+  toogleMenuPerfil: () => dispatch(toogleMenuPerfil())
+  }
+}
+    
 
 class LogInForm extends React.Component {
   constructor(props) {
@@ -97,7 +108,7 @@ class LogInForm extends React.Component {
             Iniciar sesion
           </button>
           <button
-            onClick={this.props.myHandleRegistrar}
+            onClick={() => {this.props.changeFormContent("registrar");this.props.toogleMenuPerfil()}}
             name="btnRegistrar"
             type="button"
             class="btn btn-success"
@@ -110,4 +121,4 @@ class LogInForm extends React.Component {
   }
 }
 
-export default LogInForm;
+export default connect(null, mapDispatchToProps)(LogInForm);
