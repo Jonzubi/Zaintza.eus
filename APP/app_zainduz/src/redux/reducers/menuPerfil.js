@@ -7,7 +7,7 @@ const initialState = {
 function reducer(state = initialState, action){
     switch (action.type){
         case TOOGLE_MENUPERFIL:
-            const auxIsOpened = !state.isOpened;
+            const auxIsOpened = action.payload || !state.isOpened;
             return Object.assign({},state,{isOpened:auxIsOpened});
         default:
             return state;
