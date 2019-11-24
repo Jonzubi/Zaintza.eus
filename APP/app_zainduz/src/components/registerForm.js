@@ -22,6 +22,14 @@ import imgNino from "../util/images/nino.png";
 import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
 import imgTerceraEdad from "../util/images/terceraEdad.png";
 import { getRandomString, toBase64 } from "../util/funciones";
+import {connect} from "react-redux";
+import {changeFormContent} from "../redux/actions/app";
+
+const mapDispatchToProps = dispatch => {
+  return {
+    changeFormContent : (form) => {dispatch(changeFormContent(form))}
+  }
+}
 
 class RegisterForm extends React.Component {
   constructor(props) {
@@ -297,7 +305,7 @@ class RegisterForm extends React.Component {
   }
 
   async handleRegistrarse() {
-    //TODO primero validar todo
+    
     for (var clave in this.state) {
       if (
         (this.state[clave].length == 0 || !this.state[clave]) &&
@@ -318,8 +326,7 @@ class RegisterForm extends React.Component {
         return;
       }
     }
-
-    //TODO llamar a la api para insertar
+    
     this.setState({ isLoading: true });
 
     var codAvatar = getRandomString(20);
@@ -416,7 +423,7 @@ class RegisterForm extends React.Component {
                 </small>
               </div>
             );
-            this.props.myChangeFormContent("tabla");
+            this.props.changeFormContent("tabla");
           })
           .catch(err => {
             this.setState({
@@ -1060,4 +1067,4 @@ class RegisterForm extends React.Component {
   }
 }
 
-export default RegisterForm;
+export default connect(null, mapDispatchToProps)(RegisterForm);

@@ -158,8 +158,10 @@ exports.getImage = (req, res) => {
   fs.readdir(avatarDirPath, (err, files) => {
     if (err) console.log(err);
     else {
+      let found = false;
       files.map(archivo => {
         if (archivo.includes(idImage)) {
+          found = true;
           let stream = fs.createReadStream(avatarDirPath + "\\" + archivo);
           let formato = archivo.split('.')[1];
           switch(formato){
@@ -175,7 +177,8 @@ exports.getImage = (req, res) => {
           }
           stream.pipe(res);
         }
-      });
+      })
+      
     }
   });
 };

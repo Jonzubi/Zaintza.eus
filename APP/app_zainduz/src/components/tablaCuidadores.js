@@ -1,6 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import loadGif from "../util/gifs/loadGif.gif";
 import Axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 
@@ -36,8 +37,9 @@ class Tabla extends React.Component {
                           ":3001/image/" +
                           cuidador.direcFotoContacto
                         }
+                        height="300px"
                         class="card-img-top"
-                        alt="..."
+                        alt="Imagen no disponible"
                       />
                       <div className="card-body">
                         <h5 className="card-title mt-2">
@@ -106,7 +108,11 @@ class Tabla extends React.Component {
                   </td>
                 );
               })
-            : ""}
+            : 
+              (<div className="w-100 text-center">
+                <img className="mt-4" src={loadGif} height={100} width={100} />
+              </div>)
+            }
         </tr>
       </table>
     );

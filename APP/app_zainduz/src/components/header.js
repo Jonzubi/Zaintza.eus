@@ -5,11 +5,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import {connect} from "react-redux";
 import {toogleMenuPerfil} from "../redux/actions/menuPerfil";
+import {changeFormContent} from "../redux/actions/app";
 import "./styles/header.css";
 
 
 const mapDispachToProps = dispatch => {
-  return {toogleMenuPerfil: (payload) => dispatch(toogleMenuPerfil(payload))}
+  return {
+    toogleMenuPerfil: (payload) => dispatch(toogleMenuPerfil(payload)),
+    changeFormContent: (form) => dispatch(changeFormContent(form))
+  }
 }
 
 class Header extends React.Component {
@@ -40,7 +44,7 @@ class Header extends React.Component {
     const IconAvatar = this.getAvatar.bind(this);
     return (      
       <Headroom style={{background:"#343a40"}} id="headRoom" className="text-center w-100">
-          <a href="#" onClick={() => {this.props.myChangeFormContent("tabla")}} style={{textDecoration : "none"}}><h1 className="w-100 d-inline display-1 text-light">Zainduz</h1></a>
+          <a href="#" onClick={() => {this.props.changeFormContent("tabla")}} style={{textDecoration : "none"}}><h1 className="w-100 d-inline display-1 text-light">Zainduz</h1></a>
           <IconAvatar />
       </Headroom>
     );
