@@ -99,7 +99,7 @@ class Tabla extends React.Component {
                         </div>
                       </div>
                       <div className="card-body card-footer">
-                        <a href="#" className="mr-0 w-100 btn btn-success">
+                        <a className="mr-0 w-100 btn btn-success text-light">
                           Contactar
                           <FontAwesomeIcon className="ml-1" icon={faPhone} />
                         </a>

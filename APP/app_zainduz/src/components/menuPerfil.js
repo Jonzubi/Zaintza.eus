@@ -1,5 +1,5 @@
 import React from "react";
-import { slide as BurgerMenu } from "react-burger-menu";
+import { fallDown as BurgerMenu } from "react-burger-menu";
 import Avatar from "react-avatar";
 import LogInForm from "./logInForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,6 +10,7 @@ import {toogleMenuPerfil} from "../redux/actions/menuPerfil";
 import {initializeUserSession} from "../redux/actions/user";
 import ipMaquina from "../util/ipMaquinaAPI";
 import "./styles/menuPerfil.css";
+import cogoToast from "cogo-toast";
 
 const mapStateToProps = state => {
   return {
@@ -48,6 +49,14 @@ class MenuPerfil extends React.Component {
     );  
   }
 
+  handleLogOut(){
+    this.props.initializeUserSession();
+    this.props.toogleMenuPerfil(false);
+    cogoToast.success(
+      <h5>Sesion cerrada correctamente!</h5>
+    )
+  }
+
   getMenuContent() {
     if (!this.props.direcFoto) {
       //TODO Devolver el formulario de inicio de sesion
@@ -69,7 +78,7 @@ class MenuPerfil extends React.Component {
               Contratos
             </button>
           </div>
-          <button type="button" className="mt-5 w-100 btn btn-danger" onClick={() => {this.props.initializeUserSession();this.props.toogleMenuPerfil(false)}}>
+          <button type="button" className="mt-5 w-100 btn btn-danger" onClick={() => this.handleLogOut()}>
             <FontAwesomeIcon className="mt-1 float-left" icon={faTimes} />
             Salir
           </button>
