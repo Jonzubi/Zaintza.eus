@@ -9,7 +9,7 @@ import {toogleMenuPerfil} from "../redux/actions/menuPerfil";
 const mapDispatchToProps = dispatch => {
   return {
   changeFormContent: (form) => dispatch(changeFormContent(form)),
-  toogleMenuPerfil: () => dispatch(toogleMenuPerfil())
+  toogleMenuPerfil: (payload) => dispatch(toogleMenuPerfil(payload))
   }
 }
     
@@ -108,7 +108,7 @@ class LogInForm extends React.Component {
             Iniciar sesion
           </button>
           <button
-            onClick={() => {this.props.changeFormContent("registrar");this.props.toogleMenuPerfil()}}
+            onClick={() => {this.props.changeFormContent("registrar");this.props.toogleMenuPerfil(false)}}
             name="btnRegistrar"
             type="button"
             class="btn btn-success"

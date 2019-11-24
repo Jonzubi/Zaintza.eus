@@ -9,7 +9,7 @@ import "./styles/header.css";
 
 
 const mapDispachToProps = dispatch => {
-  return {toogleMenuPerfil: () => dispatch(toogleMenuPerfil())}
+  return {toogleMenuPerfil: (payload) => dispatch(toogleMenuPerfil(payload))}
 }
 
 class Header extends React.Component {
@@ -28,7 +28,7 @@ class Header extends React.Component {
       return <FontAwesomeIcon 
               size="7x"
               style={{cursor: "pointer", color:"white"}}
-              onClick={() => this.props.toogleMenuPerfil()}
+              onClick={() => this.props.toogleMenuPerfil(true)}
               className="float-right mt-1 align-middle"
               icon={faUserCircle}
       

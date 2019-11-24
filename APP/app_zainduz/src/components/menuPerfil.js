@@ -74,8 +74,8 @@ class MenuPerfil extends React.Component {
       <BurgerMenu
         customBurgerIcon={false}
         customCrossIcon={<FontAwesomeIcon icon={faTimes} />}
-        onStateChange={(state) => {console.log(state.isOpen);}}
         outerContainerId={"outer-container"}
+        onStateChange={(state) => {this.props.toogleMenuPerfil(state.isOpen)}}
         className=""
         isOpen={this.props.isOpened}
         pageWrapId={"headRoom"}
