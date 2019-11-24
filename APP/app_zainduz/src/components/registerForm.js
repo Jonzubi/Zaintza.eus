@@ -24,10 +24,12 @@ import imgTerceraEdad from "../util/images/terceraEdad.png";
 import { getRandomString, toBase64 } from "../util/funciones";
 import {connect} from "react-redux";
 import {changeFormContent} from "../redux/actions/app";
+import {saveUserSession} from "../redux/actions/user";
 
 const mapDispatchToProps = dispatch => {
   return {
-    changeFormContent : (form) => {dispatch(changeFormContent(form))}
+    changeFormContent : (form) => dispatch(changeFormContent(form)),
+    saveUserSession : (user) => dispatch(saveUserSession(user))
   }
 }
 
@@ -377,10 +379,12 @@ class RegisterForm extends React.Component {
           publicoDisponible: this.state.publicoDisponible,
           precioPorPublico: this.state.precioPorPublico
         };
+        
 
         axios
           .post("http://" + ipMaquina + ":3001/cuidador", formData)
           .then(resultado => {
+            this.props.saveUserSession(formData);
             this.setState({
               txtNombre: "",
               txtApellido1: "",

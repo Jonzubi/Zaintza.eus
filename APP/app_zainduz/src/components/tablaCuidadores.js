@@ -110,7 +110,7 @@ class Tabla extends React.Component {
               })
             : 
               (<div className="w-100 text-center">
-                <img className="mt-4" src={loadGif} height={100} width={100} />
+                <img style={{marginTop:"300px"}} src={loadGif} height={100} width={100} />
               </div>)
             }
         </tr>

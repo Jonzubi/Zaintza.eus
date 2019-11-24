@@ -5,11 +5,13 @@ import cogoToast from "cogo-toast";
 import {connect} from "react-redux";
 import {changeFormContent} from "../redux/actions/app";
 import {toogleMenuPerfil} from "../redux/actions/menuPerfil";
+import {saveUserSession} from "../redux/actions/user";
 
 const mapDispatchToProps = dispatch => {
   return {
   changeFormContent: (form) => dispatch(changeFormContent(form)),
-  toogleMenuPerfil: (payload) => dispatch(toogleMenuPerfil(payload))
+  toogleMenuPerfil: (payload) => dispatch(toogleMenuPerfil(payload)),
+  saveUserSession : (user) => dispatch(saveUserSession(user))
   }
 }
     
@@ -27,10 +29,6 @@ class LogInForm extends React.Component {
   handleLogIn(){
       const vEmail = this.state.txtEmail;
       const vContrasena = this.state.txtContrasena;
-
-      console.log("Email:" + vEmail);
-      console.log("Contrasena:" + vContrasena);
-
       var objFiltros = {
         email : vEmail,
         contrasena: vContrasena
@@ -43,9 +41,8 @@ class LogInForm extends React.Component {
       })
       .then(doc => {
         if(doc.data != "Vacio"){
-          this.setState({
-            objUsuario : doc.data[0]
-          });
+          this.props.saveUserSession(doc.data[0]);
+          this.props.toogleMenuPerfil(false);
         cogoToast.success(
           <h5>Sesion iniciada correctamente!</h5>
         );

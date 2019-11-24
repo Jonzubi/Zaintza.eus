@@ -7,38 +7,49 @@ import { faTimes, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import imgPerfil from "../util/fotosPrueba/image.jpg";
 import {connect} from "react-redux";
 import {toogleMenuPerfil} from "../redux/actions/menuPerfil";
+import {initializeUserSession} from "../redux/actions/user";
+import ipMaquina from "../util/ipMaquinaAPI";
 import "./styles/menuPerfil.css";
 
 const mapStateToProps = state => {
-  return {isOpened: state.menuPerfil.isOpened}
+  return {
+    isOpened: state.menuPerfil.isOpened,
+    direcFoto : state.user.direcFoto
+  }
 }
 
 const mapDispatchToProps = dispatch => {
-  return {toogleMenuPerfil: (payload) => dispatch(toogleMenuPerfil(payload))}
+  return {
+    toogleMenuPerfil: (payload) => dispatch(toogleMenuPerfil(payload)),
+    initializeUserSession: () => dispatch(initializeUserSession())
+  }
 }
 
 class MenuPerfil extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      isLogIn:false
-    }
   }
 
   getAvatar() {  
     return (
+      this.props.direcFoto == "" ?
       <FontAwesomeIcon
         size="10x"
-        className="mx-auto pt-3"
+        className="mx-auto"
         icon={faUserCircle}
         style={{ color: "white" }}
+      />
+      :
+      <Avatar name={this.props.nombre + " " + this.props.apellido1} src={"http://" + ipMaquina + ":3001/image/" + this.props.direcFoto} 
+              className="mx-auto"
+              round={true}
+              size="200"
       />
     );  
   }
 
   getMenuContent() {
-    if (!this.state.isLogIn) {
+    if (!this.props.direcFoto) {
       //TODO Devolver el formulario de inicio de sesion
       return (
         <LogInForm />
@@ -58,7 +69,7 @@ class MenuPerfil extends React.Component {
               Contratos
             </button>
           </div>
-          <button type="button" className="mt-5 w-100 btn btn-danger">
+          <button type="button" className="mt-5 w-100 btn btn-danger" onClick={() => {this.props.initializeUserSession();this.props.toogleMenuPerfil(false)}}>
             <FontAwesomeIcon className="mt-1 float-left" icon={faTimes} />
             Salir
           </button>
@@ -76,7 +87,7 @@ class MenuPerfil extends React.Component {
         customCrossIcon={<FontAwesomeIcon icon={faTimes} />}
         outerContainerId={"outer-container"}
         onStateChange={(state) => {this.props.toogleMenuPerfil(state.isOpen)}}
-        className=""
+        className="text-center"
         isOpen={this.props.isOpened}
         pageWrapId={"headRoom"}
         right
