@@ -25,6 +25,7 @@ import { getRandomString, toBase64 } from "../util/funciones";
 import {connect} from "react-redux";
 import {changeFormContent} from "../redux/actions/app";
 import {saveUserSession} from "../redux/actions/user";
+import municipios from "../util/municipos";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -179,6 +180,14 @@ class RegisterForm extends React.Component {
   handleAddPueblo() {
     let pueblo = this.state.auxAddPueblo;
     if (pueblo == "") return;
+
+    if(!municipios.includes(pueblo)){
+      cogoToast.error(
+        <h5>{pueblo} no existe en nuestra base de datos</h5>
+      );
+      return;
+    }
+
     for (var clave in this.state.ubicaciones) {
       if (this.state.ubicaciones[clave] == pueblo) {
         cogoToast.error(<h5>Ese pueblo ya esta insertado!</h5>);
