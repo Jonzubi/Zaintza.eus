@@ -16,23 +16,24 @@ import cogoToast from "cogo-toast";
 import { ReactDatez as Calendario } from "react-datez";
 import Switch from "react-switch";
 import TimeInput from "react-time-input";
+import AutoSuggest from "react-autosuggest";
 import "react-datez/dist/css/react-datez.css";
 import loadGif from "../util/gifs/loadGif.gif";
 import imgNino from "../util/images/nino.png";
 import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
 import imgTerceraEdad from "../util/images/terceraEdad.png";
 import { getRandomString, toBase64 } from "../util/funciones";
-import {connect} from "react-redux";
-import {changeFormContent} from "../redux/actions/app";
-import {saveUserSession} from "../redux/actions/user";
+import { connect } from "react-redux";
+import { changeFormContent } from "../redux/actions/app";
+import { saveUserSession } from "../redux/actions/user";
 import municipios from "../util/municipos";
 
 const mapDispatchToProps = dispatch => {
   return {
-    changeFormContent : (form) => dispatch(changeFormContent(form)),
-    saveUserSession : (user) => dispatch(saveUserSession(user))
-  }
-}
+    changeFormContent: form => dispatch(changeFormContent(form)),
+    saveUserSession: user => dispatch(saveUserSession(user))
+  };
+};
 
 class RegisterForm extends React.Component {
   constructor(props) {
@@ -100,6 +101,7 @@ class RegisterForm extends React.Component {
       hoverNino: false,
       hoverTerceraEdad: false,
       hoverNecesidadEspecial: false,
+      suggestionsPueblos: [],
       error: {
         txtNombre: false,
         txtEmail: false,
@@ -135,6 +137,42 @@ class RegisterForm extends React.Component {
     this.onChangeContactImg = this.onChangeContactImg.bind(this);
   }
 
+  escapeRegexCharacters(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  getSuggestions(value) {
+    const escapedValue = this.escapeRegexCharacters(value.trim());
+
+    if (escapedValue === "") {
+      return [];
+    }
+
+    const regex = new RegExp("^" + escapedValue, "i");
+
+    return municipios.filter(pueblo => regex.test(pueblo));
+  }
+
+  getSuggestionValue(suggestion) {
+    return suggestion;
+  }
+
+  renderSuggestion(suggestion) {
+    return <span>{suggestion}</span>;
+  }
+
+  onSuggestionsFetchRequested = ({ value }) => {
+    this.setState({
+      suggestionsPueblos: this.getSuggestions(value)
+    });
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestionsPueblos: []
+    });
+  };
+
   onClose() {
     this.setState({ avatarPreview: "" });
   }
@@ -151,7 +189,7 @@ class RegisterForm extends React.Component {
   }
 
   onChangeContactImg(picture) {
-    if(picture.length > 1){
+    if (picture.length > 1) {
       picture.shift();
     }
     this.setState({
@@ -171,9 +209,9 @@ class RegisterForm extends React.Component {
     });
   }
 
-  handleAuxAddPuebloChange(e) {
+  handleAuxAddPuebloChange(e, { newValue }) {
     this.setState({
-      auxAddPueblo: e.target.value
+      auxAddPueblo: newValue
     });
   }
 
@@ -181,10 +219,8 @@ class RegisterForm extends React.Component {
     let pueblo = this.state.auxAddPueblo;
     if (pueblo == "") return;
 
-    if(!municipios.includes(pueblo)){
-      cogoToast.error(
-        <h5>{pueblo} no existe en nuestra base de datos</h5>
-      );
+    if (!municipios.includes(pueblo)) {
+      cogoToast.error(<h5>{pueblo} no existe en nuestra base de datos</h5>);
       return;
     }
 
@@ -316,7 +352,6 @@ class RegisterForm extends React.Component {
   }
 
   async handleRegistrarse() {
-    
     for (var clave in this.state) {
       if (
         (this.state[clave].length == 0 || !this.state[clave]) &&
@@ -336,7 +371,7 @@ class RegisterForm extends React.Component {
         return;
       }
     }
-    
+
     this.setState({ isLoading: true });
 
     var codAvatar = getRandomString(20);
@@ -387,7 +422,6 @@ class RegisterForm extends React.Component {
           publicoDisponible: this.state.publicoDisponible,
           precioPorPublico: this.state.precioPorPublico
         };
-        
 
         axios
           .post("http://" + ipMaquina + ":3001/cuidador", formData)
@@ -453,6 +487,36 @@ class RegisterForm extends React.Component {
   }
 
   render() {
+    const onChangeSuggestion = this.handleAuxAddPuebloChange;
+    const auxAddPuebloValue = this.state.auxAddPueblo;
+    const classSuggestion = this.state.error.txtNombre
+      ? "border border-danger form-control d-inline w-75"
+      : "form-control d-inline w-100";
+    const autoSuggestProps = {
+      onChange: onChangeSuggestion,
+      placeholder: "Introduce el pueblo...",
+      value: auxAddPuebloValue,
+      className: classSuggestion
+    };
+
+    const suggestionTheme = {
+      container: "react-autosuggest__container",
+      containerOpen: "react-autosuggest__container--open",
+      input: "react-autosuggest__input",
+      inputOpen: "react-autosuggest__input--open",
+      inputFocused: "react-autosuggest__input--focused",
+      suggestionsContainer: "react-autosuggest__suggestions-container",
+      suggestionsContainerOpen:
+        "react-autosuggest__suggestions-container--open",
+      suggestionsList: "react-autosuggest__suggestions-list",
+      suggestion: "react-autosuggest__suggestion",
+      suggestionFirst: "react-autosuggest__suggestion--first",
+      suggestionHighlighted: "react-autosuggest__suggestion--highlighted",
+      sectionContainer: "react-autosuggest__section-container",
+      sectionContainerFirst: "react-autosuggest__section-container--first",
+      sectionTitle: "react-autosuggest__section-title"
+    };
+
     return (
       <div
         className="border border-dark rounded p-5"
@@ -667,7 +731,11 @@ class RegisterForm extends React.Component {
               <input
                 onChange={this.handleInputChange}
                 type="password"
-                class={this.state.error.txtNombre ? "border border-danger form-control" : "form-control"}
+                class={
+                  this.state.error.txtNombre
+                    ? "border border-danger form-control"
+                    : "form-control"
+                }
                 id="txtContrasena"
                 placeholder="Introducir contraseña..."
                 value={this.state.txtContrasena}
@@ -800,23 +868,16 @@ class RegisterForm extends React.Component {
               </label>{" "}
               (<span className="text-danger font-weight-bold">*</span>)
               <div class="form-group mt-2">
-                <input
-                  onChange={this.handleAuxAddPuebloChange}
-                  class={
-                    this.state.error.txtNombre
-                      ? "border border-danger form-control d-inline w-75"
-                      : "form-control d-inline w-75"
-                  }
+                <AutoSuggest
+                  suggestions={this.state.suggestionsPueblos}
+                  onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                  onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                  getSuggestionValue={this.getSuggestionValue}
+                  renderSuggestion={this.renderSuggestion}
+                  inputProps={autoSuggestProps}
+                  theme={suggestionTheme}
                   id="txtAddPueblos"
-                  placeholder="Introduce el pueblo..."
-                  value={this.state.auxAddPueblo}
                 />
-                <a
-                  onClick={this.handleAddPueblo}
-                  className="btn btn-success float-right text-light"
-                >
-                  Añadir <FontAwesomeIcon icon={faPlusCircle} />
-                </a>
                 {this.state.ubicaciones.length > 0 ? (
                   <h5 className="mt-2 lead">Pueblos Seleccionados:</h5>
                 ) : (
