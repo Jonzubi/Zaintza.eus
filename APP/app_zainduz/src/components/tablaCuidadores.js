@@ -11,6 +11,7 @@ import ModalFooter from "react-bootstrap/ModalFooter";
 import Button from "react-bootstrap/Button";
 import ipMaquina from "../util/ipMaquinaAPI";
 import cogoToast from "cogo-toast";
+import "./styles/tablaCuidadores.css"
 
 class Tabla extends React.Component {
   componentDidMount() {
@@ -178,14 +179,12 @@ class Tabla extends React.Component {
           </tr>
         </table>
 
-        <Modal className="w-100 h-100" show={this.state.showModal} onHide={() => this.handleShowModalChange(false)}>
+        <Modal className="w-100 h-100 m-0 p-0" show={this.state.showModal} onHide={() => this.handleShowModalChange(false)}>
           <ModalHeader closeButton>
-          <ModalTitle>{vSelectedCuidador.nombre + " " + vSelectedCuidador.apellido1 + " " + vSelectedCuidador.apellido2}</ModalTitle>
+          <ModalTitle className="text-center w-100">{vSelectedCuidador.nombre + " " + vSelectedCuidador.apellido1 + " " + vSelectedCuidador.apellido2}</ModalTitle>
           </ModalHeader>
-          <ModalBody>
-            <div className="container">
-              <img src={"http://" + ipMaquina + ":3001/image/" + vSelectedCuidador.direcFotoContacto} />
-            </div>
+          <ModalBody className="container-fluid">            
+              <img src={"http://" + ipMaquina + ":3001/image/" + vSelectedCuidador.direcFotoContacto} />            
           </ModalBody>
           <ModalFooter>
             <Button variant="secondary" onClick={() => this.handleShowModalChange(false)}>
