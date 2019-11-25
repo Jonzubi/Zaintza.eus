@@ -4,19 +4,30 @@ import { faPhone, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import loadGif from "../util/gifs/loadGif.gif";
 import Axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
+import cogoToast from "cogo-toast";
 
 class Tabla extends React.Component {
   componentDidMount() {
-    Axios.get("http://" + ipMaquina + ":3001/cuidador").then(data => {
+    Axios.get("http://" + ipMaquina + ":3001/cuidador")
+    .then(data => {
       this.setState({
-        jsonCuidadores: data.data
+        jsonCuidadores: data.data,
+        buscado: true
       });
+    }).catch(err => {
+      this.setState({
+        buscado:true
+      })
+      cogoToast.error(
+        <h5>Servidor no disponible!</h5>
+      );
     });
   }
 
   constructor(props) {
     super(props);
     this.state = {
+      buscado: false,
       jsonCuidadores: {}
     };
   }
@@ -25,7 +36,7 @@ class Tabla extends React.Component {
     return (
       <table className="table">
         <tr className="row">
-          {typeof this.state.jsonCuidadores.map != "undefined"
+          {typeof this.state.jsonCuidadores.map != "undefined" && this.state.buscado
             ? this.state.jsonCuidadores.map((cuidador, indice) => {
                 return (
                   <td className="col-3 border-top-0">
@@ -38,7 +49,7 @@ class Tabla extends React.Component {
                           cuidador.direcFotoContacto
                         }
                         height="300px"
-                        class="card-img-top"
+                        className="img-responsive card-img-top"
                         alt="Imagen no disponible"
                       />
                       <div className="card-body">
@@ -108,10 +119,12 @@ class Tabla extends React.Component {
                   </td>
                 );
               })
-            : 
+            : typeof this.state.jsonCuidadores.map == "undefined" && !this.state.buscado ?
               (<div className="w-100 text-center">
                 <img style={{marginTop:"300px"}} src={loadGif} height={100} width={100} />
               </div>)
+            :
+              <small style={{marginTop:"300px"}} className="text-danger text-center w-100">No hay registros o ha habido un error</small>
             }
         </tr>
       </table>

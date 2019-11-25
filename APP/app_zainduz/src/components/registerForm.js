@@ -150,7 +150,9 @@ class RegisterForm extends React.Component {
   }
 
   onChangeContactImg(picture) {
-    console.log(picture);
+    if(picture.length > 1){
+      picture.shift();
+    }
     this.setState({
       imgContact: picture
     });
@@ -237,8 +239,6 @@ class RegisterForm extends React.Component {
         diasDisponible: auxDiasDisponible
       });
     }
-
-    console.log(this.state.diasDisponible);
   }
 
   removeDiasDisponible() {
@@ -321,7 +321,6 @@ class RegisterForm extends React.Component {
         );
         let auxError = this.state.error;
         auxError[clave] = true;
-        console.log(auxError);
         this.setState({
           error: auxError
         });
@@ -452,8 +451,7 @@ class RegisterForm extends React.Component {
       >
         <form>
           <div className="form-group row">
-            <div className="form-group col-3">
-              {/* Meter un componente para subir imagen */}
+            <div className="form-group col-3 text-center">
               <Avatar
                 label="Elige tu Avatar"
                 labelStyle={{
@@ -471,7 +469,7 @@ class RegisterForm extends React.Component {
                 src={this.state.avatarSrc}
               />
             </div>
-            <div className="col-3 mx-auto">
+            <div className="col-3 mx-auto text-center">
               <ImageUploader
                 fileContainerStyle={
                   this.state.imgContact != null
@@ -494,7 +492,7 @@ class RegisterForm extends React.Component {
                       " (" +
                       (this.state.imgContact[0].size / 1024 / 1024).toFixed(2) +
                       " MB)"
-                    : "Tamaño maximo: 5MB"
+                    : "Tamaño maximo: 5MB | Dimension recomendado (288x300)"
                 }
                 labelClass={
                   this.state.imgContact != null
@@ -515,7 +513,7 @@ class RegisterForm extends React.Component {
 
             <div className="form-group col-6">
               <div class="form-group">
-                <label for="exampleInputEmail1">Nombre</label> (
+                <label htmlFor="txtNombre">Nombre</label> (
                 <span className="text-danger font-weight-bold">*</span>)
                 <input
                   onChange={this.handleInputChange}
@@ -533,7 +531,7 @@ class RegisterForm extends React.Component {
               </div>
               <div class="form-group row">
                 <div className="form-group col">
-                  <label for="exampleInputEmail1">Apellido 1</label>
+                  <label htmlFor="txtApellido1">Apellido 1</label>
                   <input
                     onChange={this.handleInputChange}
                     type="text"
@@ -545,7 +543,7 @@ class RegisterForm extends React.Component {
                   />
                 </div>
                 <div className="form-group col">
-                  <label for="exampleInputEmail1">Apellido 2</label>
+                  <label htmlFor="txtApellido2">Apellido 2</label>
                   <input
                     onChange={this.handleInputChange}
                     type="text"
@@ -561,7 +559,7 @@ class RegisterForm extends React.Component {
           </div>
           <div class="form-group row">
             <div className="form-group col-6">
-              <label for="txtFechaNacimiento">Fecha de nacimiento</label> (
+              <label htmlFor="txtFechaNacimiento">Fecha de nacimiento</label> (
               <span className="text-danger font-weight-bold">*</span>)
               <br />
               <Calendario
@@ -638,7 +636,7 @@ class RegisterForm extends React.Component {
 
           <div className="form-group row">
             <div class="form-group col">
-              <label for="exampleInputEmail1">Email</label> (
+              <label htmlFor="txtEmail">Email</label> (
               <span className="text-danger font-weight-bold">*</span>)
               <input
                 onChange={this.handleInputChange}
@@ -653,7 +651,7 @@ class RegisterForm extends React.Component {
                 placeholder="Introducir email..."
                 value={this.state.txtEmail}
               />
-              <label className="pt-2" for="exampleInputPassword1">
+              <label className="pt-2" htmlFor="txtContrasena">
                 Contraseña
               </label>{" "}
               (<span className="text-danger font-weight-bold">*</span>)
@@ -667,7 +665,7 @@ class RegisterForm extends React.Component {
               />
             </div>
             <div class="form-group col">
-              <label for="">Telefono Movil</label> (
+              <label htmlFor="txtMovil">Telefono Movil</label> (
               <span className="text-danger font-weight-bold">*</span>)
               <input
                 onChange={this.handleInputChange}
@@ -682,7 +680,7 @@ class RegisterForm extends React.Component {
                 placeholder="Introducir movil..."
                 value={this.state.txtMovil}
               />
-              <label className="pt-2" for="">
+              <label className="pt-2" htmlFor="txtTelefono">
                 Telefono Fijo
               </label>
               <input
@@ -788,7 +786,7 @@ class RegisterForm extends React.Component {
             </div>
             <div className="form-group col">
               {/* Insertar ubicaciones disponibles aqui */}
-              <label className="w-100 text-center lead">
+              <label htmlFor="txtAddPueblos" className="w-100 text-center lead">
                 Pueblos disponible:
               </label>{" "}
               (<span className="text-danger font-weight-bold">*</span>)
@@ -1026,7 +1024,7 @@ class RegisterForm extends React.Component {
             </div>
           </div>
           <div class="form-group">
-            <label for="comment">Descripcion</label> (
+            <label htmlFor="txtDescripcion">Descripcion</label> (
             <span className="text-danger font-weight-bold">*</span>)
             <textarea
               onChange={this.handleInputChange}

@@ -12,7 +12,7 @@ class Tabla extends React.Component {
           <div className="card w-20 m-4" style={{ width: "18rem" }}>
             <img
                 src={ imgPerfil }
-                class="card-img-top"
+                className="card-img-top"
                 alt="..."
             />
             <div className="card-body">              
@@ -31,7 +31,7 @@ class Tabla extends React.Component {
             <div className="card w-20 m-4" style={{ width: "18rem" }}>
             <img
                 src={ imgPerfil }
-                class="card-img-top"
+                className="card-img-top"
                 alt="..."
             />
             <div className="card-body">              
@@ -50,7 +50,7 @@ class Tabla extends React.Component {
           <div className="card w-20 m-4" style={{ width: "18rem" }}>
               <img
                 src={ imgPerfil }
-                class="card-img-top"
+                className="card-img-top"
                 alt="..."
               />
             <div className="card-body">
@@ -69,7 +69,7 @@ class Tabla extends React.Component {
            <div className="card w-20 m-4" style={{ width: "18rem" }}>
               <img
                 src={ imgPerfil }
-                class="card-img-top"
+                className="card-img-top"
                 alt="..."
               />
             <div className="card-body">
@@ -90,7 +90,7 @@ class Tabla extends React.Component {
           <div className="card w-20 m-4" style={{ width: "18rem" }}>
             <img
                 src={ imgPerfil }
-                class="card-img-top"
+                className="card-img-top"
                 alt="..."
             />
             <div className="card-body">              
@@ -109,7 +109,7 @@ class Tabla extends React.Component {
             <div className="card w-20 m-4" style={{ width: "18rem" }}>
             <img
                 src={ imgPerfil }
-                class="card-img-top"
+                className="card-img-top"
                 alt="..."
             />
             <div className="card-body">              
@@ -128,7 +128,7 @@ class Tabla extends React.Component {
           <div className="card w-20 m-4" style={{ width: "18rem" }}>
               <img
                 src={ imgPerfil }
-                class="card-img-top"
+                className="card-img-top"
                 alt="..."
               />
             <div className="card-body">
@@ -147,7 +147,7 @@ class Tabla extends React.Component {
            <div className="card w-20 m-4" style={{ width: "18rem" }}>
               <img
                 src={ imgPerfil }
-                class="card-img-top"
+                className="card-img-top"
                 alt="..."
               />
             <div className="card-body">

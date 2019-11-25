@@ -69,29 +69,29 @@ class LogInForm extends React.Component {
     return (
       <form className="mt-5">
         <div>
-          <label for="exampleInputEmail1">Email</label>
+          <label htmlFor="txtEmail">Email</label>
           <input
             onChange={this.handleInputChange.bind(this)}
             type="email"
-            class="form-control"
+            className="form-control"
             id="txtEmail"
             aria-describedby="emailHelp"
             placeholder="Insertar email..."
           />
         </div>
-        <div class="form-group">
-          <label for="exampleInputPassword1">Contraseña</label>
+        <div className="form-group">
+          <label htmlFor="txtContrasena">Contraseña</label>
           <input
             onChange={this.handleInputChange.bind(this)}
             type="password"
-            class="form-control"
+            className="form-control"
             id="txtContrasena"
             placeholder="Insertar contraseña..."
           />
         </div>
-        <div class="form-group form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-          <label class="form-check-label" for="exampleCheck1">
+        <div className="form-group form-check">
+          <input type="checkbox" className="form-check-input" id="chkRecordarme" />
+          <label className="form-check-label" htmlFor="chkRecordarme">
             Recordarme
           </label>
         </div>
@@ -100,7 +100,7 @@ class LogInForm extends React.Component {
             onClick={this.handleLogIn.bind(this)}
             name="btnLogIn"
             type="button"
-            class="btn btn-primary"
+            className="btn btn-primary"
           >
             Iniciar sesion
           </button>
@@ -108,7 +108,7 @@ class LogInForm extends React.Component {
             onClick={() => {this.props.changeFormContent("registrar");this.props.toogleMenuPerfil(false)}}
             name="btnRegistrar"
             type="button"
-            class="btn btn-success"
+            className="btn btn-success"
           >
             Registrarse
           </button>
