@@ -510,8 +510,8 @@ class RegisterForm extends React.Component {
         "react-autosuggest__suggestions-container--open",
       suggestionsList: "list-group",
       suggestion: "list-group-item",
-      suggestionFirst: "list-group-item bg-success text-light",
-      suggestionHighlighted: "bg-secondary text-light list-group-item",
+      suggestionFirst: "list-group-item",
+      suggestionHighlighted: "bg-success text-light list-group-item",
       sectionContainer: "react-autosuggest__section-container",
       sectionContainerFirst: "react-autosuggest__section-container--first",
       sectionTitle: "react-autosuggest__section-title"
@@ -872,6 +872,7 @@ class RegisterForm extends React.Component {
                   suggestions={this.state.suggestionsPueblos}
                   onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                   onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                  onSuggestionSelected={this.handleAddPueblo}
                   getSuggestionValue={this.getSuggestionValue}
                   renderSuggestion={this.renderSuggestion}
                   inputProps={autoSuggestProps}
