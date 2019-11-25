@@ -136,7 +136,7 @@ class RegisterForm extends React.Component {
   }
 
   onClose() {
-    this.setState({ avatarPreview: null });
+    this.setState({ avatarPreview: "" });
   }
 
   onCrop(preview) {
@@ -417,8 +417,8 @@ class RegisterForm extends React.Component {
               ubicaciones: [],
               txtDescripcion: "",
               isPublic: true,
-              avatarSrc: null,
-              avatarPreview: null,
+              avatarSrc: "",
+              avatarPreview: "",
               hoverSexoM: false,
               hoverSexoF: false,
               isLoading: false,
