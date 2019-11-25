@@ -505,13 +505,13 @@ class RegisterForm extends React.Component {
       input: "react-autosuggest__input",
       inputOpen: "react-autosuggest__input--open",
       inputFocused: "react-autosuggest__input--focused",
-      suggestionsContainer: "react-autosuggest__suggestions-container",
+      suggestionsContainer: "list-group",
       suggestionsContainerOpen:
         "react-autosuggest__suggestions-container--open",
-      suggestionsList: "react-autosuggest__suggestions-list",
-      suggestion: "react-autosuggest__suggestion",
-      suggestionFirst: "react-autosuggest__suggestion--first",
-      suggestionHighlighted: "react-autosuggest__suggestion--highlighted",
+      suggestionsList: "list-group",
+      suggestion: "list-group-item",
+      suggestionFirst: "list-group-item bg-success text-light",
+      suggestionHighlighted: "bg-secondary text-light list-group-item",
       sectionContainer: "react-autosuggest__section-container",
       sectionContainerFirst: "react-autosuggest__section-container--first",
       sectionTitle: "react-autosuggest__section-title"
