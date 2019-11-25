@@ -3,25 +3,25 @@ import MenuPerfil from "./components/menuPerfil";
 import Cabecera from "./components/header";
 import SlideTab from "./components/slideTab";
 import RegisterForm from "./components/registerForm";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 
 const mapStateToProps = state => {
-  return {formContent: state.app.formContent}
-}
+  return { formContent: state.app.formContent };
+};
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isOpenMenuPerfil: false,
-      formContent : "tabla"
+      formContent: "tabla"
     };
   }
 
   //Abre o cierra el menu segun el estado actual
 
-  getContent(){
-    switch (this.props.formContent){
+  getContent() {
+    switch (this.props.formContent) {
       case "tabla":
         return <SlideTab />;
       case "registrar":
@@ -33,10 +33,12 @@ class App extends React.Component {
     const AppContent = this.getContent.bind(this);
 
     return (
-      <div id="outer-container" className="w-100">
+      <div>
         <MenuPerfil />
-        <Cabecera />
-        <AppContent />
+        <div id="outer-container" className="w-100">
+          <Cabecera />
+          <AppContent />
+        </div>
       </div>
     );
   }

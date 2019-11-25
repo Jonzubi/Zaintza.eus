@@ -93,12 +93,12 @@ class MenuPerfil extends React.Component {
     return (
       <BurgerMenu
         customBurgerIcon={false}
-        customCrossIcon={<FontAwesomeIcon icon={faTimes} />}
+        customCrossIcon={<FontAwesomeIcon className="bg-transparent text-light" icon={faTimes} />}
         outerContainerId={"outer-container"}
         onStateChange={(state) => {this.props.toogleMenuPerfil(state.isOpen)}}
         className="text-center"
         isOpen={this.props.isOpened}
-        pageWrapId={"headRoom"}
+        pageWrapId={"outer-container"}
         right
         styles={{ background: "#343a40" }}
       >
