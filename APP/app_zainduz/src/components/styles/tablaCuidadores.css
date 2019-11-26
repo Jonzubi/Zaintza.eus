@@ -14,3 +14,13 @@
     margin: 0;
     padding: 0;
   }
+
+  .close{
+    font-size: 30px;
+  }
+
+  .modalCustomClass{
+    width: 90%;
+    height: 90vh;
+    margin: 2.5% auto;
+  }

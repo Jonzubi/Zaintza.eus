@@ -68,14 +68,11 @@ class Tabla extends React.Component {
     console.log(vSelectedCuidador);
 
     return (
-      <div className="w-100 h-100">
-        <table className="table">
-          <tr className="row">
+      <div className="d-flex flex-wrap justify-content-center">
             {typeof this.state.jsonCuidadores.map != "undefined" &&
             this.state.buscado ? (
               this.state.jsonCuidadores.map((cuidador, indice) => {
                 return (
-                  <td className="col-3 border-top-0">
                     <div className="card w-20 m-4" style={{ width: "18rem" }}>
                       <div
                         style={{
@@ -108,7 +105,7 @@ class Tabla extends React.Component {
                         <h5 className="card-title mt-2">
                           {cuidador.nombre + " " + cuidador.apellido1}
                         </h5>
-                        <p className="card-text">{cuidador.descripcion}</p>
+                        <p className="card-text" style={{maxHeight: "75px", overflow:"hidden"}}>{cuidador.descripcion}</p>
                       </div>
                       <div className="card-body">
                         <div className="row text-muted card-title">
@@ -171,7 +168,6 @@ class Tabla extends React.Component {
                         </a>
                       </div>
                     </div>
-                  </td>
                 );
               })
             ) : typeof this.state.jsonCuidadores.map == "undefined" &&
@@ -192,18 +188,16 @@ class Tabla extends React.Component {
                 No hay registros o ha habido un error
               </small>
             )}
-          </tr>
-        </table>
 
         <Modal
-          className="w-100 h-100 m-0 p-0"
+          className="modalCustomClass"
           show={this.state.showModal}
           onHide={() => this.handleShowModalChange(false)}
+          
         >
-          <ModalHeader closeButton></ModalHeader>
+          <ModalHeader closeLabel="Itxi" closeButton></ModalHeader>
           <ModalBody className="container-fluid">
-            <h5>Datu pertsonalak</h5>
-            <hr />
+            <h5 style={{marginBottom:"20px"}} className="display-4">Datu pertsonalak</h5>
             <div
               style={{
                 width: "calc(100% - 20px)",
@@ -279,12 +273,12 @@ class Tabla extends React.Component {
                 </div>
               </div>
             </div>
-            <hr />
-            <h5>Zaintza baldintzak</h5>
+           
+            <h5 style={{margin:"20px 0px"}} className="display-4">Zaintza baldintzak</h5>
             <hr />
             <div className="row h-100">
                 <div className="col-6 h-100 panel panel-default">
-                    <div className="panel-header text-center">Herriak</div>
+                    <h5 className="panel-header text-center">Herriak</h5>
                     <div className="panel-body list-group">
                       {typeof vSelectedCuidador.ubicaciones != "undefined" ? vSelectedCuidador.ubicaciones.map((ubicacion, index) => {
                       return <span className="list-group-item">{ubicacion}</span>
@@ -298,16 +292,10 @@ class Tabla extends React.Component {
           </ModalBody>
           <ModalFooter>
             <Button
-              variant="secondary"
+              className="w-100 btn-success"
               onClick={() => this.handleShowModalChange(false)}
             >
-              Close
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => this.handleShowModalChange(false)}
-            >
-              Save Changes
+              Zaintza eskatu
             </Button>
           </ModalFooter>
         </Modal>
