@@ -63,9 +63,9 @@ class Tabla extends React.Component {
   render() {
     const vSelectedCuidador = this.state.selectedCuidador;
     const fechaNacCuidador = new Date(vSelectedCuidador.fechaNacimiento);
-    const telefonoFijoCuidador = typeof vSelectedCuidador.telefono == "undefined" ? "Definitu gabe" : typeof vSelectedCuidador.telefono.fijo == "undefined" ? "Definitu gabe" : vSelectedCuidador.telefono.fijo.numero || "Definitu gabe";
-    const telefonoMovilCuidador = typeof vSelectedCuidador.telefono == "undefined" ? "Definitu gabe" : typeof vSelectedCuidador.telefono.movil == "undefined" ? "Definitu gabe" : vSelectedCuidador.telefono.movil.numero || "Definitu gabe";
-    console.log(vSelectedCuidador);
+    const telefonoFijoCuidador = typeof vSelectedCuidador.telefono == "undefined" ? <em>Definitu gabe</em> : typeof vSelectedCuidador.telefono.fijo == "undefined" ? <em>Definitu gabe</em> : vSelectedCuidador.telefono.fijo.numero || <em>Definitu gabe</em>;
+    const telefonoMovilCuidador = typeof vSelectedCuidador.telefono == "undefined" ? <em>Definitu gabe</em> : typeof vSelectedCuidador.telefono.movil == "undefined" ? <em>Definitu gabe</em> : vSelectedCuidador.telefono.movil.numero || <em>Definitu gabe</em>;
+    const traducDias= ["Astelehena", "Asteartea", "Asteazkena", "Osteguna", "Ostirala", "Larunbata", "Igandea"];
 
     return (
       <div className="d-flex flex-wrap justify-content-center">
@@ -277,7 +277,7 @@ class Tabla extends React.Component {
             <h5 style={{margin:"20px 0px"}} className="display-4">Zaintza baldintzak</h5>
             <hr />
             <div className="row h-100">
-                <div className="col-6 h-100 panel panel-default">
+                <div className="col-4 h-100 panel panel-default">
                     <h5 className="panel-header text-center">Herriak</h5>
                     <div className="panel-body list-group">
                       {typeof vSelectedCuidador.ubicaciones != "undefined" ? vSelectedCuidador.ubicaciones.map((ubicacion, index) => {
@@ -285,8 +285,34 @@ class Tabla extends React.Component {
                       }) : null}
                     </div>
                 </div>
-                <div className="col-6 h-100">
-
+                <div className="col-4 h-100">
+                <h5 className="panel-header text-center">Ordu libreak</h5>
+                <div className="list-group">
+                  {typeof vSelectedCuidador.diasDisponible != "undefined" ? vSelectedCuidador.diasDisponible.map((dia) => {
+                    return (
+                    <div className="list-group-item">
+                      <span className="list-group-item border-right font-weight-bold text-center">{traducDias[(dia.dia - 1)]}</span>
+                      <span className="list-group-item text-center">{dia.horaInicio + " - " + dia.horaFin}</span>
+                    </div>)
+                  }) : null}
+                </div>
+                </div>
+                <div className="col-4 h-100">
+                  <h5 className="panel-header text-center">Prezioak multzoka</h5>
+                  <div className="list-group">
+                    <div className="list-group-item">
+                      <span className="list-group-item font-weight-bold">Haurrak</span>
+                      <span className="list-group-item">{typeof vSelectedCuidador.precioPorPublico != "undefined" ? vSelectedCuidador.precioPorPublico.nino != "" ? vSelectedCuidador.precioPorPublico.nino + "€ /orduko" : <em>Definitu gabe</em> : null}</span>
+                    </div>
+                    <div className="list-group-item">
+                      <span className="list-group-item font-weight-bold">3. Adina</span>
+                      <span className="list-group-item">{typeof vSelectedCuidador.precioPorPublico != "undefined" ? vSelectedCuidador.precioPorPublico.terceraEdad != "" ? vSelectedCuidador.precioPorPublico.terceraEdad + "€ /orduko" : <em>Definitu gabe</em> : null}</span>
+                    </div>
+                    <div className="list-group-item">
+                      <span className="list-group-item font-weight-bold">Behar bereziak</span>
+                      <span className="list-group-item">{typeof vSelectedCuidador.precioPorPublico != "undefined" ? vSelectedCuidador.precioPorPublico.necesidadEspecial != "" ? vSelectedCuidador.precioPorPublico.necesidadEspecial + "€ /orduko" : <em>Definitu gabe</em> : null}</span>
+                    </div>                    
+                  </div>
                 </div>
             </div>
           </ModalBody>
