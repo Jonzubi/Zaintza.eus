@@ -2,7 +2,7 @@ import React from "react";
 import MenuPerfil from "./components/menuPerfil";
 import Cabecera from "./components/header";
 import SlideTab from "./components/slideTab";
-import RegisterForm from "./components/registerForm";
+import RegisterForm from "./components/registerFormCuidador";
 import { connect } from "react-redux";
 
 const mapStateToProps = state => {
