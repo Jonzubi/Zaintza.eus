@@ -1,0 +1,1 @@
+export const TOOGLE_MODAL = "TOOGLE_MODAL";

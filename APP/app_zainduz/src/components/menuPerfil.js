@@ -15,14 +15,14 @@ import cogoToast from "cogo-toast";
 const mapStateToProps = state => {
   return {
     isOpened: state.menuPerfil.isOpened,
-    direcFoto : state.user.direcFoto
+    direcFoto : state.user.direcFoto,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     toogleMenuPerfil: (payload) => dispatch(toogleMenuPerfil(payload)),
-    initializeUserSession: () => dispatch(initializeUserSession())
+    initializeUserSession: () => dispatch(initializeUserSession()),
   }
 }
 

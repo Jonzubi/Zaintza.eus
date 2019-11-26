@@ -2,7 +2,9 @@ import React from "react";
 import MenuPerfil from "./components/menuPerfil";
 import Cabecera from "./components/header";
 import SlideTab from "./components/slideTab";
-import RegisterForm from "./components/registerFormCuidador";
+import RegisterFormCuidador from "./components/registerFormCuidador";
+import RegisterFormCliente from "./components/registerFormCliente";
+import ModalRegistrarse from "./components/modalRegistrarse";
 import { connect } from "react-redux";
 
 const mapStateToProps = state => {
@@ -24,8 +26,10 @@ class App extends React.Component {
     switch (this.props.formContent) {
       case "tabla":
         return <SlideTab />;
-      case "registrar":
-        return <RegisterForm />;
+      case "registrarCuidador":
+        return <RegisterFormCuidador />;
+      case "registrarCliente":
+        return <RegisterFormCliente />
     }
   }
 
@@ -38,6 +42,7 @@ class App extends React.Component {
         <div id="outer-container" className="w-100">
           <Cabecera />
           <AppContent />
+          <ModalRegistrarse />
         </div>
       </div>
     );

@@ -12,7 +12,6 @@ import Axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import ModalHeader from "react-bootstrap/ModalHeader";
 import ModalBody from "react-bootstrap/ModalBody";
-import ModalTitle from "react-bootstrap/ModalTitle";
 import ModalFooter from "react-bootstrap/ModalFooter";
 import Button from "react-bootstrap/Button";
 import ipMaquina from "../util/ipMaquinaAPI";

@@ -6,12 +6,14 @@ import {connect} from "react-redux";
 import {changeFormContent} from "../redux/actions/app";
 import {toogleMenuPerfil} from "../redux/actions/menuPerfil";
 import {saveUserSession} from "../redux/actions/user";
+import {toogleModal} from "../redux/actions/modalRegistrarse";
 
 const mapDispatchToProps = dispatch => {
   return {
   changeFormContent: (form) => dispatch(changeFormContent(form)),
   toogleMenuPerfil: (payload) => dispatch(toogleMenuPerfil(payload)),
-  saveUserSession : (user) => dispatch(saveUserSession(user))
+  saveUserSession : (user) => dispatch(saveUserSession(user)),  
+  toogleModal: (payload) => dispatch(toogleModal(payload))
   }
 }
     
@@ -105,7 +107,7 @@ class LogInForm extends React.Component {
             Iniciar sesion
           </button>
           <button
-            onClick={() => {this.props.changeFormContent("registrar");this.props.toogleMenuPerfil(false)}}
+            onClick={() => {this.props.toogleModal(true);this.props.toogleMenuPerfil(false)}}
             name="btnRegistrar"
             type="button"
             className="btn btn-success"
