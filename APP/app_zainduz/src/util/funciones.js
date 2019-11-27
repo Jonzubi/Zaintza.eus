@@ -1,4 +1,7 @@
-exports.getRandomString = length => {
+import {Translation} from "react-i18next";
+import React from "react";
+
+export const getRandomString = length => {
   var result = "";
   var characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -9,9 +12,14 @@ exports.getRandomString = length => {
   return result;
 };
 
-exports.toBase64 = file => new Promise((resolve, reject) => {
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
-  reader.onload = () => resolve(reader.result);
-  reader.onerror = error => reject(error);
-});
+export const toBase64 = file =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+
+export const t = codigo => {
+  return <Translation>{t => t(codigo)}</Translation>;
+};

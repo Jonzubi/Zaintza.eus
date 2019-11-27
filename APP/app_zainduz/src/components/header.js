@@ -30,8 +30,6 @@ class Header extends React.Component {
     };
   }
 
-  handleAvatarClick() {}
-
   getAvatar() {
     console.log(this.props);
     return (
@@ -68,7 +66,7 @@ class Header extends React.Component {
           }}
           style={{ textDecoration: "none" }}
         >
-          <h1 className="w-100 d-inline display-1 text-light">Zainduz</h1>
+          <h1 className="w-100 d-inline display-1 text-light">Euskal zaintza</h1>
         </a>
         <IconAvatar />
       </Headroom>
