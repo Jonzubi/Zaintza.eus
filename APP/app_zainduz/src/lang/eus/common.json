@@ -45,6 +45,25 @@
         "pueblos": "Herriak",
         "horasLibres": "Ordu libreak",
         "precios": "Prezioak multzoka",
-        "acordar": "Zaintza eskatu"
+        "acordar": "Zaintza eskatu",
+        "ver": "Ikusi zaintzailea"
+    },
+    "registerFormCuidadores":{
+        "nombre": "Izena",
+        "apellido1": "Lehen abizena",
+        "apellido2": "Bigarren abizena",
+        "email": "Emaila",
+        "fechaNac": "Jaiotza data",
+        "movil": "Mugikorra",
+        "telefFijo":"Telefono finkoa",
+        "contrasena":"Pasahitza",
+        "diasDisponible": "Ordu libreak",
+        "pueblosDisponible": "Herriak",
+        "publicoDisponible": "Zaintza kategoriak",
+        "precioPorPublico": "Prezioak multzoka",
+        "descripcion": "Deskribapena",
+        "publicarAuto": "Argitaratu zure perfila izen ematea bezain pronto",
+        "eligeAvatar": "Aukeratu zure avatarra",
+        "eligeImgContact": "Aukeratu zure irudi publikoa"
     }
 }

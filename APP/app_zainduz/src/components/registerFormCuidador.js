@@ -27,6 +27,7 @@ import { connect } from "react-redux";
 import { changeFormContent } from "../redux/actions/app";
 import { saveUserSession } from "../redux/actions/user";
 import municipios from "../util/municipos";
+import {t} from "../util/funciones";
 
 const mapDispatchToProps = dispatch => {
   return {

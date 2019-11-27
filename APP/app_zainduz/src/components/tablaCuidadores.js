@@ -208,7 +208,7 @@ class Tabla extends React.Component {
                       this.handleViewCuidador(cuidador);
                     }}
                   >
-                    Ver
+                    {t('tablaCuidadores.ver')}
                     <FontAwesomeIcon className="ml-1" icon={faEye} />
                   </a>
                 </div>
