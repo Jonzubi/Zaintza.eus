@@ -370,8 +370,19 @@ class RegisterForm extends React.Component {
         });
         return;
       }
+      //Hago una comporbacion diferente para los dias, que haya elegido un dia en el combo
+      if(clave == "diasDisponible"){
+        console.log("hey");
+        this.state[clave].map(confDia => {
+          if(confDia.dia == 0){
+            cogoToast.error(
+              <h5>Ez duzu eguna aukeratu</h5>
+            );
+            return;
+          }
+        });
+      }
     }
-
     this.setState({ isLoading: true });
 
     var codAvatar = getRandomString(20);
