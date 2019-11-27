@@ -20,6 +20,6 @@ export const toBase64 = file =>
     reader.onerror = error => reject(error);
   });
 
-export const t = codigo => {
+export const t = codigo => {  
   return <Translation>{t => t(codigo)}</Translation>;
 };

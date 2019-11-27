@@ -2,21 +2,21 @@ import React from "react";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import cogoToast from "cogo-toast";
-import {connect} from "react-redux";
-import {changeFormContent} from "../redux/actions/app";
-import {toogleMenuPerfil} from "../redux/actions/menuPerfil";
-import {saveUserSession} from "../redux/actions/user";
-import {toogleModal} from "../redux/actions/modalRegistrarse";
+import { connect } from "react-redux";
+import { changeFormContent } from "../redux/actions/app";
+import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
+import { saveUserSession } from "../redux/actions/user";
+import { toogleModal } from "../redux/actions/modalRegistrarse";
+import { t } from "../util/funciones";
 
 const mapDispatchToProps = dispatch => {
   return {
-  changeFormContent: (form) => dispatch(changeFormContent(form)),
-  toogleMenuPerfil: (payload) => dispatch(toogleMenuPerfil(payload)),
-  saveUserSession : (user) => dispatch(saveUserSession(user)),  
-  toogleModal: (payload) => dispatch(toogleModal(payload))
-  }
-}
-    
+    changeFormContent: form => dispatch(changeFormContent(form)),
+    toogleMenuPerfil: payload => dispatch(toogleMenuPerfil(payload)),
+    saveUserSession: user => dispatch(saveUserSession(user)),
+    toogleModal: payload => dispatch(toogleModal(payload))
+  };
+};
 
 class LogInForm extends React.Component {
   constructor(props) {
@@ -24,39 +24,37 @@ class LogInForm extends React.Component {
     this.state = {
       txtEmail: "",
       txtContrasena: "",
-      objUsuario:{}
+      objUsuario: {}
     };
   }
 
-  handleLogIn(){
-      const vEmail = this.state.txtEmail;
-      const vContrasena = this.state.txtContrasena;
-      var objFiltros = {
-        email : vEmail,
-        contrasena: vContrasena
-      }
+  handleLogIn() {
+    const vEmail = this.state.txtEmail;
+    const vContrasena = this.state.txtContrasena;
+    var objFiltros = {
+      email: vEmail,
+      contrasena: vContrasena
+    };
 
-      axios.get("http://" + ipMaquina + ":3001/cuidador", {
-        params : {
-          filtros : JSON.stringify(objFiltros)
+    axios
+      .get("http://" + ipMaquina + ":3001/cuidador", {
+        params: {
+          filtros: JSON.stringify(objFiltros)
         }
       })
       .then(doc => {
-        if(doc.data != "Vacio"){
+        if (doc.data != "Vacio") {
           this.props.saveUserSession(doc.data[0]);
           this.props.toogleMenuPerfil(false);
-        cogoToast.success(
-          <h5>Sesion iniciada correctamente!</h5>
-        );
-        }else{
+        cogoToast.success(<h5>{t('notificaciones.sesionIniciada')}</h5>);
+        } else {
           cogoToast.error(
-            <h5>Nombre de usuario o contraseña son incorrectos...</h5>
+          <h5>{t('notificaciones.datosIncorrectos')}</h5>
           );
         }
-      }).catch(err => {
-        cogoToast.error(
-          <h5>Hay un error en la conexion...</h5>
-        );
+      })
+      .catch(err => {
+      cogoToast.error(<h5>{t('notificaciones.errorConexion')}</h5>);
       });
   }
 
@@ -71,48 +69,56 @@ class LogInForm extends React.Component {
     return (
       <form className="mt-5">
         <div>
-          <label htmlFor="txtEmail">Email</label>
+          <label htmlFor="txtEmail">{t("loginForm.email")}</label>
           <input
             onChange={this.handleInputChange.bind(this)}
             type="email"
             className="form-control"
             id="txtEmail"
             aria-describedby="emailHelp"
-            placeholder="Insertar email..."
+            placeholder={"Emaila..."}
           />
         </div>
         <div className="form-group">
-          <label htmlFor="txtContrasena">Contraseña</label>
+          <label htmlFor="txtContrasena">{t("loginForm.contrasena")}</label>
           <input
             onChange={this.handleInputChange.bind(this)}
             type="password"
             className="form-control"
             id="txtContrasena"
-            placeholder="Insertar contraseña..."
+            placeholder={"Pasahitza..."}
           />
         </div>
         <div className="form-group form-check">
-          <input type="checkbox" className="form-check-input" id="chkRecordarme" />
+          <input
+            type="checkbox"
+            className="form-check-input"
+            id="chkRecordarme"
+          />
           <label className="form-check-label" htmlFor="chkRecordarme">
-            Recordarme
+            {t("loginForm.recordarme")}
           </label>
         </div>
-        <div className="btn-group mt-3">
+        <div className="row mt-3">
           <button
             onClick={this.handleLogIn.bind(this)}
             name="btnLogIn"
             type="button"
-            className="btn btn-primary"
+            className="btn btn-light col-5"
           >
-            Iniciar sesion
+            {t("loginForm.iniciarSesion")}
           </button>
+          <div className="col-2"></div>
           <button
-            onClick={() => {this.props.toogleModal(true);this.props.toogleMenuPerfil(false)}}
+            onClick={() => {
+              this.props.toogleModal(true);
+              this.props.toogleMenuPerfil(false);
+            }}
             name="btnRegistrar"
             type="button"
-            className="btn btn-success"
+            className="btn btn-success col-5"
           >
-            Registrarse
+            {t("loginForm.registrarse")}
           </button>
         </div>
       </form>

@@ -2,5 +2,48 @@
     "slideTab":{
         "cuidadores": "Zaintzaileak",
         "ofertas": "Eskaerak"
+    },
+    "menuPerfil":{
+        "calendario": "Egutegia",
+        "contratos": "Akordioak",
+        "salir": "Irten",
+        "notificaciones": "Abixuak"
+    },
+    "loginForm":{
+        "email": "Emaila",
+        "insertEmail": "Sartu zure emaila...",
+        "insertContrasena": "Sartu zure pasahitza...",
+        "contrasena": "Pasahitza",
+        "recordarme": "Gogorarazi",
+        "iniciarSesion": "Sartu",
+        "registrarse": "Izena eman"
+    },
+    "notificaciones": {
+        "sesionIniciada": "Saioa behar bezala hasi da",
+        "sesionCerrada": "Saioa behar bezala itxi da",
+        "datosIncorrectos": "Erabiltzaile izena edo pasahitza ez da zuzena...",
+        "errorConexion": "Konektatzeko arazaoak daude...",
+        "servidorNoDisponible": "Zerbitzariak ez du erantzuten"
+    },
+    "tablaCuidadores": {
+        "noData": "Ez dago daturik edo arazo bat dago sarean",
+        "ninos": "Haurrak",
+        "terceraEdad": "Adinekoak",
+        "necesidadEspecial": "B.B",
+        "datosPersonales": "Datu pertsonalak",
+        "nombre": "Izena",
+        "apellidos": "Abizenak",
+        "sinDefinir": "Definitu gabe",
+        "fechaNac": "Jaiotza data",
+        "sexo": "Sexua",
+        "email": "Emaila",
+        "movil": "Mugikorra",
+        "telefFijo": "Telefono finkoa",
+        "descripcion": "Deskribapena",
+        "condiciones": "Zaintza baldintzak",
+        "pueblos": "Herriak",
+        "horasLibres": "Ordu libreak",
+        "precios": "Prezioak multzoka",
+        "acordar": "Zaintza eskatu"
     }
 }

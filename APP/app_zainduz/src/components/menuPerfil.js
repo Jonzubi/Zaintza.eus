@@ -1,5 +1,5 @@
 import React from "react";
-import { fallDown as BurgerMenu } from "react-burger-menu";
+import { slide as BurgerMenu } from "react-burger-menu";
 import Avatar from "react-avatar";
 import LogInForm from "./logInForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +11,7 @@ import {initializeUserSession} from "../redux/actions/user";
 import ipMaquina from "../util/ipMaquinaAPI";
 import "./styles/menuPerfil.css";
 import cogoToast from "cogo-toast";
+import {t} from "../util/funciones";
 
 const mapStateToProps = state => {
   return {
@@ -53,7 +54,7 @@ class MenuPerfil extends React.Component {
     this.props.initializeUserSession();
     this.props.toogleMenuPerfil(false);
     cogoToast.success(
-      <h5>Sesion cerrada correctamente!</h5>
+    <h5>{t('notificaciones.sesionCerrada')}</h5>
     )
   }
 
@@ -72,15 +73,18 @@ class MenuPerfil extends React.Component {
             className="btn-group-vertical w-100 mt-5"            
           >
             <button type="button" className="w-100 btn btn-secondary ">
-              Calendario
+              {t('menuPerfil.calendario')}
             </button>
             <button type="button" className="w-100 btn btn-secondary">
-              Contratos
+              {t('menuPerfil.contratos')}
+            </button>
+            <button type="button" className="w-100 btn btn-secondary">
+              {t('menuPerfil.notificaciones')}
             </button>
           </div>
           <button type="button" className="mt-5 w-100 btn btn-danger" onClick={() => this.handleLogOut()}>
             <FontAwesomeIcon className="mt-1 float-left" icon={faTimes} />
-            Salir
+            {t('menuPerfil.salir')}
           </button>
         </div>
       );
