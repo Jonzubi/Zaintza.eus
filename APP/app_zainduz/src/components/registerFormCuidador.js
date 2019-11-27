@@ -184,7 +184,7 @@ class RegisterForm extends React.Component {
 
   onBeforeFileLoad(elem) {
     if (elem.target.files[0].size > 5242880) {
-      cogoToast.error(<h5>La imagen es demasiado grande!</h5>);
+    cogoToast.error(<h5>{t('registerFormCuidadores.errorImgGrande')}</h5>);
       elem.target.value = "";
     }
   }
@@ -221,13 +221,13 @@ class RegisterForm extends React.Component {
     if (pueblo == "") return;
 
     if (!municipios.includes(pueblo)) {
-      cogoToast.error(<h5>{pueblo} no existe en nuestra base de datos</h5>);
+    cogoToast.error(<h5>{pueblo} {t('registerFormCuidadores.errorPuebloNoExiste')}</h5>);
       return;
     }
 
     for (var clave in this.state.ubicaciones) {
       if (this.state.ubicaciones[clave] == pueblo) {
-        cogoToast.error(<h5>Ese pueblo ya esta insertado!</h5>);
+      cogoToast.error(<h5>{pueblo} {t('registerFormCuidadores.errorPuebloRepetido')}</h5>);
         return;
       }
     }
@@ -360,7 +360,7 @@ class RegisterForm extends React.Component {
       ) {
         cogoToast.error(
           <h5>
-            Rellena todos los campos obligatorios (
+            {t('registerFormCuidadores.errorRellenaTodo')} (
             {this.requiredStatesTraduc[clave]})
           </h5>
         );
@@ -377,7 +377,7 @@ class RegisterForm extends React.Component {
         this.state[clave].map(confDia => {
           if(confDia.dia == 0){
             cogoToast.error(
-              <h5>Ez duzu eguna aukeratu</h5>
+            <h5>{t('registerFormCuidadores.errorDiaNoElegido')}</h5>
             );
             return;
           }
@@ -392,7 +392,7 @@ class RegisterForm extends React.Component {
 
     if (imgContactB64 instanceof Error) {
       cogoToast.error(
-        <h5>Ha habido un error con la resolucion de la imagen</h5>
+      <h5>{t('registerFormCuidadores.errorImagen')}</h5>
       );
       return;
     }
@@ -475,9 +475,9 @@ class RegisterForm extends React.Component {
             });
             cogoToast.success(
               <div>
-                <h5>Registro completado correctamente!</h5>
+          <h5>{t('registerFormCuidadores.registroCompletado')}</h5>
                 <small>
-                  <b>Gracias por confiar en Zainduz</b>
+                  <b>{t('registerFormCuidadores.darGracias')}</b>
                 </small>
               </div>
             );

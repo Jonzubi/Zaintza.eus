@@ -64,6 +64,15 @@
         "descripcion": "Deskribapena",
         "publicarAuto": "Argitaratu zure perfila izen ematea bezain pronto",
         "eligeAvatar": "Aukeratu zure avatarra",
-        "eligeImgContact": "Aukeratu zure irudi publikoa"
+        "eligeImgContact": "Aukeratu zure irudi publikoa",
+        "errorImgGrande": "Irudia haundiegia da",
+        "errorPuebloNoExiste": "ez dago datu basean",
+        "errorPuebloRepetido": "sartu duzu jada",
+        "errorRellenaTodo": "Bete beharrezko datu guztiak",
+        "errorDiaNoElegido": "Ez duzu eguna aukeratu",
+        "errorImagen": "Irudiarekin arazorenbat dago",
+        "registroCompletado": "Izena eman duzu",
+        "darGracias": "Eskerrik asko Euskal Zaintzaren partez"
+
     }
 }
