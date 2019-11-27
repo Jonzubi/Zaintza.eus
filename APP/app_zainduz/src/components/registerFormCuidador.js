@@ -487,14 +487,14 @@ class RegisterForm extends React.Component {
             this.setState({
               isLoading: false
             });
-            cogoToast.error(<h5>Algo ha ido mal!</h5>);
+            cogoToast.error(<h5>{t('registerFormCuidadores.errorGeneral')}</h5>);
           });
       })
       .catch(err => {
         this.setState({
           isLoading: false
         });
-        cogoToast.error(<h5>Algo ha ido mal!</h5>);
+        cogoToast.error(<h5>{t('registerFormCuidadores.errorGeneral')}</h5>);
       });
   }
 
@@ -598,7 +598,7 @@ class RegisterForm extends React.Component {
 
             <div className="form-group col-6">
               <div class="form-group">
-                <label htmlFor="txtNombre">Nombre</label> (
+                <label htmlFor="txtNombre">{t('registerFormCuidadores.nombre')}</label> (
                 <span className="text-danger font-weight-bold">*</span>)
                 <input
                   onChange={this.handleInputChange}
@@ -616,7 +616,7 @@ class RegisterForm extends React.Component {
               </div>
               <div class="form-group row">
                 <div className="form-group col">
-                  <label htmlFor="txtApellido1">Apellido 1</label>
+                  <label htmlFor="txtApellido1">{t('registerFormCuidadores.apellido1')}</label>
                   <input
                     onChange={this.handleInputChange}
                     type="text"
@@ -628,7 +628,7 @@ class RegisterForm extends React.Component {
                   />
                 </div>
                 <div className="form-group col">
-                  <label htmlFor="txtApellido2">Apellido 2</label>
+                  <label htmlFor="txtApellido2">{t('registerFormCuidadores.apellido2')}</label>
                   <input
                     onChange={this.handleInputChange}
                     type="text"
@@ -644,7 +644,7 @@ class RegisterForm extends React.Component {
           </div>
           <div class="form-group row">
             <div className="form-group col-6">
-              <label htmlFor="txtFechaNacimiento">Fecha de nacimiento</label> (
+              <label htmlFor="txtFechaNacimiento">{t('registerFormCuidadores.fechaNac')}</label> (
               <span className="text-danger font-weight-bold">*</span>)
               <br />
               <Calendario
@@ -721,7 +721,7 @@ class RegisterForm extends React.Component {
 
           <div className="form-group row">
             <div class="form-group col">
-              <label htmlFor="txtEmail">Email</label> (
+              <label htmlFor="txtEmail">{t('registerFormCuidadores.email')}</label> (
               <span className="text-danger font-weight-bold">*</span>)
               <input
                 onChange={this.handleInputChange}
@@ -737,7 +737,7 @@ class RegisterForm extends React.Component {
                 value={this.state.txtEmail}
               />
               <label className="pt-2" htmlFor="txtContrasena">
-                Contraseña
+              {t('registerFormCuidadores.contrasena')}
               </label>{" "}
               (<span className="text-danger font-weight-bold">*</span>)
               <input
@@ -754,7 +754,7 @@ class RegisterForm extends React.Component {
               />
             </div>
             <div class="form-group col">
-              <label htmlFor="txtMovil">Telefono Movil</label> (
+              <label htmlFor="txtMovil">{t('registerFormCuidadores.movil')}</label> (
               <span className="text-danger font-weight-bold">*</span>)
               <input
                 onChange={this.handleInputChange}
@@ -770,7 +770,7 @@ class RegisterForm extends React.Component {
                 value={this.state.txtMovil}
               />
               <label className="pt-2" htmlFor="txtTelefono">
-                Telefono Fijo
+              {t('registerFormCuidadores.telefFijo')}
               </label>
               <input
                 onChange={this.handleInputChange}
@@ -785,7 +785,7 @@ class RegisterForm extends React.Component {
           <div className="form-group row">
             <div className="form-group col">
               {/* Insertar dias disponibles aqui */}
-              <label className="w-100 text-center lead">Dias disponible:</label>
+              <label className="w-100 text-center lead">{t('registerFormCuidadores.diasDisponible')}:</label>
               <br />
               <div className="w-100 mt-2" id="diasDisponible">
                 {/* Aqui iran los dias dinamicamente */}
@@ -802,18 +802,18 @@ class RegisterForm extends React.Component {
                           className="d-inline"
                           id={"dia" + indice}
                         >
-                          <option>Elige un dia</option>
-                          <option value="1">Lunes</option>
-                          <option value="2">Martes</option>
-                          <option value="3">Miercoles</option>
-                          <option value="4">Jueves</option>
-                          <option value="5">Viernes</option>
-                          <option value="6">Sabado</option>
-                          <option value="7">Domingo</option>
+                          <option>Aukeratu eguna</option>
+                          <option value="1">Astelehena</option>
+                          <option value="2">Asteartea</option>
+                          <option value="3">Asteazkena</option>
+                          <option value="4">Osteguna</option>
+                          <option value="5">Ostirala</option>
+                          <option value="6">Larunbata</option>
+                          <option value="7">Igandea</option>
                         </select>
                         <br />
                         <br />
-                        <b>Hora de inicio :</b>
+                        <b>{t('registerFormCuidadores.horaInicio')} :</b>
                         <TimeInput
                           onTimeChange={valor => {
                             this.handleDiasDisponibleChange(
@@ -831,7 +831,7 @@ class RegisterForm extends React.Component {
                           className="mt-1 text-center d-inline form-control"
                         />
                         <br />
-                        <b>Hora de fin :</b>
+                        <b>{t('registerFormCuidadores.horaFin')} :</b>
                         <TimeInput
                           onTimeChange={valor => {
                             this.handleDiasDisponibleChange(
@@ -859,7 +859,7 @@ class RegisterForm extends React.Component {
                       onClick={this.removeDiasDisponible}
                       className="btn btn-danger float-left text-light"
                     >
-                      Eliminar dia <FontAwesomeIcon icon={faMinusCircle} />
+                      {t('registerFormCuidadores.eliminarDia')} <FontAwesomeIcon icon={faMinusCircle} />
                     </a>
                   ) : (
                     ""
@@ -868,7 +868,7 @@ class RegisterForm extends React.Component {
                     onClick={this.addDiasDisponible}
                     className="btn btn-success float-right text-light"
                   >
-                    Añadir <FontAwesomeIcon icon={faPlusCircle} />
+                    {t('registerFormCuidadores.anadir')} <FontAwesomeIcon icon={faPlusCircle} />
                   </a>
                 </div>
               </div>
@@ -876,7 +876,7 @@ class RegisterForm extends React.Component {
             <div className="form-group col">
               {/* Insertar ubicaciones disponibles aqui */}
               <label htmlFor="txtAddPueblos" className="w-100 text-center lead">
-                Pueblos disponible:
+              {t('registerFormCuidadores.pueblosDisponible')}:
               </label>{" "}
               (<span className="text-danger font-weight-bold">*</span>)
               <div class="form-group mt-2">
@@ -892,7 +892,7 @@ class RegisterForm extends React.Component {
                   id="txtAddPueblos"
                 />
                 {this.state.ubicaciones.length > 0 ? (
-                  <h5 className="mt-2 lead">Pueblos Seleccionados:</h5>
+                  <h5 className="mt-2 lead">{t('registerFormCuidadores.pueblosSeleccionados')}:</h5>
                 ) : (
                   ""
                 )}
@@ -907,7 +907,7 @@ class RegisterForm extends React.Component {
                     onClick={this.handleRemovePueblo}
                     className="mt-4 btn btn-danger float-right text-light"
                   >
-                    Eliminar pueblo <FontAwesomeIcon icon={faMinusCircle} />
+                    {t('registerFormCuidadores.eliminarPueblo')} <FontAwesomeIcon icon={faMinusCircle} />
                   </a>
                 ) : (
                   ""
@@ -920,7 +920,7 @@ class RegisterForm extends React.Component {
             <div className="form-group col">
               {/* Insertar publico disponibles aqui */}
               <label className="w-100 text-center lead">
-                Público disponible:
+              {t('registerFormCuidadores.publicoDisponible')}:
               </label>
               <div className="row md-2">
                 <div
@@ -943,7 +943,7 @@ class RegisterForm extends React.Component {
                   }}
                 >
                   <img src={imgNino} className="w-100 h-100" />
-                  <small className="font-weight-bold">Niños</small>
+                  <small className="font-weight-bold">{t('registerFormCuidadores.ninos')}</small>
                 </div>
                 <div
                   onClick={() => {
@@ -965,7 +965,7 @@ class RegisterForm extends React.Component {
                   }}
                 >
                   <img src={imgTerceraEdad} className="w-100 h-100" />
-                  <small className="font-weight-bold">Tercera edad</small>
+                  <small className="font-weight-bold">{t('registerFormCuidadores.terceraEdad')}</small>
                 </div>
                 <div
                   onClick={() => {
@@ -988,7 +988,7 @@ class RegisterForm extends React.Component {
                 >
                   <img src={imgNecesidadEspecial} className="w-100 h-100" />
                   <small className="font-weight-bold">
-                    Necesidades especiales
+                  {t('registerFormCuidadores.necesidadEspecial')}
                   </small>
                 </div>
               </div>
@@ -996,13 +996,13 @@ class RegisterForm extends React.Component {
             <div className="form-group col">
               {/* Insertar precioPublico disponibles aqui */}
               <label className="w-100 text-center lead">
-                Precio para cada publico:
+              {t('registerFormCuidadores.precioPorPublico')}:
               </label>
               <div className="list-group md-2">
                 {this.state.publicoDisponible.nino ? (
                   <div className="list-group-item form-group text-center p-1">
                     <small>
-                      <b>Niños</b>
+                      <b>{t('registerFormCuidadores.ninos')}</b>
                     </small>
                     <input
                       onChange={event => {
@@ -1016,7 +1016,7 @@ class RegisterForm extends React.Component {
                 ) : (
                   <div className="list-group-item form-group text-center p-1">
                     <small>
-                      <b>Niños</b>
+                      <b>{t('registerFormCuidadores.ninos')}</b>
                     </small>
                     <input
                       onChange={event => {
@@ -1033,7 +1033,7 @@ class RegisterForm extends React.Component {
                 {this.state.publicoDisponible.terceraEdad ? (
                   <div className="list-group-item form-group text-center p-1">
                     <small>
-                      <b>Tercera Edad</b>
+                      <b>{t('registerFormCuidadores.terceraEdad')}</b>
                     </small>
                     <input
                       onChange={event => {
@@ -1050,7 +1050,7 @@ class RegisterForm extends React.Component {
                 ) : (
                   <div className="list-group-item form-group text-center p-1">
                     <small>
-                      <b>Tercera Edad</b>
+                      <b>{t('registerFormCuidadores.terceraEdad')}</b>
                     </small>
                     <input
                       onChange={event => {
@@ -1070,7 +1070,7 @@ class RegisterForm extends React.Component {
                 {this.state.publicoDisponible.necesidadEspecial ? (
                   <div className="list-group-item form-group text-center p-1">
                     <small>
-                      <b>Necesidades especiales</b>
+                      <b>{t('registerFormCuidadores.necesidadEspecial')}</b>
                     </small>
                     <input
                       onChange={event => {
@@ -1087,7 +1087,7 @@ class RegisterForm extends React.Component {
                 ) : (
                   <div className="list-group-item form-group text-center p-1">
                     <small>
-                      <b>Necesidades especiales</b>
+                      <b>{t('registerFormCuidadores.necesidadEspecial')}</b>
                     </small>
                     <input
                       onChange={event => {
@@ -1107,7 +1107,7 @@ class RegisterForm extends React.Component {
             </div>
           </div>
           <div class="form-group">
-            <label htmlFor="txtDescripcion">Descripcion</label> (
+            <label htmlFor="txtDescripcion">{t('registerFormCuidadores.descripcion')}</label> (
             <span className="text-danger font-weight-bold">*</span>)
             <textarea
               onChange={this.handleInputChange}
@@ -1130,7 +1130,7 @@ class RegisterForm extends React.Component {
               id="isPublic"
             />
             <br />
-            <small>Publicar automáticamente despues del registro</small>
+            <small>{t('registerFormCuidadores.publicarAuto')}</small>
           </div>
 
           <div id="loaderOrButton" className="w-100 mt-5 text-center">
@@ -1142,7 +1142,7 @@ class RegisterForm extends React.Component {
                 type="button"
                 className="w-100 btn btn-success "
               >
-                Registrarse
+                {t('registerFormCuidadores.registrarse')}
               </button>
             )}
           </div>
