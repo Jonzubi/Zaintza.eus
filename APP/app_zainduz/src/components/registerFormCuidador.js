@@ -52,15 +52,15 @@ class RegisterForm extends React.Component {
     ];
     //El array de abajo es para traducir el error
     this.requiredStatesTraduc = {
-      txtNombre: "Nombre",
-      txtSexo: "Sexo",
-      txtEmail: "Email",
-      txtFechaNacimiento: "Fecha de nacimiento",
-      txtContrasena: "Contraseña",
-      txtMovil: "Movil",
-      ubicaciones: "Pueblos Disponible",
-      txtDescripcion: "Descripcion",
-      imgContact: "Imagen de contacto"
+      txtNombre: "registerFormCuidadores.nombre",
+      txtSexo: "registerFormCuidadores.sexo",
+      txtEmail: "registerFormCuidadores.email",
+      txtFechaNacimiento: "registerFormCuidadores.fechaNac",
+      txtContrasena: "registerFormCuidadores.contrasena",
+      txtMovil: "registerFormCuidadores.movil",
+      ubicaciones: "registerFormCuidadores.pueblosDisponible",
+      txtDescripcion: "registerFormCuidadores.descripcion",
+      imgContact: "registerFormCuidadores.imgContact"
     };
     this.state = {
       txtNombre: "",
@@ -361,7 +361,7 @@ class RegisterForm extends React.Component {
         cogoToast.error(
           <h5>
             {t('registerFormCuidadores.errorRellenaTodo')} (
-            {this.requiredStatesTraduc[clave]})
+            {t(this.requiredStatesTraduc[clave])})
           </h5>
         );
         let auxError = this.state.error;
@@ -373,15 +373,18 @@ class RegisterForm extends React.Component {
       }
       //Hago una comporbacion diferente para los dias, que haya elegido un dia en el combo
       if(clave == "diasDisponible"){
-        console.log("hey");
+        let error = false;
         this.state[clave].map(confDia => {
           if(confDia.dia == 0){
             cogoToast.error(
             <h5>{t('registerFormCuidadores.errorDiaNoElegido')}</h5>
             );
+            error = true;
             return;
           }
         });
+        if(error)
+          return;
       }
     }
     this.setState({ isLoading: true });
@@ -538,7 +541,7 @@ class RegisterForm extends React.Component {
           <div className="form-group row">
             <div className="form-group col-3 text-center">
               <Avatar
-                label="Elige tu Avatar"
+                label="Aukeratu avatarra"
                 labelStyle={{
                   fontSize: "15px",
                   fontWeight: "bold",
@@ -567,17 +570,17 @@ class RegisterForm extends React.Component {
                   this.state.imgContact != null ? "bg-light text-dark" : ""
                 }
                 errorClass="bg-danger text-light"
-                fileSizeError="es demasiado grande"
-                fileTypeError="no tiene un formato correcto"
+                fileSizeError="handiegia da"
+                fileTypeError="ez du formatu zuzena"
                 singleImage={true}
                 label={
                   this.state.imgContact != null
-                    ? "Tamaño maximo: 5MB | " +
+                    ? "Gehienez: 5MB | " +
                       this.state.imgContact[0].name +
                       " (" +
                       (this.state.imgContact[0].size / 1024 / 1024).toFixed(2) +
                       " MB)"
-                    : "Tamaño maximo: 5MB | Dimension recomendado (288x300)"
+                    : "Gehienez: 5MB | Gomendaturiko dimentsioa (288x300)"
                 }
                 labelClass={
                   this.state.imgContact != null
@@ -587,8 +590,8 @@ class RegisterForm extends React.Component {
                 withIcon={true}
                 buttonText={
                   this.state.imgContact != null
-                    ? "Actualizar imagen de contacto"
-                    : "Elegir imagen de contacto"
+                    ? "Aukeratu beste irudi bat"
+                    : "Aukeratu zure kontaktu irudia"
                 }
                 onChange={this.onChangeContactImg}
                 imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
