@@ -19,3 +19,13 @@
   position: fixed;
   transform: translateY(0%);
 }
+
+@media only screen and (max-width: 670px) {
+  .headerTitle{
+    font-size: 15px;
+  }
+  .headerAvatar{
+    font-size: 30px !important;
+    
+  }
+}

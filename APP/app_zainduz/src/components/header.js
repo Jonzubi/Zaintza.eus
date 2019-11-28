@@ -38,7 +38,7 @@ class Header extends React.Component {
         size="7x"
         style={{ cursor: "pointer", color: "white" }}
         onClick={() => this.props.toogleMenuPerfil(true)}
-        className="float-right mt-1 align-middle"
+        className="float-right mt-1 align-middle headerAvatar"
         icon={faUserCircle}
       />
       :
@@ -66,7 +66,7 @@ class Header extends React.Component {
           }}
           style={{ textDecoration: "none" }}
         >
-          <h1 className="w-100 d-inline display-1 text-light">Euskal zaintza</h1>
+          <h1 className="w-100 d-inline display-1 text-light headerTitle">Euskal zaintza</h1>
         </a>
         <IconAvatar />
       </Headroom>
