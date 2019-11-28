@@ -1,20 +1,35 @@
 import React from "react";
 import Avatar from "react-avatar-edit";
 import cogoToast from "cogo-toast";
-import {t} from "../util/funciones";
+import loadGif from "../util/gifs/loadGif.gif";
+import { t } from "../util/funciones";
 
 class RegisterFormCliente extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      avatarSrc: ""
-    }
+      avatarSrc: "",
+      txtNombre: "",
+      txtApellido1: "",
+      txtApellido2: "",
+      txtEmail: "",
+      txtContrasena: "",
+      isLoading: false,
+      error: {
+        txtNombre: false,
+        txtEmail: false,
+        txtContrasena: false,
+        txtMovil: false
+      }
+    };
 
-    this.onClose= this.onClose.bind(this);
-    this.onCrop= this.onCrop.bind(this);
-    this.onBeforeFileLoad= this.onBeforeFileLoad.bind(this);
+    this.onClose = this.onClose.bind(this);
+    this.onCrop = this.onCrop.bind(this);
+    this.onBeforeFileLoad = this.onBeforeFileLoad.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleRegistrarse = this.handleRegistrarse.bind(this);
   }
-  
+
   onClose() {
     this.setState({ avatarPreview: "" });
   }
@@ -25,11 +40,28 @@ class RegisterFormCliente extends React.Component {
 
   onBeforeFileLoad(elem) {
     if (elem.target.files[0].size > 5242880) {
-    cogoToast.error(<h5>{t('registerFormCuidadores.errorImgGrande')}</h5>);
+      cogoToast.error(<h5>{t("registerFormCuidadores.errorImgGrande")}</h5>);
       elem.target.value = "";
     }
   }
 
+  handleInputChange(e) {
+    //La idea es recoger el nombre del componente y asignarselo al estado, algo como, this.setState({this.state[name] = e.target.value});
+    var stateId = e.target.id;
+    //No vamos a dejar que el usuario meta mas de 9 digitos para el telefono
+    if (stateId == "txtMovil" || stateId == "txtTelefono") {
+      if (e.target.value.toString() > 9) {
+        e.target.value = e.target.value.slice(0, 9);
+      }
+    }
+    this.setState({
+      [stateId]: e.target.value
+    });
+  }
+
+  handleRegistrarse(){
+
+  }
 
   render() {
     return (
@@ -55,6 +87,107 @@ class RegisterFormCliente extends React.Component {
             src={this.state.avatarSrc}
           />
         </div>
+        <div className="form-group row">
+          <div className="col-12">
+            <label htmlFor="txtNombre">
+              {t("registerFormCuidadores.nombre")}
+            </label>{" "}
+            (<span className="text-danger font-weight-bold">*</span>)
+            <input
+              onChange={this.handleInputChange}
+              type="text"
+              className={
+                this.state.error.txtNombre
+                  ? "border border-danger form-control"
+                  : "form-control"
+              }
+              id="txtNombre"
+              aria-describedby="txtNombreHelp"
+              placeholder="Izena..."
+              value={this.state.txtNombre}
+            />
+          </div>
+        </div>
+        <div className="form-group row">
+          <div className="col-6">
+            <label htmlFor="txtApellido1">
+              {t("registerFormCuidadores.apellido1")}
+            </label>
+            <input
+              onChange={this.handleInputChange}
+              type="text"
+              className="form-control"
+              id="txtApellido1"
+              aria-describedby="txtNombreHelp"
+              placeholder="Lehen abizena..."
+              value={this.state.txtApellido1}
+            />
+          </div>
+          <div className="col-6">
+            <label htmlFor="txtApellido2">
+              {t("registerFormCuidadores.apellido2")}
+            </label>
+            <input
+              onChange={this.handleInputChange}
+              type="text"
+              className="form-control"
+              id="txtApellido2"
+              aria-describedby="txtNombreHelp"
+              placeholder="Bigarren abizena..."
+              value={this.state.txtApellido2}
+            />
+          </div>
+        </div>
+        <div className="form-group row">
+          <div className="col-6">
+          <label htmlFor="txtEmail">{t('registerFormCuidadores.email')}</label> (
+              <span className="text-danger font-weight-bold">*</span>)
+              <input
+                onChange={this.handleInputChange}
+                type="email"
+                class={
+                  this.state.error.txtNombre
+                    ? "border border-danger form-control"
+                    : "form-control"
+                }
+                id="txtEmail"
+                aria-describedby="emailHelp"
+                placeholder="Sartu emaila..."
+                value={this.state.txtEmail}
+              />
+          </div>
+          <div className="col-6">
+          <label htmlFor="txtContrasena">
+              {t('registerFormCuidadores.contrasena')}
+              </label>{" "}
+              (<span className="text-danger font-weight-bold">*</span>)
+              <input
+                onChange={this.handleInputChange}
+                type="password"
+                class={
+                  this.state.error.txtNombre
+                    ? "border border-danger form-control"
+                    : "form-control"
+                }
+                id="txtContrasena"
+                placeholder="Sartu pasahitza..."
+                value={this.state.txtContrasena}
+              />
+          </div>
+        </div>
+        <div id="loaderOrButton" className="w-100 mt-5 text-center">
+            {this.state.isLoading ? (
+              <img src={loadGif} height={50} width={50} />
+            ) : (
+              <button
+                onClick={this.handleRegistrarse}
+                type="button"
+                className="w-100 btn btn-success "
+              >
+                {t('registerFormCuidadores.registrarse')}
+              </button>
+            )}
+          </div>
       </div>
     );
   }
