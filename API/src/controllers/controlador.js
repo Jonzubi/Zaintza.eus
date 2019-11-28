@@ -64,6 +64,7 @@ exports.insert = function(req, res) {
       res.write("Guardado :" + doc);
     })
     .catch(err => {
+      res.writeHead(500, headerResponse);
       res.write(err);
     })
     .finally(err => {
