@@ -2,10 +2,10 @@ import React from "react";
 import Avatar from "react-avatar-edit";
 import cogoToast from "cogo-toast";
 import loadGif from "../util/gifs/loadGif.gif";
-import {connect} from "react-redux";
-import { t,getRandomString } from "../util/funciones";
-import {saveUserSession} from "../redux/actions/user";
-import {changeFormContent} from "../redux/actions/app";
+import { connect } from "react-redux";
+import { t, getRandomString } from "../util/funciones";
+import { saveUserSession } from "../redux/actions/user";
+import { changeFormContent } from "../redux/actions/app";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 
@@ -13,8 +13,8 @@ const mapDispatchToProps = dispatch => {
   return {
     saveUserSession: payload => dispatch(saveUserSession(payload)),
     changeFormContent: form => dispatch(changeFormContent(form))
-  }
-}
+  };
+};
 
 class RegisterFormCliente extends React.Component {
   constructor(props) {
@@ -103,61 +103,83 @@ class RegisterFormCliente extends React.Component {
     var codAvatar = getRandomString(20);
 
     if (this.state.avatarPreview.length > 0) {
-      await axios.post("http://" + ipMaquina + ":3001/image/" + codAvatar, {
-        imageB64: this.state.avatarPreview
-      }).catch(error => {
-        cogoToast.error(<h5>
-          {t('registerFormCliente.errorAvatarUpload')}
-        </h5>);
-        return;
-      });
+      await axios
+        .post("http://" + ipMaquina + ":3001/image/" + codAvatar, {
+          imageB64: this.state.avatarPreview
+        })
+        .catch(error => {
+          cogoToast.error(
+            <h5>{t("registerFormCliente.errorAvatarUpload")}</h5>
+          );
+          return;
+        });
     }
 
     var formData = {
       nombre: this.state.txtNombre,
       apellido1: this.state.txtApellido1,
       apellido2: this.state.txtApellido2,
-      email: this.state.txtEmail,
-      contrasena: this.state.txtContrasena,
       direcFoto: codAvatar
     };
 
     axios
-        .post("http://" + ipMaquina + ":3001/cliente/", formData)
-        .then(resultado => {
-          this.props.saveUserSession(formData);
+      .post("http://" + ipMaquina + ":3001/cliente/", formData)
+      .then(resultado => {
+        var idPerfil = resultado.data;
+        //recogemos el _id que se ha generado al registrar el cliente
+        idPerfil = idPerfil
+          .slice(idPerfil.indexOf("_id"), idPerfil.indexOf(","))
+          .replace("_id: ", "");
 
-          this.state = {
-            avatarPreview: "",
-            txtNombre: "",
-            txtApellido1: "",
-            txtApellido2: "",
-            txtEmail: "",
-            txtContrasena: "",
-            isLoading: false,
-            error: {
-              txtNombre: false,
-              txtEmail: false,
-              txtContrasena: false,
-              txtMovil: false
-            }
-          }
-          cogoToast.success(
-            <div>
-        <h5>{t('registerFormCuidadores.registroCompletado')}</h5>
-              <small>
-                <b>{t('registerFormCuidadores.darGracias')}</b>
-              </small>
-            </div>
-          );
-          this.props.changeFormContent("tabla");
-        })
-        .catch(err => {
-          this.setState({
-            isLoading: false
+        var formDataUsu = {
+          email: this.state.txtEmail,
+          contrasena: this.state.txtContrasena,
+          tipoUsuario: "C",
+          idPerfil: idPerfil
+        };
+        axios
+          .post("http://" + ipMaquina + ":3001/usuario/", formDataUsu)
+          .then(resultado => {
+            this.props.saveUserSession(formData);
+
+            this.state = {
+              avatarPreview: "",
+              txtNombre: "",
+              txtApellido1: "",
+              txtApellido2: "",
+              txtEmail: "",
+              txtContrasena: "",
+              isLoading: false,
+              error: {
+                txtNombre: false,
+                txtEmail: false,
+                txtContrasena: false,
+                txtMovil: false
+              }
+            };
+            cogoToast.success(
+              <div>
+                <h5>{t("registerFormCuidadores.registroCompletado")}</h5>
+                <small>
+                  <b>{t("registerFormCuidadores.darGracias")}</b>
+                </small>
+              </div>
+            );
+            this.props.changeFormContent("tabla");
           });
-          cogoToast.error(<h5>{t('registerFormCuidadores.errorGeneral')}</h5>);
+      })
+      .catch(err => {
+        this.setState({
+          isLoading: false
         });
+        cogoToast.error(<h5>{t("registerFormCuidadores.errorGeneral")}</h5>);
+      })
+      .catch(err => {
+        this.setState({
+          isLoading: false
+        });
+        cogoToast.error(<h5>{t("registerFormCuidadores.errorGeneral")}</h5>);
+      });
   }
 
   render() {
@@ -292,4 +314,4 @@ class RegisterFormCliente extends React.Component {
   }
 }
 
-export default connect(null,mapDispatchToProps)(RegisterFormCliente);
+export default connect(null, mapDispatchToProps)(RegisterFormCliente);

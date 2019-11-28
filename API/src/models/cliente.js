@@ -2,11 +2,12 @@ const mongoose = require("../../util/bdConnection");
 
 var cliente = new mongoose.Schema({
     direcFoto: String,
-    nombre : String,
+    nombre : {
+        type:String,
+        required: true
+    },
     apellido1 : String,
     apellido2: String,
-    email : String,
-    contrasena: String
 });
 
 var Cliente = mongoose.model("Cliente", cliente, "Clientes");
