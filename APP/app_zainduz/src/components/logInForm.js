@@ -37,24 +37,50 @@ class LogInForm extends React.Component {
     };
 
     axios
-      .get("http://" + ipMaquina + ":3001/cuidador", {
+      .get("http://" + ipMaquina + ":3001/usuario", {
         params: {
           filtros: JSON.stringify(objFiltros)
         }
       })
       .then(doc => {
         if (doc.data != "Vacio") {
-          this.props.saveUserSession(doc.data[0]);
-          this.props.toogleMenuPerfil(false);
-        cogoToast.success(<h5>{t('notificaciones.sesionIniciada')}</h5>);
+          console.log(doc.data[0]);
+          var idPerfil = doc.data[0].idPerfil;
+          var tipoUsuario = doc.data[0].tipoUsuario;
+
+          if (tipoUsuario == "Z") {
+            axios
+              .get("http://" + ipMaquina + ":3001/cuidador/" + idPerfil)
+              .then(doc => {
+                this.props.saveUserSession(doc.data[0]);
+                this.props.toogleMenuPerfil(false);
+                cogoToast.success(
+                  <h5>{t("notificaciones.sesionIniciada")}</h5>
+                );
+              })
+              .catch(err => {
+                cogoToast.error(<h5>{t("notificaciones.errorConexion")}</h5>);
+              });
+          } else if (tipoUsuario == "C") {
+            axios
+              .get("http://" + ipMaquina + ":3001/cliente/" + idPerfil)
+              .then(doc => {
+                this.props.saveUserSession(doc.data);
+                this.props.toogleMenuPerfil(false);
+                cogoToast.success(
+                  <h5>{t("notificaciones.sesionIniciada")}</h5>
+                );
+              })
+              .catch(err => {
+                cogoToast.error(<h5>{t("notificaciones.errorConexion")}</h5>);
+              });
+          }
         } else {
-          cogoToast.error(
-          <h5>{t('notificaciones.datosIncorrectos')}</h5>
-          );
+          cogoToast.error(<h5>{t("notificaciones.datosIncorrectos")}</h5>);
         }
       })
       .catch(err => {
-      cogoToast.error(<h5>{t('notificaciones.errorConexion')}</h5>);
+        cogoToast.error(<h5>{t("notificaciones.errorConexion")}</h5>);
       });
   }
 
