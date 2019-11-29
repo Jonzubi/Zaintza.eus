@@ -28,6 +28,8 @@ class LogInForm extends React.Component {
       objUsuario: {},
       isLoading: false
     };
+
+    this.handleLogIn = this.handleLogIn.bind(this);
   }
 
   async handleLogIn() {
@@ -64,9 +66,15 @@ class LogInForm extends React.Component {
                 cogoToast.success(
                   <h5>{t("notificaciones.sesionIniciada")}</h5>
                 );
+                this.setState({
+                  isLoading: false
+                });
               })
               .catch(err => {
                 cogoToast.error(<h5>{t("notificaciones.errorConexion")}</h5>);
+                this.setState({
+                  isLoading: false
+                });
               });
           } else if (tipoUsuario == "C") {
             axios
@@ -77,21 +85,29 @@ class LogInForm extends React.Component {
                 cogoToast.success(
                   <h5>{t("notificaciones.sesionIniciada")}</h5>
                 );
+                this.setState({
+                  isLoading: false
+                });
               })
               .catch(err => {
                 cogoToast.error(<h5>{t("notificaciones.errorConexion")}</h5>);
+                this.setState({
+                  isLoading: false
+                });
               });
           }
         } else {
           cogoToast.error(<h5>{t("notificaciones.datosIncorrectos")}</h5>);
+          this.setState({
+            isLoading: false
+          });
         }
       })
       .catch(err => {
         cogoToast.error(<h5>{t("notificaciones.errorConexion")}</h5>);
-      });
-
-      this.setState({
-        isLoading: false
+        this.setState({
+          isLoading: false
+        });
       });
   }
 
@@ -103,6 +119,7 @@ class LogInForm extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     return (
       <form className="mt-5">
         <div>
@@ -137,11 +154,13 @@ class LogInForm extends React.Component {
           </label>
         </div>
         {this.state.isLoading ? (
-          <div className="row mt-3 text-center"><img src={loadGif} height={50} width={50} /></div>
+          <div className="row mt-3 text-center">
+            <img src={loadGif} height={50} width={50} />
+          </div>
         ) : (
           <div className="row mt-3">
             <button
-              onClick={this.handleLogIn.bind(this)}
+              onClick={() => this.handleLogIn()}
               name="btnLogIn"
               type="button"
               className="btn btn-light col-5"
