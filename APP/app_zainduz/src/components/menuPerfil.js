@@ -83,12 +83,10 @@ class MenuPerfil extends React.Component {
 
   getMenuContent() {
     if (!this.props.direcFoto) {
-      //TODO Devolver el formulario de inicio de sesion
       return (
         <LogInForm />
       );
     } else {
-      //TODO Devolver el menu que va a tener la aplicacion
       return (
         <div id="menu-perfil-content" className="w-100">
           <div
