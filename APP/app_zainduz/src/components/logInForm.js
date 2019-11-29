@@ -8,6 +8,7 @@ import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import { saveUserSession } from "../redux/actions/user";
 import { toogleModal } from "../redux/actions/modalRegistrarse";
 import { t } from "../util/funciones";
+import { loadGif } from "../util/gifs/loadGif.gif";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -24,17 +25,22 @@ class LogInForm extends React.Component {
     this.state = {
       txtEmail: "",
       txtContrasena: "",
-      objUsuario: {}
+      objUsuario: {},
+      isLoading: false
     };
   }
 
-  handleLogIn() {
+  async handleLogIn() {
     const vEmail = this.state.txtEmail;
     const vContrasena = this.state.txtContrasena;
     var objFiltros = {
       email: vEmail,
       contrasena: vContrasena
     };
+
+    this.setState({
+      isLoading: true
+    });
 
     axios
       .get("http://" + ipMaquina + ":3001/usuario", {
@@ -83,6 +89,10 @@ class LogInForm extends React.Component {
       .catch(err => {
         cogoToast.error(<h5>{t("notificaciones.errorConexion")}</h5>);
       });
+
+      this.setState({
+        isLoading: false
+      });
   }
 
   handleInputChange(e) {
@@ -126,28 +136,32 @@ class LogInForm extends React.Component {
             {t("loginForm.recordarme")}
           </label>
         </div>
-        <div className="row mt-3">
-          <button
-            onClick={this.handleLogIn.bind(this)}
-            name="btnLogIn"
-            type="button"
-            className="btn btn-light col-5"
-          >
-            {t("loginForm.iniciarSesion")}
-          </button>
-          <div className="col-2"></div>
-          <button
-            onClick={() => {
-              this.props.toogleModal(true);
-              this.props.toogleMenuPerfil(false);
-            }}
-            name="btnRegistrar"
-            type="button"
-            className="btn btn-success col-5"
-          >
-            {t("loginForm.registrarse")}
-          </button>
-        </div>
+        {this.state.isLoading ? (
+          <div className="row mt-3 text-center"><img src={loadGif} height={50} width={50} /></div>
+        ) : (
+          <div className="row mt-3">
+            <button
+              onClick={this.handleLogIn.bind(this)}
+              name="btnLogIn"
+              type="button"
+              className="btn btn-light col-5"
+            >
+              {t("loginForm.iniciarSesion")}
+            </button>
+            <div className="col-2"></div>
+            <button
+              onClick={() => {
+                this.props.toogleModal(true);
+                this.props.toogleMenuPerfil(false);
+              }}
+              name="btnRegistrar"
+              type="button"
+              className="btn btn-success col-5"
+            >
+              {t("loginForm.registrarse")}
+            </button>
+          </div>
+        )}
       </form>
     );
   }
