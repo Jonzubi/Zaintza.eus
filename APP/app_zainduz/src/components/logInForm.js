@@ -50,18 +50,18 @@ class LogInForm extends React.Component {
           filtros: JSON.stringify(objFiltros)
         }
       })
-      .then(doc => {
-        if (doc.data != "Vacio") {
-          console.log(doc.data[0]);
-          var idPerfil = doc.data[0].idPerfil;
-          var tipoUsuario = doc.data[0].tipoUsuario;
+      .then(usuario => {
+        if (usuario.data != "Vacio") {
+          usuario = usuario.data[0];
+          var idPerfil = usuario.idPerfil;
+          var tipoUsuario = usuario.tipoUsuario;
 
           if (tipoUsuario == "Z") {
             axios
               .get("http://" + ipMaquina + ":3001/cuidador/" + idPerfil)
-              .then(doc => {
-                console.log(doc);
-                this.props.saveUserSession(doc.data);
+              .then(cuidador => {
+                console.log(cuidador);
+                this.props.saveUserSession(Object.assign({},cuidador.data, {email: usuario.email}));
                 this.props.toogleMenuPerfil(false);
                 cogoToast.success(
                   <h5>{t("notificaciones.sesionIniciada")}</h5>
@@ -79,8 +79,8 @@ class LogInForm extends React.Component {
           } else if (tipoUsuario == "C") {
             axios
               .get("http://" + ipMaquina + ":3001/cliente/" + idPerfil)
-              .then(doc => {
-                this.props.saveUserSession(doc.data);
+              .then(cliente => {
+                this.props.saveUserSession(Object.assign({},cliente.data, {email: usuario.email}));
                 this.props.toogleMenuPerfil(false);
                 cogoToast.success(
                   <h5>{t("notificaciones.sesionIniciada")}</h5>
