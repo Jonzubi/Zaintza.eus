@@ -26,6 +26,8 @@ class RegisterFormCliente extends React.Component {
       txtApellido2: "",
       txtEmail: "",
       txtContrasena: "",
+      txtMovil: "",
+      txtFijo: "",
       isLoading: false,
       error: {
         txtNombre: false,
@@ -35,11 +37,12 @@ class RegisterFormCliente extends React.Component {
       }
     };
 
-    this.requiredState = ["txtNombre", "txtEmail", "txtContrasena"];
+    this.requiredState = ["txtNombre", "txtEmail", "txtContrasena", "txtMovil"];
     this.requiredStatesTraduc = {
       txtNombre: "registerFormClientes.nombre",
       txtEmail: "registerFormClientes.email",
-      txtContrasena: "registerFormClientes.contrasena"
+      txtContrasena: "registerFormClientes.contrasena",
+      txtMovil: "registerFormClientes.movil"
     };
 
     this.onClose = this.onClose.bind(this);
@@ -65,10 +68,11 @@ class RegisterFormCliente extends React.Component {
   }
 
   handleInputChange(e) {
+    console.log(this.state);
     //La idea es recoger el nombre del componente y asignarselo al estado, algo como, this.setState({this.state[name] = e.target.value});
     var stateId = e.target.id;
     //No vamos a dejar que el usuario meta mas de 9 digitos para el telefono
-    if (stateId == "txtMovil" || stateId == "txtTelefono") {
+    if (stateId == "txtMovil" || stateId == "txtFijo") {
       if (e.target.value.toString() > 9) {
         e.target.value = e.target.value.slice(0, 9);
       }
@@ -119,13 +123,23 @@ class RegisterFormCliente extends React.Component {
       nombre: this.state.txtNombre,
       apellido1: this.state.txtApellido1,
       apellido2: this.state.txtApellido2,
+      telefono: {
+        movil:{
+          etiqueta: "Movil",
+          numero: this.state.txtMovil
+        },
+        fijo:{
+          etiqueta: "Fijo",
+          numero: this.state.txtFijo
+        }
+      },
       direcFoto: codAvatar
     };
 
     axios
       .post("http://" + ipMaquina + ":3001/cliente/", formData)
-      .then(resultado => {
-        var idPerfil = resultado.data;
+      .then(cliente => {
+        var idPerfil = cliente.data;
         //recogemos el _id que se ha generado al registrar el cliente
         idPerfil = idPerfil._id;
 
@@ -138,7 +152,7 @@ class RegisterFormCliente extends React.Component {
         axios
           .post("http://" + ipMaquina + ":3001/usuario/", formDataUsu)
           .then(resultado => {
-            this.props.saveUserSession(formData);
+            this.props.saveUserSession(Object.assign({},formData, {tipoUsuario: "C", email: formDataUsu.email}));
 
             this.state = {
               avatarPreview: "",
@@ -294,6 +308,43 @@ class RegisterFormCliente extends React.Component {
             />
           </div>
         </div>
+        <div className="form-group row">
+          <div className="col-6">
+          <label htmlFor="txtMovil">
+              {t("registerFormClientes.movil")}
+            </label>{" "}
+            (<span className="text-danger font-weight-bold">*</span>)
+            <input
+              onChange={this.handleInputChange}
+              type="number"
+              class={
+                this.state.error.txtNombre
+                  ? "border border-danger form-control"
+                  : "form-control"
+              }
+              id="txtMovil"
+              placeholder="Sartu mugikorra..."
+              value={this.state.txtMovil}
+            />
+          </div>
+          <div className="col-6">
+          <label htmlFor="txtFijo">
+              {t("registerFormClientes.telefFijo")}
+            </label>{" "}
+            <input
+              onChange={this.handleInputChange}
+              type="number"
+              class={
+                this.state.error.txtFijo
+                  ? "border border-danger form-control"
+                  : "form-control"
+              }
+              id="txtFijo"
+              placeholder="Sartu telefono finkoa..."
+              value={this.state.txtFijo}
+            />
+          </div>
+        </div>
         <div id="loaderOrButton" className="w-100 mt-5 text-center">
           {this.state.isLoading ? (
             <img src={loadGif} height={50} width={50} />
@@ -306,7 +357,7 @@ class RegisterFormCliente extends React.Component {
               {t("registerFormClientes.registrarse")}
             </button>
           )}
-        </div>
+        </div>        
       </div>
     );
   }
