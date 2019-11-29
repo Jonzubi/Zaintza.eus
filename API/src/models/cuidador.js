@@ -29,14 +29,6 @@ var cuidador = new mongoose.Schema({
     required: true
   },
   publicoDisponible: Map,
-  email: {
-    type: String,
-    required: true
-  },
-  contrasena: {
-    type: String,
-    required: true
-  },
   telefono: {
     type: Map,
     required: true

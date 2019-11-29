@@ -73,6 +73,9 @@ class MenuPerfil extends React.Component {
             className="btn-group-vertical w-100 mt-5"            
           >
             <button type="button" className="w-100 btn btn-secondary ">
+              {t('menuPerfil.perfil')}
+            </button>
+            <button type="button" className="w-100 btn btn-secondary ">
               {t('menuPerfil.calendario')}
             </button>
             <button type="button" className="w-100 btn btn-secondary">

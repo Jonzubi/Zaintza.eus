@@ -52,7 +52,8 @@ class LogInForm extends React.Component {
             axios
               .get("http://" + ipMaquina + ":3001/cuidador/" + idPerfil)
               .then(doc => {
-                this.props.saveUserSession(doc.data[0]);
+                console.log(doc);
+                this.props.saveUserSession(doc.data);
                 this.props.toogleMenuPerfil(false);
                 cogoToast.success(
                   <h5>{t("notificaciones.sesionIniciada")}</h5>

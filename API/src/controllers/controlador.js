@@ -48,22 +48,28 @@ exports.get = function(req, res) {
 };
 
 exports.insert = function(req, res) {
-  console.log("BEGIN INSERT ROW");
   console.log(req.body);
   var tabla = req.params.tabla;
   var modelo = require("../models/" + tabla);
 
-  if (typeof modelo == "undefined") res.send("MODELO IS UNDEFINED");
+  if (typeof modelo == "undefined"){
+    res.writeHead(500, headerResponse);
+    res.send("MODELO IS UNDEFINED");
+    res.end();
+    return;
+  } 
 
   var modeloConfiged = new modelo(req.body);
 
   modeloConfiged
     .save()
     .then(doc => {
+      console.log(doc);
       res.writeHead(200, headerResponse);
-      res.write("Guardado :" + doc);
+      res.write(JSON.stringify(doc));
     })
     .catch(err => {
+      console.log(err);
       res.writeHead(500, headerResponse);
       res.write(err);
     })
