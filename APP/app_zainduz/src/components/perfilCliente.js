@@ -6,14 +6,17 @@ import ipMaquina from "../util/ipMaquinaAPI";
 
 const mapStateToProps = state => {
     console.log(state);
+    //Aqui van los especialitos de los undefined
+    const movil = typeof state.user.telefono.movil == "undefined" ? undefined : state.user.telefono.movil.numero;
+    const telefFijo = typeof state.user.telefono.fijo == "undefined" ? undefined : state.user.telefono.fijo.numero;
     return {
         nombre: state.user.nombre,
         apellido1: state.user.apellido1,
         apellido2: state.user.apellido2,
         email: state.user.email,
         direcFoto: state.user.direcFoto,
-        movil: state.user.telefono.movil.numero,
-        telefFijo: state.user.telefono.fijo.numero
+        movil: movil,
+        telefFijo: telefFijo
     }
 }
 

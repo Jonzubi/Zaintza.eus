@@ -74,6 +74,7 @@ class MenuPerfil extends React.Component {
 
   handleLogOut(){
     this.props.initializeUserSession();
+    this.props.changeFormContent("tabla");
     this.props.toogleMenuPerfil(false);
     cogoToast.success(
     <h5>{t('notificaciones.sesionCerrada')}</h5>
