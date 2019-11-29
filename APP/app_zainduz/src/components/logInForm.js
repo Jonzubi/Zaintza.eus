@@ -55,47 +55,39 @@ class LogInForm extends React.Component {
           usuario = usuario.data[0];
           var idPerfil = usuario.idPerfil;
           var tipoUsuario = usuario.tipoUsuario;
-
-          if (tipoUsuario == "Z") {
-            axios
-              .get("http://" + ipMaquina + ":3001/cuidador/" + idPerfil)
-              .then(cuidador => {
-                console.log(cuidador);
-                this.props.saveUserSession(Object.assign({},cuidador.data, {email: usuario.email, tipoUsuario: tipoUsuario}));
-                this.props.toogleMenuPerfil(false);
-                cogoToast.success(
-                  <h5>{t("notificaciones.sesionIniciada")}</h5>
-                );
-                this.setState({
-                  isLoading: false
-                });
-              })
-              .catch(err => {
-                cogoToast.error(<h5>{t("notificaciones.errorConexion")}</h5>);
-                this.setState({
-                  isLoading: false
-                });
-              });
-          } else if (tipoUsuario == "C") {
-            axios
-              .get("http://" + ipMaquina + ":3001/cliente/" + idPerfil)
-              .then(cliente => {
-                this.props.saveUserSession(Object.assign({},cliente.data, {email: usuario.email, tipoUsuario: tipoUsuario}));
-                this.props.toogleMenuPerfil(false);
-                cogoToast.success(
-                  <h5>{t("notificaciones.sesionIniciada")}</h5>
-                );
-                this.setState({
-                  isLoading: false
-                });
-              })
-              .catch(err => {
-                cogoToast.error(<h5>{t("notificaciones.errorConexion")}</h5>);
-                this.setState({
-                  isLoading: false
-                });
-              });
+          let modelo = "";
+          switch (tipoUsuario) {
+            case "Z":
+              modelo = "cuidador";
+              break;
+            case "C":
+              modelo = "cliente";
+              break;
+            default:
+              return;
           }
+          axios
+            .get("http://" + ipMaquina + ":3001/" + modelo + "/" + idPerfil)
+            .then(resultado => {
+              console.log(resultado);
+              this.props.saveUserSession(
+                Object.assign({}, resultado.data, {
+                  email: usuario.email,
+                  tipoUsuario: tipoUsuario
+                })
+              );
+              this.props.toogleMenuPerfil(false);
+              cogoToast.success(<h5>{t("notificaciones.sesionIniciada")}</h5>);
+              this.setState({
+                isLoading: false
+              });
+            })
+            .catch(err => {
+              cogoToast.error(<h5>{t("notificaciones.errorConexion")}</h5>);
+              this.setState({
+                isLoading: false
+              });
+            });
         } else {
           cogoToast.error(<h5>{t("notificaciones.datosIncorrectos")}</h5>);
           this.setState({

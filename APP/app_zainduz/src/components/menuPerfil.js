@@ -8,6 +8,7 @@ import imgPerfil from "../util/fotosPrueba/image.jpg";
 import {connect} from "react-redux";
 import {toogleMenuPerfil} from "../redux/actions/menuPerfil";
 import {initializeUserSession} from "../redux/actions/user";
+import {changeFormContent} from "../redux/actions/app";
 import ipMaquina from "../util/ipMaquinaAPI";
 import "./styles/menuPerfil.css";
 import cogoToast from "cogo-toast";
@@ -17,6 +18,7 @@ const mapStateToProps = state => {
   return {
     isOpened: state.menuPerfil.isOpened,
     direcFoto : state.user.direcFoto,
+    tipoUsuario: state.user.tipoUsuario
   }
 }
 
@@ -24,12 +26,15 @@ const mapDispatchToProps = dispatch => {
   return {
     toogleMenuPerfil: (payload) => dispatch(toogleMenuPerfil(payload)),
     initializeUserSession: () => dispatch(initializeUserSession()),
+    changeFormContent: (form) => dispatch(changeFormContent(form))
   }
 }
 
 class MenuPerfil extends React.Component {
   constructor(props) {
     super(props);
+
+    this.handleClickPerfil = this.handleClickPerfil.bind(this);
   }
 
   getAvatar() {  
@@ -48,6 +53,23 @@ class MenuPerfil extends React.Component {
               size="200"
       />
     );  
+  }
+
+  handleClickPerfil(){
+    const tipoUsuario = this.props.tipoUsuario;
+
+    switch(tipoUsuario){
+      case "Z":
+        this.props.changeFormContent("perfilCuidador");
+        break;
+      case "C":
+        this.props.changeFormContent("perfilCliente");
+        break;
+      default:
+        this.props.changeFormContent("tabla");
+    }
+
+    this.props.toogleMenuPerfil(false);
   }
 
   handleLogOut(){
@@ -72,7 +94,7 @@ class MenuPerfil extends React.Component {
             id="menu-perfil-opciones"
             className="btn-group-vertical w-100 mt-5"            
           >
-            <button type="button" className="w-100 btn btn-secondary ">
+            <button type="button" className="w-100 btn btn-secondary" onClick={() => this.handleClickPerfil()}>
               {t('menuPerfil.perfil')}
             </button>
             <button type="button" className="w-100 btn btn-secondary ">

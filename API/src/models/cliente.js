@@ -6,6 +6,10 @@ var cliente = new mongoose.Schema({
         type:String,
         required: true
     },
+    telefono:{
+        type: Map,
+        required: true
+    },
     apellido1 : String,
     apellido2: String,
 });

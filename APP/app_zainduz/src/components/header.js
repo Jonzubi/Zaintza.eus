@@ -60,7 +60,7 @@ class Header extends React.Component {
         className="text-center w-100"
       >
         <a
-          href=""
+          href="#"
           onClick={() => {
             this.props.changeFormContent("tabla");
           }}

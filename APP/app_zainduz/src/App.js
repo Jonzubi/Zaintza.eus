@@ -4,6 +4,8 @@ import Cabecera from "./components/header";
 import SlideTab from "./components/slideTab";
 import RegisterFormCuidador from "./components/registerFormCuidador";
 import RegisterFormCliente from "./components/registerFormCliente";
+import PerfilCuidador from "./components/perfilCuidador";
+import PerfilCliente from "./components/perfilCliente";
 import ModalRegistrarse from "./components/modalRegistrarse";
 import { connect } from "react-redux";
 
@@ -21,7 +23,6 @@ class App extends React.Component {
   }
 
   //Abre o cierra el menu segun el estado actual
-
   getContent() {
     switch (this.props.formContent) {
       case "tabla":
@@ -29,7 +30,13 @@ class App extends React.Component {
       case "registrarCuidador":
         return <RegisterFormCuidador />;
       case "registrarCliente":
-        return <RegisterFormCliente />
+        return <RegisterFormCliente />;
+      case "perfilCuidador":
+        return <PerfilCuidador />;
+      case "perfilCliente":
+        return <PerfilCliente />;
+      default:
+        return <h5>Bad gateway</h5>
     }
   }
 
