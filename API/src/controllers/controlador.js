@@ -25,7 +25,7 @@ exports.get = function(req, res) {
       })
       .catch(err => {
         res.writeHead(500, headerResponse);
-        res.write(err);
+        res.write(JSON.stringify(err));
       })
       .finally(fin => {
         res.end();
@@ -39,7 +39,7 @@ exports.get = function(req, res) {
       })
       .catch(err => {
         res.writeHead(500, headerResponse);
-        res.write(err);
+        res.write(JSON.stringify(err));
       })
       .finally(fin => {
         res.end();
@@ -71,7 +71,7 @@ exports.insert = function(req, res) {
     .catch(err => {
       console.log(err);
       res.writeHead(500, headerResponse);
-      res.write(err);
+      res.write(JSON.stringify(err));
     })
     .finally(err => {
       res.end();
@@ -90,7 +90,7 @@ exports.update = function(req, res) {
       res.write("Updated");
     })
     .catch(err => {
-      res.write(err);
+      res.write(JSON.stringify(err));
     })
     .finally(fin => {
       res.end();
@@ -109,7 +109,7 @@ exports.delete = function(req, res) {
       res.write("DELETED");
     })
     .catch(err => {
-      res.write(err);
+      res.write(JSON.stringify(err));
     })
     .finally(fin => {
       res.end();
@@ -150,7 +150,7 @@ exports.postImage = (req, res) => {
     res.write("Image posted");
   } catch (error) {
     res.writeHead(500, headerResponse);
-    res.write(error);
+    res.write(JSON.stringify(error));
   } finally {
     res.end();
   }

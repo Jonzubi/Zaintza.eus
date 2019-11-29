@@ -94,5 +94,19 @@
         "registroCompletado": "Izena eman duzu",
         "darGracias": "Eskerrik asko Euskal Zaintzaren partez",
         "registrarse":"Izena eman"
+    },
+    "registerFormClientes":{
+        "nombre": "Izena",
+        "apellido1":"Lehen abizena",
+        "apellido2":"Bigarren abizena",
+        "email":"Emaila",
+        "contrasena":"Pasahitza",
+        "errorGeneral": "Arazo bat gertatu da",
+        "errorImgGrande": "Irudia haundiegia da",
+        "errorRellenaTodo": "Bete beharrezko datu guztiak",
+        "errorAvatarUpload": "Irudia igotzen arazo bat egon da",
+        "registroCompletado": "Izena eman duzu",
+        "registrarse":"Izena eman",
+        "darGracias": "Eskerrik asko Euskal Zaintzaren partez"
     }
 }

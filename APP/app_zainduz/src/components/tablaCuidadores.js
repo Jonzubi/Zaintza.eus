@@ -56,10 +56,28 @@ class Tabla extends React.Component {
   }
 
   handleViewCuidador(cuidador) {
-    this.setState({
-      showModal: true,
-      selectedCuidador: cuidador
-    });
+    let idPerfil = cuidador._id;
+    const objFiltros = {
+      idPerfil: idPerfil
+    }
+    Axios
+        .get("http://" + ipMaquina + ":3001/usuario", {
+          params:{
+            filtros: JSON.stringify(objFiltros)
+          }
+        })
+        .then(resultado => {
+          resultado = resultado.data[0];
+          this.setState({
+            showModal: true,
+            selectedCuidador: Object.assign({},cuidador,{email: resultado.email})
+          });
+        })
+        .catch(err => {
+          cogoToast.error(
+            <h5>{t('registerFormClientes.errorGeneral')}</h5>
+          )
+        });    
   }
 
   render() {
