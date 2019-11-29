@@ -127,9 +127,7 @@ class RegisterFormCliente extends React.Component {
       .then(resultado => {
         var idPerfil = resultado.data;
         //recogemos el _id que se ha generado al registrar el cliente
-        idPerfil = idPerfil
-          .slice(idPerfil.indexOf("_id"), idPerfil.indexOf(","))
-          .replace("_id: ", "");
+        idPerfil = idPerfil._id;
 
         var formDataUsu = {
           email: this.state.txtEmail,

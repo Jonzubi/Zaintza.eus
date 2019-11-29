@@ -450,11 +450,12 @@ class RegisterForm extends React.Component {
         axios
           .post("http://" + ipMaquina + ":3001/cuidador", formData)
           .then(resultado => {
+            console.log(resultado);
             var idPerfil = resultado.data;
-            //recogemos el _id que se ha generado al registrar el cliente
-            idPerfil = idPerfil
-              .slice(idPerfil.indexOf("_id"), idPerfil.indexOf(","))
-              .replace("_id: ", "");
+            console.log(typeof idPerfil);
+            idPerfil = idPerfil._id;
+            console.log(idPerfil);
+
             var formDataUsu = {
               email: this.state.txtEmail,
               contrasena: this.state.txtContrasena,
@@ -1071,7 +1072,7 @@ class RegisterForm extends React.Component {
                       }}
                       className="form-control"
                       type="number"
-                      placeholder="Introducir precio €/h"
+                      placeholder="Prezioa €/h"
                     />
                   </div>
                 ) : (
@@ -1086,7 +1087,7 @@ class RegisterForm extends React.Component {
                       className="form-control"
                       disabled
                       type="number"
-                      placeholder="Introducir precio €/h"
+                      placeholder="Prezioa €/h"
                     />
                   </div>
                 )}
@@ -1105,7 +1106,7 @@ class RegisterForm extends React.Component {
                       }}
                       className="form-control"
                       type="number"
-                      placeholder="Introducir precio €/h"
+                      placeholder="Prezioa €/h"
                     />
                   </div>
                 ) : (
@@ -1123,7 +1124,7 @@ class RegisterForm extends React.Component {
                       disabled
                       className="form-control"
                       type="number"
-                      placeholder="Introducir precio €/h"
+                      placeholder="Prezioa €/h"
                     />
                   </div>
                 )}
@@ -1142,7 +1143,7 @@ class RegisterForm extends React.Component {
                       }}
                       className="form-control"
                       type="number"
-                      placeholder="Introducir precio €/h"
+                      placeholder="Prezioa €/h"
                     />
                   </div>
                 ) : (
@@ -1160,7 +1161,7 @@ class RegisterForm extends React.Component {
                       disabled
                       className="form-control"
                       type="number"
-                      placeholder="Introducir precio €/h"
+                      placeholder="Prezioa €/h"
                     />
                   </div>
                 )}
