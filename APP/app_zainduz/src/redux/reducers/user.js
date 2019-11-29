@@ -17,7 +17,8 @@ const initialState = {
   isPublic: "",
   precioPorPublico: {},
   diasDisponible: {},
-  valoracionMedia: ""
+  valoracionMedia: "",
+  tipoUsuario: ""
 };
 
 function reducer(state = initialState, action) {
@@ -40,7 +41,8 @@ function reducer(state = initialState, action) {
         isPublic: action.payload.isPublic,
         precioPorPublico: action.payload.precioPorPublico,
         diasDisponible: action.payload.diasDisponible,
-        valoracionMedia: action.payload.valoracionMedia
+        valoracionMedia: action.payload.valoracionMedia, 
+        tipoUsuario: action.payload.tipoUsuario
       });
     case INITIALIZE_USER:
         return Object.assign({},state, initialState);

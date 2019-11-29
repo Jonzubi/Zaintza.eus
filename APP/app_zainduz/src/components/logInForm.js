@@ -61,7 +61,7 @@ class LogInForm extends React.Component {
               .get("http://" + ipMaquina + ":3001/cuidador/" + idPerfil)
               .then(cuidador => {
                 console.log(cuidador);
-                this.props.saveUserSession(Object.assign({},cuidador.data, {email: usuario.email}));
+                this.props.saveUserSession(Object.assign({},cuidador.data, {email: usuario.email, tipoUsuario: tipoUsuario}));
                 this.props.toogleMenuPerfil(false);
                 cogoToast.success(
                   <h5>{t("notificaciones.sesionIniciada")}</h5>
@@ -80,7 +80,7 @@ class LogInForm extends React.Component {
             axios
               .get("http://" + ipMaquina + ":3001/cliente/" + idPerfil)
               .then(cliente => {
-                this.props.saveUserSession(Object.assign({},cliente.data, {email: usuario.email}));
+                this.props.saveUserSession(Object.assign({},cliente.data, {email: usuario.email, tipoUsuario: tipoUsuario}));
                 this.props.toogleMenuPerfil(false);
                 cogoToast.success(
                   <h5>{t("notificaciones.sesionIniciada")}</h5>
