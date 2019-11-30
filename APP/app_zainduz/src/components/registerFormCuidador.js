@@ -570,8 +570,7 @@ class RegisterForm extends React.Component {
 
     return (
       <div
-        className="border border-dark rounded p-5"
-        style={{ margin: "10rem", marginTop: "5rem" }}
+        className="p-5"
       >
         <form>
           <div className="form-group row">

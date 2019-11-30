@@ -82,7 +82,7 @@ class MenuPerfil extends React.Component {
   }
 
   getMenuContent() {
-    if (!this.props.direcFoto) {
+    if (!this.props.tipoUsuario) {
       return (
         <LogInForm />
       );

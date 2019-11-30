@@ -197,8 +197,7 @@ class RegisterFormCliente extends React.Component {
   render() {
     return (
       <div
-        className="border border-dark rounded p-5"
-        style={{ margin: "10rem", marginTop: "5rem" }}
+        className="p-5"
       >
         <div className="form-group d-flex justify-content-center position-relative">
           <Avatar
