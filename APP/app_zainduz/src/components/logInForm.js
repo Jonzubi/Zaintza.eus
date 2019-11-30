@@ -72,6 +72,8 @@ class LogInForm extends React.Component {
               console.log(resultado);
               this.props.saveUserSession(
                 Object.assign({}, resultado.data, {
+                  _id: idPerfil,
+                  _idUsuario: usuario._id,
                   email: usuario.email,
                   tipoUsuario: tipoUsuario
                 })

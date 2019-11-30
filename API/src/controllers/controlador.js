@@ -87,7 +87,7 @@ exports.update = function(req, res) {
   modelo
     .findByIdAndUpdate(id, req.body)
     .then(doc => {
-      res.write("Updated");
+      res.write(JSON.stringify(doc));
     })
     .catch(err => {
       res.write(JSON.stringify(err));
@@ -106,7 +106,7 @@ exports.delete = function(req, res) {
   modelo
     .deleteOne({ _id: id })
     .then(doc => {
-      res.write("DELETED");
+      res.write(JSON.stringify(doc));
     })
     .catch(err => {
       res.write(JSON.stringify(err));

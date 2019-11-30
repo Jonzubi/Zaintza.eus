@@ -105,6 +105,9 @@ class MenuPerfil extends React.Component {
             <button type="button" className="w-100 btn btn-secondary">
               {t('menuPerfil.notificaciones')}
             </button>
+            <button type="button" className="w-100 btn btn-secondary">
+              {t('menuPerfil.ajustes')}
+            </button>
           </div>
           <button type="button" className="mt-5 w-100 btn btn-danger" onClick={() => this.handleLogOut()}>
             <FontAwesomeIcon className="mt-1 float-left" icon={faTimes} />
