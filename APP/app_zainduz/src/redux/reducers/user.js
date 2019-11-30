@@ -1,6 +1,7 @@
 import { SAVE_USER, INITIALIZE_USER } from "../constants/user";
 
 const initialState = {
+  _id: "",
   nombre: "",
   apellido1: "",
   apellido2: "",
@@ -25,6 +26,8 @@ function reducer(state = initialState, action) {
   switch (action.type) {
     case SAVE_USER:
       return Object.assign({}, state, {
+        _id: action.payload._id,
+        _idUsuario: action.payload._idUsuario,
         nombre: action.payload.nombre,
         apellido1: action.payload.apellido1,
         apellido2: action.payload.apellido2,

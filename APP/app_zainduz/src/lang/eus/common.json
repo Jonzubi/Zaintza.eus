@@ -8,7 +8,8 @@
         "contratos": "Akordioak",
         "salir": "Irten",
         "notificaciones": "Abixuak",
-        "perfil": "Profila"
+        "perfil": "Profila",
+        "ajustes": "Ezarpenak"
     },
     "loginForm":{
         "email": "Emaila",
@@ -110,5 +111,18 @@
         "registroCompletado": "Izena eman duzu",
         "registrarse":"Izena eman",
         "darGracias": "Eskerrik asko Euskal Zaintzaren partez"
+    },
+    "perfilCliente":{
+        "nombre": "Izena",
+        "apellido1":"Lehen abizena",
+        "apellido2":"Bigarren abizena",
+        "email":"Emaila",
+        "contrasena":"Pasahitza",        
+        "movil":"Mugikorra",
+        "telefFijo":"Telefono finkoa",
+        "editar": "Datuak editatu",
+        "guardarCambios": "Aldaketak gorde",
+        "datosActualizados": "Datuak eguneratuta",
+        "errorGeneral": "Arazo bat gertatu da"
     }
 }
