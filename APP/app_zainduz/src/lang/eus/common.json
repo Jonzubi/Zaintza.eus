@@ -123,6 +123,8 @@
         "editar": "Datuak editatu",
         "guardarCambios": "Aldaketak gorde",
         "datosActualizados": "Datuak eguneratuta",
-        "errorGeneral": "Arazo bat gertatu da"
+        "errorGeneral": "Arazo bat gertatu da",
+        "errorAvatarUpload": "Irudia igotzen arazo bat egon da",
+        "errorImgGrande": "Irudia haundiegia da"
     }
 }

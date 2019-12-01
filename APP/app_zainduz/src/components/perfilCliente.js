@@ -105,7 +105,7 @@ class PerfilCliente extends React.Component {
         })
         .catch(error => {
           cogoToast.error(
-            <h5>{t("registerFormClientes.errorAvatarUpload")}</h5>
+            <h5>{t("perfilCliente.errorAvatarUpload")}</h5>
           );
           return;
         });
@@ -166,7 +166,7 @@ class PerfilCliente extends React.Component {
 
   onBeforeFileLoad(elem) {
     if (elem.target.files[0].size > 5242880) {
-      cogoToast.error(<h5>{t("registerFormClientes.errorImgGrande")}</h5>);
+      cogoToast.error(<h5>{t("perfilCliente.errorImgGrande")}</h5>);
       elem.target.value = "";
     }
   }
