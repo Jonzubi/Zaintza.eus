@@ -3,13 +3,15 @@ import { connect } from "react-redux";
 import Avatar from "react-avatar-edit";
 import ImageUploader from "react-images-upload";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faSave } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faSave, faMale, faFemale } from "@fortawesome/free-solid-svg-icons";
+import { ReactDatez as Calendario } from "react-datez";
 import cogoToast from "cogo-toast";
-import {t} from "../util/funciones";
+import { t } from "../util/funciones";
+import ipMaquina from "../util/ipMaquinaAPI";
 import loadGif from "../util/gifs/loadGif.gif";
 
 const mapStateToProps = state => {
-    console.log(state);
+  console.log(state);
   //Aqui van los especialitos de los undefined
   const movil =
     typeof state.user.telefono.movil == "undefined"
@@ -24,6 +26,8 @@ const mapStateToProps = state => {
     nombre: state.user.nombre,
     apellido1: state.user.apellido1,
     apellido2: state.user.apellido2,
+    sexo: state.user.sexo,
+    fechaNacimiento: state.user.fechaNacimiento,
     direcFoto: state.user.direcFoto,
     direcFotoContacto: state.user.direcFotoContacto,
     movil: movil,
@@ -40,64 +44,67 @@ class PerfilCuidador extends React.Component {
     super(props);
 
     this.state = {
-        isEditing: false,
-        isLoading: false,
-        txtNombre: this.props.nombre,
-        txtApellido1: this.props.apellido1,
-        txtApellido2: this.props.apellido2,
-        txtSexo: "",
-        txtFechaNacimiento: "",
-        txtContrasena: "",
-        txtMovil: "",
-        txtTelefono: "",
-        diasDisponible: [
-          {
-            dia: 0,
-            horaInicio: "00:00",
-            horaFin: "00:00"
-          }
-        ],
-        publicoDisponible: {
-          nino: false,
-          terceraEdad: false,
-          necesidadEspecial: false
-        },
-        precioPorPublico: {
-          nino: "",
-          terceraEdad: "",
-          necesidadEspecial: ""
-        },
-        ubicaciones: [],
-        txtDescripcion: "",
-        isPublic: true,
-        avatarSrc: "",
-        avatarPreview: "",
-        imgContact: null,
-        hoverSexoM: false,
-        hoverSexoF: false,
-        isLoading: false,
-        auxAddPueblo: "",
-        hoverNino: false,
-        hoverTerceraEdad: false,
-        hoverNecesidadEspecial: false,
-        suggestionsPueblos: [],
-        error: {
-          txtNombre: false,
-          txtEmail: false,
-          txtSexo: false,
-          txtFechaNacimiento: false,
-          txtContrasena: false,
-          txtMovil: false,
-          ubicaciones: false,
-          txtDescripcion: false,
-          imgContact: false
+      isEditing: false,
+      isLoading: false,
+      txtNombre: this.props.nombre,
+      txtApellido1: this.props.apellido1,
+      txtApellido2: this.props.apellido2,
+      txtSexo: this.props.sexo,
+      txtFechaNacimiento: this.props.fechaNacimiento,
+      txtMovil: "",
+      txtTelefono: "",
+      diasDisponible: [
+        {
+          dia: 0,
+          horaInicio: "00:00",
+          horaFin: "00:00"
         }
-      };
+      ],
+      publicoDisponible: {
+        nino: false,
+        terceraEdad: false,
+        necesidadEspecial: false
+      },
+      precioPorPublico: {
+        nino: "",
+        terceraEdad: "",
+        necesidadEspecial: ""
+      },
+      ubicaciones: [],
+      txtDescripcion: "",
+      isPublic: true,
+      avatarSrc: "",
+      avatarPreview: "",
+      imgContact: null,
+      hoverSexoM: false,
+      hoverSexoF: false,
+      isLoading: false,
+      auxAddPueblo: "",
+      hoverNino: false,
+      hoverTerceraEdad: false,
+      hoverNecesidadEspecial: false,
+      suggestionsPueblos: [],
+      error: {
+        txtNombre: false,
+        txtEmail: false,
+        txtSexo: false,
+        txtFechaNacimiento: false,
+        txtContrasena: false,
+        txtMovil: false,
+        ubicaciones: false,
+        txtDescripcion: false,
+        imgContact: false
+      }
+    };
 
-      this.handleEdit = this.handleEdit.bind(this);
-      this.onClose = this.onClose.bind(this);
-      this.onCrop = this.onCrop.bind(this);
-      this.handleGuardarCambios = this.handleGuardarCambios.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+    this.onClose = this.onClose.bind(this);
+    this.onCrop = this.onCrop.bind(this);
+    this.handleGuardarCambios = this.handleGuardarCambios.bind(this);
+    this.handleSexChange = this.handleSexChange.bind(this);
+    this.handleSexHover = this.handleSexHover.bind(this);
+    this.handleSexLeave = this.handleSexLeave.bind(this);
+    this.handleCalendarChange = this.handleCalendarChange.bind(this);
   }
 
   handleEdit() {
@@ -106,9 +113,7 @@ class PerfilCuidador extends React.Component {
     });
   }
 
-  handleGuardarCambios(){
-
-  }
+  handleGuardarCambios() {}
 
   onClose() {
     this.setState({ avatarPreview: "" });
@@ -125,30 +130,86 @@ class PerfilCuidador extends React.Component {
     }
   }
 
+  handleSexChange(sex) {
+    this.setState({
+      txtSexo: sex
+    });
+  }
+
+  handleSexHover(sex) {
+    this.setState({ [sex]: true });
+  }
+
+  handleSexLeave(sex) {
+    this.setState({ [sex]: false });
+  }
+
+  handleCalendarChange(valor) {
+    console.log(valor);
+    this.setState({
+      txtFechaNacimiento: valor
+    });
+  }
+
   render() {
     return (
       <div className="p-5">
         <div className="form-group row">
           <div className="form-group col-3 text-center">
-            {this.state.direcFoto}
-            <Avatar
-              label="Aukeratu avatarra"
-              labelStyle={{
-                fontSize: "15px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                width: "100%",
-                height: "100%"
-              }}
-              height={200}
-              width={200}
-              onCrop={this.onCrop}
-              onClose={this.onClose}
-              onBeforeFileLoad={this.onBeforeFileLoad}
-              src={this.state.avatarSrc}
-            />
+            {!this.state.isEditing && this.props.direcFoto.length > 0 ? (
+              <img
+                height={200}
+                width={200}
+                src={
+                  "http://" + ipMaquina + ":3001/image/" + this.props.direcFoto
+                }
+              />
+            ) : (
+              <Avatar
+                label="Aukeratu avatarra"
+                labelStyle={{
+                  fontSize: "15px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  width: "100%",
+                  height: "100%"
+                }}
+                height={200}
+                width={200}
+                onCrop={this.onCrop}
+                onClose={this.onClose}
+                onBeforeFileLoad={this.onBeforeFileLoad}
+                src={this.state.avatarSrc}
+              />
+            )}
           </div>
           <div className="col-3 mx-auto text-center">
+            {!this.state.isEditing ?
+            (
+              <div style={{
+                //backgroundImage:"url(http://" + ipMaquina + ":3001/image/" + cuidador.direcFotoContacto + ")",
+                height: "300px",
+                backgroundSize: "cover",
+                backgroundPosition: "top",
+                backgroundRepeat: "no-repeat",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                overflow: "hidden"
+              }}>
+                <img
+                    style={{ maxHeight: "250px", height: "auto" }}
+                    src={
+                      "http://" +
+                      ipMaquina +
+                      ":3001/image/" +
+                      this.props.direcFotoContacto
+                    }
+                  />
+              </div>
+            )
+            :
+            (
             <ImageUploader
               fileContainerStyle={
                 this.state.imgContact != null
@@ -188,6 +249,8 @@ class PerfilCuidador extends React.Component {
               imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
               maxFileSize={5242880}
             />
+            )
+            }
           </div>
 
           <div className="form-group col-6">
@@ -245,6 +308,84 @@ class PerfilCuidador extends React.Component {
             </div>
           </div>
         </div>
+        <div class="form-group row">
+            <div className="form-group col-6">
+              <label htmlFor="txtFechaNacimiento">
+                {t("registerFormCuidadores.fechaNac")}
+              </label>{" "}
+              (<span className="text-danger font-weight-bold">*</span>)
+              <br />
+              <Calendario
+                dateFormat="YYYY/MM/DD"                
+                inputClassName="form-control"
+                inputStyle={{ width: "100%" }}
+                className={
+                  this.state.error.txtNombre
+                    ? "border border-danger w-100"
+                    : "w-100"
+                }
+                allowPast={true}
+                allowFuture={false}
+                id="txtFechaNacimiento"
+                handleChange={this.handleCalendarChange}
+                value={this.state.txtFechaNacimiento}
+              />
+            </div>
+            <div
+              className={
+                this.state.error.txtNombre
+                  ? "form-group col-3 text-center p-1 border border-danger"
+                  : "form-group col-3 text-center p-1"
+              }
+              onClick={() => this.state.isEditing ? this.handleSexChange("M") : null}
+              onMouseEnter={() => this.state.isEditing ? this.handleSexHover("hoverSexoM") : null}
+              onMouseLeave={() => this.state.isEditing ? this.handleSexLeave("hoverSexoM") : null}
+              id="txtSexM"
+              style={{
+                borderRadius: "8px",
+                cursor: this.state.isEditing ? "pointer" : "no-drop",
+                background:
+                  this.state.txtSexo == "M"
+                    ? "#28a745"
+                    : this.state.hoverSexoM
+                    ? "#545b62"
+                    : "",
+                color:
+                  this.state.txtSexo == "M" || this.state.hoverSexoM
+                    ? "white"
+                    : "black"
+              }}
+            >
+              <FontAwesomeIcon className="fa-5x" icon={faMale} />
+            </div>
+            <div
+              className={
+                this.state.error.txtNombre
+                  ? "form-group col-3 text-center p-1 border border-danger"
+                  : "form-group col-3 text-center p-1"
+              }
+              id="txtSexF"
+              onClick={() => this.state.isEditing ? this.handleSexChange("F") : null}
+              onMouseEnter={() => this.state.isEditing ? this.handleSexHover("hoverSexoF") : null}
+              onMouseLeave={() => this.state.isEditing ? this.handleSexLeave("hoverSexoF") : null}
+              style={{
+                borderRadius: "8px",
+                cursor: this.state.isEditing ? "pointer" : "no-drop",
+                background:
+                  this.state.txtSexo == "F"
+                    ? "#28a745"
+                    : this.state.hoverSexoF 
+                    ? "#545b62"
+                    : "",
+                color:
+                  this.state.txtSexo == "F" || this.state.hoverSexoF
+                    ? "white"
+                    : "black"
+              }}
+            >
+              <FontAwesomeIcon className="fa-5x" icon={faFemale} />
+            </div>
+          </div>
         <div id="loaderOrButton" className="row mt-5">
           <div className="col-12">
             {!this.state.isEditing ? (

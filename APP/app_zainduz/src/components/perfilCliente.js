@@ -15,11 +15,11 @@ const mapStateToProps = state => {
   console.log(state);
   //Aqui van los especialitos de los undefined
   const movil =
-    typeof state.user.telefono.movil == "undefined"
+    typeof state.user.telefono == "undefined"
       ? undefined
       : state.user.telefono.movil.numero;
   const telefFijo =
-    typeof state.user.telefono.fijo == "undefined"
+    typeof state.user.telefono == "undefined"
       ? undefined
       : state.user.telefono.fijo.numero;
   return {
