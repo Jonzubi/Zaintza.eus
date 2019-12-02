@@ -3,7 +3,12 @@ import { connect } from "react-redux";
 import Avatar from "react-avatar-edit";
 import ImageUploader from "react-images-upload";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faSave, faMale, faFemale } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faSave,
+  faMale,
+  faFemale
+} from "@fortawesome/free-solid-svg-icons";
 import { ReactDatez as Calendario } from "react-datez";
 import cogoToast from "cogo-toast";
 import { t } from "../util/funciones";
@@ -184,73 +189,71 @@ class PerfilCuidador extends React.Component {
             )}
           </div>
           <div className="col-3 mx-auto text-center">
-            {!this.state.isEditing ?
-            (
-              <div style={{
-                //backgroundImage:"url(http://" + ipMaquina + ":3001/image/" + cuidador.direcFotoContacto + ")",
-                height: "300px",
-                backgroundSize: "cover",
-                backgroundPosition: "top",
-                backgroundRepeat: "no-repeat",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                overflow: "hidden"
-              }}>
+            {!this.state.isEditing ? (
+              <div
+                style={{
+                  //backgroundImage:"url(http://" + ipMaquina + ":3001/image/" + cuidador.direcFotoContacto + ")",
+                  height: "300px",
+                  backgroundSize: "cover",
+                  backgroundPosition: "top",
+                  backgroundRepeat: "no-repeat",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  overflow: "hidden"
+                }}
+              >
                 <img
-                    style={{ maxHeight: "250px", height: "auto" }}
-                    src={
-                      "http://" +
-                      ipMaquina +
-                      ":3001/image/" +
-                      this.props.direcFotoContacto
-                    }
-                  />
+                  style={{ maxHeight: "250px", height: "auto" }}
+                  src={
+                    "http://" +
+                    ipMaquina +
+                    ":3001/image/" +
+                    this.props.direcFotoContacto
+                  }
+                />
               </div>
-            )
-            :
-            (
-            <ImageUploader
-              fileContainerStyle={
-                this.state.imgContact != null
-                  ? { background: "#28a745" }
-                  : this.state.error.txtNombre
-                  ? { background: "#dc3545" }
-                  : {}
-              }
-              buttonClassName={
-                this.state.imgContact != null ? "bg-light text-dark" : ""
-              }
-              errorClass="bg-danger text-light"
-              fileSizeError="handiegia da"
-              fileTypeError="ez du formatu zuzena"
-              singleImage={true}
-              label={
-                this.state.imgContact != null
-                  ? "Gehienez: 5MB | " +
-                    this.state.imgContact[0].name +
-                    " (" +
-                    (this.state.imgContact[0].size / 1024 / 1024).toFixed(2) +
-                    " MB)"
-                  : "Gehienez: 5MB | Gomendaturiko dimentsioa (288x300)"
-              }
-              labelClass={
-                this.state.imgContact != null
-                  ? "text-light font-weight-bold"
-                  : ""
-              }
-              withIcon={true}
-              buttonText={
-                this.state.imgContact != null
-                  ? "Aukeratu beste irudi bat"
-                  : "Aukeratu zure kontaktu irudia"
-              }
-              onChange={this.onChangeContactImg}
-              imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
-              maxFileSize={5242880}
-            />
-            )
-            }
+            ) : (
+              <ImageUploader
+                fileContainerStyle={
+                  this.state.imgContact != null
+                    ? { background: "#28a745" }
+                    : this.state.error.txtNombre
+                    ? { background: "#dc3545" }
+                    : {}
+                }
+                buttonClassName={
+                  this.state.imgContact != null ? "bg-light text-dark" : ""
+                }
+                errorClass="bg-danger text-light"
+                fileSizeError="handiegia da"
+                fileTypeError="ez du formatu zuzena"
+                singleImage={true}
+                label={
+                  this.state.imgContact != null
+                    ? "Gehienez: 5MB | " +
+                      this.state.imgContact[0].name +
+                      " (" +
+                      (this.state.imgContact[0].size / 1024 / 1024).toFixed(2) +
+                      " MB)"
+                    : "Gehienez: 5MB | Gomendaturiko dimentsioa (288x300)"
+                }
+                labelClass={
+                  this.state.imgContact != null
+                    ? "text-light font-weight-bold"
+                    : ""
+                }
+                withIcon={true}
+                buttonText={
+                  this.state.imgContact != null
+                    ? "Aukeratu beste irudi bat"
+                    : "Aukeratu zure kontaktu irudia"
+                }
+                onChange={this.onChangeContactImg}
+                imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
+                maxFileSize={5242880}
+              />
+            )}
           </div>
 
           <div className="form-group col-6">
@@ -309,83 +312,134 @@ class PerfilCuidador extends React.Component {
           </div>
         </div>
         <div class="form-group row">
-            <div className="form-group col-6">
-              <label htmlFor="txtFechaNacimiento">
-                {t("registerFormCuidadores.fechaNac")}
-              </label>{" "}
-              (<span className="text-danger font-weight-bold">*</span>)
-              <br />
-              <Calendario
-                dateFormat="YYYY/MM/DD"                
-                inputClassName="form-control"
-                inputStyle={{ width: "100%" }}
-                className={
-                  this.state.error.txtNombre
-                    ? "border border-danger w-100"
-                    : "w-100"
-                }
-                allowPast={true}
-                allowFuture={false}
-                id="txtFechaNacimiento"
-                handleChange={this.handleCalendarChange}
-                value={this.state.txtFechaNacimiento}
-              />
-            </div>
-            <div
+          <div className="form-group col-6">
+            <label htmlFor="txtFechaNacimiento">
+              {t("registerFormCuidadores.fechaNac")}
+            </label>{" "}
+            (<span className="text-danger font-weight-bold">*</span>)
+            <br />
+            <Calendario
+              dateFormat="YYYY/MM/DD"
+              inputClassName={
+                this.state.isEditing ? "form-control" : "form-control disabled"
+              }
+              displayCalendars={this.state.isEditing ? 1 : 0}
+              inputStyle={{ width: "100%" }}
               className={
                 this.state.error.txtNombre
-                  ? "form-group col-3 text-center p-1 border border-danger"
-                  : "form-group col-3 text-center p-1"
+                  ? "border border-danger w-100"
+                  : "w-100"
               }
-              onClick={() => this.state.isEditing ? this.handleSexChange("M") : null}
-              onMouseEnter={() => this.state.isEditing ? this.handleSexHover("hoverSexoM") : null}
-              onMouseLeave={() => this.state.isEditing ? this.handleSexLeave("hoverSexoM") : null}
-              id="txtSexM"
-              style={{
-                borderRadius: "8px",
-                cursor: this.state.isEditing ? "pointer" : "no-drop",
-                background:
-                  this.state.txtSexo == "M"
-                    ? "#28a745"
-                    : this.state.hoverSexoM
-                    ? "#545b62"
-                    : "",
-                color:
-                  this.state.txtSexo == "M" || this.state.hoverSexoM
-                    ? "white"
-                    : "black"
-              }}
-            >
-              <FontAwesomeIcon className="fa-5x" icon={faMale} />
-            </div>
-            <div
-              className={
-                this.state.error.txtNombre
-                  ? "form-group col-3 text-center p-1 border border-danger"
-                  : "form-group col-3 text-center p-1"
-              }
-              id="txtSexF"
-              onClick={() => this.state.isEditing ? this.handleSexChange("F") : null}
-              onMouseEnter={() => this.state.isEditing ? this.handleSexHover("hoverSexoF") : null}
-              onMouseLeave={() => this.state.isEditing ? this.handleSexLeave("hoverSexoF") : null}
-              style={{
-                borderRadius: "8px",
-                cursor: this.state.isEditing ? "pointer" : "no-drop",
-                background:
-                  this.state.txtSexo == "F"
-                    ? "#28a745"
-                    : this.state.hoverSexoF 
-                    ? "#545b62"
-                    : "",
-                color:
-                  this.state.txtSexo == "F" || this.state.hoverSexoF
-                    ? "white"
-                    : "black"
-              }}
-            >
-              <FontAwesomeIcon className="fa-5x" icon={faFemale} />
-            </div>
+              allowPast={true}
+              allowFuture={false}
+              id="txtFechaNacimiento"
+              handleChange={this.handleCalendarChange}
+              value={this.state.txtFechaNacimiento}
+              disableInputIcon={!this.state.isEditing}
+              highlightWeekends={true}
+            />
           </div>
+          <div
+            className={
+              this.state.error.txtNombre
+                ? "form-group col-3 text-center p-1 border border-danger"
+                : "form-group col-3 text-center p-1"
+            }
+            onClick={() =>
+              this.state.isEditing ? this.handleSexChange("M") : null
+            }
+            onMouseEnter={() =>
+              this.state.isEditing ? this.handleSexHover("hoverSexoM") : null
+            }
+            onMouseLeave={() =>
+              this.state.isEditing ? this.handleSexLeave("hoverSexoM") : null
+            }
+            id="txtSexM"
+            style={{
+              borderRadius: "8px",
+              cursor: this.state.isEditing ? "pointer" : "no-drop",
+              background:
+                this.state.txtSexo == "M"
+                  ? "#28a745"
+                  : this.state.hoverSexoM
+                  ? "#545b62"
+                  : "",
+              color:
+                this.state.txtSexo == "M" || this.state.hoverSexoM
+                  ? "white"
+                  : "black"
+            }}
+          >
+            <FontAwesomeIcon className="fa-5x" icon={faMale} />
+          </div>
+          <div
+            className={
+              this.state.error.txtNombre
+                ? "form-group col-3 text-center p-1 border border-danger"
+                : "form-group col-3 text-center p-1"
+            }
+            id="txtSexF"
+            onClick={() =>
+              this.state.isEditing ? this.handleSexChange("F") : null
+            }
+            onMouseEnter={() =>
+              this.state.isEditing ? this.handleSexHover("hoverSexoF") : null
+            }
+            onMouseLeave={() =>
+              this.state.isEditing ? this.handleSexLeave("hoverSexoF") : null
+            }
+            style={{
+              borderRadius: "8px",
+              cursor: this.state.isEditing ? "pointer" : "no-drop",
+              background:
+                this.state.txtSexo == "F"
+                  ? "#28a745"
+                  : this.state.hoverSexoF
+                  ? "#545b62"
+                  : "",
+              color:
+                this.state.txtSexo == "F" || this.state.hoverSexoF
+                  ? "white"
+                  : "black"
+            }}
+          >
+            <FontAwesomeIcon className="fa-5x" icon={faFemale} />
+          </div>
+        </div>
+        <div className="form-group row">
+          <div class="form-group col">
+            <label htmlFor="txtMovil">
+              {t("registerFormCuidadores.movil")}
+            </label>{" "}
+            (<span className="text-danger font-weight-bold">*</span>)
+            <input
+              onChange={this.handleInputChange}
+              type="number"
+              class={
+                this.state.error.txtNombre
+                  ? "border border-danger form-control"
+                  : "form-control"
+              }
+              id="txtMovil"
+              aria-describedby="emailHelp"
+              placeholder="Introducir movil..."
+              value={this.state.txtMovil}
+            />
+          </div>
+          <div className="col">
+            <label className="" htmlFor="txtTelefono">
+              {t("registerFormCuidadores.telefFijo")}
+            </label>
+            <input
+              onChange={this.handleInputChange}
+              type="number"
+              class="form-control"
+              id="txtTelefono"
+              placeholder="Introducir telefono fijo..."
+              value={this.state.txtTelefono}
+            />
+          </div>
+        </div>
         <div id="loaderOrButton" className="row mt-5">
           <div className="col-12">
             {!this.state.isEditing ? (
