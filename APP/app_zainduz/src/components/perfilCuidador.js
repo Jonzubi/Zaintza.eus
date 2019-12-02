@@ -7,13 +7,21 @@ import {
   faEdit,
   faSave,
   faMale,
-  faFemale
+  faFemale,
+  faMinusCircle,
+  faPlusCircle
 } from "@fortawesome/free-solid-svg-icons";
+import TimeInput from "react-time-input";
+import AutoSuggest from "react-autosuggest";
 import { ReactDatez as Calendario } from "react-datez";
 import cogoToast from "cogo-toast";
 import { t } from "../util/funciones";
 import ipMaquina from "../util/ipMaquinaAPI";
 import loadGif from "../util/gifs/loadGif.gif";
+import municipios from "../util/municipos";
+import imgNino from "../util/images/nino.png";
+import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
+import imgTerceraEdad from "../util/images/terceraEdad.png";
 
 const mapStateToProps = state => {
   console.log(state);
@@ -36,7 +44,11 @@ const mapStateToProps = state => {
     direcFoto: state.user.direcFoto,
     direcFotoContacto: state.user.direcFotoContacto,
     movil: movil,
-    telefFijo: telefFijo
+    telefFijo: telefFijo,
+    diasDisponible: state.user.diasDisponible,
+    ubicaciones: state.user.ubicaciones,
+    publicoDisponible: state.user.publicoDisponible,
+    precioPorPublico: state.user.precioPorPublico
   };
 };
 
@@ -56,26 +68,26 @@ class PerfilCuidador extends React.Component {
       txtApellido2: this.props.apellido2,
       txtSexo: this.props.sexo,
       txtFechaNacimiento: this.props.fechaNacimiento,
-      txtMovil: "",
-      txtTelefono: "",
-      diasDisponible: [
+      txtMovil: this.props.movil,
+      txtTelefono: this.props.telefFijo,
+      diasDisponible: this.props.diasDisponible || [
         {
           dia: 0,
           horaInicio: "00:00",
           horaFin: "00:00"
         }
       ],
-      publicoDisponible: {
+      publicoDisponible: this.props.publicoDisponible || {
         nino: false,
         terceraEdad: false,
         necesidadEspecial: false
       },
-      precioPorPublico: {
+      precioPorPublico: this.props.precioPorPublico || {
         nino: "",
         terceraEdad: "",
         necesidadEspecial: ""
       },
-      ubicaciones: [],
+      ubicaciones: this.props.ubicaciones || [],
       txtDescripcion: "",
       isPublic: true,
       avatarSrc: "",
@@ -110,6 +122,39 @@ class PerfilCuidador extends React.Component {
     this.handleSexHover = this.handleSexHover.bind(this);
     this.handleSexLeave = this.handleSexLeave.bind(this);
     this.handleCalendarChange = this.handleCalendarChange.bind(this);
+    this.addDiasDisponible = this.addDiasDisponible.bind(this);
+    this.handleDiasDisponibleChange = this.handleDiasDisponibleChange.bind(
+      this
+    );
+    this.removeDiasDisponible = this.removeDiasDisponible.bind(this);
+    this.getSuggestions = this.getSuggestions.bind(this);
+    this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(
+      this
+    );
+    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(
+      this
+    );
+    this.handleAuxAddPuebloChange = this.handleAuxAddPuebloChange.bind(this);
+    this.handleAddPueblo = this.handleAddPueblo.bind(this);
+    this.handleRemovePueblo = this.handleRemovePueblo.bind(this);
+    this.handlePublicoChange = this.handlePublicoChange.bind(this);
+    this.handlePublicoHover = this.handlePublicoHover.bind(this);
+    this.handlePublicoLeave = this.handlePublicoLeave.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  handleInputChange(e) {
+    //La idea es recoger el nombre del componente y asignarselo al estado, algo como, this.setState({this.state[name] = e.target.value});
+    var stateId = e.target.id;
+    //No vamos a dejar que el usuario meta mas de 9 digitos para el telefono
+    if (stateId == "txtMovil" || stateId == "txtTelefono") {
+      if (e.target.value.toString() > 9) {
+        e.target.value = e.target.value.slice(0, 9);
+      }
+    }
+    this.setState({
+      [stateId]: e.target.value
+    });
   }
 
   handleEdit() {
@@ -156,7 +201,197 @@ class PerfilCuidador extends React.Component {
     });
   }
 
+  addDiasDisponible() {
+    let auxDiasDisponible = this.state.diasDisponible;
+    auxDiasDisponible.push({
+      dia: 0,
+      horaInicio: "00:00",
+      horaFin: "00:00"
+    });
+
+    this.setState({
+      diasDisponible: auxDiasDisponible
+    });
+  }
+
+  handleDiasDisponibleChange(e, indice) {
+    if (typeof indice == "undefined") {
+      //Significa que lo que se ha cambiado es el combo de los dias
+      var origen = e.target;
+      var indice = parseInt(origen.id.substr(origen.id.length - 1));
+      var valor = origen.value;
+
+      let auxDiasDisponible = this.state.diasDisponible;
+      auxDiasDisponible[indice]["dia"] = valor;
+
+      this.setState({
+        diasDisponible: auxDiasDisponible
+      });
+    } else {
+      //Significa que ha cambiado la hora, no se sabe si inicio o fin, eso esta en "indice"
+      let atributo = indice.substr(0, indice.length - 1);
+      indice = indice.substr(indice.length - 1);
+
+      let auxDiasDisponible = this.state.diasDisponible;
+      auxDiasDisponible[indice][atributo] = e;
+
+      this.setState({
+        diasDisponible: auxDiasDisponible
+      });
+    }
+  }
+
+  removeDiasDisponible() {
+    this.setState({
+      diasDisponible:
+        typeof this.state.diasDisponible.pop() != "undefined"
+          ? this.state.diasDisponible
+          : []
+    });
+  }
+
+  escapeRegexCharacters(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  getSuggestions(value) {
+    const escapedValue = this.escapeRegexCharacters(value.trim());
+
+    if (escapedValue === "") {
+      return [];
+    }
+
+    const regex = new RegExp("^" + escapedValue, "i");
+
+    return municipios.filter(pueblo => regex.test(pueblo));
+  }
+
+  getSuggestionValue(suggestion) {
+    return suggestion;
+  }
+
+  renderSuggestion(suggestion) {
+    return <span>{suggestion}</span>;
+  }
+
+  onSuggestionsFetchRequested = ({ value }) => {
+    this.setState({
+      suggestionsPueblos: this.getSuggestions(value)
+    });
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestionsPueblos: []
+    });
+  };
+
+  handleAuxAddPuebloChange(e, { newValue }) {
+    this.setState({
+      auxAddPueblo: newValue
+    });
+  }
+
+  handleAddPueblo() {
+    let pueblo = this.state.auxAddPueblo;
+    if (pueblo == "") return;
+
+    if (!municipios.includes(pueblo)) {
+      cogoToast.error(
+        <h5>
+          {pueblo} {t("registerFormCuidadores.errorPuebloNoExiste")}
+        </h5>
+      );
+      return;
+    }
+
+    for (var clave in this.state.ubicaciones) {
+      if (this.state.ubicaciones[clave] == pueblo) {
+        cogoToast.error(
+          <h5>
+            {pueblo} {t("registerFormCuidadores.errorPuebloRepetido")}
+          </h5>
+        );
+        return;
+      }
+    }
+    this.state.ubicaciones.push(pueblo);
+    this.setState({
+      ubicaciones: this.state.ubicaciones,
+      auxAddPueblo: ""
+    });
+  }
+
+  handleRemovePueblo() {
+    this.setState({
+      ubicaciones:
+        typeof this.state.ubicaciones.pop() != "undefined"
+          ? this.state.ubicaciones
+          : []
+    });
+  }
+
+  handlePublicoHover(publico) {
+    this.setState({
+      [publico]: true
+    });
+  }
+
+  handlePublicoLeave(publico) {
+    this.setState({
+      [publico]: false
+    });
+  }
+
+  handlePublicoChange(publico) {
+    let auxPublicoDisponible = this.state.publicoDisponible;
+    auxPublicoDisponible[publico] = !auxPublicoDisponible[publico];
+    this.setState({
+      publicoDisponible: auxPublicoDisponible
+    });
+  }
+
+  handlePrecioChange(atributo, valor) {
+    let auxPrecioPublico = this.state.precioPorPublico;
+    auxPrecioPublico[atributo] = valor;
+    this.setState({
+      precioPorPublico: auxPrecioPublico
+    });
+  }
+
   render() {
+    const onChangeSuggestion = this.handleAuxAddPuebloChange;
+    const auxAddPuebloValue = this.state.auxAddPueblo;
+    const classSuggestion = this.state.error.txtNombre
+      ? "border border-danger form-control d-inline w-75"
+      : "form-control d-inline w-100";
+
+    const autoSuggestProps = {
+      onChange: onChangeSuggestion,
+      placeholder: "Introduce el pueblo...",
+      value: auxAddPuebloValue,
+      className: classSuggestion,
+      disabled: !this.state.isEditing
+    };
+
+    const suggestionTheme = {
+      container: "react-autosuggest__container",
+      containerOpen: "react-autosuggest__container--open",
+      input: "react-autosuggest__input",
+      inputOpen: "react-autosuggest__input--open",
+      inputFocused: "react-autosuggest__input--focused",
+      suggestionsContainer: "list-group",
+      suggestionsContainerOpen:
+        "react-autosuggest__suggestions-container--open",
+      suggestionsList: "list-group",
+      suggestion: "list-group-item",
+      suggestionFirst: "list-group-item",
+      suggestionHighlighted: "bg-success text-light list-group-item",
+      sectionContainer: "react-autosuggest__section-container",
+      sectionContainerFirst: "react-autosuggest__section-container--first",
+      sectionTitle: "react-autosuggest__section-title"
+    };
+
     return (
       <div className="p-5">
         <div className="form-group row">
@@ -420,6 +655,7 @@ class PerfilCuidador extends React.Component {
                   ? "border border-danger form-control"
                   : "form-control"
               }
+              disabled={this.state.isEditing ? null : "disabled"}
               id="txtMovil"
               aria-describedby="emailHelp"
               placeholder="Introducir movil..."
@@ -434,10 +670,327 @@ class PerfilCuidador extends React.Component {
               onChange={this.handleInputChange}
               type="number"
               class="form-control"
+              disabled={this.state.isEditing ? null : "disabled"}
               id="txtTelefono"
               placeholder="Introducir telefono fijo..."
               value={this.state.txtTelefono}
             />
+          </div>
+        </div>
+        <div className="form-group row">
+          <div className="form-group col">
+            {/* Insertar dias disponibles aqui */}
+            <label className="w-100 text-center lead">
+              {t("registerFormCuidadores.diasDisponible")}:
+            </label>
+            <br />
+            <div className="w-100 mt-2" id="diasDisponible">
+              {/* Aqui iran los dias dinamicamente */}
+              {this.state.diasDisponible.map((objDia, indice) => {
+                return (
+                  <div
+                    className="col-6 mx-auto text-center"
+                    id={"diaDisponible" + indice}
+                  >
+                    <div className="form-control mt-4 w-100">
+                      <select
+                        disabled={this.state.isEditing ? null : "disabled"}
+                        value={this.state.diasDisponible[indice].dia}
+                        onChange={this.handleDiasDisponibleChange}
+                        className="d-inline"
+                        id={"dia" + indice}
+                      >
+                        <option>Aukeratu eguna</option>
+                        <option value="1">Astelehena</option>
+                        <option value="2">Asteartea</option>
+                        <option value="3">Asteazkena</option>
+                        <option value="4">Osteguna</option>
+                        <option value="5">Ostirala</option>
+                        <option value="6">Larunbata</option>
+                        <option value="7">Igandea</option>
+                      </select>
+                      <br />
+                      <br />
+                      <b>{t("registerFormCuidadores.horaInicio")} :</b>
+                      <TimeInput
+                        onTimeChange={valor => {
+                          this.handleDiasDisponibleChange(
+                            valor,
+                            "horaInicio" + indice
+                          );
+                        }}
+                        id={"horaInicio" + indice}
+                        disabled={this.state.isEditing ? null : "disabled"}
+                        initTime={
+                          this.state.diasDisponible[indice].horaInicio !=
+                          "00:00"
+                            ? this.state.diasDisponible[indice].horaInicio
+                            : "00:00"
+                        }
+                        className="mt-1 text-center d-inline form-control"
+                      />
+                      <br />
+                      <b>{t("registerFormCuidadores.horaFin")} :</b>
+                      <TimeInput
+                        onTimeChange={valor => {
+                          this.handleDiasDisponibleChange(
+                            valor,
+                            "horaFin" + indice
+                          );
+                        }}
+                        id={"horaFin" + indice}
+                        disabled={this.state.isEditing ? null : "disabled"}
+                        initTime={
+                          this.state.diasDisponible[indice].horaFin != "00:00"
+                            ? this.state.diasDisponible[indice].horaFin
+                            : "00:00"
+                        }
+                        className="mt-1 text-center d-inline form-control"
+                      />
+                      <br />
+                      <br />
+                    </div>
+                  </div>
+                );
+              })}
+              <div id="botonesDiasDisponible" className="w-100 mt-2">
+                {this.state.diasDisponible.length > 0 ? (
+                  <a
+                    onClick={this.removeDiasDisponible}
+                    className={
+                      this.state.isEditing
+                        ? "btn btn-danger float-left text-light"
+                        : "btn btn-danger float-left text-light disabled"
+                    }
+                  >
+                    {t("registerFormCuidadores.eliminarDia")}{" "}
+                    <FontAwesomeIcon icon={faMinusCircle} />
+                  </a>
+                ) : (
+                  ""
+                )}
+                <a
+                  onClick={this.addDiasDisponible}
+                  className={
+                    this.state.isEditing
+                      ? "btn btn-success float-right text-light"
+                      : "btn btn-success float-right text-light disabled"
+                  }
+                >
+                  {t("registerFormCuidadores.anadir")}{" "}
+                  <FontAwesomeIcon icon={faPlusCircle} />
+                </a>
+              </div>
+            </div>
+          </div>
+          <div className="form-group col">
+            {/* Insertar ubicaciones disponibles aqui */}
+            <label htmlFor="txtAddPueblos" className="w-100 text-center lead">
+              {t("registerFormCuidadores.pueblosDisponible")}:
+            </label>{" "}
+            (<span className="text-danger font-weight-bold">*</span>)
+            <div class="form-group mt-2">
+              <AutoSuggest
+                suggestions={this.state.suggestionsPueblos}
+                onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                onSuggestionSelected={this.handleAddPueblo}
+                getSuggestionValue={this.getSuggestionValue}
+                renderSuggestion={this.renderSuggestion}
+                inputProps={autoSuggestProps}
+                theme={suggestionTheme}
+                id="txtAddPueblos"
+              />
+              {this.state.ubicaciones.length > 0 ? (
+                <h5 className="mt-2 lead">
+                  {t("registerFormCuidadores.pueblosSeleccionados")}:
+                </h5>
+              ) : (
+                ""
+              )}
+
+              <ul className="list-group">
+                {this.state.ubicaciones.map(pueblo => {
+                  return <li className="list-group-item">{pueblo}</li>;
+                })}
+              </ul>
+              {this.state.ubicaciones.length > 0 ? (
+                <a
+                  onClick={this.handleRemovePueblo}
+                  className={
+                    this.state.isEditing
+                      ? "mt-4 btn btn-danger float-right text-light"
+                      : "mt-4 btn btn-danger float-right text-light disabled"
+                  }
+                >
+                  {t("registerFormCuidadores.eliminarPueblo")}{" "}
+                  <FontAwesomeIcon icon={faMinusCircle} />
+                </a>
+              ) : (
+                ""
+              )}
+            </div>
+            <br />
+          </div>
+        </div>
+        <div className="form-group row">
+          <div className="form-group col">
+            {/* Insertar publico disponibles aqui */}
+            <label className="w-100 text-center lead">
+              {t("registerFormCuidadores.publicoDisponible")}:
+            </label>
+            <div className="row md-2">
+              <div
+                onClick={() =>
+                  this.state.isEditing ? this.handlePublicoChange("nino") : null
+                }
+                onMouseEnter={() =>
+                  this.state.isEditing
+                    ? this.handlePublicoHover("hoverNino")
+                    : null
+                }
+                onMouseLeave={() =>
+                  this.state.isEditing
+                    ? this.handlePublicoLeave("hoverNino")
+                    : null
+                }
+                className="col-4 text-center p-1"
+                style={{
+                  background: this.state.publicoDisponible.nino
+                    ? "#28a745"
+                    : this.state.hoverNino
+                    ? "#545b62"
+                    : "",
+                  cursor: this.state.isEditing ? "pointer" : "no-drop"
+                }}
+              >
+                <img src={imgNino} className="w-100 h-100" />
+                <small className="font-weight-bold">
+                  {t("registerFormCuidadores.ninos")}
+                </small>
+              </div>
+              <div
+                onClick={() =>
+                  this.state.isEditing
+                    ? this.handlePublicoChange("terceraEdad")
+                    : null
+                }
+                onMouseEnter={() =>
+                  this.state.isEditing
+                    ? this.handlePublicoHover("hoverTerceraEdad")
+                    : null
+                }
+                onMouseLeave={() =>
+                  this.state.isEditing
+                    ? this.handlePublicoLeave("hoverTerceraEdad")
+                    : null
+                }
+                className="col-4 text-center p-1"
+                style={{
+                  background: this.state.publicoDisponible.terceraEdad
+                    ? "#28a745"
+                    : this.state.hoverTerceraEdad
+                    ? "#545b62"
+                    : "",
+                  cursor: this.state.isEditing ? "pointer" : "no-drop"
+                }}
+              >
+                <img src={imgTerceraEdad} className="w-100 h-100" />
+                <small className="font-weight-bold">
+                  {t("registerFormCuidadores.terceraEdad")}
+                </small>
+              </div>
+              <div
+                onClick={() =>
+                  this.state.isEditing
+                    ? this.handlePublicoChange("necesidadEspecial")
+                    : null
+                }
+                onMouseEnter={() =>
+                  this.state.isEditing
+                    ? this.handlePublicoHover("hoverNecesidadEspecial")
+                    : null
+                }
+                onMouseLeave={() =>
+                  this.state.isEditing
+                    ? this.handlePublicoLeave("hoverNecesidadEspecial")
+                    : null
+                }
+                className="col-4 text-center p-1"
+                style={{
+                  background: this.state.publicoDisponible.necesidadEspecial
+                    ? "#28a745"
+                    : this.state.hoverNecesidadEspecial
+                    ? "#545b62"
+                    : "",
+                  cursor: this.state.isEditing ? "pointer" : "no-drop"
+                }}
+              >
+                <img src={imgNecesidadEspecial} className="w-100 h-100" />
+                <small className="font-weight-bold">
+                  {t("registerFormCuidadores.necesidadEspecial")}
+                </small>
+              </div>
+            </div>
+          </div>
+          <div className="form-group col">
+            {/* Insertar precioPublico disponibles aqui */}
+            <label className="w-100 text-center lead">
+              {t("registerFormCuidadores.precioPorPublico")}:
+            </label>
+            <div className="list-group md-2">              
+                <div className="list-group-item form-group text-center p-1">
+                  <small>
+                    <b>{t("registerFormCuidadores.ninos")}</b>
+                  </small>
+                  <input
+                    onChange={event => {
+                      this.handlePrecioChange("nino", event.target.value);
+                    }}
+                    className="form-control"
+                    disabled={!this.state.isEditing ? true : !this.state.publicoDisponible.nino }
+                    value={this.state.precioPorPublico.nino}
+                    type="number"
+                    placeholder="Prezioa €/h"
+                  />
+                </div>
+                <div className="list-group-item form-group text-center p-1">
+                  <small>
+                    <b>{t("registerFormCuidadores.terceraEdad")}</b>
+                  </small>
+                  <input
+                    onChange={event => {
+                      this.handlePrecioChange(
+                        "terceraEdad",
+                        event.target.value
+                      );
+                    }}
+                    disabled={!this.state.isEditing ? true : !this.state.publicoDisponible.terceraEdad }
+                    value={this.state.precioPorPublico.terceraEdad}
+                    className="form-control"
+                    type="number"
+                    placeholder="Prezioa €/h"
+                  />
+                </div>
+                <div className="list-group-item form-group text-center p-1">
+                  <small>
+                    <b>{t("registerFormCuidadores.necesidadEspecial")}</b>
+                  </small>
+                  <input
+                    onChange={event => {
+                      this.handlePrecioChange(
+                        "necesidadEspecial",
+                        event.target.value
+                      );
+                    }}
+                    disabled={!this.state.isEditing ? true : !this.state.publicoDisponible.necesidadEspecial }
+                    value={this.state.precioPorPublico.necesidadEspecial}
+                    className="form-control"
+                    type="number"
+                    placeholder="Prezioa €/h"
+                  />
+                </div>
+            </div>
           </div>
         </div>
         <div id="loaderOrButton" className="row mt-5">
