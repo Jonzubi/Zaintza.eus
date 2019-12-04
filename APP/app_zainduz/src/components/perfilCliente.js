@@ -62,6 +62,14 @@ class PerfilCliente extends React.Component {
       }
     };
 
+    this.requiredState = ["txtNombre", "txtEmail", "txtContrasena", "txtMovil"];
+    this.requiredStatesTraduc = {
+      txtNombre: "registerFormClientes.nombre",
+      txtEmail: "registerFormClientes.email",
+      txtContrasena: "registerFormClientes.contrasena",
+      txtMovil: "registerFormClientes.movil"
+    };
+
     this.handleInputChange = this.handleInputChange.bind(this);
     this.onClose = this.onClose.bind(this);
     this.onCrop = this.onCrop.bind(this);
@@ -75,6 +83,26 @@ class PerfilCliente extends React.Component {
   }
 
   async handleGuardarCambios() {
+    for (var clave in this.state) {
+      if (
+        (this.state[clave].length == 0 || !this.state[clave]) &&
+        this.requiredState.includes(clave)
+      ) {
+        cogoToast.error(
+          <h5>
+            {t("registerFormClientes.errorRellenaTodo")} (
+            {t(this.requiredStatesTraduc[clave])})
+          </h5>
+        );
+        let auxError = this.state.error;
+        auxError[clave] = true;
+        this.setState({
+          error: auxError
+        });
+        return;
+      }
+    }
+
     this.setState({
       isLoading: true
     });
