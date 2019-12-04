@@ -34,6 +34,7 @@ const mapStateToProps = state => {
     typeof state.user.telefono.fijo == "undefined"
       ? undefined
       : state.user.telefono.fijo.numero;
+
   return {
     _id: state.user._id,
     nombre: state.user.nombre,
@@ -45,10 +46,10 @@ const mapStateToProps = state => {
     direcFotoContacto: state.user.direcFotoContacto,
     movil: movil,
     telefFijo: telefFijo,
-    diasDisponible: state.user.diasDisponible,
-    ubicaciones: state.user.ubicaciones,
-    publicoDisponible: state.user.publicoDisponible,
-    precioPorPublico: state.user.precioPorPublico
+    diasDisponible: state.user.diasDisponible.slice(0),
+    ubicaciones: state.user.ubicaciones.slice(0),
+    publicoDisponible: Object.assign({},state.user.publicoDisponible),
+    precioPorPublico: Object.assign({},state.user.precioPorPublico)
   };
 };
 
