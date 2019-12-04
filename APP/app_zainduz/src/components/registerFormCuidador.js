@@ -379,7 +379,7 @@ class RegisterForm extends React.Component {
         });
         return;
       }
-      //Hago una comporbacion diferente para los dias, que haya elegido un dia en el combo
+      //Hago una comporbacion diferente para los dias, para que haya elegido un dia en el combo
       if (clave == "diasDisponible") {
         let error = false;
         this.state[clave].map(confDia => {

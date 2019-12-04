@@ -23,6 +23,8 @@ import municipios from "../util/municipos";
 import imgNino from "../util/images/nino.png";
 import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
 import imgTerceraEdad from "../util/images/terceraEdad.png";
+import {getRandomString, toBase64} from "../util/funciones";
+import Axios from "axios";
 
 const mapStateToProps = state => {
   console.log(state);
@@ -47,6 +49,8 @@ const mapStateToProps = state => {
     direcFotoContacto: state.user.direcFotoContacto,
     movil: movil,
     telefFijo: telefFijo,
+    descripcion: state.user.descripcion,
+    isPublic: state.user.isPublic,
     diasDisponible: state.user.diasDisponible.slice(0),
     ubicaciones: state.user.ubicaciones.slice(0),
     publicoDisponible: Object.assign({},state.user.publicoDisponible),
@@ -90,8 +94,8 @@ class PerfilCuidador extends React.Component {
         necesidadEspecial: ""
       },
       ubicaciones: this.props.ubicaciones || [],
-      txtDescripcion: "",
-      isPublic: true,
+      txtDescripcion: this.props.descripcion,
+      isPublic: this.props.isPublic,
       avatarSrc: "",
       avatarPreview: "",
       imgContact: null,
@@ -144,6 +148,7 @@ class PerfilCuidador extends React.Component {
     this.handlePublicoLeave = this.handlePublicoLeave.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleIsPublicChange = this.handleIsPublicChange.bind(this);
+    this.onChangeContactImg = this.onChangeContactImg.bind(this);
   }
 
   handleInputChange(e) {
@@ -160,13 +165,20 @@ class PerfilCuidador extends React.Component {
     });
   }
 
+  onChangeContactImg(picture) {
+    if (picture.length > 1) {
+      picture.shift();
+    }
+    this.setState({
+      imgContact: picture
+    });
+  }
+
   handleEdit() {
     this.setState({
       isEditing: true
     });
   }
-
-  handleGuardarCambios() {}
 
   onClose() {
     this.setState({ avatarPreview: "" });
@@ -366,6 +378,35 @@ class PerfilCuidador extends React.Component {
     this.setState({
       isPublic: valor
     });
+  }
+
+  async handleGuardarCambios() {
+    {/* TODO Guardar los cambios en la base de datos y atualizar el estado de Redux */}
+    return;
+    this.setState({
+      isLoading:true
+    });
+
+    var codContactImg = "";
+
+    if(this.state.imgContact != null){
+      //Significa que quiere cambiar su imagen de contatco
+      codContactImg = getRandomString(20);
+      var imgContactB64 = await toBase64(this.state.imgContact[0]);
+
+      await Axios.post("http://" + ipMaquina + ":3001/image/" + codContactImg, {
+        imageB64: imgContactB64
+      })
+        .catch(err => {
+          cogoToast.error(
+            <h5>{t("perfilCliente.errorAvatarUpload")}</h5>
+          );
+          return;
+        });        
+    }else{
+      codContactImg = this.props.direcFotoContacto;
+    }
+    {/* Imagen contacto guardado, ahora toca imagen perfil */}
   }
 
   render() {

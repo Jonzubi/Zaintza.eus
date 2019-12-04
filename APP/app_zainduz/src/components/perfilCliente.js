@@ -48,7 +48,6 @@ class PerfilCliente extends React.Component {
       avatarPreview: "",
       isEditing: false,
       isLoading: false,
-      avatarPreview: "",
       txtNombre: this.props.nombre,
       txtApellido1: this.props.apellido1,
       txtApellido2: this.props.apellido2,
