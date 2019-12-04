@@ -15,6 +15,7 @@ import TimeInput from "react-time-input";
 import AutoSuggest from "react-autosuggest";
 import { ReactDatez as Calendario } from "react-datez";
 import cogoToast from "cogo-toast";
+import Switch from "react-switch";
 import { t } from "../util/funciones";
 import ipMaquina from "../util/ipMaquinaAPI";
 import loadGif from "../util/gifs/loadGif.gif";
@@ -142,6 +143,7 @@ class PerfilCuidador extends React.Component {
     this.handlePublicoHover = this.handlePublicoHover.bind(this);
     this.handlePublicoLeave = this.handlePublicoLeave.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleIsPublicChange = this.handleIsPublicChange.bind(this);
   }
 
   handleInputChange(e) {
@@ -357,6 +359,12 @@ class PerfilCuidador extends React.Component {
     auxPrecioPublico[atributo] = valor;
     this.setState({
       precioPorPublico: auxPrecioPublico
+    });
+  }
+
+  handleIsPublicChange(valor) {
+    this.setState({
+      isPublic: valor
     });
   }
 
@@ -994,6 +1002,36 @@ class PerfilCuidador extends React.Component {
             </div>
           </div>
         </div>
+        <div class="form-group">
+            <label htmlFor="txtDescripcion">
+              {t("registerFormCuidadores.descripcion")}
+            </label>{" "}
+            (<span className="text-danger font-weight-bold">*</span>)
+            <textarea
+              onChange={this.handleInputChange}
+              class={
+                this.state.error.txtNombre
+                  ? "border border-danger form-control"
+                  : "form-control"
+              }
+              disabled={!this.state.isEditing}
+              rows="5"
+              id="txtDescripcion"
+              placeholder="Tu descripcion..."
+              value={this.state.txtDescripcion}
+            ></textarea>
+          </div>
+
+          <div>
+            <Switch
+              onChange={this.handleIsPublicChange}
+              checked={this.state.isPublic}
+              disabled={!this.state.isEditing}
+              id="isPublic"
+            />
+            <br />
+            <small>{t("registerFormCuidadores.publicarAuto")}</small>
+          </div>
         <div id="loaderOrButton" className="row mt-5">
           <div className="col-12">
             {!this.state.isEditing ? (
