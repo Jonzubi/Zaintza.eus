@@ -119,6 +119,8 @@ class PerfilCliente extends React.Component {
         .then(
           resultado => {
             formData.tipoUsuario = "C";
+            formData._id = this.props._id;
+            formData._idUsuario = this.props._idUsuario;
 
             this.props.saveUserSession(formData);
             cogoToast.success(
