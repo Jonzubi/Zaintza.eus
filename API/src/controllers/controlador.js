@@ -82,14 +82,16 @@ exports.update = function(req, res) {
   var tabla = req.params.tabla;
   var id = req.params.id;
   var modelo = require("../models/" + tabla);
-
-  res.writeHead(200, headerResponse);
+  console.log(req.body);
   modelo
     .findByIdAndUpdate(id, req.body)
-    .then(doc => {
+    .then(doc => {      
+      res.writeHead(200, headerResponse);
       res.write(JSON.stringify(doc));
     })
     .catch(err => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
       res.write(JSON.stringify(err));
     })
     .finally(fin => {

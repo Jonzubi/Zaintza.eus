@@ -23,8 +23,9 @@ import municipios from "../util/municipos";
 import imgNino from "../util/images/nino.png";
 import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
 import imgTerceraEdad from "../util/images/terceraEdad.png";
-import {getRandomString, toBase64} from "../util/funciones";
+import { getRandomString, toBase64 } from "../util/funciones";
 import Axios from "axios";
+import {saveUserSession} from "../redux/actions/user";
 
 const mapStateToProps = state => {
   console.log(state);
@@ -40,6 +41,7 @@ const mapStateToProps = state => {
 
   return {
     _id: state.user._id,
+    _idUsuario: state.user._idUsuario,
     nombre: state.user.nombre,
     apellido1: state.user.apellido1,
     apellido2: state.user.apellido2,
@@ -53,13 +55,15 @@ const mapStateToProps = state => {
     isPublic: state.user.isPublic,
     diasDisponible: state.user.diasDisponible.slice(0),
     ubicaciones: state.user.ubicaciones.slice(0),
-    publicoDisponible: Object.assign({},state.user.publicoDisponible),
-    precioPorPublico: Object.assign({},state.user.precioPorPublico)
+    publicoDisponible: Object.assign({}, state.user.publicoDisponible),
+    precioPorPublico: Object.assign({}, state.user.precioPorPublico)
   };
 };
 
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    saveUserSession: (user) => dispatch(saveUserSession(user))
+  };
 };
 
 class PerfilCuidador extends React.Component {
@@ -381,32 +385,92 @@ class PerfilCuidador extends React.Component {
   }
 
   async handleGuardarCambios() {
-    {/* TODO Guardar los cambios en la base de datos y atualizar el estado de Redux */}
-    return;
+    {
+      /* TODO Guardar los cambios en la base de datos y atualizar el estado de Redux */
+    }
     this.setState({
-      isLoading:true
+      isLoading: true
     });
 
     var codContactImg = "";
 
-    if(this.state.imgContact != null){
+    if (this.state.imgContact != null) {
       //Significa que quiere cambiar su imagen de contatco
       codContactImg = getRandomString(20);
       var imgContactB64 = await toBase64(this.state.imgContact[0]);
 
       await Axios.post("http://" + ipMaquina + ":3001/image/" + codContactImg, {
         imageB64: imgContactB64
-      })
-        .catch(err => {
-          cogoToast.error(
-            <h5>{t("perfilCliente.errorAvatarUpload")}</h5>
-          );
-          return;
-        });        
-    }else{
+      }).catch(err => {
+        cogoToast.error(<h5>{t("perfilCliente.errorAvatarUpload")}</h5>);
+        return;
+      });
+    } else {
       codContactImg = this.props.direcFotoContacto;
     }
-    {/* Imagen contacto guardado, ahora toca imagen perfil */}
+    {
+      /* Imagen contacto guardado, ahora toca imagen perfil */
+    }
+
+    var codAvatar = "";
+    if (this.state.avatarPreview != "") {
+      codAvatar = getRandomString(20);
+      await Axios.post("http://" + ipMaquina + ":3001/image/" + codAvatar, {
+        imageB64: this.state.avatarPreview
+      }).catch(error => {
+        cogoToast.error(<h5>{t("perfilCliente.errorAvatarUpload")}</h5>);
+        return;
+      });
+    } else {
+      codAvatar = this.props.direcFoto;
+    }
+
+    let formData = {
+      nombre: this.state.txtNombre,
+      apellido1: this.state.txtApellido1,
+      apellido2: this.state.txtApellido2,
+      fechaNacimiento: this.state.txtFechaNacimiento,
+      sexo: this.state.txtSexo,
+      direcFoto: codAvatar,
+      direcFotoContacto: codContactImg,
+      descripcion: this.state.txtDescripcion,
+      ubicaciones: this.state.ubicaciones,
+      publicoDisponible: this.state.publicoDisponible,
+      telefono: {
+        movil: {
+          etiqueta: "Movil",
+          numero: this.state.txtMovil
+        },
+        fijo: {
+          etiqueta: "Fijo",
+          numero: this.state.txtTelefono
+        }
+      },
+      isPublic: this.state.isPublic,
+      precioPorPublico: this.state.precioPorPublico,
+      diasDisponible: this.state.diasDisponible
+    };
+
+    Axios.patch(
+      "http://" + ipMaquina + ":3001/cuidador/" + this.props._id,
+      formData
+    )
+      .then(res => {
+        formData.tipoUsuario = "Z";
+        formData._id = this.props._id;
+        formData._idUsuario = this.props._idUsuario;
+
+        this.props.saveUserSession(formData);
+        cogoToast.success(<h5>{t("perfilCliente.datosActualizados")}</h5>);
+      })
+      .catch(err => {
+        cogoToast.error(<h5>{t("perfilCliente.errorGeneral")}</h5>);
+      })
+      .finally(() => {
+        this.setState({
+          isLoading: false
+        });
+      });
   }
 
   render() {
@@ -988,91 +1052,100 @@ class PerfilCuidador extends React.Component {
             <label className="w-100 text-center lead">
               {t("registerFormCuidadores.precioPorPublico")}:
             </label>
-            <div className="list-group md-2">              
-                <div className="list-group-item form-group text-center p-1">
-                  <small>
-                    <b>{t("registerFormCuidadores.ninos")}</b>
-                  </small>
-                  <input
-                    onChange={event => {
-                      this.handlePrecioChange("nino", event.target.value);
-                    }}
-                    className="form-control"
-                    disabled={!this.state.isEditing ? true : !this.state.publicoDisponible.nino }
-                    value={this.state.precioPorPublico.nino}
-                    type="number"
-                    placeholder="Prezioa €/h"
-                  />
-                </div>
-                <div className="list-group-item form-group text-center p-1">
-                  <small>
-                    <b>{t("registerFormCuidadores.terceraEdad")}</b>
-                  </small>
-                  <input
-                    onChange={event => {
-                      this.handlePrecioChange(
-                        "terceraEdad",
-                        event.target.value
-                      );
-                    }}
-                    disabled={!this.state.isEditing ? true : !this.state.publicoDisponible.terceraEdad }
-                    value={this.state.precioPorPublico.terceraEdad}
-                    className="form-control"
-                    type="number"
-                    placeholder="Prezioa €/h"
-                  />
-                </div>
-                <div className="list-group-item form-group text-center p-1">
-                  <small>
-                    <b>{t("registerFormCuidadores.necesidadEspecial")}</b>
-                  </small>
-                  <input
-                    onChange={event => {
-                      this.handlePrecioChange(
-                        "necesidadEspecial",
-                        event.target.value
-                      );
-                    }}
-                    disabled={!this.state.isEditing ? true : !this.state.publicoDisponible.necesidadEspecial }
-                    value={this.state.precioPorPublico.necesidadEspecial}
-                    className="form-control"
-                    type="number"
-                    placeholder="Prezioa €/h"
-                  />
-                </div>
+            <div className="list-group md-2">
+              <div className="list-group-item form-group text-center p-1">
+                <small>
+                  <b>{t("registerFormCuidadores.ninos")}</b>
+                </small>
+                <input
+                  onChange={event => {
+                    this.handlePrecioChange("nino", event.target.value);
+                  }}
+                  className="form-control"
+                  disabled={
+                    !this.state.isEditing
+                      ? true
+                      : !this.state.publicoDisponible.nino
+                  }
+                  value={this.state.precioPorPublico.nino}
+                  type="number"
+                  placeholder="Prezioa €/h"
+                />
+              </div>
+              <div className="list-group-item form-group text-center p-1">
+                <small>
+                  <b>{t("registerFormCuidadores.terceraEdad")}</b>
+                </small>
+                <input
+                  onChange={event => {
+                    this.handlePrecioChange("terceraEdad", event.target.value);
+                  }}
+                  disabled={
+                    !this.state.isEditing
+                      ? true
+                      : !this.state.publicoDisponible.terceraEdad
+                  }
+                  value={this.state.precioPorPublico.terceraEdad}
+                  className="form-control"
+                  type="number"
+                  placeholder="Prezioa €/h"
+                />
+              </div>
+              <div className="list-group-item form-group text-center p-1">
+                <small>
+                  <b>{t("registerFormCuidadores.necesidadEspecial")}</b>
+                </small>
+                <input
+                  onChange={event => {
+                    this.handlePrecioChange(
+                      "necesidadEspecial",
+                      event.target.value
+                    );
+                  }}
+                  disabled={
+                    !this.state.isEditing
+                      ? true
+                      : !this.state.publicoDisponible.necesidadEspecial
+                  }
+                  value={this.state.precioPorPublico.necesidadEspecial}
+                  className="form-control"
+                  type="number"
+                  placeholder="Prezioa €/h"
+                />
+              </div>
             </div>
           </div>
         </div>
         <div class="form-group">
-            <label htmlFor="txtDescripcion">
-              {t("registerFormCuidadores.descripcion")}
-            </label>{" "}
-            (<span className="text-danger font-weight-bold">*</span>)
-            <textarea
-              onChange={this.handleInputChange}
-              class={
-                this.state.error.txtNombre
-                  ? "border border-danger form-control"
-                  : "form-control"
-              }
-              disabled={!this.state.isEditing}
-              rows="5"
-              id="txtDescripcion"
-              placeholder="Tu descripcion..."
-              value={this.state.txtDescripcion}
-            ></textarea>
-          </div>
+          <label htmlFor="txtDescripcion">
+            {t("registerFormCuidadores.descripcion")}
+          </label>{" "}
+          (<span className="text-danger font-weight-bold">*</span>)
+          <textarea
+            onChange={this.handleInputChange}
+            class={
+              this.state.error.txtNombre
+                ? "border border-danger form-control"
+                : "form-control"
+            }
+            disabled={!this.state.isEditing}
+            rows="5"
+            id="txtDescripcion"
+            placeholder="Tu descripcion..."
+            value={this.state.txtDescripcion}
+          ></textarea>
+        </div>
 
-          <div>
-            <Switch
-              onChange={this.handleIsPublicChange}
-              checked={this.state.isPublic}
-              disabled={!this.state.isEditing}
-              id="isPublic"
-            />
-            <br />
-            <small>{t("registerFormCuidadores.publicarAuto")}</small>
-          </div>
+        <div>
+          <Switch
+            onChange={this.handleIsPublicChange}
+            checked={this.state.isPublic}
+            disabled={!this.state.isEditing}
+            id="isPublic"
+          />
+          <br />
+          <small>{t("registerFormCuidadores.publicarAuto")}</small>
+        </div>
         <div id="loaderOrButton" className="row mt-5">
           <div className="col-12">
             {!this.state.isEditing ? (

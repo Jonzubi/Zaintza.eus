@@ -466,7 +466,7 @@ class RegisterForm extends React.Component {
             axios
               .post("http://" + ipMaquina + ":3001/usuario", formDataUsu)
               .then(doc => {
-                this.props.saveUserSession(Object.assign({},formData, {email: formDataUsu.email, tipoUsuario: formDataUsu.tipoUsuario}));
+                this.props.saveUserSession(Object.assign({},formData, {email: formDataUsu.email, tipoUsuario: formDataUsu.tipoUsuario, _idUsuario: doc.data._id}));
                 this.setState({
                   txtNombre: "",
                   txtApellido1: "",
