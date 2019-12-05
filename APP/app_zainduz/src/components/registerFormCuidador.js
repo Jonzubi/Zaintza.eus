@@ -383,7 +383,7 @@ class RegisterForm extends React.Component {
       if (clave == "diasDisponible") {
         let error = false;
         this.state[clave].map(confDia => {
-          if (confDia.dia == 0) {
+          if (confDia.dia == 0 || isNaN(confDia.dia)) {
             cogoToast.error(
               <h5>{t("registerFormCuidadores.errorDiaNoElegido")}</h5>
             );

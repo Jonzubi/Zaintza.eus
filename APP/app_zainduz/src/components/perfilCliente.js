@@ -56,17 +56,13 @@ class PerfilCliente extends React.Component {
       isLoading: false,
       error: {
         txtNombre: false,
-        txtEmail: false,
-        txtContrasena: false,
         txtMovil: false
       }
     };
 
-    this.requiredState = ["txtNombre", "txtEmail", "txtContrasena", "txtMovil"];
+    this.requiredState = ["txtNombre", "txtMovil"];
     this.requiredStatesTraduc = {
       txtNombre: "registerFormClientes.nombre",
-      txtEmail: "registerFormClientes.email",
-      txtContrasena: "registerFormClientes.contrasena",
       txtMovil: "registerFormClientes.movil"
     };
 
@@ -146,10 +142,6 @@ class PerfilCliente extends React.Component {
         .patch("http://" + ipMaquina + ":3001/cliente/" + this.props._id, formData)
         .then(
           resultado => {
-            formData.tipoUsuario = "C";
-            formData._id = this.props._id;
-            formData._idUsuario = this.props._idUsuario;
-
             this.props.saveUserSession(formData);
             cogoToast.success(
             <h5>{t('perfilCliente.datosActualizados')}</h5>

@@ -70,6 +70,24 @@ class PerfilCuidador extends React.Component {
   constructor(props) {
     super(props);
 
+    this.requiredStates = [
+      "txtNombre",
+      "txtSexo",
+      "txtFechaNacimiento",
+      "txtMovil",
+      "ubicaciones",
+      "txtDescripcion"
+    ];
+    //El array de abajo es para traducir el error
+    this.requiredStatesTraduc = {
+      txtNombre: "registerFormCuidadores.nombre",
+      txtSexo: "registerFormCuidadores.sexo",
+      txtFechaNacimiento: "registerFormCuidadores.fechaNac",
+      txtMovil: "registerFormCuidadores.movil",
+      ubicaciones: "registerFormCuidadores.pueblosDisponible",
+      txtDescripcion: "registerFormCuidadores.descripcion"
+    };
+
     this.state = {
       isEditing: false,
       isLoading: false,
@@ -102,7 +120,7 @@ class PerfilCuidador extends React.Component {
       isPublic: this.props.isPublic,
       avatarSrc: "",
       avatarPreview: "",
-      imgContact: null,
+      imgContact: "",
       hoverSexoM: false,
       hoverSexoF: false,
       isLoading: false,
@@ -388,13 +406,47 @@ class PerfilCuidador extends React.Component {
     {
       /* TODO Guardar los cambios en la base de datos y atualizar el estado de Redux */
     }
+    for (var clave in this.state) {
+      if (
+        (this.state[clave].length == 0 || !this.state[clave]) &&
+        this.requiredStates.includes(clave)
+      ) {
+        cogoToast.error(
+          <h5>
+            {t("registerFormCuidadores.errorRellenaTodo")} (
+            {t(this.requiredStatesTraduc[clave])})
+          </h5>
+        );
+        let auxError = this.state.error;
+        auxError[clave] = true;
+        this.setState({
+          error: auxError
+        });
+        return;
+      }
+      //Hago una comporbacion diferente para los dias, para que haya elegido un dia en el combo
+      if (clave == "diasDisponible") {
+        let error = false;
+        this.state[clave].map(confDia => {
+          if (confDia.dia == 0 || isNaN(confDia.dia)) {
+            cogoToast.error(
+              <h5>{t("registerFormCuidadores.errorDiaNoElegido")}</h5>
+            );
+            error = true;
+            return;
+          }
+        });
+        if (error) return;
+      }
+    }
+
     this.setState({
       isLoading: true
     });
 
     var codContactImg = "";
 
-    if (this.state.imgContact != null) {
+    if (this.state.imgContact != "") {
       //Significa que quiere cambiar su imagen de contatco
       codContactImg = getRandomString(20);
       var imgContactB64 = await toBase64(this.state.imgContact[0]);
@@ -456,9 +508,6 @@ class PerfilCuidador extends React.Component {
       formData
     )
       .then(res => {
-        formData.tipoUsuario = "Z";
-        formData._id = this.props._id;
-        formData._idUsuario = this.props._idUsuario;
 
         this.props.saveUserSession(formData);
         cogoToast.success(<h5>{t("perfilCliente.datosActualizados")}</h5>);
@@ -565,21 +614,21 @@ class PerfilCuidador extends React.Component {
             ) : (
               <ImageUploader
                 fileContainerStyle={
-                  this.state.imgContact != null
+                  this.state.imgContact != ""
                     ? { background: "#28a745" }
                     : this.state.error.txtNombre
                     ? { background: "#dc3545" }
                     : {}
                 }
                 buttonClassName={
-                  this.state.imgContact != null ? "bg-light text-dark" : ""
+                  this.state.imgContact != "" ? "bg-light text-dark" : ""
                 }
                 errorClass="bg-danger text-light"
                 fileSizeError="handiegia da"
                 fileTypeError="ez du formatu zuzena"
                 singleImage={true}
                 label={
-                  this.state.imgContact != null
+                  this.state.imgContact != ""
                     ? "Gehienez: 5MB | " +
                       this.state.imgContact[0].name +
                       " (" +
@@ -588,13 +637,13 @@ class PerfilCuidador extends React.Component {
                     : "Gehienez: 5MB | Gomendaturiko dimentsioa (288x300)"
                 }
                 labelClass={
-                  this.state.imgContact != null
+                  this.state.imgContact != ""
                     ? "text-light font-weight-bold"
                     : ""
                 }
                 withIcon={true}
                 buttonText={
-                  this.state.imgContact != null
+                  this.state.imgContact != ""
                     ? "Aukeratu beste irudi bat"
                     : "Aukeratu zure kontaktu irudia"
                 }
