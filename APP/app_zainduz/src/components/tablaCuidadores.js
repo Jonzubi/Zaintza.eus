@@ -10,6 +10,7 @@ import {
 import loadGif from "../util/gifs/loadGif.gif";
 import Axios from "axios";
 import Modal from "react-bootstrap/Modal";
+import Collapse from "react-bootstrap/Collapse";
 import ModalHeader from "react-bootstrap/ModalHeader";
 import ModalBody from "react-bootstrap/ModalBody";
 import ModalFooter from "react-bootstrap/ModalFooter";
@@ -538,7 +539,11 @@ class Tabla extends React.Component {
                   </div>
                 </div>
               </div>
-              
+             <Collapse in={this.state.showPropuestaModal}>
+                <h5 className="panel-header text-center">
+                  Aqui ira  el form
+                </h5>
+            </Collapse> 
             </div>
           </ModalBody>
           <ModalFooter>
