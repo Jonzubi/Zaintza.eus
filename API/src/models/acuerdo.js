@@ -1,8 +1,14 @@
 const mongoose = require("../../util/bdConnection");
 
 var acuerdo = new mongoose.Schema({
-    idCuidador : String,
-    idCliente : String,
+    idCuidador : {
+        type:String,
+        required: true
+    },
+    idCliente : {
+        type:String,
+        required:true
+    },
     direccion : String,
     diasAcordados : Map,
     precioPorHora : Number,

@@ -19,7 +19,21 @@ import cogoToast from "cogo-toast";
 import "./styles/tablaCuidadores.css";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import { connect } from "react-redux";
 import { t } from "../util/funciones";
+import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
+
+const mapStateToProps = state => {
+  return {
+    tipoUsuario: state.user.tipoUsuario
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    toogleMenuPerfil: payload => dispatch(toogleMenuPerfil(payload))
+  };
+};
 
 class Tabla extends React.Component {
   componentDidMount() {
@@ -44,9 +58,15 @@ class Tabla extends React.Component {
       buscado: false,
       jsonCuidadores: {},
       showModal: false,
+      showPropuestaModal: false,
       selectedCuidador: {}
     };
     this.handleShowModalChange = this.handleShowModalChange.bind(this);
+    this.handleShowPropuestaModalChange = this.handleShowPropuestaModalChange.bind(
+      this
+    );
+    this.handlePedirCuidado = this.handlePedirCuidado.bind(this);
+    this.handleEnviarPropuesta = this.handleEnviarPropuesta.bind(this);
   }
 
   handleShowModalChange(state) {
@@ -55,30 +75,54 @@ class Tabla extends React.Component {
     });
   }
 
+  handleShowPropuestaModalChange(state) {
+    this.setState({
+      showPropuestaModal: state
+    });
+  }
+
   handleViewCuidador(cuidador) {
     let idPerfil = cuidador._id;
     const objFiltros = {
       idPerfil: idPerfil
-    }
-    Axios
-        .get("http://" + ipMaquina + ":3001/usuario", {
-          params:{
-            filtros: JSON.stringify(objFiltros)
-          }
-        })
-        .then(resultado => {
-          resultado = resultado.data[0];
-          this.setState({
-            showModal: true,
-            selectedCuidador: Object.assign({},cuidador,{email: resultado.email})
-          });
-        })
-        .catch(err => {
-          cogoToast.error(
-            <h5>{t('registerFormClientes.errorGeneral')}</h5>
-          )
-        });    
+    };
+    Axios.get("http://" + ipMaquina + ":3001/usuario", {
+      params: {
+        filtros: JSON.stringify(objFiltros)
+      }
+    })
+      .then(resultado => {
+        resultado = resultado.data[0];
+        this.setState({
+          showModal: true,
+          selectedCuidador: Object.assign({}, cuidador, {
+            email: resultado.email
+          })
+        });
+      })
+      .catch(err => {
+        cogoToast.error(<h5>{t("registerFormClientes.errorGeneral")}</h5>);
+      });
   }
+
+  handlePedirCuidado() {
+    if (!this.props.tipoUsuario) {
+      cogoToast.error(<h5>{t("tablaCuidadores.errorNoLogueado")}</h5>);
+      this.handleShowModalChange(false);
+      this.props.toogleMenuPerfil(true);
+      return;
+    } else if (this.props.tipoUsuario != "C") {
+      cogoToast.error(<h5>{t("tablaCuidadores.errorClienteObligatorio")}</h5>);
+      this.handleShowModalChange(false);
+      return;
+    }
+
+    this.setState({
+      showPropuestaModal: true
+    });
+  }
+
+  handleEnviarPropuesta() {}
 
   render() {
     const vSelectedCuidador = this.state.selectedCuidador;
@@ -226,7 +270,7 @@ class Tabla extends React.Component {
                       this.handleViewCuidador(cuidador);
                     }}
                   >
-                    {t('tablaCuidadores.ver')}
+                    {t("tablaCuidadores.ver")}
                     <FontAwesomeIcon className="ml-1" icon={faEye} />
                   </a>
                 </div>
@@ -452,8 +496,7 @@ class Tabla extends React.Component {
                       {typeof vSelectedCuidador.precioPorPublico !=
                       "undefined" ? (
                         vSelectedCuidador.precioPorPublico.nino != "" ? (
-                          vSelectedCuidador.precioPorPublico.nino +
-                          "€ /orduko"
+                          vSelectedCuidador.precioPorPublico.nino + "€ /orduko"
                         ) : (
                           <em>Definitu gabe</em>
                         )
@@ -495,20 +538,21 @@ class Tabla extends React.Component {
                   </div>
                 </div>
               </div>
+              
             </div>
           </ModalBody>
           <ModalFooter>
             <Button
               className="w-100 btn-success"
-              onClick={() => this.handleShowModalChange(false)}
+              onClick={() => this.handlePedirCuidado()}
             >
               {t("tablaCuidadores.acordar")}
             </Button>
           </ModalFooter>
-        </Modal>
+        </Modal>        
       </div>
     );
   }
 }
 
-export default Tabla;
+export default connect(mapStateToProps, mapDispatchToProps)(Tabla);

@@ -48,7 +48,12 @@
         "horasLibres": "Ordu libreak",
         "precios": "Prezioak multzoka",
         "acordar": "Zaintza eskatu",
-        "ver": "Ikusi zaintzailea"
+        "ver": "Ikusi zaintzailea",
+        "errorNoLogueado": "Saioa hasi behar da zaintza eskatzeko",
+        "errorClienteObligatorio": "Guraso gisako kontua behar da zaintza eskatzeko",
+        "enviarPropuesta": "Bidali akordio proposamena",
+        "condicionesCuidador": "Zaintzailearen baldintzak",
+        "propuestaPublico": "Zein pertsona mota zaindu ditzake?"
     },
     "registerFormCuidadores":{
         "nombre": "Izena",
