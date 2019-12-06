@@ -72,7 +72,8 @@ class Tabla extends React.Component {
 
   handleShowModalChange(state) {
     this.setState({
-      showModal: state
+      showModal: state,
+      showPropuestaModal: false
     });
   }
 
