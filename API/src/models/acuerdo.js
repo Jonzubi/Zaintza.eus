@@ -10,12 +10,16 @@ var acuerdo = new mongoose.Schema({
     required: true
   },
   diasAcordados: {
-    type: Map,
+    type: [Map],
     required: true
   },
   tituloAcuerdo: {
     type: String,
     required: true
+  },
+  descripcionAcuerdo: {
+    type:String,
+    required:true
   },
   pueblo: { type: String, required: true },
   estadoAcuerdo: { type: Number, required: true },

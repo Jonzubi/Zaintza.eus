@@ -31,7 +31,8 @@ import municipios from "../util/municipos";
 
 const mapStateToProps = state => {
   return {
-    tipoUsuario: state.user.tipoUsuario
+    tipoUsuario: state.user.tipoUsuario,
+    idCliente: state.user._id
   };
 };
 
@@ -61,6 +62,7 @@ class Tabla extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      propuestaIsLoading: false,
       buscado: false,
       jsonCuidadores: {},
       showModal: false,
@@ -83,7 +85,12 @@ class Tabla extends React.Component {
       txtDescripcion: ""
     };
 
-    this.requiredStates = ["txtTituloPropuesta", "diasDisponible", "ubicaciones", "txtDescripcion"];
+    this.requiredStates = [
+      "txtTituloPropuesta",
+      "diasDisponible",
+      "ubicaciones",
+      "txtDescripcion"
+    ];
     this.requiredStatesTraduc = {
       txtTituloPropuesta: "tablaCuidadores.tituloPropuesta",
       diasDisponible: "tablaCuidadores.diasDisponible",
@@ -349,7 +356,7 @@ class Tabla extends React.Component {
         if (error) return;
       }
     }
-    
+
     this.handleEnviarPropuesta();
   }
 
@@ -359,7 +366,70 @@ class Tabla extends React.Component {
     });
   }
 
-  handleEnviarPropuesta() {}
+  async handleEnviarPropuesta() {
+    this.setState({
+      propuestaIsLoading: true
+    });
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+
+    var yyyy = today.getFullYear();
+    if (dd < 10) {
+      dd = "0" + dd;
+    }
+    if (mm < 10) {
+      mm = "0" + mm;
+    }
+    var today = dd + "/" + mm + "/" + yyyy;
+
+    //Aqui me monto el acuerdo para subirlo
+    //Estado acuerdo no lo tengo definido todavia pero seria algo como:
+    //0 -> Pendiente
+    //1 -> Aceptado
+    //2 -> Finzalizado o Cancelado
+    let formData = {
+      idCuidador: this.state.selectedCuidador._id,
+      idCliente: this.props.idCliente,
+      diasAcordados: this.state.diasDisponible,
+      tituloAcuerdo: this.state.txtTituloPropuesta,
+      pueblo: this.state.ubicaciones[0],
+      estadoAcuerdo: 0,
+      dateAcuerdo: today,
+      descripcionAcuerdo: this.state.txtDescripcion
+    };
+
+    Axios.post("http://" + ipMaquina + ":3001/acuerdo", formData)
+      .then(resultado => {
+        this.setState({
+          showModal: false
+        }).then(() => {
+          this.setState({
+            diasDisponible: [
+              {
+                dia: 0,
+                horaInicio: "00:00",
+                horaFin: "00:00"
+              }
+            ],
+            ubicaciones: [],
+            txtTituloPropuesta: "",
+            txtDescripcion: ""
+          });
+        });
+        cogoToast.success(
+          <h5>
+            {t('tablaCuidadores.exitoEnviarPropuesta')}
+          </h5>
+        )
+      })
+      .catch(err => {})
+      .finally(() => {
+        this.setState({
+          propuestaIsLoading: false
+        });
+      });
+  }
 
   render() {
     const vSelectedCuidador = this.state.selectedCuidador;

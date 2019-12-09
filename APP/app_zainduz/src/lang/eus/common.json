@@ -59,7 +59,8 @@
         "horasPropuesta": "Orduak",
         "enviarAcuerdo": "Bidali proposamena",
         "diasDisponible": "Ordu libreak",
-        "ubicaciones": "Herriak"
+        "ubicaciones": "Herriak",
+        "exitoEnviarPropuesta": "Proposamena behar bezala bidali da"
     },
     "registerFormCuidadores":{
         "nombre": "Izena",
