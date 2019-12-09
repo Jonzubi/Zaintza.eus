@@ -82,10 +82,20 @@ class Tabla extends React.Component {
       ],
       txtDescripcion: ""
     };
+
+    this.requiredStates = ["txtTituloPropuesta", "diasDisponible", "ubicaciones", "txtDescripcion"];
+    this.requiredStatesTraduc = {
+      txtTituloPropuesta: "tablaCuidadores.tituloPropuesta",
+      diasDisponible: "tablaCuidadores.diasDisponible",
+      ubicaciones: "tablaCuidadores.ubicaciones",
+      txtDescripcion: "tablaCuidadores.descripcion"
+    };
+
     this.handleShowModalChange = this.handleShowModalChange.bind(this);
     this.handleShowPropuestaModalChange = this.handleShowPropuestaModalChange.bind(
       this
     );
+    this.handleEnviarPropuesta = this.handleEnviarPropuesta.bind(this);
     this.handlePedirCuidado = this.handlePedirCuidado.bind(this);
     this.handleEnviarPropuesta = this.handleEnviarPropuesta.bind(this);
     this.handleDiasDisponibleChange = this.handleDiasDisponibleChange.bind(
@@ -295,9 +305,49 @@ class Tabla extends React.Component {
       return;
     }
 
-    this.setState({
-      showPropuestaModal: true
-    });
+    if (!this.state.showPropuestaModal) {
+      this.setState({
+        showPropuestaModal: true
+      });
+      return;
+    }
+
+    //Comprobacion de errores
+    for (var clave in this.state) {
+      if (
+        (this.state[clave].length == 0 || !this.state[clave]) &&
+        this.requiredStates.includes(clave)
+      ) {
+        cogoToast.error(
+          <h5>
+            {t("registerFormCuidadores.errorRellenaTodo")} (
+            {t(this.requiredStatesTraduc[clave])})
+          </h5>
+        );
+        let auxError = this.state.error;
+        auxError[clave] = true;
+        this.setState({
+          error: auxError
+        });
+        return;
+      }
+      //Hago una comporbacion diferente para los dias, para que haya elegido un dia en el combo
+      if (clave == "diasDisponible") {
+        let error = false;
+        this.state[clave].map(confDia => {
+          if (confDia.dia == 0 || isNaN(confDia.dia)) {
+            cogoToast.error(
+              <h5>{t("registerFormCuidadores.errorDiaNoElegido")}</h5>
+            );
+            error = true;
+            return;
+          }
+        });
+        if (error) return;
+      }
+    }
+    cogoToast.success("NICE");
+    this.handleEnviarPropuesta();
   }
 
   handleAuxAddPuebloChange(e, { newValue }) {
@@ -920,7 +970,9 @@ class Tabla extends React.Component {
                     </div>
                   </div>
                   <div className="row ml-0 mr-0 p-2">
-                    <label htmlFor="txtDescripcion">{t("tablaCuidadores.descripcion")}</label>
+                    <label htmlFor="txtDescripcion">
+                      {t("tablaCuidadores.descripcion")}
+                    </label>
                     <textarea
                       onChange={this.handleInputChange}
                       class={
@@ -943,7 +995,9 @@ class Tabla extends React.Component {
               className="w-100 btn-success"
               onClick={() => this.handlePedirCuidado()}
             >
-              {t("tablaCuidadores.acordar")}
+              {this.state.showPropuestaModal
+                ? t("tablaCuidadores.enviarAcuerdo")
+                : t("tablaCuidadores.acordar")}
             </Button>
           </ModalFooter>
         </Modal>

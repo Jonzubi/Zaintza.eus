@@ -56,7 +56,10 @@
         "propuestaPublico": "Zein pertsona mota zaindu ditzake?",
         "tuPropuesta": "Zure proposamena",
         "tituloPropuesta": "Proposamen izenburua",
-        "horasPropuesta": "Orduak"
+        "horasPropuesta": "Orduak",
+        "enviarAcuerdo": "Bidali proposamena",
+        "diasDisponible": "Ordu libreak",
+        "ubicaciones": "Herriak"
     },
     "registerFormCuidadores":{
         "nombre": "Izena",
