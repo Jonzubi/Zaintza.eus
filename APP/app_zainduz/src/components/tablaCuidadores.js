@@ -66,10 +66,10 @@ class Tabla extends React.Component {
       showModal: false,
       showPropuestaModal: false,
       selectedCuidador: {},
-      suggestionsPueblos: [],      
+      suggestionsPueblos: [],
       auxAddPueblo: "",
       ubicaciones: [],
-      error:{
+      error: {
         txtNombre: false
       },
       txtTituloPropuesta: "",
@@ -79,7 +79,8 @@ class Tabla extends React.Component {
           horaInicio: "00:00",
           horaFin: "00:00"
         }
-      ]
+      ],
+      txtDescripcion: ""
     };
     this.handleShowModalChange = this.handleShowModalChange.bind(this);
     this.handleShowPropuestaModalChange = this.handleShowPropuestaModalChange.bind(
@@ -92,11 +93,16 @@ class Tabla extends React.Component {
     );
     this.addDiasDisponible = this.addDiasDisponible.bind(this);
     this.removeDiasDisponible = this.removeDiasDisponible.bind(this);
-    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
-    this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
+    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(
+      this
+    );
+    this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(
+      this
+    );
     this.handleAddPueblo = this.handleAddPueblo.bind(this);
     this.handleAuxAddPuebloChange = this.handleAuxAddPuebloChange.bind(this);
     this.handleRemovePueblo = this.handleRemovePueblo.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   escapeRegexCharacters(str) {
@@ -340,7 +346,7 @@ class Tabla extends React.Component {
       placeholder: "Introduce el pueblo...",
       value: auxAddPuebloValue,
       className: classSuggestion
-    };    
+    };
     const suggestionTheme = {
       container: "react-autosuggest__container",
       containerOpen: "react-autosuggest__container--open",
@@ -912,6 +918,21 @@ class Tabla extends React.Component {
                         )}
                       </div>
                     </div>
+                  </div>
+                  <div className="row ml-0 mr-0 p-2">
+                    <label htmlFor="txtDescripcion">{t("tablaCuidadores.descripcion")}</label>
+                    <textarea
+                      onChange={this.handleInputChange}
+                      class={
+                        this.state.error.txtNombre
+                          ? "border border-danger form-control"
+                          : "form-control"
+                      }
+                      rows="5"
+                      id="txtDescripcion"
+                      placeholder="Idatzi zure proposamenaren deskribapen zehatza..."
+                      value={this.state.txtDescripcion}
+                    ></textarea>
                   </div>
                 </div>
               </Collapse>
