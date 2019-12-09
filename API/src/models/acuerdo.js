@@ -1,20 +1,26 @@
 const mongoose = require("../../util/bdConnection");
 
 var acuerdo = new mongoose.Schema({
-    idCuidador : {
-        type:String,
-        required: true
-    },
-    idCliente : {
-        type:String,
-        required:true
-    },
-    direccion : String,
-    diasAcordados : Map,
-    precioPorHora : Number,
-    estadoAcuerdo : Number,
-    dateAcuerdo : Date,
-    dateFinAcuerdo : Date
+  idCuidador: {
+    type: String,
+    required: true
+  },
+  idCliente: {
+    type: String,
+    required: true
+  },
+  diasAcordados: {
+    type: Map,
+    required: true
+  },
+  tituloAcuerdo: {
+    type: String,
+    required: true
+  },
+  pueblo: { type: String, required: true },
+  estadoAcuerdo: { type: Number, required: true },
+  dateAcuerdo: { type: Date, required: true },
+  dateFinAcuerdo: Date
 });
 
 var Acuerdo = mongoose.model("Acuerdo", acuerdo, "Acuerdos");

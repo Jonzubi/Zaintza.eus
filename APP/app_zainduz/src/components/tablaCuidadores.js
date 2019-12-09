@@ -259,7 +259,10 @@ class Tabla extends React.Component {
           horaInicio: "00:00",
           horaFin: "00:00"
         }
-      ]
+      ],
+      ubicaciones: [],
+      txtTituloPropuesta: "",
+      txtDescripcion: ""
     });
   }
 
@@ -346,7 +349,7 @@ class Tabla extends React.Component {
         if (error) return;
       }
     }
-    cogoToast.success("NICE");
+    
     this.handleEnviarPropuesta();
   }
 
