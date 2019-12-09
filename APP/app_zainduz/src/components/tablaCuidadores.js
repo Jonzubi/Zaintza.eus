@@ -13,6 +13,7 @@ import loadGif from "../util/gifs/loadGif.gif";
 import Axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import Collapse from "react-bootstrap/Collapse";
+import AutoSuggest from "react-autosuggest";
 import ModalHeader from "react-bootstrap/ModalHeader";
 import ModalBody from "react-bootstrap/ModalBody";
 import ModalFooter from "react-bootstrap/ModalFooter";
@@ -26,6 +27,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { connect } from "react-redux";
 import { t } from "../util/funciones";
 import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
+import municipios from "../util/municipos";
 
 const mapStateToProps = state => {
   return {
@@ -64,6 +66,12 @@ class Tabla extends React.Component {
       showModal: false,
       showPropuestaModal: false,
       selectedCuidador: {},
+      suggestionsPueblos: [],      
+      auxAddPueblo: "",
+      ubicaciones: [],
+      error:{
+        txtNombre: false
+      },
       txtTituloPropuesta: "",
       diasDisponible: [
         {
@@ -79,9 +87,91 @@ class Tabla extends React.Component {
     );
     this.handlePedirCuidado = this.handlePedirCuidado.bind(this);
     this.handleEnviarPropuesta = this.handleEnviarPropuesta.bind(this);
-    this.handleDiasDisponibleChange = this.handleDiasDisponibleChange.bind(this);
+    this.handleDiasDisponibleChange = this.handleDiasDisponibleChange.bind(
+      this
+    );
     this.addDiasDisponible = this.addDiasDisponible.bind(this);
     this.removeDiasDisponible = this.removeDiasDisponible.bind(this);
+    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
+    this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
+    this.handleAddPueblo = this.handleAddPueblo.bind(this);
+    this.handleAuxAddPuebloChange = this.handleAuxAddPuebloChange.bind(this);
+    this.handleRemovePueblo = this.handleRemovePueblo.bind(this);
+  }
+
+  escapeRegexCharacters(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  getSuggestions(value) {
+    const escapedValue = this.escapeRegexCharacters(value.trim());
+
+    if (escapedValue === "") {
+      return [];
+    }
+
+    const regex = new RegExp("^" + escapedValue, "i");
+
+    return municipios.filter(pueblo => regex.test(pueblo));
+  }
+
+  getSuggestionValue(suggestion) {
+    return suggestion;
+  }
+
+  renderSuggestion(suggestion) {
+    return <span>{suggestion}</span>;
+  }
+
+  onSuggestionsFetchRequested = ({ value }) => {
+    this.setState({
+      suggestionsPueblos: this.getSuggestions(value)
+    });
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestionsPueblos: []
+    });
+  };
+
+  handleAddPueblo() {
+    let pueblo = this.state.auxAddPueblo;
+    if (pueblo == "") return;
+
+    if (!municipios.includes(pueblo)) {
+      cogoToast.error(
+        <h5>
+          {pueblo} {t("registerFormCuidadores.errorPuebloNoExiste")}
+        </h5>
+      );
+      return;
+    }
+
+    for (var clave in this.state.ubicaciones) {
+      if (this.state.ubicaciones[clave] == pueblo) {
+        cogoToast.error(
+          <h5>
+            {pueblo} {t("registerFormCuidadores.errorPuebloRepetido")}
+          </h5>
+        );
+        return;
+      }
+    }
+    this.state.ubicaciones.push(pueblo);
+    this.setState({
+      ubicaciones: this.state.ubicaciones,
+      auxAddPueblo: ""
+    });
+  }
+
+  handleRemovePueblo() {
+    this.setState({
+      ubicaciones:
+        typeof this.state.ubicaciones.pop() != "undefined"
+          ? this.state.ubicaciones
+          : []
+    });
   }
 
   addDiasDisponible() {
@@ -143,7 +233,7 @@ class Tabla extends React.Component {
   async handleShowModalChange(state) {
     await this.setState({
       showModal: state,
-      showPropuestaModal: false,      
+      showPropuestaModal: false
     });
     //El await lo hago porque si no aparece la inicializacion de horas en la pagina y no da un buen efecto
     this.setState({
@@ -204,6 +294,12 @@ class Tabla extends React.Component {
     });
   }
 
+  handleAuxAddPuebloChange(e, { newValue }) {
+    this.setState({
+      auxAddPueblo: newValue
+    });
+  }
+
   handleEnviarPropuesta() {}
 
   render() {
@@ -234,7 +330,35 @@ class Tabla extends React.Component {
       "Larunbata",
       "Igandea"
     ];
-    console.log(vSelectedCuidador);
+    const classSuggestion = this.state.error.txtNombre
+      ? "border border-danger form-control d-inline w-75"
+      : "form-control d-inline w-100";
+    const onChangeSuggestion = this.handleAuxAddPuebloChange;
+    const auxAddPuebloValue = this.state.auxAddPueblo;
+    const autoSuggestProps = {
+      onChange: onChangeSuggestion,
+      placeholder: "Introduce el pueblo...",
+      value: auxAddPuebloValue,
+      className: classSuggestion
+    };    
+    const suggestionTheme = {
+      container: "react-autosuggest__container",
+      containerOpen: "react-autosuggest__container--open",
+      input: "react-autosuggest__input",
+      inputOpen: "react-autosuggest__input--open",
+      inputFocused: "react-autosuggest__input--focused",
+      suggestionsContainer: "list-group",
+      suggestionsContainerOpen:
+        "react-autosuggest__suggestions-container--open",
+      suggestionsList: "list-group",
+      suggestion: "list-group-item",
+      suggestionFirst: "list-group-item",
+      suggestionHighlighted: "bg-success text-light list-group-item",
+      sectionContainer: "react-autosuggest__section-container",
+      sectionContainerFirst: "react-autosuggest__section-container--first",
+      sectionTitle: "react-autosuggest__section-title"
+    };
+
     return (
       <div className="d-flex flex-wrap justify-content-center">
         {typeof this.state.jsonCuidadores.map != "undefined" &&
@@ -744,6 +868,49 @@ class Tabla extends React.Component {
                       <label className="w-100 text-center">
                         {t("tablaCuidadores.pueblos")}:
                       </label>
+                      <div class="form-group mt-2">
+                        <AutoSuggest
+                          suggestions={this.state.suggestionsPueblos}
+                          onSuggestionsFetchRequested={
+                            this.onSuggestionsFetchRequested
+                          }
+                          onSuggestionsClearRequested={
+                            this.onSuggestionsClearRequested
+                          }
+                          onSuggestionSelected={this.handleAddPueblo}
+                          getSuggestionValue={this.getSuggestionValue}
+                          renderSuggestion={this.renderSuggestion}
+                          inputProps={autoSuggestProps}
+                          theme={suggestionTheme}
+                          id="txtAddPueblos"
+                        />
+                        {this.state.ubicaciones.length > 0 ? (
+                          <h5 className="mt-2 lead">
+                            {t("registerFormCuidadores.pueblosSeleccionados")}:
+                          </h5>
+                        ) : (
+                          ""
+                        )}
+
+                        <ul className="list-group">
+                          {this.state.ubicaciones.map(pueblo => {
+                            return (
+                              <li className="list-group-item">{pueblo}</li>
+                            );
+                          })}
+                        </ul>
+                        {this.state.ubicaciones.length > 0 ? (
+                          <a
+                            onClick={this.handleRemovePueblo}
+                            className="mt-4 btn btn-danger float-right text-light"
+                          >
+                            {t("registerFormCuidadores.eliminarPueblo")}{" "}
+                            <FontAwesomeIcon icon={faMinusCircle} />
+                          </a>
+                        ) : (
+                          ""
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
