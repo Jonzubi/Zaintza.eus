@@ -5,7 +5,9 @@ import {
   faCheck,
   faTimes,
   faUser,
-  faCalendarAlt
+  faCalendarAlt,
+  faPlusCircle,
+  faMinusCircle
 } from "@fortawesome/free-solid-svg-icons";
 import loadGif from "../util/gifs/loadGif.gif";
 import Axios from "axios";
@@ -18,6 +20,7 @@ import Button from "react-bootstrap/Button";
 import ipMaquina from "../util/ipMaquinaAPI";
 import cogoToast from "cogo-toast";
 import "./styles/tablaCuidadores.css";
+import TimeInput from "react-time-input";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { connect } from "react-redux";
@@ -60,7 +63,15 @@ class Tabla extends React.Component {
       jsonCuidadores: {},
       showModal: false,
       showPropuestaModal: false,
-      selectedCuidador: {}
+      selectedCuidador: {},
+      txtTituloPropuesta: "",
+      diasDisponible: [
+        {
+          dia: 0,
+          horaInicio: "00:00",
+          horaFin: "00:00"
+        }
+      ]
     };
     this.handleShowModalChange = this.handleShowModalChange.bind(this);
     this.handleShowPropuestaModalChange = this.handleShowPropuestaModalChange.bind(
@@ -68,12 +79,81 @@ class Tabla extends React.Component {
     );
     this.handlePedirCuidado = this.handlePedirCuidado.bind(this);
     this.handleEnviarPropuesta = this.handleEnviarPropuesta.bind(this);
+    this.handleDiasDisponibleChange = this.handleDiasDisponibleChange.bind(this);
+    this.addDiasDisponible = this.addDiasDisponible.bind(this);
+    this.removeDiasDisponible = this.removeDiasDisponible.bind(this);
   }
 
-  handleShowModalChange(state) {
+  addDiasDisponible() {
+    let auxDiasDisponible = this.state.diasDisponible;
+    auxDiasDisponible.push({
+      dia: 0,
+      horaInicio: "00:00",
+      horaFin: "00:00"
+    });
+
     this.setState({
+      diasDisponible: auxDiasDisponible
+    });
+  }
+
+  handleDiasDisponibleChange(e, indice) {
+    if (typeof indice == "undefined") {
+      //Significa que lo que se ha cambiado es el combo de los dias
+      var origen = e.target;
+      var indice = parseInt(origen.id.substr(origen.id.length - 1));
+      var valor = origen.value;
+
+      let auxDiasDisponible = this.state.diasDisponible;
+      auxDiasDisponible[indice]["dia"] = valor;
+
+      this.setState({
+        diasDisponible: auxDiasDisponible
+      });
+    } else {
+      //Significa que ha cambiado la hora, no se sabe si inicio o fin, eso esta en "indice"
+      let atributo = indice.substr(0, indice.length - 1);
+      indice = indice.substr(indice.length - 1);
+
+      let auxDiasDisponible = this.state.diasDisponible;
+      auxDiasDisponible[indice][atributo] = e;
+
+      this.setState({
+        diasDisponible: auxDiasDisponible
+      });
+    }
+  }
+
+  removeDiasDisponible() {
+    this.setState({
+      diasDisponible:
+        typeof this.state.diasDisponible.pop() != "undefined"
+          ? this.state.diasDisponible
+          : []
+    });
+  }
+
+  handleInputChange(e) {
+    var stateId = e.target.id;
+    this.setState({
+      [stateId]: e.target.value
+    });
+  }
+
+  async handleShowModalChange(state) {
+    await this.setState({
       showModal: state,
-      showPropuestaModal: false
+      showPropuestaModal: false,      
+    });
+    //El await lo hago porque si no aparece la inicializacion de horas en la pagina y no da un buen efecto
+    this.setState({
+      diasDisponible: [
+        {
+          dia: 0,
+          horaInicio: "00:00",
+          horaFin: "00:00"
+        }
+      ]
     });
   }
 
@@ -540,11 +620,134 @@ class Tabla extends React.Component {
                   </div>
                 </div>
               </div>
-             <Collapse in={this.state.showPropuestaModal}>
-                <h5 className="panel-header text-center">
-                  Aqui ira  el form
-                </h5>
-            </Collapse> 
+              <Collapse className="w-100" in={this.state.showPropuestaModal}>
+                <div>
+                  <h5 className="display-4 mb-2">
+                    {t("tablaCuidadores.tuPropuesta")}
+                  </h5>
+                  <div className="row mr-0 ml-0 mb-2 p-2 text-center">
+                    <label
+                      className="w-100 text-center"
+                      htmlFor="txtTituloPropuesta"
+                    >
+                      {t("tablaCuidadores.tituloPropuesta")}
+                    </label>
+                    <input
+                      onChange={this.handleInputChange}
+                      type="text"
+                      className="form-control"
+                      id="txtTituloPropuesta"
+                      aria-describedby="txtNombreHelp"
+                      placeholder="Idatzi proposamen izenburua..."
+                      value={this.state.txtTituloPropuesta}
+                    />
+                  </div>
+                  <div className="row ml-0 mr-0 mb-2">
+                    <div className="col-6">
+                      <label className="w-100 text-center">
+                        {t("tablaCuidadores.horasPropuesta")}:
+                      </label>
+                      <div className="w-100 mt-2" id="diasDisponible">
+                        {/* Aqui iran los dias dinamicamente */}
+                        {this.state.diasDisponible.map((objDia, indice) => {
+                          return (
+                            <div
+                              className="col-6 mx-auto text-center"
+                              id={"diaDisponible" + indice}
+                            >
+                              <div className="form-control mt-4 w-100">
+                                <select
+                                  value={this.state.diasDisponible[indice].dia}
+                                  onChange={this.handleDiasDisponibleChange}
+                                  className="d-inline"
+                                  id={"dia" + indice}
+                                >
+                                  <option>Aukeratu eguna</option>
+                                  <option value="1">Astelehena</option>
+                                  <option value="2">Asteartea</option>
+                                  <option value="3">Asteazkena</option>
+                                  <option value="4">Osteguna</option>
+                                  <option value="5">Ostirala</option>
+                                  <option value="6">Larunbata</option>
+                                  <option value="7">Igandea</option>
+                                </select>
+                                <br />
+                                <br />
+                                <b>
+                                  {t("registerFormCuidadores.horaInicio")} :
+                                </b>
+                                <TimeInput
+                                  onTimeChange={valor => {
+                                    this.handleDiasDisponibleChange(
+                                      valor,
+                                      "horaInicio" + indice
+                                    );
+                                  }}
+                                  id={"horaInicio" + indice}
+                                  initTime={
+                                    this.state.diasDisponible[indice]
+                                      .horaInicio != "00:00"
+                                      ? this.state.diasDisponible[indice]
+                                          .horaInicio
+                                      : "00:00"
+                                  }
+                                  className="mt-1 text-center d-inline form-control"
+                                />
+                                <br />
+                                <b>{t("registerFormCuidadores.horaFin")} :</b>
+                                <TimeInput
+                                  onTimeChange={valor => {
+                                    this.handleDiasDisponibleChange(
+                                      valor,
+                                      "horaFin" + indice
+                                    );
+                                  }}
+                                  id={"horaFin" + indice}
+                                  initTime={
+                                    this.state.diasDisponible[indice].horaFin !=
+                                    "00:00"
+                                      ? this.state.diasDisponible[indice]
+                                          .horaFin
+                                      : "00:00"
+                                  }
+                                  className="mt-1 text-center d-inline form-control"
+                                />
+                                <br />
+                                <br />
+                              </div>
+                            </div>
+                          );
+                        })}
+                        <div id="botonesDiasDisponible" className="w-100 mt-2">
+                          {this.state.diasDisponible.length > 0 ? (
+                            <a
+                              onClick={this.removeDiasDisponible}
+                              className="btn btn-danger float-left text-light"
+                            >
+                              {t("registerFormCuidadores.eliminarDia")}{" "}
+                              <FontAwesomeIcon icon={faMinusCircle} />
+                            </a>
+                          ) : (
+                            ""
+                          )}
+                          <a
+                            onClick={this.addDiasDisponible}
+                            className="btn btn-success float-right text-light"
+                          >
+                            {t("registerFormCuidadores.anadir")}{" "}
+                            <FontAwesomeIcon icon={faPlusCircle} />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-6">
+                      <label className="w-100 text-center">
+                        {t("tablaCuidadores.pueblos")}:
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </Collapse>
             </div>
           </ModalBody>
           <ModalFooter>
@@ -555,7 +758,7 @@ class Tabla extends React.Component {
               {t("tablaCuidadores.acordar")}
             </Button>
           </ModalFooter>
-        </Modal>        
+        </Modal>
       </div>
     );
   }

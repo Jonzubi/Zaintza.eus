@@ -53,7 +53,10 @@
         "errorClienteObligatorio": "Guraso gisako kontua behar da zaintza eskatzeko",
         "enviarPropuesta": "Bidali akordio proposamena",
         "condicionesCuidador": "Zaintzailearen baldintzak",
-        "propuestaPublico": "Zein pertsona mota zaindu ditzake?"
+        "propuestaPublico": "Zein pertsona mota zaindu ditzake?",
+        "tuPropuesta": "Zure proposamena",
+        "tituloPropuesta": "Proposamen izenburua",
+        "horasPropuesta": "Orduak"
     },
     "registerFormCuidadores":{
         "nombre": "Izena",
