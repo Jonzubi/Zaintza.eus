@@ -35,6 +35,8 @@ class MenuPerfil extends React.Component {
     super(props);
 
     this.handleClickPerfil = this.handleClickPerfil.bind(this);
+    this.handleClickAcuerdos = this.handleClickAcuerdos.bind(this);
+    this.handleClickNotificaciones = this.handleClickNotificaciones.bind(this);
   }
 
   getAvatar() {  
@@ -72,6 +74,16 @@ class MenuPerfil extends React.Component {
     this.props.toogleMenuPerfil(false);
   }
 
+  handleClickAcuerdos(){
+    this.props.changeFormContent("acuerdos");
+    this.props.toogleMenuPerfil(false);
+  }
+
+  handleClickNotificaciones(){
+    this.props.changeFormContent("notificaciones");
+    this.props.toogleMenuPerfil(false);
+  }
+
   handleLogOut(){
     this.props.initializeUserSession();
     this.props.changeFormContent("tabla");
@@ -96,13 +108,13 @@ class MenuPerfil extends React.Component {
             <button type="button" className="w-100 btn btn-secondary" onClick={() => this.handleClickPerfil()}>
               {t('menuPerfil.perfil')}
             </button>
-            <button type="button" className="w-100 btn btn-secondary ">
+            <button type="button" className="w-100 btn btn-secondary">
               {t('menuPerfil.calendario')}
             </button>
-            <button type="button" className="w-100 btn btn-secondary">
+            <button type="button" className="w-100 btn btn-secondary" onClick={() => this.handleClickAcuerdos()}>
               {t('menuPerfil.contratos')}
             </button>
-            <button type="button" className="w-100 btn btn-secondary">
+            <button type="button" className="w-100 btn btn-secondary" onClick={() => this.handleClickNotificaciones()}>
               {t('menuPerfil.notificaciones')}
             </button>
             <button type="button" className="w-100 btn btn-secondary">

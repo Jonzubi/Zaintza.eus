@@ -8,6 +8,8 @@ import PerfilCuidador from "./components/perfilCuidador";
 import PerfilCliente from "./components/perfilCliente";
 import ModalRegistrarse from "./components/modalRegistrarse";
 import { connect } from "react-redux";
+import AcuerdosForm from "./components/acuerdosForm";
+import NotificacionesForm from "./components/notificacionesForm";
 
 const mapStateToProps = state => {
   return { formContent: state.app.formContent };
@@ -35,6 +37,10 @@ class App extends React.Component {
         return <PerfilCuidador />;
       case "perfilCliente":
         return <PerfilCliente />;
+      case "acuerdos":
+        return <AcuerdosForm />;
+      case "notificaciones":
+        return <NotificacionesForm />;
       default:
         return <h5>Bad gateway</h5>
     }
