@@ -51,6 +51,7 @@
         "ver": "Ikusi zaintzailea",
         "errorNoLogueado": "Saioa hasi behar da zaintza eskatzeko",
         "errorClienteObligatorio": "Guraso gisako kontua behar da zaintza eskatzeko",
+        "errorGeneral": "Arazo bat gertatu da",
         "enviarPropuesta": "Bidali akordio proposamena",
         "condicionesCuidador": "Zaintzailearen baldintzak",
         "propuestaPublico": "Zein pertsona mota zaindu ditzake?",

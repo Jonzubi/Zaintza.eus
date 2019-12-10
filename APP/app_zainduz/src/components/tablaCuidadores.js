@@ -402,28 +402,26 @@ class Tabla extends React.Component {
     Axios.post("http://" + ipMaquina + ":3001/acuerdo", formData)
       .then(resultado => {
         this.setState({
-          showModal: false
-        }).then(() => {
-          this.setState({
-            diasDisponible: [
-              {
-                dia: 0,
-                horaInicio: "00:00",
-                horaFin: "00:00"
-              }
-            ],
-            ubicaciones: [],
-            txtTituloPropuesta: "",
-            txtDescripcion: ""
-          });
+          showModal: false,
+          showPropuestaModal: false,
+          diasDisponible: [
+            {
+              dia: 0,
+              horaInicio: "00:00",
+              horaFin: "00:00"
+            }
+          ],
+          ubicaciones: [],
+          txtTituloPropuesta: "",
+          txtDescripcion: ""
         });
-        cogoToast.success(
-          <h5>
-            {t('tablaCuidadores.exitoEnviarPropuesta')}
-          </h5>
-        )
+
+        console.log("Landando cogo");
+        cogoToast.success(<h5>{t("tablaCuidadores.exitoEnviarPropuesta")}</h5>);
       })
-      .catch(err => {})
+      .catch(err => {
+        cogoToast.success(<h5>{t("tablaCuidadores.errorGeneral")}</h5>);
+      })
       .finally(() => {
         this.setState({
           propuestaIsLoading: false
