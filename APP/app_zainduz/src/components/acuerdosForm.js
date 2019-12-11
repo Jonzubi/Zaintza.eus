@@ -1,9 +1,11 @@
 import React from "react";
-import Collapse from "react-bootstrap/Collapse";
+import {Collapse} from "react-collapse";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faCaretDown
+} from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
-import Button from "react-bootstrap/Button";
 
 const mapStateToProps = state => {
   return {
@@ -69,12 +71,12 @@ class AcuerdosForm extends React.Component {
           ? this.state.jsonAcuerdos.map((acuerdo, indice) => {
               return (
                 <div className="w-100 card">
-                  <div className="card-header">{acuerdo.tituloAcuerdo} <button className="float-right" value="Ikusi" onClick={() => this.handleToogleCollapseAcuerdo(indice)} /></div>
+                  <div className="card-header">{acuerdo.tituloAcuerdo} <FontAwesomeIcon style={{cursor: "pointer"}} icon={faCaretDown} className="float-right" onClick={() => this.handleToogleCollapseAcuerdo(indice)} /></div>
                   <Collapse
                     className="card-body"
-                    in={this.state.acuerdosCollapseState[indice]}                   
+                    isOpened={this.state.acuerdosCollapseState[indice]}                   
                   >
-                    <div>{acuerdo.descripcionAcuerdo}</div>
+                    <div className="p-5">{acuerdo.descripcionAcuerdo}</div>
                   </Collapse>
                 </div>
               );
