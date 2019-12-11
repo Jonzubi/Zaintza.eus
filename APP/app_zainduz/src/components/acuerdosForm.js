@@ -1,11 +1,11 @@
 import React from "react";
-import {Collapse} from "react-collapse";
+import { Collapse } from "react-collapse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faCaretDown
-} from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faCircle } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
+import { t } from "../util/funciones";
 
 const mapStateToProps = state => {
   return {
@@ -68,15 +68,45 @@ class AcuerdosForm extends React.Component {
     return (
       <div className="p-5">
         {typeof this.state.jsonAcuerdos.map != "undefined"
-          ? this.state.jsonAcuerdos.map((acuerdo, indice) => {
+          ? this.state.jsonAcuerdos.map((acuerdo, indice) => {              
               return (
                 <div className="w-100 card">
-                  <div className="card-header">{acuerdo.tituloAcuerdo} <FontAwesomeIcon style={{cursor: "pointer"}} icon={faCaretDown} className="float-right" onClick={() => this.handleToogleCollapseAcuerdo(indice)} /></div>
+                  <div className="card-header">
+                    <div className="row">
+                      <div className="col-6 text-center">{acuerdo.tituloAcuerdo}</div>
+                      <div className="col-4 text-center">
+                        {acuerdo.estadoAcuerdo == 0 ? (
+                          <div className="row">
+                            <div className="col-10">
+                              {t("acuerdosForm.estadoPendiente")}
+                            </div>
+                            <div className="col-2">
+                              <FontAwesomeIcon
+                                className="text-secondary"
+                                icon={faCircle}
+                              />
+                            </div>
+                          </div>
+                        ) : null}
+                      </div>
+                      <div className="col-2 text-center">
+                        <FontAwesomeIcon
+                          style={{ cursor: "pointer" }}
+                          size="2x"
+                          icon={faCaretDown}
+                          className=""
+                          onClick={() =>
+                            this.handleToogleCollapseAcuerdo(indice)
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
                   <Collapse
                     className="card-body"
-                    isOpened={this.state.acuerdosCollapseState[indice]}                   
+                    isOpened={this.state.acuerdosCollapseState[indice]}
                   >
-                    <div className="p-5">{acuerdo.descripcionAcuerdo}</div>
+                    <div className="p-2">{acuerdo.descripcionAcuerdo}</div>
                   </Collapse>
                 </div>
               );
