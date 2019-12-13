@@ -22,14 +22,17 @@ const mapDispatchToProps = dispatch => {
 class LogInForm extends React.Component {
   constructor(props) {
     super(props);
+    console.log(typeof window.localStorage.getItem('nombreUsuario'));
     this.state = {
-      txtEmail: "",
-      txtContrasena: "",
+      txtEmail: window.localStorage.getItem('nombreUsuario') || "",
+      txtContrasena: window.localStorage.getItem('password') || "",
+      chkRecordarme: window.localStorage.getItem('nombreUsuario') != null ? true : false,
       objUsuario: {},
       isLoading: false
     };
 
     this.handleLogIn = this.handleLogIn.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   async handleLogIn() {
@@ -78,6 +81,16 @@ class LogInForm extends React.Component {
                   tipoUsuario: tipoUsuario
                 })
               );
+
+              if(this.state.chkRecordarme){
+                window.localStorage.setItem('nombreUsuario', vEmail);
+                window.localStorage.setItem('password', vContrasena);
+              }
+              else{
+                window.localStorage.removeItem('nombreUsuario');
+                window.localStorage.removeItem('password');
+              }              
+
               this.props.toogleMenuPerfil(false);
               cogoToast.success(<h5>{t("notificaciones.sesionIniciada")}</h5>);
               this.setState({
@@ -106,9 +119,17 @@ class LogInForm extends React.Component {
   }
 
   handleInputChange(e) {
+    console.log(e);
     var stateId = e.target.id;
     this.setState({
       [stateId]: e.target.value
+    });
+  }
+
+  toogleChkRecordarme(){
+    const aux = !this.state.chkRecordarme
+    this.setState({
+      chkRecordarme:aux
     });
   }
 
@@ -119,22 +140,24 @@ class LogInForm extends React.Component {
         <div>
           <label htmlFor="txtEmail">{t("loginForm.email")}</label>
           <input
-            onChange={this.handleInputChange.bind(this)}
+            onChange={this.handleInputChange}
             type="email"
             className="form-control"
             id="txtEmail"
             aria-describedby="emailHelp"
             placeholder={"Emaila..."}
+            value={this.state.txtEmail}
           />
         </div>
         <div className="form-group">
           <label htmlFor="txtContrasena">{t("loginForm.contrasena")}</label>
           <input
-            onChange={this.handleInputChange.bind(this)}
+            onChange={this.handleInputChange}
             type="password"
             className="form-control"
             id="txtContrasena"
             placeholder={"Pasahitza..."}
+            value={this.state.txtContrasena}
           />
         </div>
         <div className="form-group form-check">
@@ -142,6 +165,8 @@ class LogInForm extends React.Component {
             type="checkbox"
             className="form-check-input"
             id="chkRecordarme"
+            checked={this.state.chkRecordarme}
+            onChange={() => this.toogleChkRecordarme()}
           />
           <label className="form-check-label" htmlFor="chkRecordarme">
             {t("loginForm.recordarme")}
