@@ -1,7 +1,7 @@
 import React from "react";
 import { Collapse } from "react-collapse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown, faCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faCircle, faUserMd, faCity } from "@fortawesome/free-solid-svg-icons";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { connect } from "react-redux";
@@ -46,7 +46,7 @@ class AcuerdosForm extends React.Component {
                 resultado.data[i][buscarUsuOrCuid]
             )
             .then(otro => {
-              resultado.data[i] = Object.assign({}, resultado.data[i], otro);
+              resultado.data[i] = Object.assign({}, resultado.data[i], {laOtraPersona:otro.data});
               jsonAcuerdos.push(resultado.data[i]);
               if (i == countAcuerdos - 1) {
                 this.setState({
@@ -103,8 +103,10 @@ class AcuerdosForm extends React.Component {
                 <div className="w-100 card">
                   <div className="card-header">
                     <div className="row">
-                      <div className="col-10 text-center my-auto">
-                        {acuerdo.tituloAcuerdo}
+                      <div className="col-10 text-center my-auto row">
+                        <div className="col-6">{acuerdo.tituloAcuerdo}</div>
+                        <div className="col-3">{acuerdo.laOtraPersona.nombre + ' ' + acuerdo.laOtraPersona.apellido1}</div>
+                        <div className="col-3">{acuerdo.pueblo}</div>
                       </div>
                       <div className="col-1 text-center my-auto">
                         {acuerdo.estadoAcuerdo == 0 ? (
