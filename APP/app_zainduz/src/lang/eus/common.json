@@ -146,5 +146,8 @@
     "headerInformacion": "Akordio informazioa",
     "headerEstado": "Egoera",
     "noData": "Ez duzu akordiorik oraindik"
+  },
+  "notificacionesForm":{
+    "propuestaAcuerdo": "akordio proposamena"
   }
 }
