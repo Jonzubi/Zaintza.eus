@@ -416,7 +416,6 @@ class Tabla extends React.Component {
           txtDescripcion: ""
         });
 
-        console.log("Landando cogo");
         cogoToast.success(<h5>{t("tablaCuidadores.exitoEnviarPropuesta")}</h5>);
       })
       .catch(err => {
