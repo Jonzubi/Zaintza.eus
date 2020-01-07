@@ -143,6 +143,7 @@
   "acuerdosForm": {
     "estadoPendiente": "Onartu zain",
     "headerInformacion": "Akordio informazioa",
-    "headerEstado": "Egoera"
+    "headerEstado": "Egoera",
+    "noData": "Ez duzu akordiorik oraindik"
   }
 }
