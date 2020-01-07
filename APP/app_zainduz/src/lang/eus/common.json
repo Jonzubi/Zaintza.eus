@@ -61,7 +61,8 @@
     "enviarAcuerdo": "Bidali proposamena",
     "diasDisponible": "Ordu libreak",
     "ubicaciones": "Herriak",
-    "exitoEnviarPropuesta": "Proposamena behar bezala bidali da"
+    "exitoEnviarPropuesta": "Proposamena behar bezala bidali da",
+    "acuerdoExistente": "Zaintzaile honekin akordio bat duzu jada"
   },
   "registerFormCuidadores": {
     "nombre": "Izena",

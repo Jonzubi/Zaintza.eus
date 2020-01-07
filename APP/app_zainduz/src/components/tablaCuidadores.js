@@ -303,7 +303,7 @@ class Tabla extends React.Component {
       });
   }
 
-  handlePedirCuidado() {
+  async handlePedirCuidado() {
     if (!this.props.tipoUsuario) {
       cogoToast.error(<h5>{t("tablaCuidadores.errorNoLogueado")}</h5>);
       this.handleShowModalChange(false);
@@ -323,6 +323,21 @@ class Tabla extends React.Component {
     }
 
     //Comprobacion de errores
+    let comprobAcuerdoUnico = await Axios.get(
+      "http://" + ipMaquina + ":3001/acuerdo",
+      {
+        params: {
+          idCliente: this.props.idCliente,
+          idCuidador: this.state.selectedCuidador._id
+        }
+      }
+    );
+    console.log(comprobAcuerdoUnico);
+    if (comprobAcuerdoUnico.data != "Vacio") {
+      cogoToast.error(<h5>{t("tablaCuidadores.acuerdoExistente")}</h5>);
+      return;
+    }
+
     for (var clave in this.state) {
       if (
         (this.state[clave].length == 0 || !this.state[clave]) &&
@@ -401,22 +416,34 @@ class Tabla extends React.Component {
 
     Axios.post("http://" + ipMaquina + ":3001/acuerdo", formData)
       .then(resultado => {
-        this.setState({
-          showModal: false,
-          showPropuestaModal: false,
-          diasDisponible: [
-            {
-              dia: 0,
-              horaInicio: "00:00",
-              horaFin: "00:00"
-            }
-          ],
-          ubicaciones: [],
-          txtTituloPropuesta: "",
-          txtDescripcion: ""
-        });
+        let notificacionData = {
+          idUsuario: this.state.selectedCuidador._id,
+          tipoNotificacion: "Acuerdo",
+          acuerdo: resultado.data
+        };
+        Axios.post(
+          "http://" + ipMaquina + ":3001/notificacion",
+          notificacionData
+        ).then(notif => {
+          this.setState({
+            showModal: false,
+            showPropuestaModal: false,
+            diasDisponible: [
+              {
+                dia: 0,
+                horaInicio: "00:00",
+                horaFin: "00:00"
+              }
+            ],
+            ubicaciones: [],
+            txtTituloPropuesta: "",
+            txtDescripcion: ""
+          });
 
-        cogoToast.success(<h5>{t("tablaCuidadores.exitoEnviarPropuesta")}</h5>);
+          cogoToast.success(
+            <h5>{t("tablaCuidadores.exitoEnviarPropuesta")}</h5>
+          );
+        });
       })
       .catch(err => {
         cogoToast.success(<h5>{t("tablaCuidadores.errorGeneral")}</h5>);

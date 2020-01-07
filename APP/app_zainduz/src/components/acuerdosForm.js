@@ -25,7 +25,8 @@ class AcuerdosForm extends React.Component {
   componentDidMount() {
     //buscarUsuOrCuid =>> En esta variable guardo si el usuario iniciado es cliente o cuidador para asi si es cuidador
     //buscar cliente en el acuerdo y viceversa, ESTO ME DARA LA INFORMACION DE LA OTRA PARTE DEL ACUERDO
-    let tipoUsuario = this.props.tipoUsuario == "Z" ? "idCuidador" : "idCliente";
+    let tipoUsuario =
+      this.props.tipoUsuario == "Z" ? "idCuidador" : "idCliente";
     axios
       .get("http://" + ipMaquina + ":3001/acuerdo", {
         params: {
@@ -111,14 +112,10 @@ class AcuerdosForm extends React.Component {
               <div className="w-100 card">
                 <div className="card-header">
                   <div className="row">
-                    <div className="col-10 text-center my-auto row">
-                      <div className="col-6">{acuerdo.tituloAcuerdo}</div>
-                      <div className="col-3">
-                        {acuerdo.laOtraPersona.nombre +
-                          " " +
-                          acuerdo.laOtraPersona.apellido1}
-                      </div>
-                      <div className="col-3">{acuerdo.pueblo}</div>
+                    <div className="col-10 text-center my-auto font-weight-bold">
+                      {acuerdo.laOtraPersona.nombre +
+                        " " +
+                        acuerdo.laOtraPersona.apellido1}
                     </div>
                     <div className="col-1 text-center my-auto">
                       {acuerdo.estadoAcuerdo == 0 ? (

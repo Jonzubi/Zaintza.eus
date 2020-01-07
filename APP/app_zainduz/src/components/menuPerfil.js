@@ -34,6 +34,10 @@ class MenuPerfil extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      countNotificaciones: 0
+    }
+
     this.handleClickPerfil = this.handleClickPerfil.bind(this);
     this.handleClickAcuerdos = this.handleClickAcuerdos.bind(this);
     this.handleClickNotificaciones = this.handleClickNotificaciones.bind(this);
