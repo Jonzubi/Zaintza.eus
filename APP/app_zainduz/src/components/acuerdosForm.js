@@ -30,7 +30,7 @@ class AcuerdosForm extends React.Component {
     axios
       .get("http://" + ipMaquina + ":3001/acuerdo", {
         params: {
-          [tipoUsuario]: this.props.idPerfil
+          filtros: { [tipoUsuario]: this.props.idPerfil }
         }
       })
       .then(resultado => {
@@ -103,7 +103,6 @@ class AcuerdosForm extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     return (
       <div className="p-5 h-100">
         {this.state.jsonAcuerdos.length != 0 ? (

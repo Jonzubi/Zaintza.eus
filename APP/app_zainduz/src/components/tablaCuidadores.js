@@ -327,12 +327,13 @@ class Tabla extends React.Component {
       "http://" + ipMaquina + ":3001/acuerdo",
       {
         params: {
-          idCliente: this.props.idCliente,
-          idCuidador: this.state.selectedCuidador._id
+          filtros: {
+            idCliente: this.props.idCliente,
+            idCuidador: this.state.selectedCuidador._id
+          }
         }
       }
     );
-    console.log(comprobAcuerdoUnico);
     if (comprobAcuerdoUnico.data != "Vacio") {
       cogoToast.error(<h5>{t("tablaCuidadores.acuerdoExistente")}</h5>);
       return;
@@ -416,33 +417,41 @@ class Tabla extends React.Component {
 
     Axios.post("http://" + ipMaquina + ":3001/acuerdo", formData)
       .then(resultado => {
-        let notificacionData = {
-          idUsuario: this.state.selectedCuidador._id,
-          tipoNotificacion: "Acuerdo",
-          acuerdo: resultado.data
-        };
-        Axios.post(
-          "http://" + ipMaquina + ":3001/notificacion",
-          notificacionData
-        ).then(notif => {
-          this.setState({
-            showModal: false,
-            showPropuestaModal: false,
-            diasDisponible: [
-              {
-                dia: 0,
-                horaInicio: "00:00",
-                horaFin: "00:00"
-              }
-            ],
-            ubicaciones: [],
-            txtTituloPropuesta: "",
-            txtDescripcion: ""
-          });
+        Axios.get("http://" + ipMaquina + ":3001/usuario", {
+          params: {
+            filtros: {
+              idPerfil: this.state.selectedCuidador._id
+            }
+          }
+        }).then(usuario => {
+          let notificacionData = {
+            idUsuario: usuario.data[0]._id,
+            tipoNotificacion: "Acuerdo",
+            acuerdo: resultado.data
+          };
+          Axios.post(
+            "http://" + ipMaquina + ":3001/notificacion",
+            notificacionData
+          ).then(notif => {
+            this.setState({
+              showModal: false,
+              showPropuestaModal: false,
+              diasDisponible: [
+                {
+                  dia: 0,
+                  horaInicio: "00:00",
+                  horaFin: "00:00"
+                }
+              ],
+              ubicaciones: [],
+              txtTituloPropuesta: "",
+              txtDescripcion: ""
+            });
 
-          cogoToast.success(
-            <h5>{t("tablaCuidadores.exitoEnviarPropuesta")}</h5>
-          );
+            cogoToast.success(
+              <h5>{t("tablaCuidadores.exitoEnviarPropuesta")}</h5>
+            );
+          });
         });
       })
       .catch(err => {

@@ -68,7 +68,6 @@ class RegisterFormCliente extends React.Component {
   }
 
   handleInputChange(e) {
-    console.log(this.state);
     //La idea es recoger el nombre del componente y asignarselo al estado, algo como, this.setState({this.state[name] = e.target.value});
     var stateId = e.target.id;
     //No vamos a dejar que el usuario meta mas de 9 digitos para el telefono

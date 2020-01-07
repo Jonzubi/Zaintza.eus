@@ -28,7 +28,6 @@ import Axios from "axios";
 import {saveUserSession} from "../redux/actions/user";
 
 const mapStateToProps = state => {
-  console.log(state);
   //Aqui van los especialitos de los undefined
   const movil =
     typeof state.user.telefono.movil == "undefined"
@@ -232,7 +231,6 @@ class PerfilCuidador extends React.Component {
   }
 
   handleCalendarChange(valor) {
-    console.log(valor);
     this.setState({
       txtFechaNacimiento: valor
     });

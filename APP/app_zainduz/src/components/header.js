@@ -31,7 +31,6 @@ class Header extends React.Component {
   }
 
   getAvatar() {
-    console.log(this.props);
     return (
       this.props.direcFoto == "" ?
       <FontAwesomeIcon

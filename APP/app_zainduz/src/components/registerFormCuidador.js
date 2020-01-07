@@ -450,11 +450,8 @@ class RegisterForm extends React.Component {
         axios
           .post("http://" + ipMaquina + ":3001/cuidador", formData)
           .then(resultado => {
-            console.log(resultado);
             var idPerfil = resultado.data;
-            console.log(typeof idPerfil);
             idPerfil = idPerfil._id;
-            console.log(idPerfil);
 
             var formDataUsu = {
               email: this.state.txtEmail,

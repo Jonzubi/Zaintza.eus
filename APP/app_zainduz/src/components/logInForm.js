@@ -22,11 +22,11 @@ const mapDispatchToProps = dispatch => {
 class LogInForm extends React.Component {
   constructor(props) {
     super(props);
-    console.log(typeof window.localStorage.getItem('nombreUsuario'));
     this.state = {
-      txtEmail: window.localStorage.getItem('nombreUsuario') || "",
-      txtContrasena: window.localStorage.getItem('password') || "",
-      chkRecordarme: window.localStorage.getItem('nombreUsuario') != null ? true : false,
+      txtEmail: window.localStorage.getItem("nombreUsuario") || "",
+      txtContrasena: window.localStorage.getItem("password") || "",
+      chkRecordarme:
+        window.localStorage.getItem("nombreUsuario") != null ? true : false,
       objUsuario: {},
       isLoading: false
     };
@@ -72,7 +72,6 @@ class LogInForm extends React.Component {
           axios
             .get("http://" + ipMaquina + ":3001/" + modelo + "/" + idPerfil)
             .then(resultado => {
-              console.log(resultado);
               this.props.saveUserSession(
                 Object.assign({}, resultado.data, {
                   _id: idPerfil,
@@ -82,14 +81,13 @@ class LogInForm extends React.Component {
                 })
               );
 
-              if(this.state.chkRecordarme){
-                window.localStorage.setItem('nombreUsuario', vEmail);
-                window.localStorage.setItem('password', vContrasena);
+              if (this.state.chkRecordarme) {
+                window.localStorage.setItem("nombreUsuario", vEmail);
+                window.localStorage.setItem("password", vContrasena);
+              } else {
+                window.localStorage.removeItem("nombreUsuario");
+                window.localStorage.removeItem("password");
               }
-              else{
-                window.localStorage.removeItem('nombreUsuario');
-                window.localStorage.removeItem('password');
-              }              
 
               this.props.toogleMenuPerfil(false);
               cogoToast.success(<h5>{t("notificaciones.sesionIniciada")}</h5>);
@@ -119,22 +117,20 @@ class LogInForm extends React.Component {
   }
 
   handleInputChange(e) {
-    console.log(e);
     var stateId = e.target.id;
     this.setState({
       [stateId]: e.target.value
     });
   }
 
-  toogleChkRecordarme(){
-    const aux = !this.state.chkRecordarme
+  toogleChkRecordarme() {
+    const aux = !this.state.chkRecordarme;
     this.setState({
-      chkRecordarme:aux
+      chkRecordarme: aux
     });
   }
 
   render() {
-    console.log(this.state);
     return (
       <form className="mt-5">
         <div>

@@ -12,7 +12,6 @@ import Axios from "axios";
 import cogoToast from "cogo-toast";
 
 const mapStateToProps = state => {
-  console.log(state);
   //Aqui van los especialitos de los undefined
   const movil =
     typeof state.user.telefono == "undefined" && typeof state.user.telefono.movil == "undefined"
@@ -163,7 +162,6 @@ class PerfilCliente extends React.Component {
   }
 
   handleInputChange(e) {
-    console.log(this.state);
     //La idea es recoger el nombre del componente y asignarselo al estado, algo como, this.setState({this.state[name] = e.target.value});
     var stateId = e.target.id;
     //No vamos a dejar que el usuario meta mas de 9 digitos para el telefono
