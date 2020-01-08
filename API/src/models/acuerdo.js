@@ -24,7 +24,11 @@ var acuerdo = new mongoose.Schema({
   pueblo: { type: String, required: true },
   estadoAcuerdo: { type: Number, required: true },
   dateAcuerdo: { type: Date, required: true },
-  dateFinAcuerdo: Date
+  dateFinAcuerdo: Date,
+  origenAcuerdo:{
+    type: String,
+    required: true
+  }
 });
 
 var Acuerdo = mongoose.model("Acuerdo", acuerdo, "Acuerdos");

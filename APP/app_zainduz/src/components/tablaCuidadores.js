@@ -104,7 +104,6 @@ class Tabla extends React.Component {
     );
     this.handleEnviarPropuesta = this.handleEnviarPropuesta.bind(this);
     this.handlePedirCuidado = this.handlePedirCuidado.bind(this);
-    this.handleEnviarPropuesta = this.handleEnviarPropuesta.bind(this);
     this.handleDiasDisponibleChange = this.handleDiasDisponibleChange.bind(
       this
     );
@@ -412,7 +411,8 @@ class Tabla extends React.Component {
       pueblo: this.state.ubicaciones[0],
       estadoAcuerdo: 0,
       dateAcuerdo: today,
-      descripcionAcuerdo: this.state.txtDescripcion
+      descripcionAcuerdo: this.state.txtDescripcion,
+      origenAcuerdo: this.props.tipoUsuario
     };
 
     Axios.post("http://" + ipMaquina + ":3001/acuerdo", formData)
