@@ -148,6 +148,10 @@
     "noData": "Ez duzu akordiorik oraindik"
   },
   "notificacionesForm":{
-    "propuestaAcuerdo": "akordio proposamena"
+    "propuestaAcuerdo": "akordio proposamena",
+    "pueblos":"Herria/k",
+    "dias": "Eguna/k",
+    "aceptarAcuerdo": "Onartu akordioa",
+    "rechazarAcuerdo": "Akordio ezeztatu"
   }
 }

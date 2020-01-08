@@ -21,7 +21,7 @@ var acuerdo = new mongoose.Schema({
     type:String,
     required:true
   },
-  pueblo: { type: String, required: true },
+  pueblo: { type: [String], required: true },
   estadoAcuerdo: { type: Number, required: true },
   dateAcuerdo: { type: Date, required: true },
   dateFinAcuerdo: Date,

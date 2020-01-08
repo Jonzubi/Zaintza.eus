@@ -4,7 +4,9 @@ import ipMaquina from "../util/ipMaquinaAPI";
 import { connect } from "react-redux";
 import { t } from "../util/funciones";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown, faCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faUser } from "@fortawesome/free-solid-svg-icons";
+import { Collapse } from "react-collapse";
+import Avatar from "react-avatar";
 
 const mapStateToProps = state => {
   return {
@@ -15,7 +17,8 @@ const mapStateToProps = state => {
 
 class NotificacionesForm extends React.Component {
   componentDidMount() {
-      let jsonNotificaciones=[];
+    let jsonNotificaciones = [];
+    let auxNotificacionesCollapseState = [];
     axios
       .get("http://" + ipMaquina + ":3001/notificacion", {
         params: {
@@ -26,12 +29,42 @@ class NotificacionesForm extends React.Component {
       })
       .then(notificaciones => {
         for (let i = 0; i < notificaciones.data.length; i++) {
-            const notificacion = notificaciones.data[i];
-            
+          let notificacion = notificaciones.data[i];
+          console.log(notificacion);
+          switch (notificacion.tipoNotificacion) {
+            //Si es acuerdo recupero los datos de la persona que envio la propuesta
+            case "Acuerdo":
+              const tablaLaOtraPersona =
+                this.props.tipoUsuario == "C" ? "cuidador" : "cliente";
+              const idLaOtraPersona =
+                this.props.tipoUsuario == "C" ? "idCuidador" : "idCliente";
+              axios
+                .get(
+                  "http://" +
+                    ipMaquina +
+                    ":3001/" +
+                    tablaLaOtraPersona +
+                    "/" +
+                    notificacion.acuerdo[idLaOtraPersona]
+                )
+                .then(laOtraPersona => {
+                  //Le asigno un nuevo atributo a la notificacion con todos los datos de la otra persona
+                  notificacion.laOtraPersona = laOtraPersona.data;
+                  jsonNotificaciones.push(notificacion);
+                  auxNotificacionesCollapseState.push(false);
+
+                  if (i == notificaciones.data.length - 1) {
+                    this.setState({
+                      jsonNotificaciones: jsonNotificaciones,
+                      notificacionesCollapseState: auxNotificacionesCollapseState
+                    });
+                  }
+                });
+              break;
+            default:
+              break;
+          }
         }
-        this.setState({
-          jsonNotificaciones: notificaciones.data
-        });
       });
   }
   constructor(props) {
@@ -41,20 +74,72 @@ class NotificacionesForm extends React.Component {
       jsonNotificaciones: [],
       notificacionesCollapseState: []
     };
+
+    this.handleToogleCollapseNotificacion = this.handleToogleCollapseNotificacion.bind(
+      this
+    );
+  }
+
+  handleToogleCollapseNotificacion(index) {
+    let aux = this.state.notificacionesCollapseState;
+    aux[index] = !aux[index];
+
+    this.setState({
+      notificacionesCollapseState: aux
+    });
+  }
+
+  traducirDia(indice) {
+    switch (parseInt(indice)) {
+      case 1:
+        return "Astelehena";
+      case 2:
+        return "Asteartea";
+      case 3:
+        return "Asteazkena";
+      case 4:
+        return "Osteguna";
+      case 5:
+        return "Ostirala";
+      case 6:
+        return "Larunbata";
+      case 7:
+        return "Igandea";
+      default:
+        return "WTF";
+    }
   }
 
   render() {
+    console.log("HEEEY");
     return (
       <div className="p-5">
         {this.state.jsonNotificaciones.map((notificacion, indice) => {
           return (
-            <div className="w-100 card">
+            <div className="w-100 card mt-2 mb-2">
               <div className="card-header">
                 <div className="row">
-                  <div className="col-11 text-center">
-                    {notificacion.tipoNotificacion == "Acuerdo"
-                      ? t("notificacionesForm.propuestaAcuerdo")
-                      : null}
+                  <div className="col-11 text-center align-middle">
+                    {notificacion.tipoNotificacion == "Acuerdo" ? (
+                      <div className="">
+                        <Avatar
+                          className="float-left"
+                          name={notificacion.laOtraPersona.nombre}
+                          src={
+                            "http://" +
+                            ipMaquina +
+                            ":3001/image/" +
+                            notificacion.laOtraPersona.direcFoto
+                          }
+                        />
+                        <span className="ml-1 font-weight-bold">
+                          {notificacion.laOtraPersona.nombre +
+                            " " +
+                            notificacion.laOtraPersona.apellido1}
+                        </span>{" "}
+                        <span>{t("notificacionesForm.propuestaAcuerdo")}</span>
+                      </div>
+                    ) : null}
                   </div>
                   <div className="col-1 text-center my-auto">
                     <FontAwesomeIcon
@@ -69,6 +154,71 @@ class NotificacionesForm extends React.Component {
                   </div>
                 </div>
               </div>
+              <Collapse
+                className="card-body"
+                isOpened={this.state.notificacionesCollapseState[indice]}
+              >
+                <div className="p-2">
+                  {notificacion.tipoNotificacion == "Acuerdo" ? (
+                    <div>
+                      <span className="display-4">
+                        {notificacion.acuerdo.tituloAcuerdo}
+                      </span>
+                      <hr />
+                      <div className="p-5 font-weight-bold text-center">
+                        {notificacion.acuerdo.descripcionAcuerdo}
+                      </div>
+                      <div className="row">
+                        <div className="col-6 text-center">
+                          <span>{t("notificacionesForm.pueblos")}</span>
+                          <hr />
+                          <ul className="list-group">
+                            {typeof notificacion.acuerdo.pueblo.map !=
+                            "undefined"
+                              ? notificacion.acuerdo.pueblo.map(pueblo => {
+                                  return (
+                                    <li className="list-group-item font-weight-bold">
+                                      {pueblo}
+                                    </li>
+                                  );
+                                })
+                              : null}
+                          </ul>
+                        </div>
+                        <div className="col-6 text-center">
+                          <span>{t("notificacionesForm.dias")}</span>
+                          <hr />
+                          <ul className="list-group">
+                            {typeof notificacion.acuerdo.diasAcordados.map !=
+                            "undefined"
+                              ? notificacion.acuerdo.diasAcordados.map(dia => {
+                                  return (
+                                    <li className="list-group-item">
+                                      <span className="font-weight-bold">
+                                        {this.traducirDia(dia.dia) + ": "}
+                                      </span>
+                                      <span>
+                                        {dia.horaInicio + " - " + dia.horaFin}
+                                      </span>
+                                    </li>
+                                  );
+                                })
+                              : null}
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="row mt-5">
+                        <button className="btn btn-success col-6">
+                          {t('notificacionesForm.aceptarAcuerdo')}
+                        </button>
+                        <button className="btn btn-danger col-6">
+                          {t('notificacionesForm.rechazarAcuerdo')}
+                        </button>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              </Collapse>
             </div>
           );
         })}
