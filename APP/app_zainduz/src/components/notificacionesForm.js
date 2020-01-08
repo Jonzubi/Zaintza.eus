@@ -122,16 +122,13 @@ class NotificacionesForm extends React.Component {
     }
   }
 
-  async handleAceptarPropuesta(notificacion, indice) {
-    const acuerdoAceptado = notificacion.acuerdo;
+  async handleGestionarPropuesta(notificacion, indice, ifAccept) {
+    const acuerdo = notificacion.acuerdo;
     let auxJsonNotif = this.state.jsonNotificaciones;
 
-    await axios.patch(
-      "http://" + ipMaquina + ":3001/acuerdo/" + acuerdoAceptado._id,
-      {
-        estadoAcuerdo: 1
-      }
-    );
+    await axios.patch("http://" + ipMaquina + ":3001/acuerdo/" + acuerdo._id, {
+      estadoAcuerdo: ifAccept ? 1 : 2 //Si Accept es true acepta el acuerdo mandando un 1 a la BD, si no un 2
+    });
     await axios.delete(
       "http://" + ipMaquina + ":3001/notificacion/" + notificacion._id
     );
@@ -141,7 +138,13 @@ class NotificacionesForm extends React.Component {
         jsonNotificaciones: auxJsonNotif
       },
       () => {
-        cogoToast.success(<h5>{t("notificacionesForm.acuerdoAceptado")}</h5>);
+        ifAccept
+          ? cogoToast.success(
+              <h5>{t("notificacionesForm.acuerdoAceptado")}</h5>
+            )
+          : cogoToast.success(
+              <h5>{t("notificacionesForm.acuerdoRechazado")}</h5>
+            );
       }
     );
   }
@@ -251,13 +254,13 @@ class NotificacionesForm extends React.Component {
                       <div className="row mt-5 ml-0 mr-0">
                         <button
                           onClick={() =>
-                            this.handleAceptarPropuesta(notificacion, indice)
+                            this.handleGestionarPropuesta(notificacion, indice, true)
                           }
                           className="btn btn-success col-6"
                         >
                           {t("notificacionesForm.aceptarAcuerdo")}
                         </button>
-                        <button className="btn btn-danger col-6">
+                        <button onClick={() => this.handleGestionarPropuesta(notificacion, indice, false)} className="btn btn-danger col-6">
                           {t("notificacionesForm.rechazarAcuerdo")}
                         </button>
                       </div>

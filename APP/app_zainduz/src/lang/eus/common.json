@@ -155,6 +155,7 @@
     "dias": "Eguna/k",
     "aceptarAcuerdo": "Onartu akordioa",
     "rechazarAcuerdo": "Akordio ezeztatu",
-    "acuerdoAceptado": "Akordio onartu duzu"
+    "acuerdoAceptado": "Akordioa onartu duzu",    
+    "acuerdoRechazado": "Akordioa ezeztatu duzu"
   }
 }
