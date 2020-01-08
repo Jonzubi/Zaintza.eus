@@ -143,15 +143,18 @@
   },
   "acuerdosForm": {
     "estadoPendiente": "Onartu zain",
+    "estadoAceptado": "Onartua",
+    "estadoRechazado": "Ezeztatua",
     "headerInformacion": "Akordio informazioa",
     "headerEstado": "Egoera",
     "noData": "Ez duzu akordiorik oraindik"
   },
   "notificacionesForm":{
-    "propuestaAcuerdo": "-ek akordio proposamena bidali dizu",
+    "propuestaAcuerdo": "-k akordio proposamena bidali dizu",
     "pueblos":"Herria/k",
     "dias": "Eguna/k",
     "aceptarAcuerdo": "Onartu akordioa",
-    "rechazarAcuerdo": "Akordio ezeztatu"
+    "rechazarAcuerdo": "Akordio ezeztatu",
+    "acuerdoAceptado": "Akordio onartu duzu"
   }
 }

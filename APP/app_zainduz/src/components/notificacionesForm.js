@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faEye } from "@fortawesome/free-solid-svg-icons";
 import { Collapse } from "react-collapse";
 import Avatar from "react-avatar";
+import cogoToast from "cogo-toast";
 
 const mapStateToProps = state => {
   return {
@@ -84,10 +85,13 @@ class NotificacionesForm extends React.Component {
     aux[index] = !aux[index];
 
     let auxJsonNotif = this.state.jsonNotificaciones;
-    if(!auxJsonNotif[index].visto){
-      await axios.patch("http://" + ipMaquina + ":3001/notificacion/" + auxJsonNotif[index]._id, {
-        visto: true
-      });
+    if (!auxJsonNotif[index].visto) {
+      await axios.patch(
+        "http://" + ipMaquina + ":3001/notificacion/" + auxJsonNotif[index]._id,
+        {
+          visto: true
+        }
+      );
       auxJsonNotif[index].visto = true;
     }
 
@@ -118,6 +122,30 @@ class NotificacionesForm extends React.Component {
     }
   }
 
+  async handleAceptarPropuesta(notificacion, indice) {
+    const acuerdoAceptado = notificacion.acuerdo;
+    let auxJsonNotif = this.state.jsonNotificaciones;
+
+    await axios.patch(
+      "http://" + ipMaquina + ":3001/acuerdo/" + acuerdoAceptado._id,
+      {
+        estadoAcuerdo: 1
+      }
+    );
+    await axios.delete(
+      "http://" + ipMaquina + ":3001/notificacion/" + notificacion._id
+    );
+    delete auxJsonNotif[indice];
+    this.setState(
+      {
+        jsonNotificaciones: auxJsonNotif
+      },
+      () => {
+        cogoToast.success(<h5>{t("notificacionesForm.acuerdoAceptado")}</h5>);
+      }
+    );
+  }
+
   render() {
     return (
       <div className="p-5">
@@ -141,12 +169,15 @@ class NotificacionesForm extends React.Component {
                           }
                         />
                         <div className="ml-3">
-                        <span className="font-weight-bold">
-                          {notificacion.laOtraPersona.nombre +
-                            " " +
-                            notificacion.laOtraPersona.apellido1}
-                        </span>{" "}
-                        <span>{t("notificacionesForm.propuestaAcuerdo")}</span></div>
+                          <span className="font-weight-bold">
+                            {notificacion.laOtraPersona.nombre +
+                              " " +
+                              notificacion.laOtraPersona.apellido1}
+                          </span>{" "}
+                          <span>
+                            {t("notificacionesForm.propuestaAcuerdo")}
+                          </span>
+                        </div>
                       </div>
                     ) : null}
                   </div>
@@ -217,12 +248,17 @@ class NotificacionesForm extends React.Component {
                           </ul>
                         </div>
                       </div>
-                      <div className="row mt-5">
-                        <button className="btn btn-success col-6">
-                          {t('notificacionesForm.aceptarAcuerdo')}
+                      <div className="row mt-5 ml-0 mr-0">
+                        <button
+                          onClick={() =>
+                            this.handleAceptarPropuesta(notificacion, indice)
+                          }
+                          className="btn btn-success col-6"
+                        >
+                          {t("notificacionesForm.aceptarAcuerdo")}
                         </button>
                         <button className="btn btn-danger col-6">
-                          {t('notificacionesForm.rechazarAcuerdo')}
+                          {t("notificacionesForm.rechazarAcuerdo")}
                         </button>
                       </div>
                     </div>

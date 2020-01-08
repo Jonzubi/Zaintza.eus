@@ -132,7 +132,37 @@ class AcuerdosForm extends React.Component {
                             icon={faCircle}
                           />
                         </OverlayTrigger>
-                      ) : null}
+                      ) : acuerdo.estadoAcuerdo == 1 ? (
+                        <OverlayTrigger
+                          key="top"
+                          placement="top"
+                          overlay={
+                            <Tooltip>
+                              {t("acuerdosForm.estadoAceptado")}
+                            </Tooltip>
+                          }
+                        >
+                          <FontAwesomeIcon
+                            className="text-success"
+                            icon={faCircle}
+                          />
+                        </OverlayTrigger>
+                      ) : (
+                        <OverlayTrigger
+                          key="top"
+                          placement="top"
+                          overlay={
+                            <Tooltip>
+                              {t("acuerdosForm.estadoRechazado")}
+                            </Tooltip>
+                          }
+                        >
+                          <FontAwesomeIcon
+                            className="text-danger"
+                            icon={faCircle}
+                          />
+                        </OverlayTrigger>
+                      )}
                     </div>
                     <div className="col-1 text-center my-auto">
                       <FontAwesomeIcon
