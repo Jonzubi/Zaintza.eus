@@ -427,7 +427,8 @@ class Tabla extends React.Component {
           let notificacionData = {
             idUsuario: usuario.data[0]._id,
             tipoNotificacion: "Acuerdo",
-            acuerdo: resultado.data
+            acuerdo: resultado.data,
+            visto: false
           };
           Axios.post(
             "http://" + ipMaquina + ":3001/notificacion",

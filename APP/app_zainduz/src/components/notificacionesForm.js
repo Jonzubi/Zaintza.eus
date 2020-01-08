@@ -4,7 +4,7 @@ import ipMaquina from "../util/ipMaquinaAPI";
 import { connect } from "react-redux";
 import { t } from "../util/funciones";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faEye } from "@fortawesome/free-solid-svg-icons";
 import { Collapse } from "react-collapse";
 import Avatar from "react-avatar";
 
@@ -30,7 +30,6 @@ class NotificacionesForm extends React.Component {
       .then(notificaciones => {
         for (let i = 0; i < notificaciones.data.length; i++) {
           let notificacion = notificaciones.data[i];
-          console.log(notificacion);
           switch (notificacion.tipoNotificacion) {
             //Si es acuerdo recupero los datos de la persona que envio la propuesta
             case "Acuerdo":
@@ -80,12 +79,21 @@ class NotificacionesForm extends React.Component {
     );
   }
 
-  handleToogleCollapseNotificacion(index) {
+  async handleToogleCollapseNotificacion(index) {
     let aux = this.state.notificacionesCollapseState;
     aux[index] = !aux[index];
 
+    let auxJsonNotif = this.state.jsonNotificaciones;
+    if(!auxJsonNotif[index].visto){
+      await axios.patch("http://" + ipMaquina + ":3001/notificacion/" + auxJsonNotif[index]._id, {
+        visto: true
+      });
+      auxJsonNotif[index].visto = true;
+    }
+
     this.setState({
-      notificacionesCollapseState: aux
+      notificacionesCollapseState: aux,
+      jsonNotificaciones: auxJsonNotif
     });
   }
 
@@ -111,7 +119,6 @@ class NotificacionesForm extends React.Component {
   }
 
   render() {
-    console.log("HEEEY");
     return (
       <div className="p-5">
         {this.state.jsonNotificaciones.map((notificacion, indice) => {
@@ -119,11 +126,12 @@ class NotificacionesForm extends React.Component {
             <div className="w-100 card mt-2 mb-2">
               <div className="card-header">
                 <div className="row">
-                  <div className="col-11 text-center align-middle">
+                  <div className="col-11 text-center">
                     {notificacion.tipoNotificacion == "Acuerdo" ? (
-                      <div className="">
+                      <div className="d-flex align-items-center">
                         <Avatar
-                          className="float-left"
+                          size={50}
+                          className=""
                           name={notificacion.laOtraPersona.nombre}
                           src={
                             "http://" +
@@ -132,20 +140,22 @@ class NotificacionesForm extends React.Component {
                             notificacion.laOtraPersona.direcFoto
                           }
                         />
-                        <span className="ml-1 font-weight-bold">
+                        <div className="ml-3">
+                        <span className="font-weight-bold">
                           {notificacion.laOtraPersona.nombre +
                             " " +
                             notificacion.laOtraPersona.apellido1}
                         </span>{" "}
-                        <span>{t("notificacionesForm.propuestaAcuerdo")}</span>
+                        <span>{t("notificacionesForm.propuestaAcuerdo")}</span></div>
                       </div>
                     ) : null}
                   </div>
                   <div className="col-1 text-center my-auto">
                     <FontAwesomeIcon
                       style={{ cursor: "pointer" }}
+                      color={notificacion.visto ? "#7F8C8D" : "#17202A"}
                       size="2x"
-                      icon={faCaretDown}
+                      icon={faEye}
                       className=""
                       onClick={() =>
                         this.handleToogleCollapseNotificacion(indice)

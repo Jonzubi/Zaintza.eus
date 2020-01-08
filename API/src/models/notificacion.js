@@ -9,6 +9,10 @@ var notificacion = new mongoose.Schema({
     type: String,
     required: true
   },
+  visto:{
+    type: Boolean,
+    required: true
+  },
   acuerdo: Object
 });
 

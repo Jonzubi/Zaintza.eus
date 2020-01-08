@@ -39,7 +39,8 @@ class MenuPerfil extends React.Component {
       Axios.get("http://" + ipMaquina + ":3001/notificacion", {
         params: {
           filtros: {
-            idUsuario: this.props.idUsuario
+            idUsuario: this.props.idUsuario,
+            visto: false
           }
         }
       }).then(resultado => {
@@ -49,6 +50,13 @@ class MenuPerfil extends React.Component {
         ) {
           this.setState({
             countNotificaciones: resultado.data.length
+          });
+        } else if (
+          resultado.data == "Vacio" &&
+          this.state.countNotificaciones != 0
+        ) {
+          this.setState({
+            countNotificaciones: 0
           });
         }
       });
