@@ -152,7 +152,7 @@ class NotificacionesForm extends React.Component {
   render() {
     return (
       <div className="p-5">
-        {this.state.jsonNotificaciones.map((notificacion, indice) => {
+        {this.state.jsonNotificaciones.length != 0 ? this.state.jsonNotificaciones.map((notificacion, indice) => {
           return (
             <div className="w-100 card mt-2 mb-2">
               <div className="card-header">
@@ -270,7 +270,13 @@ class NotificacionesForm extends React.Component {
               </Collapse>
             </div>
           );
-        })}
+        }) : (
+          <div className="d-flex justify-content-center">
+            <small className="text-danger my-auto">
+              {t("notificacionesForm.noData")}
+            </small>
+          </div>
+        )}
       </div>
     );
   }

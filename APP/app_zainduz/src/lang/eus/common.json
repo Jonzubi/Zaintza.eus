@@ -156,6 +156,7 @@
     "aceptarAcuerdo": "Onartu akordioa",
     "rechazarAcuerdo": "Akordio ezeztatu",
     "acuerdoAceptado": "Akordioa onartu duzu",    
-    "acuerdoRechazado": "Akordioa ezeztatu duzu"
+    "acuerdoRechazado": "Akordioa ezeztatu duzu",    
+    "noData": "Ez daukazu abixurik"
   }
 }

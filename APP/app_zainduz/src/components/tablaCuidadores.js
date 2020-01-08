@@ -314,14 +314,6 @@ class Tabla extends React.Component {
       return;
     }
 
-    if (!this.state.showPropuestaModal) {
-      this.setState({
-        showPropuestaModal: true
-      });
-      return;
-    }
-
-    //Comprobacion de errores
     let comprobAcuerdoUnico = await Axios.get(
       "http://" + ipMaquina + ":3001/acuerdo",
       {
@@ -338,6 +330,14 @@ class Tabla extends React.Component {
       return;
     }
 
+    if (!this.state.showPropuestaModal) {
+      this.setState({
+        showPropuestaModal: true
+      });
+      return;
+    }
+
+    //Comprobacion de errores
     for (var clave in this.state) {
       if (
         (this.state[clave].length == 0 || !this.state[clave]) &&
