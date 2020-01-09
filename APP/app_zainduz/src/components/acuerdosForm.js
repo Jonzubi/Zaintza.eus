@@ -126,16 +126,34 @@ class AcuerdosForm extends React.Component {
     }
   }
 
-  async handleTerminarAcuerdo(acuerdo, indice){
-    await axios.patch("http://" + ipMaquina +":3001/acuerdo/" + acuerdo._id, {
-      estadoAcuerdo: 2
+  async handleTerminarAcuerdo(acuerdo, indice) {
+    if (acuerdo.estadoAcuerdo == 2) {
+      return;
+    }
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+
+    var yyyy = today.getFullYear();
+    if (dd < 10) {
+      dd = "0" + dd;
+    }
+    if (mm < 10) {
+      mm = "0" + mm;
+    }
+    var today = dd + "/" + mm + "/" + yyyy;
+
+    await axios.patch("http://" + ipMaquina + ":3001/acuerdo/" + acuerdo._id, {
+      estadoAcuerdo: 2,
+      dateFinAcuerdo: today
     });
     //Ahora se quiere notificar a la otra parte del acuerdo de la finalizacion del acuerdo
-    let buscarUsuOrCuid = this.props.tipoUsuario == "C" ? "idCuidador" : "idCliente";
+    let buscarUsuOrCuid =
+      this.props.tipoUsuario == "C" ? "idCuidador" : "idCliente";
     const idElOtro = acuerdo[buscarUsuOrCuid];
     let elOtroUsu = await axios.get("http://" + ipMaquina + ":3001/usuario", {
-      params:{
-        filtros:{
+      params: {
+        filtros: {
           idPerfil: idElOtro
         }
       }
@@ -147,15 +165,21 @@ class AcuerdosForm extends React.Component {
       valorGestion: false,
       visto: false
     };
-    await axios.post("http://" + ipMaquina + ":3001/notificacion", notificacionData);
+    await axios.post(
+      "http://" + ipMaquina + ":3001/notificacion",
+      notificacionData
+    );
 
     let auxJsonAcuerdos = this.state.jsonAcuerdos;
     auxJsonAcuerdos[indice].estadoAcuerdo = 2;
-    this.setState({
-      jsonAcuerdos: auxJsonAcuerdos
-    }, () => {
-    cogoToast.success(<h5>{t('acuerdosForm.acuerdoTerminado')}</h5>)
-    });
+    this.setState(
+      {
+        jsonAcuerdos: auxJsonAcuerdos
+      },
+      () => {
+        cogoToast.success(<h5>{t("acuerdosForm.acuerdoTerminado")}</h5>);
+      }
+    );
   }
 
   render() {
@@ -303,7 +327,16 @@ class AcuerdosForm extends React.Component {
                       </div>
                     </div>
                     <div className="row ml-0 mr-0 mt-5">
-                      <button onClick={() => this.handleTerminarAcuerdo(acuerdo, indice)} className="w-100 btn btn-danger">
+                      <button
+                        onClick={() =>
+                          this.handleTerminarAcuerdo(acuerdo, indice)
+                        }
+                        className={
+                          acuerdo.estadoAcuerdo != 2
+                            ? "w-100 btn btn-danger"
+                            : "w-100 btn btn-danger disabled"
+                        }
+                      >
                         {t("acuerdosForm.terminarAcuerdo")}
                       </button>
                     </div>
