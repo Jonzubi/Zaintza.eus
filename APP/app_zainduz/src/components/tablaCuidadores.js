@@ -32,7 +32,8 @@ import municipios from "../util/municipos";
 const mapStateToProps = state => {
   return {
     tipoUsuario: state.user.tipoUsuario,
-    idCliente: state.user._id
+    idCliente: state.user._id,
+    idUsuario: state.user._idUsuario
   };
 };
 
@@ -426,6 +427,7 @@ class Tabla extends React.Component {
         }).then(usuario => {
           let notificacionData = {
             idUsuario: usuario.data[0]._id,
+            idRemitente: this.props.idUsuario,
             tipoNotificacion: "Acuerdo",
             acuerdo: resultado.data,
             visto: false

@@ -151,6 +151,8 @@
   },
   "notificacionesForm":{
     "propuestaAcuerdo": "-k akordio proposamena bidali dizu",
+    "otraPersonaAcuerdoAceptado": "-k akordioa onartu du",
+    "otraPersonaAcuerdoRechazado": "-k akordioa ezeztatu du",
     "pueblos":"Herria/k",
     "dias": "Eguna/k",
     "aceptarAcuerdo": "Onartu akordioa",
