@@ -147,7 +147,12 @@
     "estadoRechazado": "Ezeztatua",
     "headerInformacion": "Akordio informazioa",
     "headerEstado": "Egoera",
-    "noData": "Ez duzu akordiorik oraindik"
+    "noData": "Ez duzu akordiorik oraindik",
+    "esperandoAcuerdo": "-k akordioa onartu zain...",
+    "aceptadoAcuerdo": "-rekin akordio aktibo bat duzu",
+    "rechazadoAcuerdo": "-rekin akordioa bukaturik dago",
+    "terminarAcuerdo": "Akordioa bukatu", 
+    "acuerdoTerminado": "Akordioa ezeztatu duzu"
   },
   "notificacionesForm":{
     "propuestaAcuerdo": "-k akordio proposamena bidali dizu",

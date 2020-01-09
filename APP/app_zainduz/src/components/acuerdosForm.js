@@ -13,10 +13,13 @@ import { connect } from "react-redux";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import { t } from "../util/funciones";
+import Avatar from "react-avatar";
+import cogoToast from "cogo-toast";
 
 const mapStateToProps = state => {
   return {
     idPerfil: state.user._id,
+    idUsuario: state.user._idUsuario,
     tipoUsuario: state.user.tipoUsuario
   };
 };
@@ -102,6 +105,59 @@ class AcuerdosForm extends React.Component {
     });
   }
 
+  traducirDia(indice) {
+    switch (parseInt(indice)) {
+      case 1:
+        return "Astelehena";
+      case 2:
+        return "Asteartea";
+      case 3:
+        return "Asteazkena";
+      case 4:
+        return "Osteguna";
+      case 5:
+        return "Ostirala";
+      case 6:
+        return "Larunbata";
+      case 7:
+        return "Igandea";
+      default:
+        return "WTF";
+    }
+  }
+
+  async handleTerminarAcuerdo(acuerdo, indice){
+    await axios.patch("http://" + ipMaquina +":3001/acuerdo/" + acuerdo._id, {
+      estadoAcuerdo: 2
+    });
+    //Ahora se quiere notificar a la otra parte del acuerdo de la finalizacion del acuerdo
+    let buscarUsuOrCuid = this.props.tipoUsuario == "C" ? "idCuidador" : "idCliente";
+    const idElOtro = acuerdo[buscarUsuOrCuid];
+    let elOtroUsu = await axios.get("http://" + ipMaquina + ":3001/usuario", {
+      params:{
+        filtros:{
+          idPerfil: idElOtro
+        }
+      }
+    });
+    const notificacionData = {
+      idUsuario: elOtroUsu.data[0]._id,
+      idRemitente: this.props.idUsuario,
+      tipoNotificacion: "AcuerdoGestionado",
+      valorGestion: false,
+      visto: false
+    };
+    await axios.post("http://" + ipMaquina + ":3001/notificacion", notificacionData);
+
+    let auxJsonAcuerdos = this.state.jsonAcuerdos;
+    auxJsonAcuerdos[indice].estadoAcuerdo = 2;
+    this.setState({
+      jsonAcuerdos: auxJsonAcuerdos
+    }, () => {
+    cogoToast.success(<h5>{t('acuerdosForm.acuerdoTerminado')}</h5>)
+    });
+  }
+
   render() {
     return (
       <div className="p-5 h-100">
@@ -111,10 +167,34 @@ class AcuerdosForm extends React.Component {
               <div className="w-100 card">
                 <div className="card-header">
                   <div className="row">
-                    <div className="col-10 text-center my-auto font-weight-bold">
-                      {acuerdo.laOtraPersona.nombre +
-                        " " +
-                        acuerdo.laOtraPersona.apellido1}
+                    <div className="col-10 text-center">
+                      <div className="d-flex align-items-center">
+                        <Avatar
+                          size={50}
+                          className=""
+                          name={acuerdo.laOtraPersona.nombre}
+                          src={
+                            "http://" +
+                            ipMaquina +
+                            ":3001/image/" +
+                            acuerdo.laOtraPersona.direcFoto
+                          }
+                        />
+                        <div className="ml-3">
+                          <span className="font-weight-bold">
+                            {acuerdo.laOtraPersona.nombre +
+                              " " +
+                              acuerdo.laOtraPersona.apellido1}
+                          </span>{" "}
+                          <span>
+                            {acuerdo.estadoAcuerdo == 0
+                              ? t("acuerdosForm.esperandoAcuerdo")
+                              : acuerdo.estadoAcuerdo == 1
+                              ? t("acuerdosForm.aceptadoAcuerdo")
+                              : t("acuerdosForm.rechazadoAcuerdo")}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                     <div className="col-1 text-center my-auto">
                       {acuerdo.estadoAcuerdo == 0 ? (
@@ -179,7 +259,55 @@ class AcuerdosForm extends React.Component {
                   className="card-body"
                   isOpened={this.state.acuerdosCollapseState[indice]}
                 >
-                  <div className="p-2">{acuerdo.descripcionAcuerdo}</div>
+                  <div>
+                    <span className="display-4">{acuerdo.tituloAcuerdo}</span>
+                    <hr />
+                    <div className="p-5 font-weight-bold text-center">
+                      {acuerdo.descripcionAcuerdo}
+                    </div>
+                    <div className="row">
+                      <div className="col-6 text-center">
+                        <span>{t("notificacionesForm.pueblos")}</span>
+                        <hr />
+                        <ul className="list-group">
+                          {typeof acuerdo.pueblo.map != "undefined"
+                            ? acuerdo.pueblo.map(pueblo => {
+                                return (
+                                  <li className="list-group-item font-weight-bold">
+                                    {pueblo}
+                                  </li>
+                                );
+                              })
+                            : null}
+                        </ul>
+                      </div>
+                      <div className="col-6 text-center">
+                        <span>{t("notificacionesForm.dias")}</span>
+                        <hr />
+                        <ul className="list-group">
+                          {typeof acuerdo.diasAcordados.map != "undefined"
+                            ? acuerdo.diasAcordados.map(dia => {
+                                return (
+                                  <li className="list-group-item">
+                                    <span className="font-weight-bold">
+                                      {this.traducirDia(dia.dia) + ": "}
+                                    </span>
+                                    <span>
+                                      {dia.horaInicio + " - " + dia.horaFin}
+                                    </span>
+                                  </li>
+                                );
+                              })
+                            : null}
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="row ml-0 mr-0 mt-5">
+                      <button onClick={() => this.handleTerminarAcuerdo(acuerdo, indice)} className="w-100 btn btn-danger">
+                        {t("acuerdosForm.terminarAcuerdo")}
+                      </button>
+                    </div>
+                  </div>
                 </Collapse>
               </div>
             );
