@@ -21,7 +21,11 @@ var notificacion = new mongoose.Schema({
   acuerdo: Object,
   //Este es si el acuerdo ha sido aceptado o rechazado en el caso de 
   //que la notificacion sea una decision de un usuario en una notificacion
-  valorGestion: Boolean
+  valorGestion: Boolean,
+  dateEnvioNotificacion: {
+    type: Date,
+    required: true
+  }
 });
 
 var Notificacion = mongoose.model("Notificacion", notificacion, "Notificaciones");

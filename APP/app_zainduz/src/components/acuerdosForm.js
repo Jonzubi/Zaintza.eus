@@ -130,11 +130,11 @@ class AcuerdosForm extends React.Component {
     if (acuerdo.estadoAcuerdo == 2) {
       return;
     }
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth() + 1;
+    var objToday = new Date();
+    var dd = objToday.getDate();
+    var mm = objToday.getMonth() + 1;
 
-    var yyyy = today.getFullYear();
+    var yyyy = objToday.getFullYear();
     if (dd < 10) {
       dd = "0" + dd;
     }
@@ -163,7 +163,8 @@ class AcuerdosForm extends React.Component {
       idRemitente: this.props.idUsuario,
       tipoNotificacion: "AcuerdoGestionado",
       valorGestion: false,
-      visto: false
+      visto: false,
+      dateEnvioNotificacion: today + " " + objToday.getHours() + ":" + objToday.getMinutes()
     };
     await axios.post(
       "http://" + ipMaquina + ":3001/notificacion",

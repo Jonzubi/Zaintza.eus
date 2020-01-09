@@ -387,11 +387,11 @@ class Tabla extends React.Component {
     this.setState({
       propuestaIsLoading: true
     });
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth() + 1;
+    var objToday = new Date();
+    var dd = objToday.getDate();
+    var mm = objToday.getMonth() + 1;
 
-    var yyyy = today.getFullYear();
+    var yyyy = objToday.getFullYear();
     if (dd < 10) {
       dd = "0" + dd;
     }
@@ -431,7 +431,8 @@ class Tabla extends React.Component {
             idRemitente: this.props.idUsuario,
             tipoNotificacion: "Acuerdo",
             acuerdo: resultado.data,
-            visto: false
+            visto: false,
+            dateEnvioNotificacion: today + " " + objToday.getHours() + ":" + objToday.getMinutes()
           };
           Axios.post(
             "http://" + ipMaquina + ":3001/notificacion",

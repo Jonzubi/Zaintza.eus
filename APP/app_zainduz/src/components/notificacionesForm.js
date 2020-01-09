@@ -149,6 +149,18 @@ class NotificacionesForm extends React.Component {
   }
 
   async handleGestionarPropuesta(notificacion, indice, ifAccept) {
+    var objToday = new Date();
+    var dd = objToday.getDate();
+    var mm = objToday.getMonth() + 1;
+
+    var yyyy = objToday.getFullYear();
+    if (dd < 10) {
+      dd = "0" + dd;
+    }
+    if (mm < 10) {
+      mm = "0" + mm;
+    }
+    var today = dd + "/" + mm + "/" + yyyy;
     const acuerdo = notificacion.acuerdo;
     let auxJsonNotif = this.state.jsonNotificaciones;
     //Squi estoy pillando el estado actual del acuerdo para comprobar que el acuerdo no se ha cancelado ya por el usuario.
@@ -199,7 +211,8 @@ class NotificacionesForm extends React.Component {
       idRemitente: notificacion.idUsuario,
       tipoNotificacion: "AcuerdoGestionado",
       valorGestion: ifAccept,
-      visto: false
+      visto: false,
+      dateEnvioNotificacion: today + " " + objToday.getHours() + ":" + objToday.getMinutes()
     });
     await axios.delete(
       "http://" + ipMaquina + ":3001/notificacion/" + notificacion._id
@@ -289,6 +302,9 @@ class NotificacionesForm extends React.Component {
                               {notificacion.valorGestion ? t("notificacionesForm.otraPersonaAcuerdoAceptado") : t("notificacionesForm.otraPersonaAcuerdoRechazado")}
                             </span>
                           </div>
+                          <span className="ml-5">
+                            {new Date(notificacion.dateEnvioNotificacion).getHours() + ":" + new Date(notificacion.dateEnvioNotificacion).getMinutes()}
+                          </span>
                         </div>
                       ) : null}
                     </div>
