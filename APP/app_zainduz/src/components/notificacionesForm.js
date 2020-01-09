@@ -4,7 +4,7 @@ import ipMaquina from "../util/ipMaquinaAPI";
 import { connect } from "react-redux";
 import { t } from "../util/funciones";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faEye, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { Collapse } from "react-collapse";
 import Avatar from "react-avatar";
 import cogoToast from "cogo-toast";
@@ -164,6 +164,14 @@ class NotificacionesForm extends React.Component {
       cogoToast.error(<h5>
         {t('notificacionesForm.acuerdoYaRechazado')}
       </h5>);
+      await axios.delete(
+        "http://" + ipMaquina + ":3001/notificacion/" + notificacion._id
+      );
+      delete auxJsonNotif[indice];
+      this.setState(
+        {
+          jsonNotificaciones: auxJsonNotif
+        });
       return;
     }
 
@@ -213,6 +221,17 @@ class NotificacionesForm extends React.Component {
     );
   }
 
+  async handleDeleteNotificacion(notificacion, indice){
+    let auxJsonNotif = this.state.jsonNotificaciones;
+
+    await axios.delete("http://" + ipMaquina + ":3001/notificacion/" + notificacion._id);
+    delete auxJsonNotif[indice];
+
+    this.setState({
+      jsonNotificaciones: auxJsonNotif
+    });
+  }
+
   render() {
     return (
       <div className="p-5">
@@ -222,7 +241,7 @@ class NotificacionesForm extends React.Component {
               <div className="w-100 card mt-2 mb-2">
                 <div className="card-header">
                   <div className="row">
-                    <div className="col-11 text-center">
+                    <div className="col-10 text-center">
                       {notificacion.tipoNotificacion == "Acuerdo" ? (
                         <div className="d-flex align-items-center">
                           <Avatar
@@ -282,6 +301,17 @@ class NotificacionesForm extends React.Component {
                         className=""
                         onClick={() =>
                           this.handleToogleCollapseNotificacion(indice)
+                        }
+                      />
+                    </div>
+                    <div className="col-1 text-center my-auto">
+                      <FontAwesomeIcon
+                        style={{ cursor: "pointer" }}
+                        size="2x"
+                        icon={faTrashAlt}
+                        className="text-danger"
+                        onClick={() =>
+                          this.handleDeleteNotificacion(notificacion,indice)
                         }
                       />
                     </div>
