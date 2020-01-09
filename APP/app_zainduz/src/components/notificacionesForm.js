@@ -151,6 +151,21 @@ class NotificacionesForm extends React.Component {
   async handleGestionarPropuesta(notificacion, indice, ifAccept) {
     const acuerdo = notificacion.acuerdo;
     let auxJsonNotif = this.state.jsonNotificaciones;
+    //Squi estoy pillando el estado actual del acuerdo para comprobar que el acuerdo no se ha cancelado ya por el usuario.
+    //Por ejemplo sui ha hecho una propuesta erronea
+    let estadoAcuerdo = await axios.get("http://" + ipMaquina + ":3001/acuerdo/" + notificacion.acuerdo._id, {
+      params:{
+        columnas: "estadoAcuerdo"
+      }
+    });
+    //Hago esto para que sea mas legible, ya que con el axios estado acuerdo contiene data y despues data contiene el dato del estadoAcuerdo: X
+    estadoAcuerdo = estadoAcuerdo.data.estadoAcuerdo;
+    if(estadoAcuerdo == 2){
+      cogoToast.error(<h5>
+        {t('notificacionesForm.acuerdoYaRechazado')}
+      </h5>);
+      return;
+    }
 
     await axios.patch("http://" + ipMaquina + ":3001/acuerdo/" + acuerdo._id, {
       estadoAcuerdo: ifAccept ? 1 : 2 //Si Accept es true acepta el acuerdo mandando un 1 a la BD, si no un 2
