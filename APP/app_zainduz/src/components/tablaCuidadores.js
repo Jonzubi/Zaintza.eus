@@ -321,7 +321,8 @@ class Tabla extends React.Component {
         params: {
           filtros: {
             idCliente: this.props.idCliente,
-            idCuidador: this.state.selectedCuidador._id
+            idCuidador: this.state.selectedCuidador._id,
+            $or:[{estadoAcuerdo: 1}, {estadoAcuerdo: 0}]
           }
         }
       }
@@ -1033,7 +1034,7 @@ class Tabla extends React.Component {
                       <label className="w-100 text-center">
                         {t("tablaCuidadores.pueblos")}:
                       </label>
-                      <div class="form-group mt-2">
+                      <div className="form-group mt-2">
                         <AutoSuggest
                           suggestions={this.state.suggestionsPueblos}
                           onSuggestionsFetchRequested={
@@ -1084,7 +1085,7 @@ class Tabla extends React.Component {
                     </label>
                     <textarea
                       onChange={this.handleInputChange}
-                      class={
+                      className={
                         this.state.error.txtNombre
                           ? "border border-danger form-control"
                           : "form-control"
