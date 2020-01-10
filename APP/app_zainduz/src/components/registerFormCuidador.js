@@ -175,7 +175,7 @@ class RegisterForm extends React.Component {
   };
 
   onClose() {
-    this.setState({ avatarPreview: "" });
+    this.setState({ avatarPreview: "", avatarSrc: "" });
   }
 
   onCrop(preview) {
@@ -362,8 +362,10 @@ class RegisterForm extends React.Component {
 
   async handleRegistrarse() {
     for (var clave in this.state) {
+      if(this.state[clave] === null)
+        continue;
       if (
-        (this.state[clave].length == 0 || !this.state[clave]) &&
+        (this.state[clave].length == 0) &&
         this.requiredStates.includes(clave)
       ) {
         cogoToast.error(

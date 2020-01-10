@@ -186,8 +186,11 @@ exports.getImage = (req, res) => {
           }
           stream.pipe(res);
         }
-      })
-      
+      });
+      if(!found){
+        res.write("Vacio");
+        res.end();
+      }
     }
   });
 };

@@ -18,7 +18,9 @@ const MapDispachToProps = dispatch => {
 
 const MapStateToProps = state => {
   return {    
-    direcFoto: state.user.direcFoto    
+    direcFoto: state.user.direcFoto,
+    nombre: state.user.nombre,
+    apellido1: state.user.apellido1 
   };
 };
 

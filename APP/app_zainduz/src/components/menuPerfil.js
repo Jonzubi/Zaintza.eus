@@ -21,7 +21,9 @@ const mapStateToProps = state => {
     direcFoto: state.user.direcFoto,
     tipoUsuario: state.user.tipoUsuario,
     idPerfil: state.user._id,
-    idUsuario: state.user._idUsuario
+    idUsuario: state.user._idUsuario,
+    nombre: state.user.nombre,
+    apellido1: state.user.apellido1
   };
 };
 
@@ -75,6 +77,8 @@ class MenuPerfil extends React.Component {
   }
 
   getAvatar() {
+    console.log("IZEENA");
+    console.log(this.props.nombre);
     return this.props.direcFoto == "" ? (
       <FontAwesomeIcon
         size="10x"
@@ -84,7 +88,7 @@ class MenuPerfil extends React.Component {
       />
     ) : (
       <Avatar
-        name={this.props.nombre + " " + this.props.apellido1}
+        name={this.props.nombre + " " + this.props.apellido1 || ""}
         src={"http://" + ipMaquina + ":3001/image/" + this.props.direcFoto}
         className="mx-auto"
         round={true}
