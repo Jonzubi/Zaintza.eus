@@ -67,7 +67,7 @@ class Header extends React.Component {
           }}
           style={{ textDecoration: "none" }}
         >
-          <h1 className="w-100 d-inline display-1 text-light headerTitle">Euskal zaintza</h1>
+          <h1 className="w-100 d-inline display-1 text-light headerTitle">Zaintza</h1>
         </a>
         <IconAvatar />
       </Headroom>
