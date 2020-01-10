@@ -1,7 +1,10 @@
-const mongoose = require("mongoose");
+let mongoose = require("mongoose");
+const pwdAtlas = require("./mongoDBAtlasPWD");
 const ipMaquina = require("./ipMaquina");
-
-
-mongoose.connect('mongodb://' + ipMaquina + ':27017/zainduz', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true});
+//Esta es para el Atlas
+//const uri = 'mongodb+srv://<admin>:<'+pwdAtlas+'>@jonzubiCloud-7eg52.azure.mongodb.net/zaintza?retryWrites=true&w=majority';
+//Esta es la local
+const uri = 'mongodb://' + ipMaquina + ':27017/zainduz';
+mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true});
 
 module.exports = mongoose;
