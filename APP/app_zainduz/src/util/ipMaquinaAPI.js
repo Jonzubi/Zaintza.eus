@@ -1,1 +1,1 @@
-module.exports="localhost";
+module.exports="dev.zaintza.eus";
