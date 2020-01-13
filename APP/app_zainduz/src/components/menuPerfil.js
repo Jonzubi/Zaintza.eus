@@ -77,8 +77,6 @@ class MenuPerfil extends React.Component {
   }
 
   getAvatar() {
-    console.log("IZEENA");
-    console.log(this.props.nombre);
     return this.props.direcFoto == "" ? (
       <FontAwesomeIcon
         size="10x"

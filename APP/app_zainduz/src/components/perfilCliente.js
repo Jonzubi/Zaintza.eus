@@ -316,7 +316,7 @@ class PerfilCliente extends React.Component {
                 <FontAwesomeIcon className="ml-1" icon={faEdit} />
               </button>
             ) : this.state.isLoading ? (
-              <img src={loadGif} height={50} width={50} />
+              <img src={"http://" + ipMaquina + ":3001/image/loadGif"} height={50} width={50} />
             ) : (
               <button
                 onClick={() => this.handleGuardarCambios()}

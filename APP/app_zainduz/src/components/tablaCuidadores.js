@@ -655,7 +655,7 @@ class Tabla extends React.Component {
           <div className="w-100 text-center">
             <img
               style={{ marginTop: "300px" }}
-              src={loadGif}
+              src={"http://" + ipMaquina + ":3001/image/loadGif"}
               height={100}
               width={100}
             />

@@ -43,77 +43,82 @@ class LogInForm extends React.Component {
       contrasena: vContrasena
     };
 
-    this.setState({
-      isLoading: true
-    });
-
-    axios
-      .get("http://" + ipMaquina + ":3001/usuario", {
-        params: {
-          filtros: JSON.stringify(objFiltros)
-        }
-      })
-      .then(usuario => {
-        if (usuario.data != "Vacio") {
-          usuario = usuario.data[0];
-          var idPerfil = usuario.idPerfil;
-          var tipoUsuario = usuario.tipoUsuario;
-          let modelo = "";
-          switch (tipoUsuario) {
-            case "Z":
-              modelo = "cuidador";
-              break;
-            case "C":
-              modelo = "cliente";
-              break;
-            default:
-              return;
-          }
-          axios
-            .get("http://" + ipMaquina + ":3001/" + modelo + "/" + idPerfil)
-            .then(resultado => {
-              this.props.saveUserSession(
-                Object.assign({}, resultado.data, {
-                  _id: idPerfil,
-                  _idUsuario: usuario._id,
-                  email: usuario.email,
-                  tipoUsuario: tipoUsuario
-                })
-              );
-
-              if (this.state.chkRecordarme) {
-                window.localStorage.setItem("nombreUsuario", vEmail);
-                window.localStorage.setItem("password", vContrasena);
-              } else {
-                window.localStorage.removeItem("nombreUsuario");
-                window.localStorage.removeItem("password");
+    this.setState(
+      {
+        isLoading: true
+      },
+      () => {
+        axios
+          .get("http://" + ipMaquina + ":3001/usuario", {
+            params: {
+              filtros: JSON.stringify(objFiltros)
+            }
+          })
+          .then(usuario => {
+            if (usuario.data != "Vacio") {
+              usuario = usuario.data[0];
+              var idPerfil = usuario.idPerfil;
+              var tipoUsuario = usuario.tipoUsuario;
+              let modelo = "";
+              switch (tipoUsuario) {
+                case "Z":
+                  modelo = "cuidador";
+                  break;
+                case "C":
+                  modelo = "cliente";
+                  break;
+                default:
+                  return;
               }
+              axios
+                .get("http://" + ipMaquina + ":3001/" + modelo + "/" + idPerfil)
+                .then(resultado => {
+                  this.props.saveUserSession(
+                    Object.assign({}, resultado.data, {
+                      _id: idPerfil,
+                      _idUsuario: usuario._id,
+                      email: usuario.email,
+                      tipoUsuario: tipoUsuario
+                    })
+                  );
 
-              this.props.toogleMenuPerfil(false);
-              cogoToast.success(<h5>{t("notificaciones.sesionIniciada")}</h5>);
+                  if (this.state.chkRecordarme) {
+                    window.localStorage.setItem("nombreUsuario", vEmail);
+                    window.localStorage.setItem("password", vContrasena);
+                  } else {
+                    window.localStorage.removeItem("nombreUsuario");
+                    window.localStorage.removeItem("password");
+                  }
+
+                  this.props.toogleMenuPerfil(false);
+                  cogoToast.success(
+                    <h5>{t("notificaciones.sesionIniciada")}</h5>
+                  );
+                  this.setState({
+                    isLoading: false
+                  });
+                })
+                .catch(err => {
+                  cogoToast.error(<h5>{t("notificaciones.errorConexion")}</h5>);
+                  this.setState({
+                    isLoading: false
+                  });
+                });
+            } else {
+              cogoToast.error(<h5>{t("notificaciones.datosIncorrectos")}</h5>);
               this.setState({
                 isLoading: false
               });
-            })
-            .catch(err => {
-              cogoToast.error(<h5>{t("notificaciones.errorConexion")}</h5>);
-              this.setState({
-                isLoading: false
-              });
+            }
+          })
+          .catch(err => {
+            cogoToast.error(<h5>{t("notificaciones.errorConexion")}</h5>);
+            this.setState({
+              isLoading: false
             });
-        } else {
-          cogoToast.error(<h5>{t("notificaciones.datosIncorrectos")}</h5>);
-          this.setState({
-            isLoading: false
           });
-        }
-      })
-      .catch(err => {
-        cogoToast.error(<h5>{t("notificaciones.errorConexion")}</h5>);
-        this.setState({
-          isLoading: false
-        });
-      });
+      }
+    );
   }
 
   handleInputChange(e) {
@@ -169,8 +174,8 @@ class LogInForm extends React.Component {
           </label>
         </div>
         {this.state.isLoading ? (
-          <div className="row mt-3 text-center">
-            <img src={loadGif} height={50} width={50} />
+          <div className="row mt-3 justify-content-center">
+            <img src={"http://" + ipMaquina + ":3001/image/loadGif"} height={50} width={50} />
           </div>
         ) : (
           <div className="row mt-3">

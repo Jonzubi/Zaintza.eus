@@ -1197,7 +1197,7 @@ class RegisterForm extends React.Component {
 
           <div id="loaderOrButton" className="w-100 mt-5 text-center">
             {this.state.isLoading ? (
-              <img src={loadGif} height={50} width={50} />
+              <img src={"http://" + ipMaquina + ":3001/image/loadGif"} height={50} width={50} />
             ) : (
               <button
                 onClick={this.handleRegistrarse}
