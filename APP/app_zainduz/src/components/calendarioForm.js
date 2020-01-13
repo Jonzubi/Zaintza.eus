@@ -1,15 +1,22 @@
 import React from "react";
+import { Calendar } from "react-big-calendar";
+import { connect } from "react-redux";
 
-class CalendarioForm extends React.Component{
-    constructor(props){
-        super(props);
-    }
+const mapStateToProps = state => {
+  return {
+    idPerfil: state.user._id,
+    idUsuario: state.user._idUsuario
+  };
+};
 
-    render(){
-        return(
-            <h1>Calendario</h1>
-        );
-    }
+class CalendarioForm extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return <h1>Calendario</h1>;
+  }
 }
 
-export default CalendarioForm;
+export default connect(mapStateToProps, null)(CalendarioForm);
