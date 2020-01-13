@@ -160,7 +160,7 @@ class NotificacionesForm extends React.Component {
     if (mm < 10) {
       mm = "0" + mm;
     }
-    var today = dd + "/" + mm + "/" + yyyy;
+    var today = mm + "/" + dd + "/" + yyyy;
     const acuerdo = notificacion.acuerdo;
     let auxJsonNotif = this.state.jsonNotificaciones;
     //Squi estoy pillando el estado actual del acuerdo para comprobar que el acuerdo no se ha cancelado ya por el usuario.

@@ -398,7 +398,7 @@ class Tabla extends React.Component {
     if (mm < 10) {
       mm = "0" + mm;
     }
-    var today = dd + "/" + mm + "/" + yyyy;
+    var today = mm + "/" + dd + "/" + yyyy;
 
     //Aqui me monto el acuerdo para subirlo
     //Estado acuerdo no lo tengo definido todavia pero seria algo como:
@@ -456,13 +456,15 @@ class Tabla extends React.Component {
             cogoToast.success(
               <h5>{t("tablaCuidadores.exitoEnviarPropuesta")}</h5>
             );
+
+            this.setState({
+              propuestaIsLoading: false
+            });
           });
         });
       })
       .catch(err => {
-        cogoToast.success(<h5>{t("tablaCuidadores.errorGeneral")}</h5>);
-      })
-      .finally(() => {
+        cogoToast.error(<h5>{t("tablaCuidadores.errorGeneral")}</h5>);
         this.setState({
           propuestaIsLoading: false
         });
