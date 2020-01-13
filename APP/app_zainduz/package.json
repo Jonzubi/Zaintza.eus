@@ -19,6 +19,7 @@
     "react-autosuggest": "^9.4.3",
     "react-avatar": "^3.7.0",
     "react-avatar-edit": "^0.8.3",
+    "react-big-calendar": "^0.23.0",
     "react-bootstrap": "^1.0.0-beta.16",
     "react-burger-menu": "^2.6.11",
     "react-collapse": "^5.0.0",

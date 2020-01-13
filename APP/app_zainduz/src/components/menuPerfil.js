@@ -129,6 +129,11 @@ class MenuPerfil extends React.Component {
     cogoToast.success(<h5>{t("notificaciones.sesionCerrada")}</h5>);
   }
 
+  handleClickCalendario(){
+    this.props.changeFormContent("calendario");
+    this.props.toogleMenuPerfil(false);
+  }
+
   getMenuContent() {
     if (!this.props.tipoUsuario) {
       return <LogInForm />;
@@ -146,7 +151,7 @@ class MenuPerfil extends React.Component {
             >
               {t("menuPerfil.perfil")}
             </button>
-            <button type="button" className="w-100 btn btn-secondary">
+            <button type="button" className="w-100 btn btn-secondary" onClick={() => this.handleClickCalendario()}>
               {t("menuPerfil.calendario")}
             </button>
             <button
