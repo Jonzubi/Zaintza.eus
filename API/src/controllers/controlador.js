@@ -23,25 +23,6 @@ exports.get = function(req, res) {
           res.writeHead(200, headerResponse);
           res.write("Vacio");
         } else {
-          if(objJoin != null){
-            objJoin.forEach(eachJoin => {
-              let joinModel = require("../models/" + eachJoin.tabla);
-              doc.forEach(eachDoc => {
-                joinModel
-                  .findById(eachDoc[eachJoin.joinColumn], eachJoin.columnas)
-                  .then(joinDoc => {
-                    eachJoin = Object.assign(eachDoc,{[eachJoin.tabla]: joinDoc});
-                  })
-                  .catch(err => {
-                    res.writeHead(500, headerResponse);
-                    res.write(JSON.stringify(err));
-                  })
-                  .finally(fin => {
-                    res.end();
-                  });;
-              });
-            });
-          }
           res.writeHead(200, headerResponse);
           res.write(JSON.stringify(doc));
         }
