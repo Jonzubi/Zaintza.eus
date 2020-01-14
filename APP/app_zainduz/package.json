@@ -15,6 +15,7 @@
     "cogo-toast": "^4.1.1",
     "i18n": "^0.8.3",
     "i18next": "^19.0.1",
+    "moment": "^2.24.0",
     "react": "^16.9.0",
     "react-autosuggest": "^9.4.3",
     "react-avatar": "^3.7.0",
