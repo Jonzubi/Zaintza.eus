@@ -73,21 +73,19 @@ class CalendarioForm extends React.Component {
 
   getEventsJson() {
     let jsonForCalendar=[];
-    const cuantosEventosMostrar = 30;
+    const cuantosEventosMostrar = 60;
     let fecha = new Date();
     
     for (let i = 0; i < cuantosEventosMostrar; i++) {
         let dia = fecha.getDay();
-        this.state.jsonEventos.forEach((evento, indice) => {
+        this.state.jsonEventos.forEach((evento, indice) => {          
           evento.diasAcordados.forEach((diaAcordado) => {
             //La siguiente linea adapta el dia para compararlo con el dia del getDay(). Ya que la clase Date devuelve un 0 si es Domingo. En mi base de datos Domingo es 7
             const adaptarDia = diaAcordado.dia == 7 ? 0 : diaAcordado.dia;
             if(dia == adaptarDia){
-              let fechaStart = new Date(fecha);
-              console.log(diaAcordado.horaInicio);
+              let fechaStart = new Date(fecha.getTime());
               fechaStart.setHours(parseInt(diaAcordado.horaInicio.split(":")[0]), parseInt(diaAcordado.horaInicio.split(":")[1]));
-              console.log(fechaStart.getHours());
-              let fechaEnd = new Date(fecha);
+              let fechaEnd = new Date(fecha.getTime());
               fechaEnd.setHours(parseInt(diaAcordado.horaFin.split(":")[0]), parseInt(diaAcordado.horaFin.split(":")[1]));
               let eventoData = {
                 id: indice,
@@ -97,9 +95,9 @@ class CalendarioForm extends React.Component {
               }
               jsonForCalendar.push(eventoData);
             }
-          });
-          fecha = this.addDays(fecha,1);
+          });          
         });
+        fecha = this.addDays(fecha,1);
     }
     
     return jsonForCalendar;
