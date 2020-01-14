@@ -23,7 +23,8 @@ class CalendarioForm extends React.Component {
       .get("http://" + ipMaquina + ":3001/acuerdo", {
         params: {
           filtros: {
-            $or: [{ idCuidador: idPerfil }, { idCliente: idPerfil }]
+            $or: [{ idCuidador: idPerfil }, { idCliente: idPerfil }],
+            estadoAcuerdo: 1
           }
         }
       })
@@ -79,7 +80,9 @@ class CalendarioForm extends React.Component {
         let dia = fecha.getDay();
         this.state.jsonEventos.forEach((evento, indice) => {
           evento.diasAcordados.forEach((diaAcordado) => {
-            if(dia == diaAcordado.dia){
+            //La siguiente linea adapta el dia para compararlo con el dia del getDay(). Ya que la clase Date devuelve un 0 si es Domingo. En mi base de datos Domingo es 7
+            const adaptarDia = diaAcordado.dia == 7 ? 0 : diaAcordado.dia;
+            if(dia == adaptarDia){
               let fechaStart = new Date(fecha);
               console.log(diaAcordado.horaInicio);
               fechaStart.setHours(parseInt(diaAcordado.horaInicio.split(":")[0]), parseInt(diaAcordado.horaInicio.split(":")[1]));
