@@ -7,8 +7,12 @@ exports.get = function(req, res) {
   //La idea es en query mandar un string columnas = "nombre apellido1 apellido2" asi se lo incrusto directo a la query
   let strColumnas = req.query.columnas;
   let objFilter;
+  let objJoin;
   if (typeof req.query.filtros != "undefined") {
     objFilter = JSON.parse(req.query.filtros);
+  }
+  if (typeof req.query.join != "undefined"){
+    objJoin = JSON.parse(req.query.join);
   }
   let modelo = require("../models/" + tabla);
   if (typeof id == "undefined") {
