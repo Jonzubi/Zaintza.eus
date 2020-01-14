@@ -2,15 +2,15 @@ const headerResponse = require("../../util/headerResponse");
 const fs = require("fs");
 
 exports.get = function(req, res) {
-  var tabla = req.params.tabla;
-  var id = req.params.id;
+  let tabla = req.params.tabla;
+  let id = req.params.id;
   //La idea es en query mandar un string columnas = "nombre apellido1 apellido2" asi se lo incrusto directo a la query
-  var strColumnas = req.query.columnas;
-  var objFilter;
+  let strColumnas = req.query.columnas;
+  let objFilter;
   if (typeof req.query.filtros != "undefined") {
     objFilter = JSON.parse(req.query.filtros);
   }
-  var modelo = require("../models/" + tabla);
+  let modelo = require("../models/" + tabla);
   if (typeof id == "undefined") {
     modelo
       .find(objFilter, strColumnas)
@@ -49,8 +49,8 @@ exports.get = function(req, res) {
 
 exports.insert = function(req, res) {
   console.log(req.body);
-  var tabla = req.params.tabla;
-  var modelo = require("../models/" + tabla);
+  let tabla = req.params.tabla;
+  let modelo = require("../models/" + tabla);
 
   if (typeof modelo == "undefined"){
     res.writeHead(500, headerResponse);
@@ -59,7 +59,7 @@ exports.insert = function(req, res) {
     return;
   } 
 
-  var modeloConfiged = new modelo(req.body);
+  let modeloConfiged = new modelo(req.body);
 
   modeloConfiged
     .save()
@@ -79,9 +79,9 @@ exports.insert = function(req, res) {
 };
 
 exports.update = function(req, res) {
-  var tabla = req.params.tabla;
-  var id = req.params.id;
-  var modelo = require("../models/" + tabla);
+  let tabla = req.params.tabla;
+  let id = req.params.id;
+  let modelo = require("../models/" + tabla);
   console.log(req.body);
   modelo
     .findByIdAndUpdate(id, req.body)
@@ -100,9 +100,9 @@ exports.update = function(req, res) {
 };
 
 exports.delete = function(req, res) {
-  var tabla = req.params.tabla;
-  var id = req.params.id;
-  var modelo = require("../models/" + tabla);
+  let tabla = req.params.tabla;
+  let id = req.params.id;
+  let modelo = require("../models/" + tabla);
 
   res.writeHead(200, headerResponse);
   modelo
@@ -119,9 +119,9 @@ exports.delete = function(req, res) {
 };
 
 exports.postImage = (req, res) => {
-  var idImage = req.params.id;
-  var imageBase64 = req.body.imageB64.split(",")[1];
-  var formatBase64 = imageBase64.charAt(0);
+  let idImage = req.params.id;
+  let imageBase64 = req.body.imageB64.split(",")[1];
+  let formatBase64 = imageBase64.charAt(0);
 
   switch (formatBase64) {
     case "/":
@@ -139,7 +139,7 @@ exports.postImage = (req, res) => {
       res.end();
       return;
   }
-  var avatarDirPath = __dirname.substring(0, __dirname.lastIndexOf("\\"));
+  let avatarDirPath = __dirname.substring(0, __dirname.lastIndexOf("\\"));
   avatarDirPath =
     avatarDirPath.substring(0, avatarDirPath.lastIndexOf("\\")) +
     "\\util\\imagenes\\" +
@@ -160,8 +160,8 @@ exports.postImage = (req, res) => {
 };
 
 exports.getImage = (req, res) => {
-  var idImage = req.params.id;
-  var avatarDirPath = __dirname.substring(0, __dirname.lastIndexOf("\\"));
+  let idImage = req.params.id;
+  let avatarDirPath = __dirname.substring(0, __dirname.lastIndexOf("\\"));
   avatarDirPath =
     avatarDirPath.substring(0, avatarDirPath.lastIndexOf("\\")) +
     "\\util\\imagenes\\";
