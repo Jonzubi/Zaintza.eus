@@ -23,3 +23,11 @@ export const toBase64 = file =>
 export const t = codigo => {  
   return <Translation>{t => t(codigo)}</Translation>;
 };
+
+export const arrayOfFalses = cont => {
+  let array = [];
+  for (let i = 0; i < cont; i++) {
+    array.push(false);
+  }
+  return array;
+}

@@ -20,18 +20,12 @@ exports.getAcuerdosConUsuarios = (req, res, modelos) => {
     columna = "idCuidador";
     columnaLaOtraPersona = "idCliente";
   }
-  console.log(columna);
-  console.log(idPerfil);
-  const filtro = {
-    [columna]: idPerfil
-  }
-  console.log(filtro);
+
   modeloAcuerdos
-    .find(filtro)
+    .find({ [columna]: idPerfil })
     
     .populate(columnaLaOtraPersona)
     .then(respuesta => {
-      console.log(respuesta);
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(respuesta));
       res.end();

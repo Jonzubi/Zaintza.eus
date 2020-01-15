@@ -12,7 +12,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { connect } from "react-redux";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
-import { t } from "../util/funciones";
+import { t, arrayOfFalses } from "../util/funciones";
 import Avatar from "react-avatar";
 import cogoToast from "cogo-toast";
 
@@ -30,56 +30,23 @@ class AcuerdosForm extends React.Component {
     //buscar cliente en el acuerdo y viceversa, ESTO ME DARA LA INFORMACION DE LA OTRA PARTE DEL ACUERDO
     let tipoUsuario =
       this.props.tipoUsuario == "Z" ? "idCuidador" : "idCliente";
-    axios
-      .get("http://" + ipMaquina + ":3001/api/acuerdo", {
-        params: {
-          filtros: { [tipoUsuario]: this.props.idPerfil }
-        }
-      })
-      .then(resultado => {
-        {
-          /* En estas lineas inicializo un array donde guardara el estado de los collapse que van a se los acuerdos. Por cada acuerdo guardara un false al inicio */
-        }
-        let buscarUsuOrCuid =
-          this.props.tipoUsuario == "Z" ? "idCliente" : "idCuidador";
-        let countAcuerdos = resultado.data.length;
-        let auxAcuerdosCollapseState = [];
-        let jsonAcuerdos = [];
-        for (let i = 0; i < countAcuerdos; i++) {
-          axios
-            .get(
-              "http://" +
-                ipMaquina +
-                ":3001/api/" +
-                (buscarUsuOrCuid == "idCliente" ? "cliente" : "cuidador") +
-                "/" +
-                resultado.data[i][buscarUsuOrCuid]
-            )
-            .then(otro => {
-              resultado.data[i] = Object.assign({}, resultado.data[i], {
-                laOtraPersona: otro.data
-              });
-              jsonAcuerdos.push(resultado.data[i]);
-              if (i == countAcuerdos - 1) {
-                this.setState({
-                  jsonAcuerdos: jsonAcuerdos,
-                  buscarUsuOrCuid: buscarUsuOrCuid
-                });
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            });
-          auxAcuerdosCollapseState.push(false);
-        }
-
-        this.setState({
-          acuerdosCollapseState: auxAcuerdosCollapseState
-        });
-      })
-      .catch(err => {
-        console.log(err);
+    const { idPerfil } = this.props;
+    
+    axios.get("http://" + ipMaquina + ":3001/api/procedures/getAcuerdosConUsuarios", {
+      params: {
+        tipoUsuario: tipoUsuario,
+        idPerfil: idPerfil
+      }      
+    })
+    .then(resultado => {
+      this.setState({
+        jsonAcuerdos: resultado.data,
+        acuerdosCollapseState: arrayOfFalses(resultado.data.length)
       });
+    })
+    .catch(err => {
+      console.log(err);
+    });
   }
 
   constructor(props) {
@@ -87,8 +54,7 @@ class AcuerdosForm extends React.Component {
 
     this.state = {
       jsonAcuerdos: [],
-      acuerdosCollapseState: [],
-      buscarUsuOrCuid: ""
+      acuerdosCollapseState: []
     };
 
     this.handleToogleCollapseAcuerdo = this.handleToogleCollapseAcuerdo.bind(
@@ -184,6 +150,7 @@ class AcuerdosForm extends React.Component {
   }
 
   render() {
+    const laOtraPersona = this.props.tipoUsuario != "Z" ? "idCuidador" : "idCliente";
     return (
       <div className="p-5 h-100">
         {this.state.jsonAcuerdos.length != 0 ? (
@@ -197,19 +164,19 @@ class AcuerdosForm extends React.Component {
                         <Avatar
                           size={50}
                           className=""
-                          name={acuerdo.laOtraPersona.nombre}
+                          name={acuerdo[laOtraPersona].nombre}
                           src={
                             "http://" +
                             ipMaquina +
                             ":3001/api/image/" +
-                            acuerdo.laOtraPersona.direcFoto
+                            acuerdo[laOtraPersona].direcFoto
                           }
                         />
                         <div className="ml-3">
                           <span className="font-weight-bold">
-                            {acuerdo.laOtraPersona.nombre +
+                            {acuerdo[laOtraPersona].nombre +
                               " " +
-                              acuerdo.laOtraPersona.apellido1}
+                              acuerdo[laOtraPersona].apellido1}
                           </span>{" "}
                           <span>
                             {acuerdo.estadoAcuerdo == 0
