@@ -1,7 +1,7 @@
 module.exports = conexion => {
   const Schema = conexion.Schema;
 
-  var historicoAcuerdo = new mongoose.Schema({
+  var historicoAcuerdo = new Schema({
     idCuidador: String,
     idCliente: String,
     direccion: String,

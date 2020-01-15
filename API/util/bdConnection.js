@@ -7,7 +7,7 @@ const ipMaquina = require("./ipMaquina");
 //  pwdAtlas +
 //  "@jonzubicloud-7eg52.azure.mongodb.net/zaintza?retryWrites=true&w=majority";
 //Esta es la local
-const uri = 'mongodb://' + ipMaquina + ':27017/zainduz';
+const uri = 'mongodb://' + ipMaquina + ':27017/zaintza';
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

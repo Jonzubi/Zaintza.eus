@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 module.exports = conexion => {
   const Schema = mongoose.Schema;
 

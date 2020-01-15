@@ -28,7 +28,7 @@
     "servidorNoDisponible": "Zerbitzariak ez du erantzuten"
   },
   "tablaCuidadores": {
-    "noData": "Ez dago daturik edo arazo bat dago sarean",
+    "noData": "Ez dago daturik",
     "ninos": "Haurrak",
     "terceraEdad": "Adinekoak",
     "necesidadEspecial": "Behar bereziak",

@@ -1,5 +1,6 @@
+const mongoose = require('mongoose');
 module.exports = (conexion) => {
-  const Schema = conexion.Schema;
+  const Schema = mongoose.Schema;
 
   var acuerdo = new Schema({
     idCuidador: {

@@ -4,9 +4,9 @@ module.exports = (app, conexion) => {
   let proceduresControlador = require('../controllers/proceduresControlador');
 
   //Inicio es una prueba para comprobar la respuesta
-  app.route("/api/image/:id").post((req, res) => mainControlador.postImage(req, res, conexion));
+  app.route("/api/image/:id").post((req, res) => mainControlador.postImage(req, res));
 
-  app.route("/api/image/:id").get((req, res) => mainControlador.getImage(req, res, conexion));
+  app.route("/api/image/:id").get((req, res) => mainControlador.getImage(req, res));
 
   app.route("/api/procedures/getAcuerdosConUsuarios").get((req, res) => proceduresControlador.getAcuerdosConUsuarios(req, res, conexion));
   
