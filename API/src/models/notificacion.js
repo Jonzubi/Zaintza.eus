@@ -1,13 +1,16 @@
 const mongoose = require("../../util/bdConnection");
+const Schema = mongoose.Schema;
 
-var notificacion = new mongoose.Schema({
+var notificacion = new Schema({
   idUsuario: {
-    type: String,
-    required: true
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'Usuario'
   },
   idRemitente:{
-    type: String,
-    required: true
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'Usuario'
   },
   tipoNotificacion:{
     type: String,
