@@ -10,6 +10,7 @@ app.use(bodyParser.json({limit: "50mb"}));
 app.use(bodyParser.urlencoded({extended: true, limit:"50mb"}));
 
 var routes = require("./src/routes/ruteo");
+let modelos = require("./util/requireAllModels")(conexion)
 routes(app, conexion);
 
 app.listen(port, function() {
