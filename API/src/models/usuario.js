@@ -1,24 +1,24 @@
-const mongoose = require("../../util/bdConnection");
+module.exports = conexion => {
+  const Schema = conexion.Schema;
 
-var usuario = new mongoose.Schema({
+  var usuario = new Schema({
     email: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     },
     contrasena: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     },
     tipoUsuario: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     },
     idPerfil: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     }
-});
+  });
 
-var Usuario = mongoose.model("Usuario", usuario, "Usuarios");
-
-module.exports = Usuario;
+  return conexion.model("Usuario", usuario, "Usuarios");
+};

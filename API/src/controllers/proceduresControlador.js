@@ -1,6 +1,6 @@
 const headerResponse = require("../../util/headerResponse");
 
-exports.getAcuerdosConUsuarios = (req, res) => {
+exports.getAcuerdosConUsuarios = (req, res, conexion) => {
   const tipoUsuario = req.query.tipoUsuario;
   const idPerfil = req.query.idPerfil;
   if (typeof tipoUsuario == "undefined" || typeof idPerfil == "undefined") {
@@ -11,7 +11,8 @@ exports.getAcuerdosConUsuarios = (req, res) => {
     res.end();
     return;
   }
-  const modeloAcuerdos = require("../models/acuerdo");
+  const modeloAcuerdos = require("../models/acuerdo")(conexion);
+
   let columna, columnaLaOtraPersona;
   if (tipoUsuario == "C") {
     columna = "idCliente";
@@ -23,7 +24,7 @@ exports.getAcuerdosConUsuarios = (req, res) => {
   console.log(columna);
   modeloAcuerdos
     .find({ [columna]: idPerfil })
-    .populate(columnaLaOtraPersona)
+    //.populate(columnaLaOtraPersona)
     .then(respuesta => {
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(respuesta));

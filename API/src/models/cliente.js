@@ -1,19 +1,17 @@
-const mongoose = require("../../util/bdConnection");
-
-var cliente = new mongoose.Schema({
+module.exports = conexion => {
+  const Schema = conexion.Schema;
+  var cliente = new Schema({
     direcFoto: String,
-    nombre : {
-        type:String,
-        required: true
+    nombre: {
+      type: String,
+      required: true
     },
-    telefono:{
-        type: Map,
-        required: true
+    telefono: {
+      type: Map,
+      required: true
     },
-    apellido1 : String,
-    apellido2: String,
-});
-
-var Cliente = mongoose.model("Cliente", cliente, "Clientes");
-
-module.exports = Cliente;
+    apellido1: String,
+    apellido2: String
+  });
+  return conexion.model("Cliente", cliente, "Clientes");
+};

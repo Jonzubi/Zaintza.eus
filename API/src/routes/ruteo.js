@@ -1,5 +1,5 @@
 "use strict";
-module.exports = function(app, conexion) {
+module.exports = (app, conexion) => {
   let mainControlador = require("../controllers/mainControlador");
   let proceduresControlador = require('../controllers/proceduresControlador');
 

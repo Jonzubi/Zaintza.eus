@@ -1,13 +1,18 @@
-const mongoose = require("../../util/bdConnection");
+module.exports = conexion => {
+  const Schema = conexion.Schema;
 
-var propuestaAcuerdo = new mongoose.Schema({
-    idCuidador : String,
-    idCliente : String,
-    diasDisponible : Map,
-    estadoPropuesta : Number,
-    caducidad : Date,
-    datePropuesta : Date
-});
+  var propuestaAcuerdo = new Schema({
+    idCuidador: String,
+    idCliente: String,
+    diasDisponible: Map,
+    estadoPropuesta: Number,
+    caducidad: Date,
+    datePropuesta: Date
+  });
 
-var PropuestaAcuerdo = mongoose.model("PropuestaAcuerdo", propuestaAcuerdo, "PropuestaAcuerdos");
-module.exports = PropuestaAcuerdo;
+  return conexion.model(
+    "PropuestaAcuerdo",
+    propuestaAcuerdo,
+    "PropuestaAcuerdos"
+  );
+};

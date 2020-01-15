@@ -1,7 +1,7 @@
 const headerResponse = require("../../util/headerResponse");
 const fs = require("fs");
 
-exports.get = function(req, res) {
+exports.get = function(req, res, conexion) {
   let tabla = req.params.tabla;
   let id = req.params.id;
   //La idea es en query mandar un string columnas = "nombre apellido1 apellido2" asi se lo incrusto directo a la query
@@ -14,7 +14,7 @@ exports.get = function(req, res) {
   if (typeof req.query.join != "undefined"){
     objJoin = JSON.parse(req.query.join);
   }
-  let modelo = require("../models/" + tabla);
+  let modelo = require("../models/" + tabla)(conexion);
   if (typeof id == "undefined") {
     modelo
       .find(objFilter, strColumnas)
@@ -51,10 +51,10 @@ exports.get = function(req, res) {
   }
 };
 
-exports.insert = function(req, res) {
+exports.insert = function(req, res, conexion) {
   console.log(req.body);
   let tabla = req.params.tabla;
-  let modelo = require("../models/" + tabla);
+  let modelo = require("../models/" + tabla)(conexion);
 
   if (typeof modelo == "undefined"){
     res.writeHead(500, headerResponse);
@@ -82,10 +82,10 @@ exports.insert = function(req, res) {
     });
 };
 
-exports.update = function(req, res) {
+exports.update = function(req, res, conexion) {
   let tabla = req.params.tabla;
   let id = req.params.id;
-  let modelo = require("../models/" + tabla);
+  let modelo = require("../models/" + tabla)(conexion);
   console.log(req.body);
   modelo
     .findByIdAndUpdate(id, req.body)
@@ -103,10 +103,10 @@ exports.update = function(req, res) {
     });
 };
 
-exports.delete = function(req, res) {
+exports.delete = function(req, res, conexion) {
   let tabla = req.params.tabla;
   let id = req.params.id;
-  let modelo = require("../models/" + tabla);
+  let modelo = require("../models/" + tabla)(conexion);
 
   res.writeHead(200, headerResponse);
   modelo
@@ -122,7 +122,7 @@ exports.delete = function(req, res) {
     });
 };
 
-exports.postImage = (req, res) => {
+exports.postImage = (req, res, conexion) => {
   let idImage = req.params.id;
   let imageBase64 = req.body.imageB64.split(",")[1];
   let formatBase64 = imageBase64.charAt(0);
@@ -163,7 +163,7 @@ exports.postImage = (req, res) => {
   }
 };
 
-exports.getImage = (req, res) => {
+exports.getImage = (req, res, conexion) => {
   let idImage = req.params.id;
   let avatarDirPath = __dirname.substring(0, __dirname.lastIndexOf("\\"));
   avatarDirPath =
@@ -202,7 +202,7 @@ exports.getImage = (req, res) => {
 };
 
 //Funcion para ver si el server esta en linea
-exports.inicio = function(req, res) {
+exports.inicio = function(req, res, conexion) {
   console.log("Solicitud recibida");
   res.writeHead(200, headerResponse);
   res.write("Solicitud recibida");
