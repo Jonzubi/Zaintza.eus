@@ -408,7 +408,7 @@ class RegisterForm extends React.Component {
     }
 
     if (this.state.avatarPreview.length > 0) {
-      await axios.post("http://" + ipMaquina + ":3001/image/" + codAvatar, {
+      await axios.post("http://" + ipMaquina + ":3001/api/image/" + codAvatar, {
         imageB64: this.state.avatarPreview
       })
       .catch(err => {
@@ -419,7 +419,7 @@ class RegisterForm extends React.Component {
       });
     }
     axios
-      .post("http://" + ipMaquina + ":3001/image/" + codContactImg, {
+      .post("http://" + ipMaquina + ":3001/api/image/" + codContactImg, {
         imageB64: imgContactB64
       })
       .then(() => {
@@ -450,7 +450,7 @@ class RegisterForm extends React.Component {
         };
 
         axios
-          .post("http://" + ipMaquina + ":3001/cuidador", formData)
+          .post("http://" + ipMaquina + ":3001/api/cuidador", formData)
           .then(resultado => {
             var idPerfil = resultado.data;
             idPerfil = idPerfil._id;
@@ -463,7 +463,7 @@ class RegisterForm extends React.Component {
             };
 
             axios
-              .post("http://" + ipMaquina + ":3001/usuario", formDataUsu)
+              .post("http://" + ipMaquina + ":3001/api/usuario", formDataUsu)
               .then(doc => {
                 this.props.saveUserSession(Object.assign({},formData, {email: formDataUsu.email, tipoUsuario: formDataUsu.tipoUsuario, _idUsuario: doc.data._id}));
                 this.setState({
@@ -1197,7 +1197,7 @@ class RegisterForm extends React.Component {
 
           <div id="loaderOrButton" className="w-100 mt-5 text-center">
             {this.state.isLoading ? (
-              <img src={"http://" + ipMaquina + ":3001/image/loadGif"} height={50} width={50} />
+              <img src={"http://" + ipMaquina + ":3001/api/image/loadGif"} height={50} width={50} />
             ) : (
               <button
                 onClick={this.handleRegistrarse}

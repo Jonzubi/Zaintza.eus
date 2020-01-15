@@ -107,7 +107,7 @@ class RegisterFormCliente extends React.Component {
 
     if (this.state.avatarPreview.length > 0) {
       await axios
-        .post("http://" + ipMaquina + ":3001/image/" + codAvatar, {
+        .post("http://" + ipMaquina + ":3001/api/image/" + codAvatar, {
           imageB64: this.state.avatarPreview
         })
         .catch(error => {
@@ -136,7 +136,7 @@ class RegisterFormCliente extends React.Component {
     };
 
     axios
-      .post("http://" + ipMaquina + ":3001/cliente/", formData)
+      .post("http://" + ipMaquina + ":3001/api/cliente/", formData)
       .then(cliente => {
         var idPerfil = cliente.data;
         //recogemos el _id que se ha generado al registrar el cliente
@@ -149,7 +149,7 @@ class RegisterFormCliente extends React.Component {
           idPerfil: idPerfil
         };
         axios
-          .post("http://" + ipMaquina + ":3001/usuario/", formDataUsu)
+          .post("http://" + ipMaquina + ":3001/api/usuario/", formDataUsu)
           .then(resultado => {
             this.props.saveUserSession(Object.assign({},formData, {tipoUsuario: "C", email: formDataUsu.email, _id: idPerfil, _idUsuario: resultado.data._id}));
 
@@ -345,7 +345,7 @@ class RegisterFormCliente extends React.Component {
         </div>
         <div id="loaderOrButton" className="w-100 mt-5 text-center">
           {this.state.isLoading ? (
-            <img src={"http://" + ipMaquina + ":3001/image/loadGif"} height={50} width={50} />
+            <img src={"http://" + ipMaquina + ":3001/api/image/loadGif"} height={50} width={50} />
           ) : (
             <button
               onClick={this.handleRegistrarse}

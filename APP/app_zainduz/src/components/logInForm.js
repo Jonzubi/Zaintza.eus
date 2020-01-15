@@ -49,7 +49,7 @@ class LogInForm extends React.Component {
       },
       () => {
         axios
-          .get("http://" + ipMaquina + ":3001/usuario", {
+          .get("http://" + ipMaquina + ":3001/api/usuario", {
             params: {
               filtros: JSON.stringify(objFiltros)
             }
@@ -71,7 +71,7 @@ class LogInForm extends React.Component {
                   return;
               }
               axios
-                .get("http://" + ipMaquina + ":3001/" + modelo + "/" + idPerfil)
+                .get("http://" + ipMaquina + ":3001/api/" + modelo + "/" + idPerfil)
                 .then(resultado => {
                   this.props.saveUserSession(
                     Object.assign({}, resultado.data, {
@@ -175,7 +175,7 @@ class LogInForm extends React.Component {
         </div>
         {this.state.isLoading ? (
           <div className="row mt-3 justify-content-center">
-            <img src={"http://" + ipMaquina + ":3001/image/loadGif"} height={50} width={50} />
+            <img src={"http://" + ipMaquina + ":3001/api/image/loadGif"} height={50} width={50} />
           </div>
         ) : (
           <div className="row mt-3">

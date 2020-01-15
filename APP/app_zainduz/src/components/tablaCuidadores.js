@@ -45,7 +45,7 @@ const mapDispatchToProps = dispatch => {
 
 class Tabla extends React.Component {
   componentDidMount() {
-    Axios.get("http://" + ipMaquina + ":3001/cuidador")
+    Axios.get("http://" + ipMaquina + ":3001/api/cuidador")
       .then(data => {
         this.setState({
           jsonCuidadores: data.data,
@@ -284,7 +284,7 @@ class Tabla extends React.Component {
     const objFiltros = {
       idPerfil: idPerfil
     };
-    Axios.get("http://" + ipMaquina + ":3001/usuario", {
+    Axios.get("http://" + ipMaquina + ":3001/api/usuario", {
       params: {
         filtros: JSON.stringify(objFiltros)
       }
@@ -316,7 +316,7 @@ class Tabla extends React.Component {
     }
 
     let comprobAcuerdoUnico = await Axios.get(
-      "http://" + ipMaquina + ":3001/acuerdo",
+      "http://" + ipMaquina + ":3001/api/acuerdo",
       {
         params: {
           filtros: {
@@ -417,9 +417,9 @@ class Tabla extends React.Component {
       origenAcuerdo: this.props.tipoUsuario
     };
 
-    Axios.post("http://" + ipMaquina + ":3001/acuerdo", formData)
+    Axios.post("http://" + ipMaquina + ":3001/api/acuerdo", formData)
       .then(resultado => {
-        Axios.get("http://" + ipMaquina + ":3001/usuario", {
+        Axios.get("http://" + ipMaquina + ":3001/api/usuario", {
           params: {
             filtros: {
               idPerfil: this.state.selectedCuidador._id
@@ -435,7 +435,7 @@ class Tabla extends React.Component {
             dateEnvioNotificacion: today + " " + objToday.getHours() + ":" + objToday.getMinutes()
           };
           Axios.post(
-            "http://" + ipMaquina + ":3001/notificacion",
+            "http://" + ipMaquina + ":3001/api/notificacion",
             notificacionData
           ).then(notif => {
             this.setState({
@@ -537,7 +537,7 @@ class Tabla extends React.Component {
               <div className="card w-20 m-4" style={{ width: "18rem" }}>
                 <div
                   style={{
-                    //backgroundImage:"url(http://" + ipMaquina + ":3001/image/" + cuidador.direcFotoContacto + ")",
+                    //backgroundImage:"url(http://" + ipMaquina + ":3001/api/image/" + cuidador.direcFotoContacto + ")",
                     height: "300px",
                     width: "calc(100% - 20px)",
                     backgroundSize: "cover",
@@ -557,7 +557,7 @@ class Tabla extends React.Component {
                     src={
                       "http://" +
                       ipMaquina +
-                      ":3001/image/" +
+                      ":3001/api/image/" +
                       cuidador.direcFotoContacto
                     }
                   />
@@ -657,7 +657,7 @@ class Tabla extends React.Component {
           <div className="w-100 text-center">
             <img
               style={{ marginTop: "300px" }}
-              src={"http://" + ipMaquina + ":3001/image/loadGif"}
+              src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
               height={100}
               width={100}
             />
@@ -703,7 +703,7 @@ class Tabla extends React.Component {
                 src={
                   "http://" +
                   ipMaquina +
-                  ":3001/image/" +
+                  ":3001/api/image/" +
                   vSelectedCuidador.direcFotoContacto
                 }
               />

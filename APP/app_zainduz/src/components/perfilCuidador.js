@@ -449,7 +449,7 @@ class PerfilCuidador extends React.Component {
       codContactImg = getRandomString(20);
       var imgContactB64 = await toBase64(this.state.imgContact[0]);
 
-      await Axios.post("http://" + ipMaquina + ":3001/image/" + codContactImg, {
+      await Axios.post("http://" + ipMaquina + ":3001/api/image/" + codContactImg, {
         imageB64: imgContactB64
       }).catch(err => {
         cogoToast.error(<h5>{t("perfilCliente.errorAvatarUpload")}</h5>);
@@ -465,7 +465,7 @@ class PerfilCuidador extends React.Component {
     var codAvatar = "";
     if (this.state.avatarPreview != "") {
       codAvatar = getRandomString(20);
-      await Axios.post("http://" + ipMaquina + ":3001/image/" + codAvatar, {
+      await Axios.post("http://" + ipMaquina + ":3001/api/image/" + codAvatar, {
         imageB64: this.state.avatarPreview
       }).catch(error => {
         cogoToast.error(<h5>{t("perfilCliente.errorAvatarUpload")}</h5>);
@@ -502,7 +502,7 @@ class PerfilCuidador extends React.Component {
     };
 
     Axios.patch(
-      "http://" + ipMaquina + ":3001/cuidador/" + this.props._id,
+      "http://" + ipMaquina + ":3001/api/cuidador/" + this.props._id,
       formData
     )
       .then(res => {
@@ -562,7 +562,7 @@ class PerfilCuidador extends React.Component {
                 height={200}
                 width={200}
                 src={
-                  "http://" + ipMaquina + ":3001/image/" + this.props.direcFoto
+                  "http://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto
                 }
               />
             ) : (
@@ -588,7 +588,7 @@ class PerfilCuidador extends React.Component {
             {!this.state.isEditing ? (
               <div
                 style={{
-                  //backgroundImage:"url(http://" + ipMaquina + ":3001/image/" + cuidador.direcFotoContacto + ")",
+                  //backgroundImage:"url(http://" + ipMaquina + ":3001/api/image/" + cuidador.direcFotoContacto + ")",
                   height: "300px",
                   backgroundSize: "cover",
                   backgroundPosition: "top",
@@ -604,7 +604,7 @@ class PerfilCuidador extends React.Component {
                   src={
                     "http://" +
                     ipMaquina +
-                    ":3001/image/" +
+                    ":3001/api/image/" +
                     this.props.direcFotoContacto
                   }
                 />
@@ -1205,7 +1205,7 @@ class PerfilCuidador extends React.Component {
                 <FontAwesomeIcon className="ml-1" icon={faEdit} />
               </button>
             ) : this.state.isLoading ? (
-              <img src={"http://" + ipMaquina + ":3001/image/loadGif"} height={50} width={50} />
+              <img src={"http://" + ipMaquina + ":3001/api/image/loadGif"} height={50} width={50} />
             ) : (
               <button
                 onClick={() => this.handleGuardarCambios()}

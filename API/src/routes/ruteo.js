@@ -3,17 +3,17 @@ module.exports = function(app) {
   var controlador = require("../controllers/controlador");
 
   //Inicio es una prueba para comprobar la respuesta
-  app.route("/image/:id").post(controlador.postImage);
+  app.route("/api/image/:id").post(controlador.postImage);
 
-  app.route("/image/:id").get(controlador.getImage);
+  app.route("/api/image/:id").get(controlador.getImage);
   
   app.route("/Inicio/").get(controlador.inicio);
 
-  app.route("/:tabla/:id?").get(controlador.get);
+  app.route("/api/:tabla/:id?").get(controlador.get);
 
-  app.route("/:tabla/:id").delete(controlador.delete);
+  app.route("/api/:tabla/:id").delete(controlador.delete);
 
-  app.route("/:tabla/").post(controlador.insert);
+  app.route("/api/:tabla/").post(controlador.insert);
 
-  app.route("/:tabla/:id").patch(controlador.update);
+  app.route("/api/:tabla/:id").patch(controlador.update);
 };

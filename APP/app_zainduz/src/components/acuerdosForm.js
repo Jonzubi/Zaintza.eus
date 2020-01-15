@@ -31,7 +31,7 @@ class AcuerdosForm extends React.Component {
     let tipoUsuario =
       this.props.tipoUsuario == "Z" ? "idCuidador" : "idCliente";
     axios
-      .get("http://" + ipMaquina + ":3001/acuerdo", {
+      .get("http://" + ipMaquina + ":3001/api/acuerdo", {
         params: {
           filtros: { [tipoUsuario]: this.props.idPerfil }
         }
@@ -50,7 +50,7 @@ class AcuerdosForm extends React.Component {
             .get(
               "http://" +
                 ipMaquina +
-                ":3001/" +
+                ":3001/api/" +
                 (buscarUsuOrCuid == "idCliente" ? "cliente" : "cuidador") +
                 "/" +
                 resultado.data[i][buscarUsuOrCuid]
@@ -143,7 +143,7 @@ class AcuerdosForm extends React.Component {
     }
     var today = mm + "/" + dd + "/" + yyyy;
 
-    await axios.patch("http://" + ipMaquina + ":3001/acuerdo/" + acuerdo._id, {
+    await axios.patch("http://" + ipMaquina + ":3001/api/acuerdo/" + acuerdo._id, {
       estadoAcuerdo: 2,
       dateFinAcuerdo: today
     });
@@ -151,7 +151,7 @@ class AcuerdosForm extends React.Component {
     let buscarUsuOrCuid =
       this.props.tipoUsuario == "C" ? "idCuidador" : "idCliente";
     const idElOtro = acuerdo[buscarUsuOrCuid];
-    let elOtroUsu = await axios.get("http://" + ipMaquina + ":3001/usuario", {
+    let elOtroUsu = await axios.get("http://" + ipMaquina + ":3001/api/usuario", {
       params: {
         filtros: {
           idPerfil: idElOtro
@@ -167,7 +167,7 @@ class AcuerdosForm extends React.Component {
       dateEnvioNotificacion: today + " " + objToday.getHours() + ":" + objToday.getMinutes()
     };
     await axios.post(
-      "http://" + ipMaquina + ":3001/notificacion",
+      "http://" + ipMaquina + ":3001/api/notificacion",
       notificacionData
     );
 
@@ -201,7 +201,7 @@ class AcuerdosForm extends React.Component {
                           src={
                             "http://" +
                             ipMaquina +
-                            ":3001/image/" +
+                            ":3001/api/image/" +
                             acuerdo.laOtraPersona.direcFoto
                           }
                         />

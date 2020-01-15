@@ -122,7 +122,7 @@ class PerfilCliente extends React.Component {
     if(this.state.avatarPreview != ""){
       codAvatar = getRandomString(20);
       await Axios
-        .post("http://" + ipMaquina + ":3001/image/" + codAvatar, {
+        .post("http://" + ipMaquina + ":3001/api/image/" + codAvatar, {
           imageB64: this.state.avatarPreview
         })
         .catch(error => {
@@ -138,7 +138,7 @@ class PerfilCliente extends React.Component {
     }
 
     Axios
-        .patch("http://" + ipMaquina + ":3001/cliente/" + this.props._id, formData)
+        .patch("http://" + ipMaquina + ":3001/api/cliente/" + this.props._id, formData)
         .then(
           resultado => {
             this.props.saveUserSession(formData);
@@ -199,7 +199,7 @@ class PerfilCliente extends React.Component {
               height={200}
               width={200}
               src={
-                "http://" + ipMaquina + ":3001/image/" + this.props.direcFoto
+                "http://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto
               }
             />
           ) : (
@@ -316,7 +316,7 @@ class PerfilCliente extends React.Component {
                 <FontAwesomeIcon className="ml-1" icon={faEdit} />
               </button>
             ) : this.state.isLoading ? (
-              <img src={"http://" + ipMaquina + ":3001/image/loadGif"} height={50} width={50} />
+              <img src={"http://" + ipMaquina + ":3001/api/image/loadGif"} height={50} width={50} />
             ) : (
               <button
                 onClick={() => this.handleGuardarCambios()}

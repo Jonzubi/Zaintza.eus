@@ -20,7 +20,7 @@ class CalendarioForm extends React.Component {
     let auxJsonEventos = [];
 
     axios
-      .get("http://" + ipMaquina + ":3001/acuerdo", {
+      .get("http://" + ipMaquina + ":3001/api/acuerdo", {
         params: {
           filtros: {
             $or: [{ idCuidador: idPerfil }, { idCliente: idPerfil }],
@@ -39,7 +39,7 @@ class CalendarioForm extends React.Component {
             .get(
               "http://" +
                 ipMaquina +
-                ":3001/" +
+                ":3001/api/" +
                 tablaLaOtraPersona +
                 "/" +
                 evento[idLaOtraPersona]

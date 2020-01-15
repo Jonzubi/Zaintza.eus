@@ -38,7 +38,7 @@ const mapDispatchToProps = dispatch => {
 class MenuPerfil extends React.Component {
   componentDidMount() {
     setInterval(() => {
-      Axios.get("http://" + ipMaquina + ":3001/notificacion", {
+      Axios.get("http://" + ipMaquina + ":3001/api/notificacion", {
         params: {
           filtros: {
             idUsuario: this.props.idUsuario,
@@ -87,7 +87,7 @@ class MenuPerfil extends React.Component {
     ) : (
       <Avatar
         name={this.props.nombre + " " + this.props.apellido1 || ""}
-        src={"http://" + ipMaquina + ":3001/image/" + this.props.direcFoto}
+        src={"http://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto}
         className="mx-auto"
         round={true}
         size="200"

@@ -21,7 +21,7 @@ class NotificacionesForm extends React.Component {
     let jsonNotificaciones = [];
     let auxNotificacionesCollapseState = [];
     axios
-      .get("http://" + ipMaquina + ":3001/notificacion", {
+      .get("http://" + ipMaquina + ":3001/api/notificacion", {
         params: {
           filtros: {
             idUsuario: this.props.idUsuario
@@ -45,7 +45,7 @@ class NotificacionesForm extends React.Component {
                 .get(
                   "http://" +
                     ipMaquina +
-                    ":3001/" +
+                    ":3001/api/" +
                     tablaLaOtraPersona +
                     "/" +
                     notificacion.acuerdo[idLaOtraPersona]
@@ -65,7 +65,7 @@ class NotificacionesForm extends React.Component {
                 });
               break;
             case "AcuerdoGestionado":
-              axios.get("http://" + ipMaquina + ":3001/usuario/" + notificacion.idRemitente, {
+              axios.get("http://" + ipMaquina + ":3001/api/usuario/" + notificacion.idRemitente, {
                 params:{
                   columnas:"idPerfil tipoUsuario"
                 }
@@ -73,7 +73,7 @@ class NotificacionesForm extends React.Component {
                 console.log(elOtroUsuario);
                 const tablaLaOtraPersona =
                 elOtroUsuario.data.tipoUsuario == "Z" ? "cuidador" : "cliente";
-                axios.get("http://" + ipMaquina + ":3001/" + tablaLaOtraPersona + "/" + elOtroUsuario.data.idPerfil).then(laOtraPersona => {
+                axios.get("http://" + ipMaquina + ":3001/api/" + tablaLaOtraPersona + "/" + elOtroUsuario.data.idPerfil).then(laOtraPersona => {
                   notificacion.laOtraPersona = laOtraPersona.data;
                   jsonNotificaciones.push(notificacion);
                   auxNotificacionesCollapseState.push(false);
@@ -113,7 +113,7 @@ class NotificacionesForm extends React.Component {
     let auxJsonNotif = this.state.jsonNotificaciones;
     if (!auxJsonNotif[index].visto) {
       await axios.patch(
-        "http://" + ipMaquina + ":3001/notificacion/" + auxJsonNotif[index]._id,
+        "http://" + ipMaquina + ":3001/api/notificacion/" + auxJsonNotif[index]._id,
         {
           visto: true
         }
@@ -165,7 +165,7 @@ class NotificacionesForm extends React.Component {
     let auxJsonNotif = this.state.jsonNotificaciones;
     //Squi estoy pillando el estado actual del acuerdo para comprobar que el acuerdo no se ha cancelado ya por el usuario.
     //Por ejemplo sui ha hecho una propuesta erronea
-    let estadoAcuerdo = await axios.get("http://" + ipMaquina + ":3001/acuerdo/" + notificacion.acuerdo._id, {
+    let estadoAcuerdo = await axios.get("http://" + ipMaquina + ":3001/api/acuerdo/" + notificacion.acuerdo._id, {
       params:{
         columnas: "estadoAcuerdo"
       }
@@ -177,7 +177,7 @@ class NotificacionesForm extends React.Component {
         {t('notificacionesForm.acuerdoYaRechazado')}
       </h5>);
       await axios.delete(
-        "http://" + ipMaquina + ":3001/notificacion/" + notificacion._id
+        "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id
       );
       delete auxJsonNotif[indice];
       this.setState(
@@ -187,13 +187,13 @@ class NotificacionesForm extends React.Component {
       return;
     }
 
-    await axios.patch("http://" + ipMaquina + ":3001/acuerdo/" + acuerdo._id, {
+    await axios.patch("http://" + ipMaquina + ":3001/api/acuerdo/" + acuerdo._id, {
       estadoAcuerdo: ifAccept ? 1 : 2 //Si Accept es true acepta el acuerdo mandando un 1 a la BD, si no un 2
     });
     //La otra personaUsua recoge el _id de la tabla usuario para mandar
     //la notificacion a la otra parte del acuerdo de que el acuerdo ha sido o aceptado o rechazado
     let laOtraPersonaUsu = await axios.get(
-      "http://" + ipMaquina + ":3001/usuario",
+      "http://" + ipMaquina + ":3001/api/usuario",
       {
         params: {
           filtros: {
@@ -206,7 +206,7 @@ class NotificacionesForm extends React.Component {
     console.log(laOtraPersonaUsu);
     //Aqui se manda la notificacion con el usuario recogido anteriormente,
     //el acuerdo ha sido gestionado con un valor de aceptado o rechazado en el valorGestion
-    await axios.post("http://" + ipMaquina + ":3001/notificacion", {
+    await axios.post("http://" + ipMaquina + ":3001/api/notificacion", {
       idUsuario: laOtraPersonaUsu._id,
       idRemitente: notificacion.idUsuario,
       tipoNotificacion: "AcuerdoGestionado",
@@ -215,7 +215,7 @@ class NotificacionesForm extends React.Component {
       dateEnvioNotificacion: today + " " + objToday.getHours() + ":" + objToday.getMinutes()
     });
     await axios.delete(
-      "http://" + ipMaquina + ":3001/notificacion/" + notificacion._id
+      "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id
     );
     delete auxJsonNotif[indice];
     this.setState(
@@ -237,7 +237,7 @@ class NotificacionesForm extends React.Component {
   async handleDeleteNotificacion(notificacion, indice){
     let auxJsonNotif = this.state.jsonNotificaciones;
 
-    await axios.delete("http://" + ipMaquina + ":3001/notificacion/" + notificacion._id);
+    await axios.delete("http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id);
     delete auxJsonNotif[indice];
 
     this.setState({
@@ -264,7 +264,7 @@ class NotificacionesForm extends React.Component {
                             src={
                               "http://" +
                               ipMaquina +
-                              ":3001/image/" +
+                              ":3001/api/image/" +
                               notificacion.laOtraPersona.direcFoto
                             }
                           />
@@ -288,7 +288,7 @@ class NotificacionesForm extends React.Component {
                             src={
                               "http://" +
                               ipMaquina +
-                              ":3001/image/" +
+                              ":3001/api/image/" +
                               notificacion.laOtraPersona.direcFoto
                             }
                           />

@@ -43,7 +43,7 @@ class Header extends React.Component {
         icon={faUserCircle}
       />
       :
-      <Avatar name={this.props.nombre + " " + this.props.apellido1} src={"http://" + ipMaquina + ":3001/image/" + this.props.direcFoto} 
+      <Avatar name={this.props.nombre + " " + this.props.apellido1} src={"http://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto} 
               className="float-right mt-1 align-middle"
               round={true}
               onClick={() => this.props.toogleMenuPerfil(true)}
