@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import { connect } from "react-redux";
-import { t } from "../util/funciones";
+import { t, arrayOfFalses } from "../util/funciones";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faEye, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { Collapse } from "react-collapse";
@@ -18,80 +18,22 @@ const mapStateToProps = state => {
 
 class NotificacionesForm extends React.Component {
   componentDidMount() {
-    let jsonNotificaciones = [];
-    let auxNotificacionesCollapseState = [];
-    axios
-      .get("http://" + ipMaquina + ":3001/api/notificacion", {
-        params: {
-          filtros: {
-            idUsuario: this.props.idUsuario
-          }
-        }
+    const { idUsuario } = this.props;
+
+    axios.get("http://" + ipMaquina + ":3001/api/procedures/getNotificacionesConUsuarios", {
+      params: {
+        idUsuario: idUsuario
+      }
+    })
+    .then(notificaciones => {
+      this.setState({
+        jsonNotificaciones: notificaciones.data,
+        notificacionesCollapseState: arrayOfFalses(notificaciones.data.length)
       })
-      .then(notificaciones => {
-        for (let i = 0; i < notificaciones.data.length; i++) {
-          let notificacion = notificaciones.data[i];
-          switch (notificacion.tipoNotificacion) {
-            //Si es acuerdo recupero los datos de la persona que envio la propuesta
-            case "Acuerdo":
-              //Aqui me he liado antes asi que lo comento para el futuro.
-              //Aqui estoy buscando la otra persona por lo que miro MI tipo y busco el contrario, es decir, si soy cuidador busco un cliente y viceversa.
-              //Me he liado con la parte de acuerdoGestionado, ahi SI tengo que mirar el mismo tipo ya que lo busco desde usuario => idPerfil => su respectiva tabla
-              const tablaLaOtraPersona =
-                this.props.tipoUsuario == "Cliente" ? "cuidador" : "cliente";
-              const idLaOtraPersona =
-                this.props.tipoUsuario == "Cliente" ? "idCuidador" : "idCliente";
-              axios
-                .get(
-                  "http://" +
-                    ipMaquina +
-                    ":3001/api/" +
-                    tablaLaOtraPersona +
-                    "/" +
-                    notificacion.acuerdo[idLaOtraPersona]
-                )
-                .then(laOtraPersona => {
-                  //Le asigno un nuevo atributo a la notificacion con todos los datos de la otra persona
-                  notificacion.laOtraPersona = laOtraPersona.data;
-                  jsonNotificaciones.push(notificacion);
-                  auxNotificacionesCollapseState.push(false);
-
-                  if (i == notificaciones.data.length - 1) {
-                    this.setState({
-                      jsonNotificaciones: jsonNotificaciones,
-                      notificacionesCollapseState: auxNotificacionesCollapseState
-                    });
-                  }
-                });
-              break;
-            case "AcuerdoGestionado":
-              axios.get("http://" + ipMaquina + ":3001/api/usuario/" + notificacion.idRemitente, {
-                params:{
-                  columnas:"idPerfil tipoUsuario"
-                }
-              }).then(elOtroUsuario => {                
-                console.log(elOtroUsuario);
-                const tablaLaOtraPersona =
-                elOtroUsuario.data.tipoUsuario == "Cuidador" ? "cuidador" : "cliente";
-                axios.get("http://" + ipMaquina + ":3001/api/" + tablaLaOtraPersona + "/" + elOtroUsuario.data.idPerfil).then(laOtraPersona => {
-                  notificacion.laOtraPersona = laOtraPersona.data;
-                  jsonNotificaciones.push(notificacion);
-                  auxNotificacionesCollapseState.push(false);
-
-                  if (i == notificaciones.data.length - 1) {
-                    this.setState({
-                      jsonNotificaciones: jsonNotificaciones,
-                      notificacionesCollapseState: auxNotificacionesCollapseState
-                    });
-                  }
-                });
-              });
-              break;
-            default:
-              break;
-          }
-        }
-      });
+    })
+    .catch(err => {
+      //TODO gestionar error
+    });
   }
   constructor(props) {
     super(props);
@@ -197,7 +139,7 @@ class NotificacionesForm extends React.Component {
       {
         params: {
           filtros: {
-            idPerfil: notificacion.laOtraPersona._id
+            idPerfil: notificacion.idRemitente._id
           }
         }
       }
@@ -207,7 +149,7 @@ class NotificacionesForm extends React.Component {
     //Aqui se manda la notificacion con el usuario recogido anteriormente,
     //el acuerdo ha sido gestionado con un valor de aceptado o rechazado en el valorGestion
     await axios.post("http://" + ipMaquina + ":3001/api/notificacion", {
-      idUsuario: laOtraPersonaUsu._id,
+      idUsuario: notificacion.idRemitente._id,
       idRemitente: notificacion.idUsuario,
       tipoNotificacion: "AcuerdoGestionado",
       valorGestion: ifAccept,
@@ -260,19 +202,19 @@ class NotificacionesForm extends React.Component {
                           <Avatar
                             size={50}
                             className=""
-                            name={notificacion.laOtraPersona.nombre}
+                            name={notificacion.idRemitente.idPerfil.nombre}
                             src={
                               "http://" +
                               ipMaquina +
                               ":3001/api/image/" +
-                              notificacion.laOtraPersona.direcFoto
+                              notificacion.idRemitente.idPerfil.direcFoto
                             }
                           />
                           <div className="ml-3">
                             <span className="font-weight-bold">
-                              {notificacion.laOtraPersona.nombre +
+                              {notificacion.idRemitente.idPerfil.nombre +
                                 " " +
-                                notificacion.laOtraPersona.apellido1}
+                                notificacion.idRemitente.idPerfil.apellido1}
                             </span>{" "}
                             <span>
                               {t("notificacionesForm.propuestaAcuerdo")}
@@ -284,19 +226,19 @@ class NotificacionesForm extends React.Component {
                           <Avatar
                             size={50}
                             className=""
-                            name={notificacion.laOtraPersona.nombre}
+                            name={notificacion.idRemitente.idPerfil.nombre}
                             src={
                               "http://" +
                               ipMaquina +
                               ":3001/api/image/" +
-                              notificacion.laOtraPersona.direcFoto
+                              notificacion.idRemitente.idPerfil.direcFoto
                             }
                           />
                           <div className="ml-3">
                             <span className="font-weight-bold">
-                              {notificacion.laOtraPersona.nombre +
+                              {notificacion.idRemitente.idPerfil.nombre +
                                 " " +
-                                notificacion.laOtraPersona.apellido1}
+                                notificacion.idRemitente.idPerfil.apellido1}
                             </span>{" "}
                             <span>
                               {notificacion.valorGestion ? t("notificacionesForm.otraPersonaAcuerdoAceptado") : t("notificacionesForm.otraPersonaAcuerdoRechazado")}

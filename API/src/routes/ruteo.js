@@ -1,5 +1,5 @@
 "use strict";
-module.exports = (app, conexion) => {
+module.exports = (app, modelos) => {
   let mainControlador = require("../controllers/mainControlador");
   let proceduresControlador = require('../controllers/proceduresControlador');
 
@@ -8,15 +8,17 @@ module.exports = (app, conexion) => {
 
   app.route("/api/image/:id").get((req, res) => mainControlador.getImage(req, res));
 
-  app.route("/api/procedures/getAcuerdosConUsuarios").get((req, res) => proceduresControlador.getAcuerdosConUsuarios(req, res, conexion));
+  app.route("/api/procedures/getAcuerdosConUsuarios").get((req, res) => proceduresControlador.getAcuerdosConUsuarios(req, res, modelos));
+
+  app.route("/api/procedures/getNotificacionesConUsuarios").get((req, res) => proceduresControlador.getNotificacionesConUsuarios(req, res, modelos));
   
   app.route("/Inicio/").get(mainControlador.inicio);
 
-  app.route("/api/:tabla/:id?").get((req, res) => mainControlador.get(req, res, conexion));
+  app.route("/api/:tabla/:id?").get((req, res) => mainControlador.get(req, res, modelos));
 
-  app.route("/api/:tabla/:id").delete((req, res) => mainControlador.delete(req, res, conexion));
+  app.route("/api/:tabla/:id").delete((req, res) => mainControlador.delete(req, res, modelos));
 
-  app.route("/api/:tabla/").post((req, res) => mainControlador.insert(req, res, conexion));
+  app.route("/api/:tabla/").post((req, res) => mainControlador.insert(req, res, modelos));
 
-  app.route("/api/:tabla/:id").patch((req, res) => mainControlador.update(req, res, conexion));
+  app.route("/api/:tabla/:id").patch((req, res) => mainControlador.update(req, res, modelos));
 };
