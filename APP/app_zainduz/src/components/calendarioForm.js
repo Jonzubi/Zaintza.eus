@@ -83,7 +83,7 @@ class CalendarioForm extends React.Component {
 
   render() {
     const localizer = momentLocalizer(moment);
-    return <Calendar defaultView={'week'} localizer={localizer} events={this.getEventsJson()} />;
+    return <Calendar views={['week', 'day', 'agenda']} defaultView={'week'} localizer={localizer} events={this.getEventsJson()} />;
   }
 }
 
