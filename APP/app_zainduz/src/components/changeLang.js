@@ -36,10 +36,11 @@ class ChangeLang extends React.Component {
 
   render() {
       const { nowLang } = this.state;
+      const { clase } = this.props;
     return (
-      <div className="dropdown">
+      <div className="dropdown w-100 d-flex mt-5">
         <button
-          className="btn btn-light dropdown-toggle"
+          className="btn btn-light dropdown-toggle w-100"
           type="button"
           id="dropdownMenuButton"
           data-toggle="dropdown"
@@ -48,10 +49,10 @@ class ChangeLang extends React.Component {
         >
           {this.getLangTraducido(nowLang)}
         </button>
-        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <div className="dropdown-menu w-100 text-center" aria-labelledby="dropdownMenuButton">
           {this.getAllLang().map(lang => {
             return (
-              <a className="dropdown-item btn" onClick={() => this.handleChangeLanguage(lang)}>
+              <a className="dropdown-item btn w-100" onClick={() => this.handleChangeLanguage(lang)}>
                 {this.getLangTraducido(lang)}
               </a>
             );
