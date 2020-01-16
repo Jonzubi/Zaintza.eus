@@ -17,45 +17,22 @@ const mapStateToProps = state => {
 class CalendarioForm extends React.Component {
   componentDidMount() {
     const { idPerfil, tipoUsuario } = this.props;
-    let auxJsonEventos = [];
-
-    axios
-      .get("http://" + ipMaquina + ":3001/api/acuerdo", {
-        params: {
-          filtros: {
-            $or: [{ idCuidador: idPerfil }, { idCliente: idPerfil }],
-            estadoAcuerdo: 1
-          }
-        }
-      })
-      .then(eventos => {
-        for (let i = 0; i < eventos.data.length; i++) {
-          let evento = eventos.data[i];
-          const tablaLaOtraPersona =
-            tipoUsuario == "Cliente" ? "cuidador" : "cliente";
-          const idLaOtraPersona =
-            tipoUsuario == "Cliente" ? "idCuidador" : "idCliente";
-          axios
-            .get(
-              "http://" +
-                ipMaquina +
-                ":3001/api/" +
-                tablaLaOtraPersona +
-                "/" +
-                evento[idLaOtraPersona]
-            )
-            .then(laOtraPersona => {
-              evento.laOtraPersona = laOtraPersona.data;
-              auxJsonEventos.push(evento);
-
-              if (i == eventos.data.length - 1) {
-                this.setState({
-                  jsonEventos: auxJsonEventos
-                });
-              }
-            });
-        }
+    
+    axios.get("http://" + ipMaquina + ":3001/api/procedures/getAcuerdosConUsuarios", {
+      params: {
+        idPerfil: idPerfil,
+        tipoUsuario: tipoUsuario,
+        estadoAcuerdo: 1
+      }
+    })
+    .then(acuerdos => {
+      this.setState({
+        jsonEventos: acuerdos.data
       });
+    })
+    .catch(err => {
+      //TODO gestionar error
+    });
   }
   constructor(props) {
     super(props);
@@ -66,17 +43,18 @@ class CalendarioForm extends React.Component {
   }
 
   addDays(date, days) {
-    const copy = new Date(Number(date))
-    copy.setDate(date.getDate() + days)
-    return copy
+    const copy = new Date(date);
+    copy.setDate(date.getDate() + days);
+    return copy;
   }
 
   getEventsJson() {
     let jsonForCalendar=[];
-    const cuantosEventosMostrar = 60;
+    const { tipoUsuario } = this.props;
+    const columnaLaOtraPersona = tipoUsuario == "Cliente" ? "idCuidador" : "idCliente";
+    const cuantosDiasDeEventosMostrar = 10;
     let fecha = new Date();
-    
-    for (let i = 0; i < cuantosEventosMostrar; i++) {
+    for (let i = 0; i < cuantosDiasDeEventosMostrar; i++) {
         let dia = fecha.getDay();
         this.state.jsonEventos.forEach((evento, indice) => {          
           evento.diasAcordados.forEach((diaAcordado) => {
@@ -89,7 +67,7 @@ class CalendarioForm extends React.Component {
               fechaEnd.setHours(parseInt(diaAcordado.horaFin.split(":")[0]), parseInt(diaAcordado.horaFin.split(":")[1]));
               let eventoData = {
                 id: indice,
-                title: evento.laOtraPersona.nombre + " " + evento.laOtraPersona.apellido1,
+                title: evento[columnaLaOtraPersona].nombre + " " + evento[columnaLaOtraPersona].apellido1,
                 start: fechaStart,
                 end: fechaEnd
               }

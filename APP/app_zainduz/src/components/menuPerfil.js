@@ -38,6 +38,10 @@ const mapDispatchToProps = dispatch => {
 class MenuPerfil extends React.Component {
   componentDidMount() {
     setInterval(() => {
+      //Si no esta logueado no queremos saber notificaciones;
+      if(typeof this.props.idUsuario == "undefined" || this.props.idUsuario == "")
+        return;
+      
       Axios.get("http://" + ipMaquina + ":3001/api/notificacion", {
         params: {
           filtros: {

@@ -1,8 +1,7 @@
 const headerResponse = require("../../util/headerResponse");
 
 exports.getAcuerdosConUsuarios = (req, res, modelos) => {
-  const tipoUsuario = req.query.tipoUsuario;
-  const idPerfil = req.query.idPerfil;
+  const { tipoUsuario, idPerfil, estadoAcuerdo } = req.query;
   if (typeof tipoUsuario == "undefined" || typeof idPerfil == "undefined") {
     res.writeHead(500, headerResponse);
     res.write("Parametros incorrectos");
@@ -16,13 +15,25 @@ exports.getAcuerdosConUsuarios = (req, res, modelos) => {
   if (tipoUsuario == "Cliente") {
     columna = "idCliente";
     columnaLaOtraPersona = "idCuidador";
-  } else {
+  } else if(tipoUsuario == "Cuidador"){
     columna = "idCuidador";
     columnaLaOtraPersona = "idCliente";
   }
+  else{
+    res.writeHead(500, headerResponse);
+    res.write("Parametros incorrectos");
+    res.end();
+    return;
+  }
+
+  let filtrosConsulta = { [columna]: idPerfil };
+  //El parametro estadoAcuerdo es opcional para el procedure, si se le pasa lo va a aplicar
+  if(typeof estadoAcuerdo != "undefined"){
+    filtrosConsulta.estadoAcuerdo = estadoAcuerdo;
+  }
 
   modeloAcuerdos
-    .find({ [columna]: idPerfil })    
+    .find( filtrosConsulta )    
     .populate(columnaLaOtraPersona)
     .then(respuesta => {
       res.writeHead(200, headerResponse);
