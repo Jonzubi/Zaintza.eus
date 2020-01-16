@@ -61,10 +61,10 @@ class LogInForm extends React.Component {
               var tipoUsuario = usuario.tipoUsuario;
               let modelo = "";
               switch (tipoUsuario) {
-                case "Z":
+                case "Cuidador":
                   modelo = "cuidador";
                   break;
-                case "C":
+                case "Cliente":
                   modelo = "cliente";
                   break;
                 default:

@@ -38,9 +38,9 @@ class NotificacionesForm extends React.Component {
               //Aqui estoy buscando la otra persona por lo que miro MI tipo y busco el contrario, es decir, si soy cuidador busco un cliente y viceversa.
               //Me he liado con la parte de acuerdoGestionado, ahi SI tengo que mirar el mismo tipo ya que lo busco desde usuario => idPerfil => su respectiva tabla
               const tablaLaOtraPersona =
-                this.props.tipoUsuario == "C" ? "cuidador" : "cliente";
+                this.props.tipoUsuario == "Cliente" ? "cuidador" : "cliente";
               const idLaOtraPersona =
-                this.props.tipoUsuario == "C" ? "idCuidador" : "idCliente";
+                this.props.tipoUsuario == "Cliente" ? "idCuidador" : "idCliente";
               axios
                 .get(
                   "http://" +
@@ -72,7 +72,7 @@ class NotificacionesForm extends React.Component {
               }).then(elOtroUsuario => {                
                 console.log(elOtroUsuario);
                 const tablaLaOtraPersona =
-                elOtroUsuario.data.tipoUsuario == "Z" ? "cuidador" : "cliente";
+                elOtroUsuario.data.tipoUsuario == "Cuidador" ? "cuidador" : "cliente";
                 axios.get("http://" + ipMaquina + ":3001/api/" + tablaLaOtraPersona + "/" + elOtroUsuario.data.idPerfil).then(laOtraPersona => {
                   notificacion.laOtraPersona = laOtraPersona.data;
                   jsonNotificaciones.push(notificacion);

@@ -32,9 +32,9 @@ class CalendarioForm extends React.Component {
         for (let i = 0; i < eventos.data.length; i++) {
           let evento = eventos.data[i];
           const tablaLaOtraPersona =
-            tipoUsuario == "C" ? "cuidador" : "cliente";
+            tipoUsuario == "Cliente" ? "cuidador" : "cliente";
           const idLaOtraPersona =
-            tipoUsuario == "C" ? "idCuidador" : "idCliente";
+            tipoUsuario == "Cliente" ? "idCuidador" : "idCliente";
           axios
             .get(
               "http://" +

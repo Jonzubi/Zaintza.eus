@@ -99,10 +99,10 @@ class MenuPerfil extends React.Component {
     const tipoUsuario = this.props.tipoUsuario;
 
     switch (tipoUsuario) {
-      case "Z":
+      case "Cuidador":
         this.props.changeFormContent("perfilCuidador");
         break;
-      case "C":
+      case "Cliente":
         this.props.changeFormContent("perfilCliente");
         break;
       default:

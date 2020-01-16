@@ -12,11 +12,13 @@ module.exports = conexion => {
     },
     tipoUsuario: {
       type: String,
-      required: true
+      required: true,
+      enum: ['Cliente', 'Cuidador']
     },
     idPerfil: {
       type: String,
-      required: true
+      required: true,
+      refPath: 'tipoUsuario'
     }
   });
 

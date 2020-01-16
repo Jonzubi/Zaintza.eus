@@ -145,13 +145,13 @@ class RegisterFormCliente extends React.Component {
         var formDataUsu = {
           email: this.state.txtEmail,
           contrasena: this.state.txtContrasena,
-          tipoUsuario: "C",
+          tipoUsuario: "Cliente",
           idPerfil: idPerfil
         };
         axios
           .post("http://" + ipMaquina + ":3001/api/usuario/", formDataUsu)
           .then(resultado => {
-            this.props.saveUserSession(Object.assign({},formData, {tipoUsuario: "C", email: formDataUsu.email, _id: idPerfil, _idUsuario: resultado.data._id}));
+            this.props.saveUserSession(Object.assign({},formData, {tipoUsuario: "Cliente", email: formDataUsu.email, _id: idPerfil, _idUsuario: resultado.data._id}));
 
             this.state = {
               avatarPreview: "",

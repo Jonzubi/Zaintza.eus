@@ -29,7 +29,7 @@ class AcuerdosForm extends React.Component {
     //buscarUsuOrCuid =>> En esta variable guardo si el usuario iniciado es cliente o cuidador para asi si es cuidador
     //buscar cliente en el acuerdo y viceversa, ESTO ME DARA LA INFORMACION DE LA OTRA PARTE DEL ACUERDO
     let tipoUsuario =
-      this.props.tipoUsuario == "Z" ? "idCuidador" : "idCliente";
+      this.props.tipoUsuario == "Cuidador" ? "idCuidador" : "idCliente";
     const { idPerfil } = this.props;
     
     axios.get("http://" + ipMaquina + ":3001/api/procedures/getAcuerdosConUsuarios", {
@@ -115,7 +115,7 @@ class AcuerdosForm extends React.Component {
     });
     //Ahora se quiere notificar a la otra parte del acuerdo de la finalizacion del acuerdo
     let buscarUsuOrCuid =
-      this.props.tipoUsuario == "C" ? "idCuidador" : "idCliente";
+      this.props.tipoUsuario == "Cliente" ? "idCuidador" : "idCliente";
     const idElOtro = acuerdo[buscarUsuOrCuid];
     let elOtroUsu = await axios.get("http://" + ipMaquina + ":3001/api/usuario", {
       params: {
@@ -150,7 +150,7 @@ class AcuerdosForm extends React.Component {
   }
 
   render() {
-    const laOtraPersona = this.props.tipoUsuario != "Z" ? "idCuidador" : "idCliente";
+    const laOtraPersona = this.props.tipoUsuario != "Cuidador" ? "idCuidador" : "idCliente";
     return (
       <div className="p-5 h-100">
         {this.state.jsonAcuerdos.length != 0 ? (

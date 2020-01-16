@@ -458,7 +458,7 @@ class RegisterForm extends React.Component {
             var formDataUsu = {
               email: this.state.txtEmail,
               contrasena: this.state.txtContrasena,
-              tipoUsuario: "Z",
+              tipoUsuario: "Cuidador",
               idPerfil: idPerfil
             };
 

@@ -309,7 +309,7 @@ class Tabla extends React.Component {
       this.handleShowModalChange(false);
       this.props.toogleMenuPerfil(true);
       return;
-    } else if (this.props.tipoUsuario != "C") {
+    } else if (this.props.tipoUsuario != "Cliente") {
       cogoToast.error(<h5>{t("tablaCuidadores.errorClienteObligatorio")}</h5>);
       this.handleShowModalChange(false);
       return;

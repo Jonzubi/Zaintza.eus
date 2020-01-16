@@ -13,7 +13,7 @@ exports.getAcuerdosConUsuarios = (req, res, modelos) => {
   const modeloAcuerdos = modelos.acuerdo;
 
   let columna, columnaLaOtraPersona;
-  if (tipoUsuario == "C") {
+  if (tipoUsuario == "Cliente") {
     columna = "idCliente";
     columnaLaOtraPersona = "idCuidador";
   } else {
