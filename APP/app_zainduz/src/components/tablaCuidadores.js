@@ -45,7 +45,13 @@ const mapDispatchToProps = dispatch => {
 
 class Tabla extends React.Component {
   componentDidMount() {
-    Axios.get("http://" + ipMaquina + ":3001/api/cuidador")
+    Axios.get("http://" + ipMaquina + ":3001/api/cuidador", {
+      params: {
+        filtros:{
+          isPublic: true
+        }        
+      }
+    })
       .then(data => {
         this.setState({
           jsonCuidadores: data.data,
