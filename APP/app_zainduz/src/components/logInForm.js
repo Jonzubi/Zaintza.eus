@@ -8,7 +8,6 @@ import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import { saveUserSession } from "../redux/actions/user";
 import { toogleModal } from "../redux/actions/modalRegistrarse";
 import { t } from "../util/funciones";
-import { loadGif } from "../util/gifs/loadGif.gif";
 
 const mapDispatchToProps = dispatch => {
   return {
