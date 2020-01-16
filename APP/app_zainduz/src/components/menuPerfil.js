@@ -14,6 +14,7 @@ import "./styles/menuPerfil.css";
 import cogoToast from "cogo-toast";
 import { t } from "../util/funciones";
 import Axios from "axios";
+import ChangeLang from "../components/changeLang";
 
 const mapStateToProps = state => {
   return {
@@ -218,6 +219,7 @@ class MenuPerfil extends React.Component {
       >
         <IconAvatar />
         <MenuContent />
+        <ChangeLang />
       </BurgerMenu>
     );
   }

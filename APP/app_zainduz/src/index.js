@@ -5,7 +5,8 @@ import store from "./redux/store/index";
 import {useTranslation, initReactI18next} from 'react-i18next';
 import i18n from 'i18next';
 import App from './App';
-import zainduz_eus from "./lang/eus/common.json";
+import zaintza_eus from "./lang/eus/common.json";
+import zaintza_es from "./lang/es/common.json";
 import * as serviceWorker from './serviceWorker';
 
 i18n
@@ -13,9 +14,13 @@ i18n
     .init({
         resources: {
             eus: {
-                translation: zainduz_eus
+                translation: zaintza_eus
+            },
+            es: {
+                translation: zaintza_es
             }
         },
+        preload: ["eus", "es"],
         lng: "eus",
         fallbackLng: "eus",
         interpolation: {
