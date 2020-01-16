@@ -42,7 +42,7 @@ function reducer(state = initialState, action) {
         email: action.payload.email || state.email,
         contrasena: action.payload.contrasena || state.contrasena,
         telefono: action.payload.telefono || state.telefono,
-        isPublic: action.payload.isPublic || state.isPublic,
+        isPublic: typeof action.payload.isPublic != "undefined" ? action.payload.isPublic : state.isPublic,
         precioPorPublico: action.payload.precioPorPublico || state.precioPorPublico,
         diasDisponible: action.payload.diasDisponible || state.diasDisponible,
         valoracionMedia: action.payload.valoracionMedia || state.valoracionMedia, 
