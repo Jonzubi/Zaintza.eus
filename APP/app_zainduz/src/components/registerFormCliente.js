@@ -3,7 +3,7 @@ import Avatar from "react-avatar-edit";
 import cogoToast from "cogo-toast";
 import loadGif from "../util/gifs/loadGif.gif";
 import { connect } from "react-redux";
-import { t, getRandomString } from "../util/funciones";
+import { trans, getRandomString } from "../util/funciones";
 import { saveUserSession } from "../redux/actions/user";
 import { changeFormContent } from "../redux/actions/app";
 import axios from "axios";
@@ -62,7 +62,7 @@ class RegisterFormCliente extends React.Component {
 
   onBeforeFileLoad(elem) {
     if (elem.target.files[0].size > 5242880) {
-      cogoToast.error(<h5>{t("registerFormClientes.errorImgGrande")}</h5>);
+      cogoToast.error(<h5>{trans("registerFormClientes.errorImgGrande")}</h5>);
       elem.target.value = "";
     }
   }
@@ -89,8 +89,8 @@ class RegisterFormCliente extends React.Component {
       ) {
         cogoToast.error(
           <h5>
-            {t("registerFormClientes.errorRellenaTodo")} (
-            {t(this.requiredStatesTraduc[clave])})
+            {trans("registerFormClientes.errorRellenaTodo")} (
+            {trans(this.requiredStatesTraduc[clave])})
           </h5>
         );
         let auxError = this.state.error;
@@ -112,7 +112,7 @@ class RegisterFormCliente extends React.Component {
         })
         .catch(error => {
           cogoToast.error(
-            <h5>{t("registerFormClientes.errorAvatarUpload")}</h5>
+            <h5>{trans("registerFormClientes.errorAvatarUpload")}</h5>
           );
           return;
         });
@@ -170,9 +170,9 @@ class RegisterFormCliente extends React.Component {
             };
             cogoToast.success(
               <div>
-                <h5>{t("registerFormClientes.registroCompletado")}</h5>
+                <h5>{trans("registerFormClientes.registroCompletado")}</h5>
                 <small>
-                  <b>{t("registerFormClientes.darGracias")}</b>
+                  <b>{trans("registerFormClientes.darGracias")}</b>
                 </small>
               </div>
             );
@@ -183,13 +183,13 @@ class RegisterFormCliente extends React.Component {
         this.setState({
           isLoading: false
         });
-        cogoToast.error(<h5>{t("registerFormClientes.errorGeneral")}</h5>);
+        cogoToast.error(<h5>{trans("registerFormClientes.errorGeneral")}</h5>);
       })
       .catch(err => {
         this.setState({
           isLoading: false
         });
-        cogoToast.error(<h5>{t("registerFormClientes.errorGeneral")}</h5>);
+        cogoToast.error(<h5>{trans("registerFormClientes.errorGeneral")}</h5>);
       });
   }
 
@@ -219,7 +219,7 @@ class RegisterFormCliente extends React.Component {
         <div className="form-group row">
           <div className="col-12">
             <label htmlFor="txtNombre">
-              {t("registerFormClientes.nombre")}
+              {trans("registerFormClientes.nombre")}
             </label>{" "}
             (<span className="text-danger font-weight-bold">*</span>)
             <input
@@ -240,7 +240,7 @@ class RegisterFormCliente extends React.Component {
         <div className="form-group row">
           <div className="col-6">
             <label htmlFor="txtApellido1">
-              {t("registerFormClientes.apellido1")}
+              {trans("registerFormClientes.apellido1")}
             </label>
             <input
               onChange={this.handleInputChange}
@@ -254,7 +254,7 @@ class RegisterFormCliente extends React.Component {
           </div>
           <div className="col-6">
             <label htmlFor="txtApellido2">
-              {t("registerFormClientes.apellido2")}
+              {trans("registerFormClientes.apellido2")}
             </label>
             <input
               onChange={this.handleInputChange}
@@ -270,7 +270,7 @@ class RegisterFormCliente extends React.Component {
         <div className="form-group row">
           <div className="col-6">
             <label htmlFor="txtEmail">
-              {t("registerFormClientes.email")}
+              {trans("registerFormClientes.email")}
             </label>{" "}
             (<span className="text-danger font-weight-bold">*</span>)
             <input
@@ -289,7 +289,7 @@ class RegisterFormCliente extends React.Component {
           </div>
           <div className="col-6">
             <label htmlFor="txtContrasena">
-              {t("registerFormClientes.contrasena")}
+              {trans("registerFormClientes.contrasena")}
             </label>{" "}
             (<span className="text-danger font-weight-bold">*</span>)
             <input
@@ -309,7 +309,7 @@ class RegisterFormCliente extends React.Component {
         <div className="form-group row">
           <div className="col-6">
           <label htmlFor="txtMovil">
-              {t("registerFormClientes.movil")}
+              {trans("registerFormClientes.movil")}
             </label>{" "}
             (<span className="text-danger font-weight-bold">*</span>)
             <input
@@ -327,7 +327,7 @@ class RegisterFormCliente extends React.Component {
           </div>
           <div className="col-6">
           <label htmlFor="txtFijo">
-              {t("registerFormClientes.telefFijo")}
+              {trans("registerFormClientes.telefFijo")}
             </label>{" "}
             <input
               onChange={this.handleInputChange}
@@ -352,7 +352,7 @@ class RegisterFormCliente extends React.Component {
               type="button"
               className="w-100 btn btn-success "
             >
-              {t("registerFormClientes.registrarse")}
+              {trans("registerFormClientes.registrarse")}
             </button>
           )}
         </div>        

@@ -12,8 +12,8 @@
       "ajustes": "Ezarpenak"
     },
     "loginForm": {
-      "email": "Emaila",
-      "insertEmail": "Sartu zure emaila...",
+      "email": "Correo",
+      "insertEmail": "Inserta tu correo...",
       "insertContrasena": "Sartu zure pasahitza...",
       "contrasena": "Pasahitza",
       "recordarme": "Gogorarazi",

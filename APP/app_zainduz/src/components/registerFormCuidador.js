@@ -27,7 +27,7 @@ import { connect } from "react-redux";
 import { changeFormContent } from "../redux/actions/app";
 import { saveUserSession } from "../redux/actions/user";
 import municipios from "../util/municipos";
-import { t } from "../util/funciones";
+import { trans } from "../util/funciones";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -184,7 +184,7 @@ class RegisterForm extends React.Component {
 
   onBeforeFileLoad(elem) {
     if (elem.target.files[0].size > 5242880) {
-      cogoToast.error(<h5>{t("registerFormCuidadores.errorImgGrande")}</h5>);
+      cogoToast.error(<h5>{trans("registerFormCuidadores.errorImgGrande")}</h5>);
       elem.target.value = "";
     }
   }
@@ -223,7 +223,7 @@ class RegisterForm extends React.Component {
     if (!municipios.includes(pueblo)) {
       cogoToast.error(
         <h5>
-          {pueblo} {t("registerFormCuidadores.errorPuebloNoExiste")}
+          {pueblo} {trans("registerFormCuidadores.errorPuebloNoExiste")}
         </h5>
       );
       return;
@@ -233,7 +233,7 @@ class RegisterForm extends React.Component {
       if (this.state.ubicaciones[clave] == pueblo) {
         cogoToast.error(
           <h5>
-            {pueblo} {t("registerFormCuidadores.errorPuebloRepetido")}
+            {pueblo} {trans("registerFormCuidadores.errorPuebloRepetido")}
           </h5>
         );
         return;
@@ -370,8 +370,8 @@ class RegisterForm extends React.Component {
       ) {
         cogoToast.error(
           <h5>
-            {t("registerFormCuidadores.errorRellenaTodo")} (
-            {t(this.requiredStatesTraduc[clave])})
+            {trans("registerFormCuidadores.errorRellenaTodo")} (
+            {trans(this.requiredStatesTraduc[clave])})
           </h5>
         );
         let auxError = this.state.error;
@@ -387,7 +387,7 @@ class RegisterForm extends React.Component {
         this.state[clave].map(confDia => {
           if (confDia.dia == 0 || isNaN(confDia.dia)) {
             cogoToast.error(
-              <h5>{t("registerFormCuidadores.errorDiaNoElegido")}</h5>
+              <h5>{trans("registerFormCuidadores.errorDiaNoElegido")}</h5>
             );
             error = true;
             return;
@@ -403,7 +403,7 @@ class RegisterForm extends React.Component {
     var imgContactB64 = await toBase64(this.state.imgContact[0]);
 
     if (imgContactB64 instanceof Error) {
-      cogoToast.error(<h5>{t("registerFormCuidadores.errorImagen")}</h5>);
+      cogoToast.error(<h5>{trans("registerFormCuidadores.errorImagen")}</h5>);
       return;
     }
 
@@ -415,7 +415,7 @@ class RegisterForm extends React.Component {
         this.setState({
           isLoading: false
         });
-        cogoToast.error(<h5>{t("registerFormCuidadores.errorGeneral")}</h5>);
+        cogoToast.error(<h5>{trans("registerFormCuidadores.errorGeneral")}</h5>);
       });
     }
     axios
@@ -502,9 +502,9 @@ class RegisterForm extends React.Component {
                 });
                 cogoToast.success(
                   <div>
-                    <h5>{t("registerFormCuidadores.registroCompletado")}</h5>
+                    <h5>{trans("registerFormCuidadores.registroCompletado")}</h5>
                     <small>
-                      <b>{t("registerFormCuidadores.darGracias")}</b>
+                      <b>{trans("registerFormCuidadores.darGracias")}</b>
                     </small>
                   </div>
                 );
@@ -515,7 +515,7 @@ class RegisterForm extends React.Component {
                   isLoading: false
                 });
                 cogoToast.error(
-                  <h5>{t("registerFormCuidadores.errorGeneral")}</h5>
+                  <h5>{trans("registerFormCuidadores.errorGeneral")}</h5>
                 );
               });
           })
@@ -524,7 +524,7 @@ class RegisterForm extends React.Component {
               isLoading: false
             });
             cogoToast.error(
-              <h5>{t("registerFormCuidadores.errorGeneral")}</h5>
+              <h5>{trans("registerFormCuidadores.errorGeneral")}</h5>
             );
           });
       })
@@ -532,7 +532,7 @@ class RegisterForm extends React.Component {
         this.setState({
           isLoading: false
         });
-        cogoToast.error(<h5>{t("registerFormCuidadores.errorGeneral")}</h5>);
+        cogoToast.error(<h5>{trans("registerFormCuidadores.errorGeneral")}</h5>);
       });
   }
 
@@ -636,7 +636,7 @@ class RegisterForm extends React.Component {
             <div className="form-group col-6">
               <div class="form-group">
                 <label htmlFor="txtNombre">
-                  {t("registerFormCuidadores.nombre")}
+                  {trans("registerFormCuidadores.nombre")}
                 </label>{" "}
                 (<span className="text-danger font-weight-bold">*</span>)
                 <input
@@ -656,7 +656,7 @@ class RegisterForm extends React.Component {
               <div class="form-group row">
                 <div className="form-group col">
                   <label htmlFor="txtApellido1">
-                    {t("registerFormCuidadores.apellido1")}
+                    {trans("registerFormCuidadores.apellido1")}
                   </label>
                   <input
                     onChange={this.handleInputChange}
@@ -670,7 +670,7 @@ class RegisterForm extends React.Component {
                 </div>
                 <div className="form-group col">
                   <label htmlFor="txtApellido2">
-                    {t("registerFormCuidadores.apellido2")}
+                    {trans("registerFormCuidadores.apellido2")}
                   </label>
                   <input
                     onChange={this.handleInputChange}
@@ -688,7 +688,7 @@ class RegisterForm extends React.Component {
           <div class="form-group row">
             <div className="form-group col-6">
               <label htmlFor="txtFechaNacimiento">
-                {t("registerFormCuidadores.fechaNac")}
+                {trans("registerFormCuidadores.fechaNac")}
               </label>{" "}
               (<span className="text-danger font-weight-bold">*</span>)
               <br />
@@ -767,7 +767,7 @@ class RegisterForm extends React.Component {
           <div className="form-group row">
             <div class="form-group col">
               <label htmlFor="txtEmail">
-                {t("registerFormCuidadores.email")}
+                {trans("registerFormCuidadores.email")}
               </label>{" "}
               (<span className="text-danger font-weight-bold">*</span>)
               <input
@@ -784,7 +784,7 @@ class RegisterForm extends React.Component {
                 value={this.state.txtEmail}
               />
               <label className="pt-2" htmlFor="txtContrasena">
-                {t("registerFormCuidadores.contrasena")}
+                {trans("registerFormCuidadores.contrasena")}
               </label>{" "}
               (<span className="text-danger font-weight-bold">*</span>)
               <input
@@ -802,7 +802,7 @@ class RegisterForm extends React.Component {
             </div>
             <div class="form-group col">
               <label htmlFor="txtMovil">
-                {t("registerFormCuidadores.movil")}
+                {trans("registerFormCuidadores.movil")}
               </label>{" "}
               (<span className="text-danger font-weight-bold">*</span>)
               <input
@@ -819,7 +819,7 @@ class RegisterForm extends React.Component {
                 value={this.state.txtMovil}
               />
               <label className="pt-2" htmlFor="txtTelefono">
-                {t("registerFormCuidadores.telefFijo")}
+                {trans("registerFormCuidadores.telefFijo")}
               </label>
               <input
                 onChange={this.handleInputChange}
@@ -835,7 +835,7 @@ class RegisterForm extends React.Component {
             <div className="form-group col">
               {/* Insertar dias disponibles aqui */}
               <label className="w-100 text-center lead">
-                {t("registerFormCuidadores.diasDisponible")}:
+                {trans("registerFormCuidadores.diasDisponible")}:
               </label>
               <br />
               <div className="w-100 mt-2" id="diasDisponible">
@@ -864,7 +864,7 @@ class RegisterForm extends React.Component {
                         </select>
                         <br />
                         <br />
-                        <b>{t("registerFormCuidadores.horaInicio")} :</b>
+                        <b>{trans("registerFormCuidadores.horaInicio")} :</b>
                         <TimeInput
                           onTimeChange={valor => {
                             this.handleDiasDisponibleChange(
@@ -882,7 +882,7 @@ class RegisterForm extends React.Component {
                           className="mt-1 text-center d-inline form-control"
                         />
                         <br />
-                        <b>{t("registerFormCuidadores.horaFin")} :</b>
+                        <b>{trans("registerFormCuidadores.horaFin")} :</b>
                         <TimeInput
                           onTimeChange={valor => {
                             this.handleDiasDisponibleChange(
@@ -910,7 +910,7 @@ class RegisterForm extends React.Component {
                       onClick={this.removeDiasDisponible}
                       className="btn btn-danger float-left text-light"
                     >
-                      {t("registerFormCuidadores.eliminarDia")}{" "}
+                      {trans("registerFormCuidadores.eliminarDia")}{" "}
                       <FontAwesomeIcon icon={faMinusCircle} />
                     </a>
                   ) : (
@@ -920,7 +920,7 @@ class RegisterForm extends React.Component {
                     onClick={this.addDiasDisponible}
                     className="btn btn-success float-right text-light"
                   >
-                    {t("registerFormCuidadores.anadir")}{" "}
+                    {trans("registerFormCuidadores.anadir")}{" "}
                     <FontAwesomeIcon icon={faPlusCircle} />
                   </a>
                 </div>
@@ -929,7 +929,7 @@ class RegisterForm extends React.Component {
             <div className="form-group col">
               {/* Insertar ubicaciones disponibles aqui */}
               <label htmlFor="txtAddPueblos" className="w-100 text-center lead">
-                {t("registerFormCuidadores.pueblosDisponible")}:
+                {trans("registerFormCuidadores.pueblosDisponible")}:
               </label>{" "}
               (<span className="text-danger font-weight-bold">*</span>)
               <div class="form-group mt-2">
@@ -946,7 +946,7 @@ class RegisterForm extends React.Component {
                 />
                 {this.state.ubicaciones.length > 0 ? (
                   <h5 className="mt-2 lead">
-                    {t("registerFormCuidadores.pueblosSeleccionados")}:
+                    {trans("registerFormCuidadores.pueblosSeleccionados")}:
                   </h5>
                 ) : (
                   ""
@@ -962,7 +962,7 @@ class RegisterForm extends React.Component {
                     onClick={this.handleRemovePueblo}
                     className="mt-4 btn btn-danger float-right text-light"
                   >
-                    {t("registerFormCuidadores.eliminarPueblo")}{" "}
+                    {trans("registerFormCuidadores.eliminarPueblo")}{" "}
                     <FontAwesomeIcon icon={faMinusCircle} />
                   </a>
                 ) : (
@@ -976,7 +976,7 @@ class RegisterForm extends React.Component {
             <div className="form-group col">
               {/* Insertar publico disponibles aqui */}
               <label className="w-100 text-center lead">
-                {t("registerFormCuidadores.publicoDisponible")}:
+                {trans("registerFormCuidadores.publicoDisponible")}:
               </label>
               <div className="row md-2">
                 <div
@@ -1000,7 +1000,7 @@ class RegisterForm extends React.Component {
                 >
                   <img src={imgNino} className="w-100 h-100" />
                   <small className="font-weight-bold">
-                    {t("registerFormCuidadores.ninos")}
+                    {trans("registerFormCuidadores.ninos")}
                   </small>
                 </div>
                 <div
@@ -1024,7 +1024,7 @@ class RegisterForm extends React.Component {
                 >
                   <img src={imgTerceraEdad} className="w-100 h-100" />
                   <small className="font-weight-bold">
-                    {t("registerFormCuidadores.terceraEdad")}
+                    {trans("registerFormCuidadores.terceraEdad")}
                   </small>
                 </div>
                 <div
@@ -1048,7 +1048,7 @@ class RegisterForm extends React.Component {
                 >
                   <img src={imgNecesidadEspecial} className="w-100 h-100" />
                   <small className="font-weight-bold">
-                    {t("registerFormCuidadores.necesidadEspecial")}
+                    {trans("registerFormCuidadores.necesidadEspecial")}
                   </small>
                 </div>
               </div>
@@ -1056,13 +1056,13 @@ class RegisterForm extends React.Component {
             <div className="form-group col">
               {/* Insertar precioPublico disponibles aqui */}
               <label className="w-100 text-center lead">
-                {t("registerFormCuidadores.precioPorPublico")}:
+                {trans("registerFormCuidadores.precioPorPublico")}:
               </label>
               <div className="list-group md-2">
                 {this.state.publicoDisponible.nino ? (
                   <div className="list-group-item form-group text-center p-1">
                     <small>
-                      <b>{t("registerFormCuidadores.ninos")}</b>
+                      <b>{trans("registerFormCuidadores.ninos")}</b>
                     </small>
                     <input
                       onChange={event => {
@@ -1076,7 +1076,7 @@ class RegisterForm extends React.Component {
                 ) : (
                   <div className="list-group-item form-group text-center p-1">
                     <small>
-                      <b>{t("registerFormCuidadores.ninos")}</b>
+                      <b>{trans("registerFormCuidadores.ninos")}</b>
                     </small>
                     <input
                       onChange={event => {
@@ -1093,7 +1093,7 @@ class RegisterForm extends React.Component {
                 {this.state.publicoDisponible.terceraEdad ? (
                   <div className="list-group-item form-group text-center p-1">
                     <small>
-                      <b>{t("registerFormCuidadores.terceraEdad")}</b>
+                      <b>{trans("registerFormCuidadores.terceraEdad")}</b>
                     </small>
                     <input
                       onChange={event => {
@@ -1110,7 +1110,7 @@ class RegisterForm extends React.Component {
                 ) : (
                   <div className="list-group-item form-group text-center p-1">
                     <small>
-                      <b>{t("registerFormCuidadores.terceraEdad")}</b>
+                      <b>{trans("registerFormCuidadores.terceraEdad")}</b>
                     </small>
                     <input
                       onChange={event => {
@@ -1130,7 +1130,7 @@ class RegisterForm extends React.Component {
                 {this.state.publicoDisponible.necesidadEspecial ? (
                   <div className="list-group-item form-group text-center p-1">
                     <small>
-                      <b>{t("registerFormCuidadores.necesidadEspecial")}</b>
+                      <b>{trans("registerFormCuidadores.necesidadEspecial")}</b>
                     </small>
                     <input
                       onChange={event => {
@@ -1147,7 +1147,7 @@ class RegisterForm extends React.Component {
                 ) : (
                   <div className="list-group-item form-group text-center p-1">
                     <small>
-                      <b>{t("registerFormCuidadores.necesidadEspecial")}</b>
+                      <b>{trans("registerFormCuidadores.necesidadEspecial")}</b>
                     </small>
                     <input
                       onChange={event => {
@@ -1168,7 +1168,7 @@ class RegisterForm extends React.Component {
           </div>
           <div class="form-group">
             <label htmlFor="txtDescripcion">
-              {t("registerFormCuidadores.descripcion")}
+              {trans("registerFormCuidadores.descripcion")}
             </label>{" "}
             (<span className="text-danger font-weight-bold">*</span>)
             <textarea
@@ -1192,7 +1192,7 @@ class RegisterForm extends React.Component {
               id="isPublic"
             />
             <br />
-            <small>{t("registerFormCuidadores.publicarAuto")}</small>
+            <small>{trans("registerFormCuidadores.publicarAuto")}</small>
           </div>
 
           <div id="loaderOrButton" className="w-100 mt-5 text-center">
@@ -1204,7 +1204,7 @@ class RegisterForm extends React.Component {
                 type="button"
                 className="w-100 btn btn-success "
               >
-                {t("registerFormCuidadores.registrarse")}
+                {trans("registerFormCuidadores.registrarse")}
               </button>
             )}
           </div>

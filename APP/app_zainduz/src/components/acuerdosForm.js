@@ -12,7 +12,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { connect } from "react-redux";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
-import { t, arrayOfFalses } from "../util/funciones";
+import { trans, arrayOfFalses } from "../util/funciones";
 import Avatar from "react-avatar";
 import cogoToast from "cogo-toast";
 
@@ -142,7 +142,7 @@ class AcuerdosForm extends React.Component {
         jsonAcuerdos: auxJsonAcuerdos
       },
       () => {
-        cogoToast.success(<h5>{t("acuerdosForm.acuerdoTerminado")}</h5>);
+        cogoToast.success(<h5>{trans("acuerdosForm.acuerdoTerminado")}</h5>);
       }
     );
   }
@@ -178,10 +178,10 @@ class AcuerdosForm extends React.Component {
                           </span>{" "}
                           <span>
                             {acuerdo.estadoAcuerdo == 0
-                              ? t("acuerdosForm.esperandoAcuerdo")
+                              ? trans("acuerdosForm.esperandoAcuerdo")
                               : acuerdo.estadoAcuerdo == 1
-                              ? t("acuerdosForm.aceptadoAcuerdo")
-                              : t("acuerdosForm.rechazadoAcuerdo")}
+                              ? trans("acuerdosForm.aceptadoAcuerdo")
+                              : trans("acuerdosForm.rechazadoAcuerdo")}
                           </span>
                         </div>
                       </div>
@@ -193,7 +193,7 @@ class AcuerdosForm extends React.Component {
                           placement="top"
                           overlay={
                             <Tooltip>
-                              {t("acuerdosForm.estadoPendiente")}
+                              {trans("acuerdosForm.estadoPendiente")}
                             </Tooltip>
                           }
                         >
@@ -208,7 +208,7 @@ class AcuerdosForm extends React.Component {
                           placement="top"
                           overlay={
                             <Tooltip>
-                              {t("acuerdosForm.estadoAceptado")}
+                              {trans("acuerdosForm.estadoAceptado")}
                             </Tooltip>
                           }
                         >
@@ -223,7 +223,7 @@ class AcuerdosForm extends React.Component {
                           placement="top"
                           overlay={
                             <Tooltip>
-                              {t("acuerdosForm.estadoRechazado")}
+                              {trans("acuerdosForm.estadoRechazado")}
                             </Tooltip>
                           }
                         >
@@ -257,7 +257,7 @@ class AcuerdosForm extends React.Component {
                     </div>
                     <div className="row">
                       <div className="col-6 text-center">
-                        <span>{t("notificacionesForm.pueblos")}</span>
+                        <span>{trans("notificacionesForm.pueblos")}</span>
                         <hr />
                         <ul className="list-group">
                           {typeof acuerdo.pueblo.map != "undefined"
@@ -272,7 +272,7 @@ class AcuerdosForm extends React.Component {
                         </ul>
                       </div>
                       <div className="col-6 text-center">
-                        <span>{t("notificacionesForm.dias")}</span>
+                        <span>{trans("notificacionesForm.dias")}</span>
                         <hr />
                         <ul className="list-group">
                           {typeof acuerdo.diasAcordados.map != "undefined"
@@ -303,7 +303,7 @@ class AcuerdosForm extends React.Component {
                             : "w-100 btn btn-danger disabled"
                         }
                       >
-                        {t("acuerdosForm.terminarAcuerdo")}
+                        {trans("acuerdosForm.terminarAcuerdo")}
                       </button>
                     </div>
                   </div>
@@ -314,7 +314,7 @@ class AcuerdosForm extends React.Component {
         ) : (
           <div className="d-flex justify-content-center">
             <small className="text-danger my-auto">
-              {t("acuerdosForm.noData")}
+              {trans("acuerdosForm.noData")}
             </small>
           </div>
         )}

@@ -12,7 +12,7 @@ import { changeFormContent } from "../redux/actions/app";
 import ipMaquina from "../util/ipMaquinaAPI";
 import "./styles/menuPerfil.css";
 import cogoToast from "cogo-toast";
-import { t } from "../util/funciones";
+import { trans } from "../util/funciones";
 import Axios from "axios";
 import ChangeLang from "../components/changeLang";
 
@@ -131,7 +131,7 @@ class MenuPerfil extends React.Component {
     this.props.initializeUserSession();
     this.props.changeFormContent("tabla");
     this.props.toogleMenuPerfil(false);
-    cogoToast.success(<h5>{t("notificaciones.sesionCerrada")}</h5>);
+    cogoToast.success(<h5>{trans("notificaciones.sesionCerrada")}</h5>);
   }
 
   handleClickCalendario(){
@@ -154,24 +154,24 @@ class MenuPerfil extends React.Component {
               className="w-100 btn btn-secondary"
               onClick={() => this.handleClickPerfil()}
             >
-              {t("menuPerfil.perfil")}
+              {trans("menuPerfil.perfil")}
             </button>
             <button type="button" className="w-100 btn btn-secondary" onClick={() => this.handleClickCalendario()}>
-              {t("menuPerfil.calendario")}
+              {trans("menuPerfil.calendario")}
             </button>
             <button
               type="button"
               className="w-100 btn btn-secondary"
               onClick={() => this.handleClickAcuerdos()}
             >
-              {t("menuPerfil.contratos")}
+              {trans("menuPerfil.contratos")}
             </button>
             <button
               type="button"
               className="w-100 btn btn-secondary"
               onClick={() => this.handleClickNotificaciones()}
             >
-              {t("menuPerfil.notificaciones")}
+              {trans("menuPerfil.notificaciones")}
               {this.state.countNotificaciones > 0 ? (
                 <span className="badge badge-light ml-2">
                   {this.state.countNotificaciones}
@@ -179,7 +179,7 @@ class MenuPerfil extends React.Component {
               ) : null}
             </button>
             <button type="button" className="w-100 btn btn-secondary">
-              {t("menuPerfil.ajustes")}
+              {trans("menuPerfil.ajustes")}
             </button>
           </div>
           <button
@@ -188,7 +188,7 @@ class MenuPerfil extends React.Component {
             onClick={() => this.handleLogOut()}
           >
             <FontAwesomeIcon className="mt-1 float-left" icon={faTimes} />
-            {t("menuPerfil.salir")}
+            {trans("menuPerfil.salir")}
           </button>
         </div>
       );

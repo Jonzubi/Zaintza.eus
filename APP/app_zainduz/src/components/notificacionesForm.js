@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import { connect } from "react-redux";
-import { t, arrayOfFalses } from "../util/funciones";
+import { trans, arrayOfFalses } from "../util/funciones";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faEye, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { Collapse } from "react-collapse";
@@ -116,7 +116,7 @@ class NotificacionesForm extends React.Component {
     estadoAcuerdo = estadoAcuerdo.data.estadoAcuerdo;
     if(estadoAcuerdo == 2){
       cogoToast.error(<h5>
-        {t('notificacionesForm.acuerdoYaRechazado')}
+        {trans('notificacionesForm.acuerdoYaRechazado')}
       </h5>);
       await axios.delete(
         "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id
@@ -167,10 +167,10 @@ class NotificacionesForm extends React.Component {
       () => {
         ifAccept
           ? cogoToast.success(
-              <h5>{t("notificacionesForm.acuerdoAceptado")}</h5>
+              <h5>{trans("notificacionesForm.acuerdoAceptado")}</h5>
             )
           : cogoToast.success(
-              <h5>{t("notificacionesForm.acuerdoRechazado")}</h5>
+              <h5>{trans("notificacionesForm.acuerdoRechazado")}</h5>
             );
       }
     );
@@ -217,7 +217,7 @@ class NotificacionesForm extends React.Component {
                                 notificacion.idRemitente.idPerfil.apellido1}
                             </span>{" "}
                             <span>
-                              {t("notificacionesForm.propuestaAcuerdo")}
+                              {trans("notificacionesForm.propuestaAcuerdo")}
                             </span>
                           </div>
                         </div>
@@ -241,7 +241,7 @@ class NotificacionesForm extends React.Component {
                                 notificacion.idRemitente.idPerfil.apellido1}
                             </span>{" "}
                             <span>
-                              {notificacion.valorGestion ? t("notificacionesForm.otraPersonaAcuerdoAceptado") : t("notificacionesForm.otraPersonaAcuerdoRechazado")}
+                              {notificacion.valorGestion ? trans("notificacionesForm.otraPersonaAcuerdoAceptado") : trans("notificacionesForm.otraPersonaAcuerdoRechazado")}
                             </span>
                           </div>
                           <span className="ml-5">
@@ -291,7 +291,7 @@ class NotificacionesForm extends React.Component {
                         </div>
                         <div className="row">
                           <div className="col-6 text-center">
-                            <span>{t("notificacionesForm.pueblos")}</span>
+                            <span>{trans("notificacionesForm.pueblos")}</span>
                             <hr />
                             <ul className="list-group">
                               {typeof notificacion.acuerdo.pueblo.map !=
@@ -307,7 +307,7 @@ class NotificacionesForm extends React.Component {
                             </ul>
                           </div>
                           <div className="col-6 text-center">
-                            <span>{t("notificacionesForm.dias")}</span>
+                            <span>{trans("notificacionesForm.dias")}</span>
                             <hr />
                             <ul className="list-group">
                               {typeof notificacion.acuerdo.diasAcordados.map !=
@@ -343,7 +343,7 @@ class NotificacionesForm extends React.Component {
                             }
                             className="btn btn-success col-6"
                           >
-                            {t("notificacionesForm.aceptarAcuerdo")}
+                            {trans("notificacionesForm.aceptarAcuerdo")}
                           </button>
                           <button
                             onClick={() =>
@@ -355,7 +355,7 @@ class NotificacionesForm extends React.Component {
                             }
                             className="btn btn-danger col-6"
                           >
-                            {t("notificacionesForm.rechazarAcuerdo")}
+                            {trans("notificacionesForm.rechazarAcuerdo")}
                           </button>
                         </div>
                       </div>
@@ -368,7 +368,7 @@ class NotificacionesForm extends React.Component {
         ) : (
           <div className="d-flex justify-content-center">
             <small className="text-danger my-auto">
-              {t("notificacionesForm.noData")}
+              {trans("notificacionesForm.noData")}
             </small>
           </div>
         )}

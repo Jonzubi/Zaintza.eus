@@ -25,7 +25,7 @@ import TimeInput from "react-time-input";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { connect } from "react-redux";
-import { t } from "../util/funciones";
+import { trans } from "../util/funciones";
 import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import municipios from "../util/municipos";
 
@@ -62,7 +62,7 @@ class Tabla extends React.Component {
         this.setState({
           buscado: true
         });
-        cogoToast.error(<h5>{t("notificaciones.servidorNoDisponible")}</h5>);
+        cogoToast.error(<h5>{trans("notificaciones.servidorNoDisponible")}</h5>);
       });
   }
 
@@ -171,7 +171,7 @@ class Tabla extends React.Component {
     if (!municipios.includes(pueblo)) {
       cogoToast.error(
         <h5>
-          {pueblo} {t("registerFormCuidadores.errorPuebloNoExiste")}
+          {pueblo} {trans("registerFormCuidadores.errorPuebloNoExiste")}
         </h5>
       );
       return;
@@ -181,7 +181,7 @@ class Tabla extends React.Component {
       if (this.state.ubicaciones[clave] == pueblo) {
         cogoToast.error(
           <h5>
-            {pueblo} {t("registerFormCuidadores.errorPuebloRepetido")}
+            {pueblo} {trans("registerFormCuidadores.errorPuebloRepetido")}
           </h5>
         );
         return;
@@ -305,18 +305,18 @@ class Tabla extends React.Component {
         });
       })
       .catch(err => {
-        cogoToast.error(<h5>{t("registerFormClientes.errorGeneral")}</h5>);
+        cogoToast.error(<h5>{trans("registerFormClientes.errorGeneral")}</h5>);
       });
   }
 
   async handlePedirCuidado() {
     if (!this.props.tipoUsuario) {
-      cogoToast.error(<h5>{t("tablaCuidadores.errorNoLogueado")}</h5>);
+      cogoToast.error(<h5>{trans("tablaCuidadores.errorNoLogueado")}</h5>);
       this.handleShowModalChange(false);
       this.props.toogleMenuPerfil(true);
       return;
     } else if (this.props.tipoUsuario != "Cliente") {
-      cogoToast.error(<h5>{t("tablaCuidadores.errorClienteObligatorio")}</h5>);
+      cogoToast.error(<h5>{trans("tablaCuidadores.errorClienteObligatorio")}</h5>);
       this.handleShowModalChange(false);
       return;
     }
@@ -334,7 +334,7 @@ class Tabla extends React.Component {
       }
     );
     if (comprobAcuerdoUnico.data != "Vacio") {
-      cogoToast.error(<h5>{t("tablaCuidadores.acuerdoExistente")}</h5>);
+      cogoToast.error(<h5>{trans("tablaCuidadores.acuerdoExistente")}</h5>);
       return;
     }
 
@@ -353,8 +353,8 @@ class Tabla extends React.Component {
       ) {
         cogoToast.error(
           <h5>
-            {t("registerFormCuidadores.errorRellenaTodo")} (
-            {t(this.requiredStatesTraduc[clave])})
+            {trans("registerFormCuidadores.errorRellenaTodo")} (
+            {trans(this.requiredStatesTraduc[clave])})
           </h5>
         );
         let auxError = this.state.error;
@@ -370,7 +370,7 @@ class Tabla extends React.Component {
         this.state[clave].map(confDia => {
           if (confDia.dia == 0 || isNaN(confDia.dia)) {
             cogoToast.error(
-              <h5>{t("registerFormCuidadores.errorDiaNoElegido")}</h5>
+              <h5>{trans("registerFormCuidadores.errorDiaNoElegido")}</h5>
             );
             error = true;
             return;
@@ -460,7 +460,7 @@ class Tabla extends React.Component {
             });
 
             cogoToast.success(
-              <h5>{t("tablaCuidadores.exitoEnviarPropuesta")}</h5>
+              <h5>{trans("tablaCuidadores.exitoEnviarPropuesta")}</h5>
             );
 
             this.setState({
@@ -470,7 +470,7 @@ class Tabla extends React.Component {
         });
       })
       .catch(err => {
-        cogoToast.error(<h5>{t("tablaCuidadores.errorGeneral")}</h5>);
+        cogoToast.error(<h5>{trans("tablaCuidadores.errorGeneral")}</h5>);
         this.setState({
           propuestaIsLoading: false
         });
@@ -582,22 +582,22 @@ class Tabla extends React.Component {
                 <div className="card-body">
                   <div className="row text-muted card-title">
                     <div className="col text-center">
-                      {t("tablaCuidadores.ninos")}
+                      {trans("tablaCuidadores.ninos")}
                     </div>
                     <div className="col text-center">
-                      {t("tablaCuidadores.terceraEdad")}
+                      {trans("tablaCuidadores.terceraEdad")}
                     </div>
                     <OverlayTrigger
                       key="top"
                       placement="top"
                       overlay={
                         <Tooltip>
-                          {t("tablaCuidadores.necesidadEspecial")}
+                          {trans("tablaCuidadores.necesidadEspecial")}
                         </Tooltip>
                       }
                     >
                       <div className="col text-center">
-                        {t("tablaCuidadores.necesidadEspecialAcortado")}
+                        {trans("tablaCuidadores.necesidadEspecialAcortado")}
                       </div>
                     </OverlayTrigger>
                   </div>
@@ -651,7 +651,7 @@ class Tabla extends React.Component {
                       this.handleViewCuidador(cuidador);
                     }}
                   >
-                    {t("tablaCuidadores.ver")}
+                    {trans("tablaCuidadores.ver")}
                     <FontAwesomeIcon className="ml-1" icon={faEye} />
                   </a>
                 </div>
@@ -673,7 +673,7 @@ class Tabla extends React.Component {
             style={{ marginTop: "300px" }}
             className="text-danger text-center w-100"
           >
-            {t("tablaCuidadores.noData")}
+            {trans("tablaCuidadores.noData")}
           </small>
         )}
 
@@ -685,7 +685,7 @@ class Tabla extends React.Component {
           <ModalHeader closeLabel="Itxi" closeButton></ModalHeader>
           <ModalBody className="container-fluid">
             <h5 style={{ marginBottom: "20px" }} className="display-4">
-              {t("tablaCuidadores.datosPersonales")}
+              {trans("tablaCuidadores.datosPersonales")}
             </h5>
             <div
               style={{
@@ -719,7 +719,7 @@ class Tabla extends React.Component {
                   <div className="col-5 h-100 border-right border-top">
                     <div className="row ml-0 h-25 border-bottom">
                       <span className="col-3 text-center my-auto font-weight-bold">
-                        {t("tablaCuidadores.nombre")}:
+                        {trans("tablaCuidadores.nombre")}:
                       </span>
                       <span className="col-9 text-center my-auto">
                         {vSelectedCuidador.nombre}
@@ -728,7 +728,7 @@ class Tabla extends React.Component {
 
                     <div className="row ml-0 h-25 border-bottom">
                       <span className="col-3 text-center my-auto font-weight-bold">
-                        {t("tablaCuidadores.apellidos")}:
+                        {trans("tablaCuidadores.apellidos")}:
                       </span>
                       <span className="col-9 text-center my-auto">
                         {(
@@ -740,14 +740,14 @@ class Tabla extends React.Component {
                           " " +
                           vSelectedCuidador.apellido2
                         ) : (
-                          <em>{t("tablaCuidadores.sinDefinir")}</em>
+                          <em>{trans("tablaCuidadores.sinDefinir")}</em>
                         )}
                       </span>
                     </div>
 
                     <div className="row ml-0 h-25 border-bottom">
                       <span className="col-3 text-center my-auto font-weight-bold">
-                        {t("tablaCuidadores.fechaNac")}:
+                        {trans("tablaCuidadores.fechaNac")}:
                       </span>
                       <span className="col-9 text-center my-auto">
                         {fechaNacCuidador.getFullYear() +
@@ -759,7 +759,7 @@ class Tabla extends React.Component {
                     </div>
                     <div className="row ml-0 h-25 border-bottom">
                       <span className="col-3 text-center my-auto font-weight-bold">
-                        {t("tablaCuidadores.sexo")}:
+                        {trans("tablaCuidadores.sexo")}:
                       </span>
                       <span className="col-9 text-center my-auto">
                         {vSelectedCuidador.sexo == "M"
@@ -774,7 +774,7 @@ class Tabla extends React.Component {
                       style={{ height: "34%" }}
                     >
                       <span className="col-3 text-center my-auto font-weight-bold">
-                        {t("tablaCuidadores.email")}:
+                        {trans("tablaCuidadores.email")}:
                       </span>
                       <span className="col-9 text-center my-auto">
                         {vSelectedCuidador.email}
@@ -785,7 +785,7 @@ class Tabla extends React.Component {
                       style={{ height: "33%" }}
                     >
                       <span className="col-3 text-center my-auto font-weight-bold">
-                        {t("tablaCuidadores.movil")}:
+                        {trans("tablaCuidadores.movil")}:
                       </span>
                       <span className="col-9 text-center my-auto">
                         {telefonoMovilCuidador}
@@ -796,7 +796,7 @@ class Tabla extends React.Component {
                       style={{ height: "33%" }}
                     >
                       <span className="col-3 text-center my-auto font-weight-bold">
-                        {t("tablaCuidadores.telefFijo")}:
+                        {trans("tablaCuidadores.telefFijo")}:
                       </span>
                       <span className="col-9 text-center my-auto">
                         {telefonoFijoCuidador}
@@ -806,7 +806,7 @@ class Tabla extends React.Component {
                   <div className="col-4 h-100 p-0 border-bottom border-top border-right">
                     <div className="panel panel-default">
                       <div className="panel-header text-center mb-5 font-weight-bold">
-                        {t("tablaCuidadores.descripcion")}
+                        {trans("tablaCuidadores.descripcion")}
                       </div>
                       <div className="panel-body p-2">
                         {vSelectedCuidador.descripcion}
@@ -818,13 +818,13 @@ class Tabla extends React.Component {
             </div>
 
             <h5 style={{ margin: "20px 0px" }} className="display-4">
-              {t("tablaCuidadores.condiciones")}
+              {trans("tablaCuidadores.condiciones")}
             </h5>
             <hr />
             <div className="row h-100">
               <div className="col-4 h-100 panel panel-default">
                 <h5 className="panel-header text-center">
-                  {t("tablaCuidadores.pueblos")}
+                  {trans("tablaCuidadores.pueblos")}
                 </h5>
                 <div className="panel-body list-group">
                   {typeof vSelectedCuidador.ubicaciones != "undefined"
@@ -838,7 +838,7 @@ class Tabla extends React.Component {
               </div>
               <div className="col-4 h-100">
                 <h5 className="panel-header text-center">
-                  {t("tablaCuidadores.horasLibres")}
+                  {trans("tablaCuidadores.horasLibres")}
                 </h5>
                 <div className="list-group">
                   {typeof vSelectedCuidador.diasDisponible != "undefined" &&
@@ -858,7 +858,7 @@ class Tabla extends React.Component {
                   ) : (
                     <div className="list-group">
                       <em className="text-center list-group-item">
-                        {t("tablaCuidadores.sinDefinir")}
+                        {trans("tablaCuidadores.sinDefinir")}
                       </em>
                     </div>
                   )}
@@ -866,12 +866,12 @@ class Tabla extends React.Component {
               </div>
               <div className="col-4 h-100">
                 <h5 className="panel-header text-center">
-                  {t("tablaCuidadores.precios")}
+                  {trans("tablaCuidadores.precios")}
                 </h5>
                 <div className="list-group">
                   <div className="list-group-item">
                     <span className="list-group-item font-weight-bold">
-                      {t("tablaCuidadores.ninos")}
+                      {trans("tablaCuidadores.ninos")}
                     </span>
                     <span className="list-group-item">
                       {typeof vSelectedCuidador.precioPorPublico !=
@@ -886,7 +886,7 @@ class Tabla extends React.Component {
                   </div>
                   <div className="list-group-item">
                     <span className="list-group-item font-weight-bold">
-                      {t("tablaCuidadores.terceraEdad")}
+                      {trans("tablaCuidadores.terceraEdad")}
                     </span>
                     <span className="list-group-item">
                       {typeof vSelectedCuidador.precioPorPublico !=
@@ -902,7 +902,7 @@ class Tabla extends React.Component {
                   </div>
                   <div className="list-group-item">
                     <span className="list-group-item font-weight-bold">
-                      {t("tablaCuidadores.necesidadEspecial")}
+                      {trans("tablaCuidadores.necesidadEspecial")}
                     </span>
                     <span className="list-group-item">
                       {typeof vSelectedCuidador.precioPorPublico !=
@@ -922,14 +922,14 @@ class Tabla extends React.Component {
               <Collapse className="w-100" in={this.state.showPropuestaModal}>
                 <div>
                   <h5 className="display-4 mb-2">
-                    {t("tablaCuidadores.tuPropuesta")}
+                    {trans("tablaCuidadores.tuPropuesta")}
                   </h5>
                   <div className="row mr-0 ml-0 mb-2 p-2 text-center">
                     <label
                       className="w-100 text-center"
                       htmlFor="txtTituloPropuesta"
                     >
-                      {t("tablaCuidadores.tituloPropuesta")}
+                      {trans("tablaCuidadores.tituloPropuesta")}
                     </label>
                     <input
                       onChange={this.handleInputChange}
@@ -944,7 +944,7 @@ class Tabla extends React.Component {
                   <div className="row ml-0 mr-0 mb-2">
                     <div className="col-6">
                       <label className="w-100 text-center">
-                        {t("tablaCuidadores.horasPropuesta")}:
+                        {trans("tablaCuidadores.horasPropuesta")}:
                       </label>
                       <div className="w-100 mt-2" id="diasDisponible">
                         {/* Aqui iran los dias dinamicamente */}
@@ -973,7 +973,7 @@ class Tabla extends React.Component {
                                 <br />
                                 <br />
                                 <b>
-                                  {t("registerFormCuidadores.horaInicio")} :
+                                  {trans("registerFormCuidadores.horaInicio")} :
                                 </b>
                                 <TimeInput
                                   onTimeChange={valor => {
@@ -993,7 +993,7 @@ class Tabla extends React.Component {
                                   className="mt-1 text-center d-inline form-control"
                                 />
                                 <br />
-                                <b>{t("registerFormCuidadores.horaFin")} :</b>
+                                <b>{trans("registerFormCuidadores.horaFin")} :</b>
                                 <TimeInput
                                   onTimeChange={valor => {
                                     this.handleDiasDisponibleChange(
@@ -1023,7 +1023,7 @@ class Tabla extends React.Component {
                               onClick={this.removeDiasDisponible}
                               className="btn btn-danger float-left text-light"
                             >
-                              {t("registerFormCuidadores.eliminarDia")}{" "}
+                              {trans("registerFormCuidadores.eliminarDia")}{" "}
                               <FontAwesomeIcon icon={faMinusCircle} />
                             </a>
                           ) : (
@@ -1033,7 +1033,7 @@ class Tabla extends React.Component {
                             onClick={this.addDiasDisponible}
                             className="btn btn-success float-right text-light"
                           >
-                            {t("registerFormCuidadores.anadir")}{" "}
+                            {trans("registerFormCuidadores.anadir")}{" "}
                             <FontAwesomeIcon icon={faPlusCircle} />
                           </a>
                         </div>
@@ -1041,7 +1041,7 @@ class Tabla extends React.Component {
                     </div>
                     <div className="col-6">
                       <label className="w-100 text-center">
-                        {t("tablaCuidadores.pueblos")}:
+                        {trans("tablaCuidadores.pueblos")}:
                       </label>
                       <div className="form-group mt-2">
                         <AutoSuggest
@@ -1061,7 +1061,7 @@ class Tabla extends React.Component {
                         />
                         {this.state.ubicaciones.length > 0 ? (
                           <h5 className="mt-2 lead">
-                            {t("registerFormCuidadores.pueblosSeleccionados")}:
+                            {trans("registerFormCuidadores.pueblosSeleccionados")}:
                           </h5>
                         ) : (
                           ""
@@ -1079,7 +1079,7 @@ class Tabla extends React.Component {
                             onClick={this.handleRemovePueblo}
                             className="mt-4 btn btn-danger float-right text-light"
                           >
-                            {t("registerFormCuidadores.eliminarPueblo")}{" "}
+                            {trans("registerFormCuidadores.eliminarPueblo")}{" "}
                             <FontAwesomeIcon icon={faMinusCircle} />
                           </a>
                         ) : (
@@ -1090,7 +1090,7 @@ class Tabla extends React.Component {
                   </div>
                   <div className="row ml-0 mr-0 p-2">
                     <label htmlFor="txtDescripcion">
-                      {t("tablaCuidadores.descripcion")}
+                      {trans("tablaCuidadores.descripcion")}
                     </label>
                     <textarea
                       onChange={this.handleInputChange}

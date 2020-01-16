@@ -3,7 +3,7 @@ import Avatar from "react-avatar-edit";
 import { connect } from "react-redux";
 import { changeFormContent } from "../redux/actions/app";
 import { saveUserSession } from "../redux/actions/user";
-import { t, getRandomString } from "../util/funciones";
+import { trans, getRandomString } from "../util/funciones";
 import ipMaquina from "../util/ipMaquinaAPI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faSave } from "@fortawesome/free-solid-svg-icons";
@@ -85,8 +85,8 @@ class PerfilCliente extends React.Component {
       ) {
         cogoToast.error(
           <h5>
-            {t("registerFormClientes.errorRellenaTodo")} (
-            {t(this.requiredStatesTraduc[clave])})
+            {trans("registerFormClientes.errorRellenaTodo")} (
+            {trans(this.requiredStatesTraduc[clave])})
           </h5>
         );
         let auxError = this.state.error;
@@ -127,7 +127,7 @@ class PerfilCliente extends React.Component {
         })
         .catch(error => {
           cogoToast.error(
-            <h5>{t("perfilCliente.errorAvatarUpload")}</h5>
+            <h5>{trans("perfilCliente.errorAvatarUpload")}</h5>
           );
           return;
         });
@@ -143,14 +143,14 @@ class PerfilCliente extends React.Component {
           resultado => {
             this.props.saveUserSession(formData);
             cogoToast.success(
-            <h5>{t('perfilCliente.datosActualizados')}</h5>
+            <h5>{trans('perfilCliente.datosActualizados')}</h5>
             );            
           }
         )
         .catch(
           err => {
             cogoToast.error(
-              <h5>{t('perfilCliente.errorGeneral')}</h5>
+              <h5>{trans('perfilCliente.errorGeneral')}</h5>
               )
           }          
         )
@@ -185,7 +185,7 @@ class PerfilCliente extends React.Component {
 
   onBeforeFileLoad(elem) {
     if (elem.target.files[0].size > 5242880) {
-      cogoToast.error(<h5>{t("perfilCliente.errorImgGrande")}</h5>);
+      cogoToast.error(<h5>{trans("perfilCliente.errorImgGrande")}</h5>);
       elem.target.value = "";
     }
   }
@@ -223,7 +223,7 @@ class PerfilCliente extends React.Component {
         </div>
         <div className="form-group row">
           <div className="col-12">
-            <label htmlFor="txtNombre">{t("perfilCliente.nombre")}</label> (
+            <label htmlFor="txtNombre">{trans("perfilCliente.nombre")}</label> (
             <span className="text-danger font-weight-bold">*</span>)
             <input
               onChange={this.handleInputChange}
@@ -243,7 +243,7 @@ class PerfilCliente extends React.Component {
         </div>
         <div className="form-group row">
           <div className="col-6">
-            <label htmlFor="txtApellido1">{t("perfilCliente.apellido1")}</label>
+            <label htmlFor="txtApellido1">{trans("perfilCliente.apellido1")}</label>
             <input
               onChange={this.handleInputChange}
               type="text"
@@ -256,7 +256,7 @@ class PerfilCliente extends React.Component {
             />
           </div>
           <div className="col-6">
-            <label htmlFor="txtApellido2">{t("perfilCliente.apellido2")}</label>
+            <label htmlFor="txtApellido2">{trans("perfilCliente.apellido2")}</label>
             <input
               onChange={this.handleInputChange}
               type="text"
@@ -271,7 +271,7 @@ class PerfilCliente extends React.Component {
         </div>
         <div className="form-group row">
           <div className="col-6">
-            <label htmlFor="txtMovil">{t("perfilCliente.movil")}</label> (
+            <label htmlFor="txtMovil">{trans("perfilCliente.movil")}</label> (
             <span className="text-danger font-weight-bold">*</span>)
             <input
               onChange={this.handleInputChange}
@@ -288,7 +288,7 @@ class PerfilCliente extends React.Component {
             />
           </div>
           <div className="col-6">
-            <label htmlFor="txtFijo">{t("perfilCliente.telefFijo")}</label>{" "}
+            <label htmlFor="txtFijo">{trans("perfilCliente.telefFijo")}</label>{" "}
             <input
               onChange={this.handleInputChange}
               type="number"
@@ -312,7 +312,7 @@ class PerfilCliente extends React.Component {
                 type="button"
                 className="w-100 btn btn-info "
               >
-                {t("perfilCliente.editar")}
+                {trans("perfilCliente.editar")}
                 <FontAwesomeIcon className="ml-1" icon={faEdit} />
               </button>
             ) : this.state.isLoading ? (
@@ -323,7 +323,7 @@ class PerfilCliente extends React.Component {
                 type="button"
                 className="w-100 btn btn-success"
               >
-                {t("perfilCliente.guardarCambios")}
+                {trans("perfilCliente.guardarCambios")}
                 <FontAwesomeIcon className="ml-1" icon={faSave} />
               </button>
             )}

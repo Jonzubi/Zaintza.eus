@@ -6,7 +6,7 @@ import TablaCuidadores from "./tablaCuidadores";
 import TablaClientes from "./tablaClientes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserMd, faUserFriends } from "@fortawesome/free-solid-svg-icons";
-import {t} from "../util/funciones";
+import {trans} from "../util/funciones";
 
 class SlideTab extends React.Component {
   state = {
@@ -35,13 +35,13 @@ class SlideTab extends React.Component {
             style={{ outline: "none" }}
             className="w-50"
             icon={<FontAwesomeIcon icon={faUserMd} />}
-            label={t('slideTab.cuidadores')}
+            label={trans('slideTab.cuidadores')}
           />
           <Tab
             style={{ outline: "none" }}
             className="w-50"
             icon={<FontAwesomeIcon icon={faUserFriends} />}
-            label={t('slideTab.ofertas')}
+            label={trans('slideTab.ofertas')}
           />
         </Tabs>
         <SwipeableViews index={index} onChangeIndex={this.handleChangeIndex}>

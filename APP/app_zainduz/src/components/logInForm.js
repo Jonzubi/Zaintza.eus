@@ -7,7 +7,8 @@ import { changeFormContent } from "../redux/actions/app";
 import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import { saveUserSession } from "../redux/actions/user";
 import { toogleModal } from "../redux/actions/modalRegistrarse";
-import { t } from "../util/funciones";
+import { trans } from "../util/funciones";
+import { Trans, useTranslation } from "react-i18next";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -91,27 +92,27 @@ class LogInForm extends React.Component {
 
                   this.props.toogleMenuPerfil(false);
                   cogoToast.success(
-                    <h5>{t("notificaciones.sesionIniciada")}</h5>
+                    <h5>{trans("notificaciones.sesionIniciada")}</h5>
                   );
                   this.setState({
                     isLoading: false
                   });
                 })
                 .catch(err => {
-                  cogoToast.error(<h5>{t("notificaciones.errorConexion")}</h5>);
+                  cogoToast.error(<h5>{trans("notificaciones.errorConexion")}</h5>);
                   this.setState({
                     isLoading: false
                   });
                 });
             } else {
-              cogoToast.error(<h5>{t("notificaciones.datosIncorrectos")}</h5>);
+              cogoToast.error(<h5>{trans("notificaciones.datosIncorrectos")}</h5>);
               this.setState({
                 isLoading: false
               });
             }
           })
           .catch(err => {
-            cogoToast.error(<h5>{t("notificaciones.errorConexion")}</h5>);
+            cogoToast.error(<h5>{trans("notificaciones.errorConexion")}</h5>);
             this.setState({
               isLoading: false
             });
@@ -138,19 +139,21 @@ class LogInForm extends React.Component {
     return (
       <form className="mt-5">
         <div>
-          <label htmlFor="txtEmail">{t("loginForm.email")}</label>
+          <label htmlFor="txtEmail">{trans("loginForm.email")}</label>
+          <Trans i18nKey={"loginForm.insertEmail"}>
           <input
             onChange={this.handleInputChange}
             type="email"
             className="form-control"
             id="txtEmail"
             aria-describedby="emailHelp"
-            placeholder={"Emaila..."}
+            placeholder={trans("loginForm.insertEmail")}
             value={this.state.txtEmail}
           />
+          </Trans>
         </div>
         <div className="form-group">
-          <label htmlFor="txtContrasena">{t("loginForm.contrasena")}</label>
+          <label htmlFor="txtContrasena">{trans("loginForm.contrasena")}</label>
           <input
             onChange={this.handleInputChange}
             type="password"
@@ -169,7 +172,7 @@ class LogInForm extends React.Component {
             onChange={() => this.toogleChkRecordarme()}
           />
           <label className="form-check-label" htmlFor="chkRecordarme">
-            {t("loginForm.recordarme")}
+            {trans("loginForm.recordarme")}
           </label>
         </div>
         {this.state.isLoading ? (
@@ -184,7 +187,7 @@ class LogInForm extends React.Component {
               type="button"
               className="btn btn-light col-5"
             >
-              {t("loginForm.iniciarSesion")}
+              {trans("loginForm.iniciarSesion")}
             </button>
             <div className="col-2"></div>
             <button
@@ -196,7 +199,7 @@ class LogInForm extends React.Component {
               type="button"
               className="btn btn-success col-5"
             >
-              {t("loginForm.registrarse")}
+              {trans("loginForm.registrarse")}
             </button>
           </div>
         )}

@@ -16,7 +16,7 @@ import AutoSuggest from "react-autosuggest";
 import { ReactDatez as Calendario } from "react-datez";
 import cogoToast from "cogo-toast";
 import Switch from "react-switch";
-import { t } from "../util/funciones";
+import { trans } from "../util/funciones";
 import ipMaquina from "../util/ipMaquinaAPI";
 import loadGif from "../util/gifs/loadGif.gif";
 import municipios from "../util/municipos";
@@ -211,7 +211,7 @@ class PerfilCuidador extends React.Component {
 
   onBeforeFileLoad(elem) {
     if (elem.target.files[0].size > 5242880) {
-      cogoToast.error(<h5>{t("registerFormCuidadores.errorImgGrande")}</h5>);
+      cogoToast.error(<h5>{trans("registerFormCuidadores.errorImgGrande")}</h5>);
       elem.target.value = "";
     }
   }
@@ -334,7 +334,7 @@ class PerfilCuidador extends React.Component {
     if (!municipios.includes(pueblo)) {
       cogoToast.error(
         <h5>
-          {pueblo} {t("registerFormCuidadores.errorPuebloNoExiste")}
+          {pueblo} {trans("registerFormCuidadores.errorPuebloNoExiste")}
         </h5>
       );
       return;
@@ -344,7 +344,7 @@ class PerfilCuidador extends React.Component {
       if (this.state.ubicaciones[clave] == pueblo) {
         cogoToast.error(
           <h5>
-            {pueblo} {t("registerFormCuidadores.errorPuebloRepetido")}
+            {pueblo} {trans("registerFormCuidadores.errorPuebloRepetido")}
           </h5>
         );
         return;
@@ -411,8 +411,8 @@ class PerfilCuidador extends React.Component {
       ) {
         cogoToast.error(
           <h5>
-            {t("registerFormCuidadores.errorRellenaTodo")} (
-            {t(this.requiredStatesTraduc[clave])})
+            {trans("registerFormCuidadores.errorRellenaTodo")} (
+            {trans(this.requiredStatesTraduc[clave])})
           </h5>
         );
         let auxError = this.state.error;
@@ -428,7 +428,7 @@ class PerfilCuidador extends React.Component {
         this.state[clave].map(confDia => {
           if (confDia.dia == 0 || isNaN(confDia.dia)) {
             cogoToast.error(
-              <h5>{t("registerFormCuidadores.errorDiaNoElegido")}</h5>
+              <h5>{trans("registerFormCuidadores.errorDiaNoElegido")}</h5>
             );
             error = true;
             return;
@@ -452,7 +452,7 @@ class PerfilCuidador extends React.Component {
       await Axios.post("http://" + ipMaquina + ":3001/api/image/" + codContactImg, {
         imageB64: imgContactB64
       }).catch(err => {
-        cogoToast.error(<h5>{t("perfilCliente.errorAvatarUpload")}</h5>);
+        cogoToast.error(<h5>{trans("perfilCliente.errorAvatarUpload")}</h5>);
         return;
       });
     } else {
@@ -468,7 +468,7 @@ class PerfilCuidador extends React.Component {
       await Axios.post("http://" + ipMaquina + ":3001/api/image/" + codAvatar, {
         imageB64: this.state.avatarPreview
       }).catch(error => {
-        cogoToast.error(<h5>{t("perfilCliente.errorAvatarUpload")}</h5>);
+        cogoToast.error(<h5>{trans("perfilCliente.errorAvatarUpload")}</h5>);
         return;
       });
     } else {
@@ -508,10 +508,10 @@ class PerfilCuidador extends React.Component {
       .then(res => {
 
         this.props.saveUserSession(formData);
-        cogoToast.success(<h5>{t("perfilCliente.datosActualizados")}</h5>);
+        cogoToast.success(<h5>{trans("perfilCliente.datosActualizados")}</h5>);
       })
       .catch(err => {
-        cogoToast.error(<h5>{t("perfilCliente.errorGeneral")}</h5>);
+        cogoToast.error(<h5>{trans("perfilCliente.errorGeneral")}</h5>);
       })
       .finally(() => {
         this.setState({
@@ -655,7 +655,7 @@ class PerfilCuidador extends React.Component {
           <div className="form-group col-6">
             <div class="form-group">
               <label htmlFor="txtNombre">
-                {t("registerFormCuidadores.nombre")}
+                {trans("registerFormCuidadores.nombre")}
               </label>{" "}
               (<span className="text-danger font-weight-bold">*</span>)
               <input
@@ -676,7 +676,7 @@ class PerfilCuidador extends React.Component {
             <div class="form-group row">
               <div className="form-group col">
                 <label htmlFor="txtApellido1">
-                  {t("registerFormCuidadores.apellido1")}
+                  {trans("registerFormCuidadores.apellido1")}
                 </label>
                 <input
                   onChange={this.handleInputChange}
@@ -691,7 +691,7 @@ class PerfilCuidador extends React.Component {
               </div>
               <div className="form-group col">
                 <label htmlFor="txtApellido2">
-                  {t("registerFormCuidadores.apellido2")}
+                  {trans("registerFormCuidadores.apellido2")}
                 </label>
                 <input
                   onChange={this.handleInputChange}
@@ -710,7 +710,7 @@ class PerfilCuidador extends React.Component {
         <div class="form-group row">
           <div className="form-group col-6">
             <label htmlFor="txtFechaNacimiento">
-              {t("registerFormCuidadores.fechaNac")}
+              {trans("registerFormCuidadores.fechaNac")}
             </label>{" "}
             (<span className="text-danger font-weight-bold">*</span>)
             <br />
@@ -805,7 +805,7 @@ class PerfilCuidador extends React.Component {
         <div className="form-group row">
           <div class="form-group col">
             <label htmlFor="txtMovil">
-              {t("registerFormCuidadores.movil")}
+              {trans("registerFormCuidadores.movil")}
             </label>{" "}
             (<span className="text-danger font-weight-bold">*</span>)
             <input
@@ -825,7 +825,7 @@ class PerfilCuidador extends React.Component {
           </div>
           <div className="col">
             <label className="" htmlFor="txtTelefono">
-              {t("registerFormCuidadores.telefFijo")}
+              {trans("registerFormCuidadores.telefFijo")}
             </label>
             <input
               onChange={this.handleInputChange}
@@ -842,7 +842,7 @@ class PerfilCuidador extends React.Component {
           <div className="form-group col">
             {/* Insertar dias disponibles aqui */}
             <label className="w-100 text-center lead">
-              {t("registerFormCuidadores.diasDisponible")}:
+              {trans("registerFormCuidadores.diasDisponible")}:
             </label>
             <br />
             <div className="w-100 mt-2" id="diasDisponible">
@@ -872,7 +872,7 @@ class PerfilCuidador extends React.Component {
                       </select>
                       <br />
                       <br />
-                      <b>{t("registerFormCuidadores.horaInicio")} :</b>
+                      <b>{trans("registerFormCuidadores.horaInicio")} :</b>
                       <TimeInput
                         onTimeChange={valor => {
                           this.handleDiasDisponibleChange(
@@ -891,7 +891,7 @@ class PerfilCuidador extends React.Component {
                         className="mt-1 text-center d-inline form-control"
                       />
                       <br />
-                      <b>{t("registerFormCuidadores.horaFin")} :</b>
+                      <b>{trans("registerFormCuidadores.horaFin")} :</b>
                       <TimeInput
                         onTimeChange={valor => {
                           this.handleDiasDisponibleChange(
@@ -924,7 +924,7 @@ class PerfilCuidador extends React.Component {
                         : "btn btn-danger float-left text-light disabled"
                     }
                   >
-                    {t("registerFormCuidadores.eliminarDia")}{" "}
+                    {trans("registerFormCuidadores.eliminarDia")}{" "}
                     <FontAwesomeIcon icon={faMinusCircle} />
                   </a>
                 ) : (
@@ -938,7 +938,7 @@ class PerfilCuidador extends React.Component {
                       : "btn btn-success float-right text-light disabled"
                   }
                 >
-                  {t("registerFormCuidadores.anadir")}{" "}
+                  {trans("registerFormCuidadores.anadir")}{" "}
                   <FontAwesomeIcon icon={faPlusCircle} />
                 </a>
               </div>
@@ -947,7 +947,7 @@ class PerfilCuidador extends React.Component {
           <div className="form-group col">
             {/* Insertar ubicaciones disponibles aqui */}
             <label htmlFor="txtAddPueblos" className="w-100 text-center lead">
-              {t("registerFormCuidadores.pueblosDisponible")}:
+              {trans("registerFormCuidadores.pueblosDisponible")}:
             </label>{" "}
             (<span className="text-danger font-weight-bold">*</span>)
             <div class="form-group mt-2">
@@ -964,7 +964,7 @@ class PerfilCuidador extends React.Component {
               />
               {this.state.ubicaciones.length > 0 ? (
                 <h5 className="mt-2 lead">
-                  {t("registerFormCuidadores.pueblosSeleccionados")}:
+                  {trans("registerFormCuidadores.pueblosSeleccionados")}:
                 </h5>
               ) : (
                 ""
@@ -984,7 +984,7 @@ class PerfilCuidador extends React.Component {
                       : "mt-4 btn btn-danger float-right text-light disabled"
                   }
                 >
-                  {t("registerFormCuidadores.eliminarPueblo")}{" "}
+                  {trans("registerFormCuidadores.eliminarPueblo")}{" "}
                   <FontAwesomeIcon icon={faMinusCircle} />
                 </a>
               ) : (
@@ -998,7 +998,7 @@ class PerfilCuidador extends React.Component {
           <div className="form-group col">
             {/* Insertar publico disponibles aqui */}
             <label className="w-100 text-center lead">
-              {t("registerFormCuidadores.publicoDisponible")}:
+              {trans("registerFormCuidadores.publicoDisponible")}:
             </label>
             <div className="row md-2">
               <div
@@ -1027,7 +1027,7 @@ class PerfilCuidador extends React.Component {
               >
                 <img src={imgNino} className="w-100 h-100" />
                 <small className="font-weight-bold">
-                  {t("registerFormCuidadores.ninos")}
+                  {trans("registerFormCuidadores.ninos")}
                 </small>
               </div>
               <div
@@ -1058,7 +1058,7 @@ class PerfilCuidador extends React.Component {
               >
                 <img src={imgTerceraEdad} className="w-100 h-100" />
                 <small className="font-weight-bold">
-                  {t("registerFormCuidadores.terceraEdad")}
+                  {trans("registerFormCuidadores.terceraEdad")}
                 </small>
               </div>
               <div
@@ -1089,7 +1089,7 @@ class PerfilCuidador extends React.Component {
               >
                 <img src={imgNecesidadEspecial} className="w-100 h-100" />
                 <small className="font-weight-bold">
-                  {t("registerFormCuidadores.necesidadEspecial")}
+                  {trans("registerFormCuidadores.necesidadEspecial")}
                 </small>
               </div>
             </div>
@@ -1097,12 +1097,12 @@ class PerfilCuidador extends React.Component {
           <div className="form-group col">
             {/* Insertar precioPublico disponibles aqui */}
             <label className="w-100 text-center lead">
-              {t("registerFormCuidadores.precioPorPublico")}:
+              {trans("registerFormCuidadores.precioPorPublico")}:
             </label>
             <div className="list-group md-2">
               <div className="list-group-item form-group text-center p-1">
                 <small>
-                  <b>{t("registerFormCuidadores.ninos")}</b>
+                  <b>{trans("registerFormCuidadores.ninos")}</b>
                 </small>
                 <input
                   onChange={event => {
@@ -1121,7 +1121,7 @@ class PerfilCuidador extends React.Component {
               </div>
               <div className="list-group-item form-group text-center p-1">
                 <small>
-                  <b>{t("registerFormCuidadores.terceraEdad")}</b>
+                  <b>{trans("registerFormCuidadores.terceraEdad")}</b>
                 </small>
                 <input
                   onChange={event => {
@@ -1140,7 +1140,7 @@ class PerfilCuidador extends React.Component {
               </div>
               <div className="list-group-item form-group text-center p-1">
                 <small>
-                  <b>{t("registerFormCuidadores.necesidadEspecial")}</b>
+                  <b>{trans("registerFormCuidadores.necesidadEspecial")}</b>
                 </small>
                 <input
                   onChange={event => {
@@ -1165,7 +1165,7 @@ class PerfilCuidador extends React.Component {
         </div>
         <div class="form-group">
           <label htmlFor="txtDescripcion">
-            {t("registerFormCuidadores.descripcion")}
+            {trans("registerFormCuidadores.descripcion")}
           </label>{" "}
           (<span className="text-danger font-weight-bold">*</span>)
           <textarea
@@ -1191,7 +1191,7 @@ class PerfilCuidador extends React.Component {
             id="isPublic"
           />
           <br />
-          <small>{t("registerFormCuidadores.publicarAuto")}</small>
+          <small>{trans("registerFormCuidadores.publicarAuto")}</small>
         </div>
         <div id="loaderOrButton" className="row mt-5">
           <div className="col-12">
@@ -1201,7 +1201,7 @@ class PerfilCuidador extends React.Component {
                 type="button"
                 className="w-100 btn btn-info "
               >
-                {t("perfilCliente.editar")}
+                {trans("perfilCliente.editar")}
                 <FontAwesomeIcon className="ml-1" icon={faEdit} />
               </button>
             ) : this.state.isLoading ? (
@@ -1212,7 +1212,7 @@ class PerfilCuidador extends React.Component {
                 type="button"
                 className="w-100 btn btn-success"
               >
-                {t("perfilCliente.guardarCambios")}
+                {trans("perfilCliente.guardarCambios")}
                 <FontAwesomeIcon className="ml-1" icon={faSave} />
               </button>
             )}
