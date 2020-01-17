@@ -52,8 +52,8 @@ const mapStateToProps = state => {
     telefFijo: telefFijo,
     descripcion: state.user.descripcion,
     isPublic: state.user.isPublic,
-    diasDisponible: state.user.diasDisponible.slice(0),
-    ubicaciones: state.user.ubicaciones.slice(0),
+    diasDisponible: typeof state.user.diasDisponible.slice != "undefined" ? state.user.diasDisponible.slice(0) : [],
+    ubicaciones: typeof state.user.ubicaciones.slice != "undefined" ? state.user.ubicaciones.slice(0) : [],
     publicoDisponible: Object.assign({}, state.user.publicoDisponible),
     precioPorPublico: Object.assign({}, state.user.precioPorPublico)
   };
