@@ -50,62 +50,39 @@ class LogInForm extends React.Component {
       },
       () => {
         axios
-          .get("http://" + ipMaquina + ":3001/api/usuario", {
-            params: {
-              filtros: JSON.stringify(objFiltros)
-            }
+          .get("http://" + ipMaquina + ":3001/api/procedures/getUsuarioConPerfil", {
+            params: objFiltros
           })
-          .then(usuario => {
-            if (usuario.data != "Vacio") {
-              usuario = usuario.data[0];
-              var idPerfil = usuario.idPerfil;
-              var tipoUsuario = usuario.tipoUsuario;
-              let modelo = "";
-              switch (tipoUsuario) {
-                case "Cuidador":
-                  modelo = "cuidador";
-                  break;
-                case "Cliente":
-                  modelo = "cliente";
-                  break;
-                default:
-                  return;
+          .then(resultado => {
+            if(resultado.data.length != 0) {
+              const usuario = resultado.data[0];
+              const idPerfil = usuario.idPerfil._id;
+              const idUsuario = usuario._id;
+
+              this.props.saveUserSession(Object.assign({}, usuario.idPerfil, {
+                _id: idPerfil,
+                _idUsuario: idUsuario,
+                email: usuario.email,
+                tipoUsuario: usuario.tipoUsuario
+              }));
+
+              if (this.state.chkRecordarme) {
+                window.localStorage.setItem("nombreUsuario", vEmail);
+                window.localStorage.setItem("password", vContrasena);
+              } else {
+                window.localStorage.removeItem("nombreUsuario");
+                window.localStorage.removeItem("password");
               }
-              axios
-                .get("http://" + ipMaquina + ":3001/api/" + modelo + "/" + idPerfil)
-                .then(resultado => {
-                  this.props.saveUserSession(
-                    Object.assign({}, resultado.data, {
-                      _id: idPerfil,
-                      _idUsuario: usuario._id,
-                      email: usuario.email,
-                      tipoUsuario: tipoUsuario
-                    })
-                  );
 
-                  if (this.state.chkRecordarme) {
-                    window.localStorage.setItem("nombreUsuario", vEmail);
-                    window.localStorage.setItem("password", vContrasena);
-                  } else {
-                    window.localStorage.removeItem("nombreUsuario");
-                    window.localStorage.removeItem("password");
-                  }
-
-                  this.props.toogleMenuPerfil(false);
-                  cogoToast.success(
-                    <h5>{trans("notificaciones.sesionIniciada")}</h5>
-                  );
-                  this.setState({
-                    isLoading: false
-                  });
-                })
-                .catch(err => {
-                  cogoToast.error(<h5>{trans("notificaciones.errorConexion")}</h5>);
-                  this.setState({
-                    isLoading: false
-                  });
-                });
-            } else {
+              this.props.toogleMenuPerfil(false);
+              cogoToast.success(
+                <h5>{trans("notificaciones.sesionIniciada")}</h5>
+              );
+              this.setState({
+                isLoading: false
+              });
+            }
+            else {
               cogoToast.error(<h5>{trans("notificaciones.datosIncorrectos")}</h5>);
               this.setState({
                 isLoading: false
@@ -113,11 +90,12 @@ class LogInForm extends React.Component {
             }
           })
           .catch(err => {
+            console.log(err);
             cogoToast.error(<h5>{trans("notificaciones.errorConexion")}</h5>);
             this.setState({
               isLoading: false
             });
-          });
+          });        
       }
     );
   }
