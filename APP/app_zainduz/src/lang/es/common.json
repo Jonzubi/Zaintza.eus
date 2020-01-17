@@ -14,11 +14,11 @@
     "loginForm": {
       "email": "Correo",
       "insertEmail": "Inserta tu correo...",
-      "insertContrasena": "Sartu zure pasahitza...",
-      "contrasena": "Pasahitza",
-      "recordarme": "Gogorarazi",
-      "iniciarSesion": "Sartu",
-      "registrarse": "Izena eman"
+      "insertContrasena": "Inserta tu contraseña...",
+      "contrasena": "Contraseña",
+      "recordarme": "Recordarme",
+      "iniciarSesion": "Entrar",
+      "registrarse": "Registrarse"
     },
     "notificaciones": {
       "sesionIniciada": "Saioa behar bezala hasi da",

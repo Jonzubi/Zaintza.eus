@@ -1115,8 +1115,8 @@ class Tabla extends React.Component {
               onClick={() => this.handlePedirCuidado()}
             >
               {this.state.showPropuestaModal
-                ? t("tablaCuidadores.enviarAcuerdo")
-                : t("tablaCuidadores.acordar")}
+                ? trans("tablaCuidadores.enviarAcuerdo")
+                : trans("tablaCuidadores.acordar")}
             </Button>
           </ModalFooter>
         </Modal>

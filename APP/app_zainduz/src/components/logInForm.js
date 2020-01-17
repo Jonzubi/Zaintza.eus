@@ -8,7 +8,8 @@ import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import { saveUserSession } from "../redux/actions/user";
 import { toogleModal } from "../redux/actions/modalRegistrarse";
 import { trans } from "../util/funciones";
-import { Trans, useTranslation } from "react-i18next";
+import i18next from "i18next";
+import {translate} from "react-i18next";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -140,17 +141,17 @@ class LogInForm extends React.Component {
       <form className="mt-5">
         <div>
           <label htmlFor="txtEmail">{trans("loginForm.email")}</label>
-          <Trans i18nKey={"loginForm.insertEmail"}>
+          
           <input
             onChange={this.handleInputChange}
             type="email"
             className="form-control"
             id="txtEmail"
             aria-describedby="emailHelp"
-            placeholder={trans("loginForm.insertEmail")}
+            placeholder={i18next.t('loginForm.insertEmail')}
             value={this.state.txtEmail}
           />
-          </Trans>
+          
         </div>
         <div className="form-group">
           <label htmlFor="txtContrasena">{trans("loginForm.contrasena")}</label>
