@@ -77,3 +77,35 @@ exports.getNotificacionesConUsuarios = (req, res, modelos) => {
       res.end();
     });
 };
+
+exports.getUsuarioConPerfil = (req, res, modelos) => {
+  const { email, contrasena } = req.query;
+
+  if(typeof email == "undefined" || typeof contrasena == "undefined") {
+    res.writeHead(500, headerResponse);
+    res.write("Parametros incorrectos");
+    res.end();
+    return;
+  }
+
+  const modeloUsuario = modelos.usuario;
+  const filtros = {
+    email: email,
+    contrasena: contrasena
+  }
+
+  modeloUsuario
+    .find(filtros)
+    .populate('idPerfil')
+    .then(respuesta => {
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(respuesta));
+      res.end();
+    })
+    .catch(err => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+      res.end();
+    });
+};
