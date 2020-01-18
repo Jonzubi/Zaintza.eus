@@ -109,3 +109,21 @@ exports.getUsuarioConPerfil = (req, res, modelos) => {
       res.end();
     });
 };
+
+exports.postNewCuidador = (req, res, modelos) => {
+  const { nombre, fechaNacimiento, sexo, direcFotoContacto, descripcion, ubicaciones, telefono } = req.body;
+
+  if (typeof nombre == "undefined" || 
+      typeof fechaNacimiento == "undefined" ||
+      typeof sexo == "undefined" || 
+      typeof direcFotoContacto == "undefined" || 
+      typeof descripcion == "undefined" || 
+      typeof ubicaciones == "undefined" || 
+      typeof telefono == "undefined"){
+
+        res.writeHead(500, headerResponse);
+        res.write("Parametros incorrectos");
+        res.end();
+        return;
+  }
+}
