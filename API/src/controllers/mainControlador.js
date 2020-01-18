@@ -171,7 +171,10 @@ exports.getImage = (req, res) => {
     "\\util\\imagenes\\";
   avatarDirPath = "/var/www/ProyectoAplicacionWeb/API/util/imagenes/";
   fs.readdir(avatarDirPath, (err, files) => {
-    if (err) console.log(err);
+    if (err) {
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+    }
     else {
       let found = false;
       files.map(archivo => {
