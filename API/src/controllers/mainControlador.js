@@ -149,7 +149,7 @@ exports.postImage = (req, res) => {
     "\\util\\imagenes\\" +
     idImage +
     formatBase64;
-  avatarDirPath = "/var/www/ProyectoAplicacionWeb/API/util/imagenes/" + idImage + formatBase64;
+  //avatarDirPath = "/var/www/ProyectoAplicacionWeb/API/util/imagenes/" + idImage + formatBase64;
   try {
     fs.writeFileSync(avatarDirPath, imageBase64, "base64");
 
@@ -169,7 +169,7 @@ exports.getImage = (req, res) => {
   avatarDirPath =
     avatarDirPath.substring(0, avatarDirPath.lastIndexOf("\\")) +
     "\\util\\imagenes\\";
-  avatarDirPath = "/var/www/ProyectoAplicacionWeb/API/util/imagenes/";
+  //avatarDirPath = "/var/www/ProyectoAplicacionWeb/API/util/imagenes/";
   fs.readdir(avatarDirPath, (err, files) => {
     if (err) {
       res.writeHead(500, headerResponse);
