@@ -1,3 +1,4 @@
+const { writeImage, getRandomString } = require("../../util/funciones");
 const headerResponse = require("../../util/headerResponse");
 
 exports.getAcuerdosConUsuarios = (req, res, modelos) => {
@@ -110,20 +111,86 @@ exports.getUsuarioConPerfil = (req, res, modelos) => {
     });
 };
 
-exports.postNewCuidador = (req, res, modelos) => {
-  const { nombre, fechaNacimiento, sexo, direcFotoContacto, descripcion, ubicaciones, telefono } = req.body;
-
+exports.postNewCuidador = async (req, res, modelos) => {
+  const { email, contrasena, nombre, apellido1, apellido2,
+          fechaNacimiento, sexo, descripcion, publicoDisponible, isPublic, precioPorPublico, diasDisponible,
+          ubicaciones, telefono, imgContactB64, avatarPreview } = req.body;
+  //Comprobamos que se han mandado los campos required del form cuidador
   if (typeof nombre == "undefined" || 
       typeof fechaNacimiento == "undefined" ||
-      typeof sexo == "undefined" || 
-      typeof direcFotoContacto == "undefined" || 
+      typeof sexo == "undefined" ||
       typeof descripcion == "undefined" || 
       typeof ubicaciones == "undefined" || 
-      typeof telefono == "undefined"){
+      typeof telefono == "undefined" ||
+      typeof imgContactB64 == "undefined" ||
+      typeof email == "undefined" ||
+      typeof contrasena == "undefined"){
 
         res.writeHead(500, headerResponse);
         res.write("Parametros incorrectos");
         res.end();
         return;
+  }
+  //Aqui los datos son validos y hay que insertarlos
+  //Empezaremos con las fotos, comporbando que el campo opcional avatar se haya enviado o no
+  //Pongo el codAvatar aqui ya que hay que insertarlo en la base de datos por si se ha definido
+  let codAvatar;
+  if(avatarPreview.length > 0){
+    //Se ha elegido una imagen para el perfil
+    codAvatar = getRandomString(20);
+    writeImage(codAvatar, avatarPreview);
+  }
+  //Se manda la foto de contacto
+  let codContactImg = getRandomString(20);
+  writeImage(codContactImg, imgContactB64);
+
+  const modeloCuidadores = modelos.cuidador;
+  const modeloUsuario = modelos.usuario;
+
+  const sesion = await modeloCuidadores.startSession();
+  sesion.startTransaction();
+
+  try {
+    const opts = { sesion };
+    const cuidadorInserted = await modeloCuidadores({
+      nombre: nombre,
+      apellido1: apellido1,
+      apellido2: apellido2,
+      sexo: sexo,
+      direcFoto: codAvatar,
+      direcFotoContacto: codContactImg,
+      descripcion: descripcion,
+      telefono: telefono,
+      isPublic: isPublic,
+      diasDisponible: diasDisponible,
+      fechaNacimiento: fechaNacimiento,
+      ubicaciones: ubicaciones,
+      publicoDisponible: publicoDisponible,
+      precioPorPublico: precioPorPublico
+    })
+    .save(opts);
+    const usuarioInserted = await modeloUsuario({
+      email: email,
+      contrasena: contrasena,
+      tipoUsuario: "Cuidador",
+      idPerfil: cuidadorInserted._id
+    })
+    .save(opts);
+
+    await sesion.commitTransaction();
+    sesion.endSession();
+
+    res.writeHead(200, headerResponse);
+    res.write(JSON.stringify(respuesta));
+    res.end();
+  } catch (error) {
+    // If an error occurred, abort the whole transaction and
+    // undo any changes that might have happened
+    await sesion.abortTransaction();
+    sesion.endSession();
+    console.log(err);
+    res.writeHead(500, headerResponse);
+    res.write(JSON.stringify(err));
+    res.end();
   }
 }

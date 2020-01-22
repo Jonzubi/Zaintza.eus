@@ -1,5 +1,6 @@
 const headerResponse = require("../../util/headerResponse");
 const fs = require("fs");
+const { writeImage } = require("../../util/funciones");
 
 exports.get = function(req, res, modelos) {
   let tabla = req.params.tabla;
@@ -124,34 +125,10 @@ exports.delete = function(req, res, modelos) {
 
 exports.postImage = (req, res) => {
   let idImage = req.params.id;
-  let imageBase64 = req.body.imageB64.split(",")[1];
-  let formatBase64 = imageBase64.charAt(0);
-
-  switch (formatBase64) {
-    case "/":
-      formatBase64 = ".jpg";
-      break;
-    case "i":
-      formatBase64 = ".png";
-      break;
-    case "R":
-      formatBase64 = ".gif";
-      break;
-    default:
-      res.writeHead(500, headerResponse);
-      res.write("imagen no compatible");
-      res.end();
-      return;
-  }
-  let avatarDirPath = __dirname.substring(0, __dirname.lastIndexOf("\\"));
-  avatarDirPath =
-    avatarDirPath.substring(0, avatarDirPath.lastIndexOf("\\")) +
-    "\\util\\imagenes\\" +
-    idImage +
-    formatBase64;
-  //avatarDirPath = "/var/www/ProyectoAplicacionWeb/API/util/imagenes/" + idImage + formatBase64;
+  let imageBase64 = req.body.imageB64;
+  
   try {
-    fs.writeFileSync(avatarDirPath, imageBase64, "base64");
+    writeImage(id, imageBase64);
 
     res.writeHead(200, headerResponse);
     res.write("Image posted");
