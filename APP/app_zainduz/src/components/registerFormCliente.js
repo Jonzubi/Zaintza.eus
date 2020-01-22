@@ -103,101 +103,74 @@ class RegisterFormCliente extends React.Component {
     }
     this.setState({ isLoading: true });
 
-    var codAvatar = getRandomString(20);
-
-    if (this.state.avatarPreview.length > 0) {
-      await axios
-        .post("http://" + ipMaquina + ":3001/api/image/" + codAvatar, {
-          imageB64: this.state.avatarPreview
-        })
-        .catch(error => {
-          cogoToast.error(
-            <h5>{trans("registerFormClientes.errorAvatarUpload")}</h5>
-          );
-          return;
-        });
-    }
-
     var formData = {
       nombre: this.state.txtNombre,
       apellido1: this.state.txtApellido1,
       apellido2: this.state.txtApellido2,
       telefono: {
-        movil:{
+        movil: {
           etiqueta: "Movil",
           numero: this.state.txtMovil
         },
-        fijo:{
+        fijo: {
           etiqueta: "Fijo",
           numero: this.state.txtFijo
         }
       },
-      direcFoto: codAvatar
+      avatarPreview: this.state.avatarPreview,
+      email: this.state.txtEmail,
+      contrasena: this.state.txtContrasena
     };
 
-    axios
-      .post("http://" + ipMaquina + ":3001/api/cliente/", formData)
-      .then(cliente => {
-        var idPerfil = cliente.data;
-        //recogemos el _id que se ha generado al registrar el cliente
-        idPerfil = idPerfil._id;
-
-        var formDataUsu = {
-          email: this.state.txtEmail,
-          contrasena: this.state.txtContrasena,
-          tipoUsuario: "Cliente",
-          idPerfil: idPerfil
-        };
-        axios
-          .post("http://" + ipMaquina + ":3001/api/usuario/", formDataUsu)
-          .then(resultado => {
-            this.props.saveUserSession(Object.assign({},formData, {tipoUsuario: "Cliente", email: formDataUsu.email, _id: idPerfil, _idUsuario: resultado.data._id}));
-
-            this.state = {
-              avatarPreview: "",
-              txtNombre: "",
-              txtApellido1: "",
-              txtApellido2: "",
-              txtEmail: "",
-              txtContrasena: "",
-              isLoading: false,
-              error: {
-                txtNombre: false,
-                txtEmail: false,
-                txtContrasena: false,
-                txtMovil: false
-              }
-            };
-            cogoToast.success(
-              <div>
-                <h5>{trans("registerFormClientes.registroCompletado")}</h5>
-                <small>
-                  <b>{trans("registerFormClientes.darGracias")}</b>
-                </small>
-              </div>
-            );
-            this.props.changeFormContent("tabla");
-          });
-      })
-      .catch(err => {
-        this.setState({
-          isLoading: false
-        });
-        cogoToast.error(<h5>{trans("registerFormClientes.errorGeneral")}</h5>);
-      })
-      .catch(err => {
-        this.setState({
-          isLoading: false
-        });
-        cogoToast.error(<h5>{trans("registerFormClientes.errorGeneral")}</h5>);
+    const insertedCliente = await axios.post("http://" + ipMaquina + ":3001/api/procedures/postNewCliente", formData).catch(err => {
+      this.setState({
+        isLoading: false
       });
+      cogoToast.error(
+        <h5>{trans("registerFormClientes.errorGeneral")}</h5>
+      );
+      return;
+    });
+    console.log(insertedCliente);
+    this.props.saveUserSession(
+      Object.assign({}, formData, {
+        tipoUsuario: "Cliente",
+        email: formData.email,
+        _id: insertedCliente.data._id,
+        _idUsuario: insertedCliente.data._idUsuario,
+        direcFoto: insertedCliente.data.direcFoto
+      })
+    );
+
+    this.state = {
+      avatarPreview: "",
+      txtNombre: "",
+      txtApellido1: "",
+      txtApellido2: "",
+      txtEmail: "",
+      txtContrasena: "",
+      isLoading: false,
+      error: {
+        txtNombre: false,
+        txtEmail: false,
+        txtContrasena: false,
+        txtMovil: false
+      }
+    };
+    cogoToast.success(
+      <div>
+        <h5>{trans("registerFormClientes.registroCompletado")}</h5>
+        <small>
+          <b>{trans("registerFormClientes.darGracias")}</b>
+        </small>
+      </div>
+    );
+    this.props.changeFormContent("tabla");
   }
 
   render() {
     return (
-      <div
-        className="p-5"
-      >
+      <div className="p-5">
         <div className="form-group d-flex justify-content-center position-relative">
           <Avatar
             label="Aukeratu avatarra"
@@ -308,7 +281,7 @@ class RegisterFormCliente extends React.Component {
         </div>
         <div className="form-group row">
           <div className="col-6">
-          <label htmlFor="txtMovil">
+            <label htmlFor="txtMovil">
               {trans("registerFormClientes.movil")}
             </label>{" "}
             (<span className="text-danger font-weight-bold">*</span>)
@@ -326,7 +299,7 @@ class RegisterFormCliente extends React.Component {
             />
           </div>
           <div className="col-6">
-          <label htmlFor="txtFijo">
+            <label htmlFor="txtFijo">
               {trans("registerFormClientes.telefFijo")}
             </label>{" "}
             <input
@@ -345,7 +318,11 @@ class RegisterFormCliente extends React.Component {
         </div>
         <div id="loaderOrButton" className="w-100 mt-5 text-center">
           {this.state.isLoading ? (
-            <img src={"http://" + ipMaquina + ":3001/api/image/loadGif"} height={50} width={50} />
+            <img
+              src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
+              height={50}
+              width={50}
+            />
           ) : (
             <button
               onClick={this.handleRegistrarse}
@@ -355,7 +332,7 @@ class RegisterFormCliente extends React.Component {
               {trans("registerFormClientes.registrarse")}
             </button>
           )}
-        </div>        
+        </div>
       </div>
     );
   }

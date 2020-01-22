@@ -30,6 +30,9 @@ exports.writeImage = (cod, b64) => {
 };
 
 exports.getRandomString = length => {
+    if(!length){
+      throw "Elige length";
+    }
     var result = "";
     var characters =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

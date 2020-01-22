@@ -199,3 +199,64 @@ exports.postNewCuidador = async (req, res, modelos) => {
     res.end();
   }
 }
+
+exports.postNewCliente = async (req, res, modelos) => {
+  const { nombre, apellido1, apellido2, avatarPreview,  telefono, email, contrasena } = req.body;
+
+  if(typeof nombre == "undefined" ||
+     typeof telefono == "undefined" ||
+     typeof email == "undefined" ||
+     typeof contrasena == "undefined"){
+      res.writeHead(500, headerResponse);
+      res.write("Parametros incorrectos");
+      res.end();
+      return;
+  }
+
+  let codAvatar;
+  if(avatarPreview.length > 0){
+    codAvatar = getRandomString(20);
+    writeImage(codAvatar, avatarPreview);
+  }
+  
+  const modeloClientes = modelos.cliente;
+  const modeluUsuarios = modelos.usuario;
+
+  const sesion = await modeloClientes.startSession();
+  sesion.startTransaction();
+
+  try {
+    const opts = { sesion };
+    const insertedCliente = await modeloClientes({
+      nombre: nombre,
+      apellido1: apellido1,
+      apellido2: apellido2,
+      telefono: telefono,
+      direcFoto: codAvatar
+    })
+    .save(opts);
+    const insertedUsuario = await modeluUsuarios({
+      email: email,
+      contrasena: contrasena,
+      tipoUsuario: "Cliente",
+      idPerfil: insertedCliente._id
+    })
+    .save(opts);
+    await sesion.commitTransaction();
+    sesion.endSession();
+    res.writeHead(200, headerResponse);
+    res.write(JSON.stringify({
+      _id: insertedCliente._id,
+      _idUsuario: insertedUsuario._id,
+      direcFoto: codAvatar
+    }));
+    res.end();
+  } catch (error) {
+    await sesion.abortTransaction();
+    sesion.endSession();
+    console.log(err);
+    res.writeHead(500, headerResponse);
+    res.write(JSON.stringify(err));
+    res.end();
+  }
+}
