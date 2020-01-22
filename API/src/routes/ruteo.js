@@ -13,6 +13,8 @@ module.exports = (app, modelos) => {
   app.route("/api/procedures/getNotificacionesConUsuarios").get((req, res) => proceduresControlador.getNotificacionesConUsuarios(req, res, modelos));
 
   app.route("/api/procedures/getUsuarioConPerfil").get((req, res) => proceduresControlador.getUsuarioConPerfil(req, res, modelos));
+
+  app.route("/api/procedures/postNewCuidador").post((req, res) => proceduresControlador.postNewCuidador(req, res, modelos));
   
   app.route("/Inicio/").get(mainControlador.inicio);
 

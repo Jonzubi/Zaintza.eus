@@ -184,7 +184,9 @@ class RegisterForm extends React.Component {
 
   onBeforeFileLoad(elem) {
     if (elem.target.files[0].size > 5242880) {
-      cogoToast.error(<h5>{trans("registerFormCuidadores.errorImgGrande")}</h5>);
+      cogoToast.error(
+        <h5>{trans("registerFormCuidadores.errorImgGrande")}</h5>
+      );
       elem.target.value = "";
     }
   }
@@ -362,10 +364,9 @@ class RegisterForm extends React.Component {
 
   async handleRegistrarse() {
     for (var clave in this.state) {
-      if(this.state[clave] === null)
-        continue;
+      if (this.state[clave] === null) continue;
       if (
-        (this.state[clave].length == 0) &&
+        this.state[clave].length == 0 &&
         this.requiredStates.includes(clave)
       ) {
         cogoToast.error(
@@ -398,8 +399,6 @@ class RegisterForm extends React.Component {
     }
     this.setState({ isLoading: true });
 
-    var codAvatar = getRandomString(20);
-    var codContactImg = getRandomString(20);
     var imgContactB64 = await toBase64(this.state.imgContact[0]);
 
     if (imgContactB64 instanceof Error) {
@@ -407,133 +406,101 @@ class RegisterForm extends React.Component {
       return;
     }
 
-    if (this.state.avatarPreview.length > 0) {
-      await axios.post("http://" + ipMaquina + ":3001/api/image/" + codAvatar, {
-        imageB64: this.state.avatarPreview
-      })
-      .catch(err => {
-        this.setState({
-          isLoading: false
-        });
-        cogoToast.error(<h5>{trans("registerFormCuidadores.errorGeneral")}</h5>);
+    const formData = {
+      nombre: this.state.txtNombre,
+      apellido1: this.state.txtApellido1,
+      apellido2: this.state.txtApellido2,
+      sexo: this.state.txtSexo,
+      avatarPreview: this.state.avatarPreview,
+      imgContactB64: imgContactB64,
+      descripcion: this.state.txtDescripcion,
+      telefono: {
+        movil: {
+          etiqueta: "Movil",
+          numero: this.state.txtMovil
+        },
+        fijo: {
+          etiqueta: "Fijo",
+          numero: this.state.txtTelefono
+        }
+      },
+      isPublic: this.state.isPublic,
+      diasDisponible: this.state.diasDisponible,
+      fechaNacimiento: this.state.txtFechaNacimiento,
+      ubicaciones: this.state.ubicaciones,
+      publicoDisponible: this.state.publicoDisponible,
+      precioPorPublico: this.state.precioPorPublico,
+      email: this.state.txtEmail,
+      contrasena: this.state.txtContrasena,
+      tipoUsuario: "Cuidador"
+    };
+    const insertedCuidador = await axios.post(
+      "http://" + ipMaquina + ":3001/api/procedures/postNewCuidador",
+      formData
+    )
+    .catch(err => {
+      this.setState({
+        isLoading: false
       });
-    }
-    axios
-      .post("http://" + ipMaquina + ":3001/api/image/" + codContactImg, {
-        imageB64: imgContactB64
+      cogoToast.error(
+        <h5>{trans("registerFormCuidadores.errorGeneral")}</h5>
+      );
+      return;
+    });
+
+    console.log(insertedCuidador);
+    
+    this.props.saveUserSession(
+      Object.assign({}, formData, {
+        _id: insertedCuidador.data._id,
+        _idUsuario: insertedCuidador.data._idUsuario,
+        direcFoto: insertedCuidador.data.direcFoto,
+        direcFotoContacto: insertedCuidador.data.direcFotoContacto
       })
-      .then(() => {
-        var formData = {
-          nombre: this.state.txtNombre,
-          apellido1: this.state.txtApellido1,
-          apellido2: this.state.txtApellido2,
-          sexo: this.state.txtSexo,
-          direcFoto: codAvatar,
-          direcFotoContacto: codContactImg,
-          descripcion: this.state.txtDescripcion,
-          telefono: {
-            movil: {
-              etiqueta: "Movil",
-              numero: this.state.txtMovil
-            },
-            fijo: {
-              etiqueta: "Fijo",
-              numero: this.state.txtTelefono
-            }
-          },
-          isPublic: this.state.isPublic,
-          diasDisponible: this.state.diasDisponible,
-          fechaNacimiento: this.state.txtFechaNacimiento,
-          ubicaciones: this.state.ubicaciones,
-          publicoDisponible: this.state.publicoDisponible,
-          precioPorPublico: this.state.precioPorPublico
-        };
-
-        axios
-          .post("http://" + ipMaquina + ":3001/api/cuidador", formData)
-          .then(resultado => {
-            var idPerfil = resultado.data;
-            idPerfil = idPerfil._id;
-
-            var formDataUsu = {
-              email: this.state.txtEmail,
-              contrasena: this.state.txtContrasena,
-              tipoUsuario: "Cuidador",
-              idPerfil: idPerfil
-            };
-
-            axios
-              .post("http://" + ipMaquina + ":3001/api/usuario", formDataUsu)
-              .then(doc => {
-                this.props.saveUserSession(Object.assign({},formData, {email: formDataUsu.email, tipoUsuario: formDataUsu.tipoUsuario, _id: formDataUsu.idPerfil, _idUsuario: doc.data._id}));
-                this.setState({
-                  txtNombre: "",
-                  txtApellido1: "",
-                  txtApellido2: "",
-                  txtEmail: "",
-                  txtSexo: "",
-                  txtFechaNacimiento: "",
-                  txtContrasena: "",
-                  txtMovil: "",
-                  txtTelefono: "",
-                  diasDisponible: [],
-                  publicoDisponible: {
-                    nino: false,
-                    terceraEdad: false,
-                    necesidadEspecial: false
-                  },
-                  precioPorPublico: {
-                    nino: "",
-                    terceraEdad: "",
-                    necesidadEspecial: ""
-                  },
-                  ubicaciones: [],
-                  txtDescripcion: "",
-                  isPublic: true,
-                  avatarSrc: "",
-                  avatarPreview: "",
-                  hoverSexoM: false,
-                  hoverSexoF: false,
-                  isLoading: false,
-                  auxAddPueblo: "",
-                  hoverNino: false,
-                  hoverTerceraEdad: false,
-                  hoverNecesidadEspecial: false
-                });
-                cogoToast.success(
-                  <div>
-                    <h5>{trans("registerFormCuidadores.registroCompletado")}</h5>
-                    <small>
-                      <b>{trans("registerFormCuidadores.darGracias")}</b>
-                    </small>
-                  </div>
-                );
-                this.props.changeFormContent("tabla");
-              })
-              .catch(err => {
-                this.setState({
-                  isLoading: false
-                });
-                cogoToast.error(
-                  <h5>{trans("registerFormCuidadores.errorGeneral")}</h5>
-                );
-              });
-          })
-          .catch(err => {
-            this.setState({
-              isLoading: false
-            });
-            cogoToast.error(
-              <h5>{trans("registerFormCuidadores.errorGeneral")}</h5>
-            );
-          });
-      })
-      .catch(err => {
-        this.setState({
-          isLoading: false
-        });
-        cogoToast.error(<h5>{trans("registerFormCuidadores.errorGeneral")}</h5>);
-      });
+    );
+    this.setState({
+      txtNombre: "",
+      txtApellido1: "",
+      txtApellido2: "",
+      txtEmail: "",
+      txtSexo: "",
+      txtFechaNacimiento: "",
+      txtContrasena: "",
+      txtMovil: "",
+      txtTelefono: "",
+      diasDisponible: [],
+      publicoDisponible: {
+        nino: false,
+        terceraEdad: false,
+        necesidadEspecial: false
+      },
+      precioPorPublico: {
+        nino: "",
+        terceraEdad: "",
+        necesidadEspecial: ""
+      },
+      ubicaciones: [],
+      txtDescripcion: "",
+      isPublic: true,
+      avatarSrc: "",
+      avatarPreview: "",
+      hoverSexoM: false,
+      hoverSexoF: false,
+      isLoading: false,
+      auxAddPueblo: "",
+      hoverNino: false,
+      hoverTerceraEdad: false,
+      hoverNecesidadEspecial: false
+    });
+    cogoToast.success(
+      <div>
+        <h5>{trans("registerFormCuidadores.registroCompletado")}</h5>
+        <small>
+          <b>{trans("registerFormCuidadores.darGracias")}</b>
+        </small>
+      </div>
+    );
+    this.props.changeFormContent("tabla");
   }
 
   render() {
@@ -568,9 +535,7 @@ class RegisterForm extends React.Component {
     };
 
     return (
-      <div
-        className="p-5"
-      >
+      <div className="p-5">
         <form>
           <div className="form-group row">
             <div className="form-group col-3 text-center">
@@ -1197,7 +1162,11 @@ class RegisterForm extends React.Component {
 
           <div id="loaderOrButton" className="w-100 mt-5 text-center">
             {this.state.isLoading ? (
-              <img src={"http://" + ipMaquina + ":3001/api/image/loadGif"} height={50} width={50} />
+              <img
+                src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
+                height={50}
+                width={50}
+              />
             ) : (
               <button
                 onClick={this.handleRegistrarse}

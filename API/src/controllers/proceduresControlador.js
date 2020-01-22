@@ -154,12 +154,12 @@ exports.postNewCuidador = async (req, res, modelos) => {
     const opts = { sesion };
     const cuidadorInserted = await modeloCuidadores({
       nombre: nombre,
-      apellido1: apellido1,
-      apellido2: apellido2,
+      apellido1: apellido1 || "",
+      apellido2: apellido2 || "",
       sexo: sexo,
       direcFoto: codAvatar,
       direcFotoContacto: codContactImg,
-      descripcion: descripcion,
+      descripcion: descripcion || "",
       telefono: telefono,
       isPublic: isPublic,
       diasDisponible: diasDisponible,
@@ -181,7 +181,12 @@ exports.postNewCuidador = async (req, res, modelos) => {
     sesion.endSession();
 
     res.writeHead(200, headerResponse);
-    res.write(JSON.stringify(respuesta));
+    res.write(JSON.stringify({
+      _id: cuidadorInserted._id,
+      _idUsuario: usuarioInserted._id,
+      direcFoto: codAvatar,
+      direcFotoContacto: codContactImg
+    }));
     res.end();
   } catch (error) {
     // If an error occurred, abort the whole transaction and

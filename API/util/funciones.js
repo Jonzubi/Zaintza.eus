@@ -17,10 +17,7 @@ exports.writeImage = (cod, b64) => {
     default:
       throw "Formato no compatible";
   }
-  let avatarDirPath = __dirname.substring(0, __dirname.lastIndexOf("\\"));
-  avatarDirPath =
-    avatarDirPath.substring(0, avatarDirPath.lastIndexOf("\\")) +
-    "\\util\\imagenes\\" +
+  let avatarDirPath = __dirname + "/imagenes/" +
     idImage +
     formatBase64;
   //avatarDirPath = "/var/www/ProyectoAplicacionWeb/API/util/imagenes/" + idImage + formatBase64;
