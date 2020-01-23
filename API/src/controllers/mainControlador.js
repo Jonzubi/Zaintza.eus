@@ -12,7 +12,7 @@ exports.get = function(req, res, modelos) {
   if (typeof req.query.filtros != "undefined") {
     objFilter = JSON.parse(req.query.filtros);
   }
-  if (typeof req.query.join != "undefined"){
+  if (typeof req.query.join != "undefined") {
     objJoin = JSON.parse(req.query.join);
   }
   let modelo = modelos[tabla];
@@ -57,12 +57,12 @@ exports.insert = function(req, res, modelos) {
   let tabla = req.params.tabla;
   let modelo = modelos[tabla];
 
-  if (typeof modelo == "undefined"){
+  if (typeof modelo == "undefined") {
     res.writeHead(500, headerResponse);
     res.send("MODELO IS UNDEFINED");
     res.end();
     return;
-  } 
+  }
 
   let modeloConfiged = new modelo(req.body);
 
@@ -90,7 +90,7 @@ exports.update = function(req, res, modelos) {
   console.log(req.body);
   modelo
     .findByIdAndUpdate(id, req.body)
-    .then(doc => {      
+    .then(doc => {
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(doc));
     })
@@ -104,29 +104,30 @@ exports.update = function(req, res, modelos) {
     });
 };
 
-exports.delete = function(req, res, modelos) {
+exports.delete = async (req, res, modelos) => {
   let tabla = req.params.tabla;
   let id = req.params.id;
   let modelo = modelos[tabla];
+  const modeloDelete = modelos["historico" + tabla];
 
-  res.writeHead(200, headerResponse);
-  modelo
-    .deleteOne({ _id: id })
-    .then(doc => {
-      res.write(JSON.stringify(doc));
-    })
-    .catch(err => {
-      res.write(JSON.stringify(err));
-    })
-    .finally(fin => {
-      res.end();
-    });
+  try {
+    let oldItem = await modelo.findById(id);
+    await modeloDelete(oldItem).save();
+    await modelo.deleteOne({ _id, id });
+    res.writeHead(200, headerResponse);
+    res.write(JSON.stringify(doc));
+    res.end();
+  } catch (error) {
+    res.writeHead(500, headerResponse);
+    res.write(JSON.stringify(err));
+    res.end();
+  }
 };
 
 exports.postImage = (req, res) => {
   let idImage = req.params.id;
   let imageBase64 = req.body.imageB64;
-  
+
   try {
     writeImage(id, imageBase64);
 
@@ -151,29 +152,28 @@ exports.getImage = (req, res) => {
     if (err) {
       res.writeHead(500, headerResponse);
       res.write(JSON.stringify(err));
-    }
-    else {
+    } else {
       let found = false;
       files.map(archivo => {
         if (archivo.includes(idImage)) {
           found = true;
           let stream = fs.createReadStream(avatarDirPath + archivo);
-          let formato = archivo.split('.')[1];
-          switch(formato){
+          let formato = archivo.split(".")[1];
+          switch (formato) {
             case "png":
-              res.setHeader('Content-Type', 'image/png');
+              res.setHeader("Content-Type", "image/png");
               break;
             case "jpg":
-                res.setHeader('Content-Type', 'image/jpeg');
-                break;
+              res.setHeader("Content-Type", "image/jpeg");
+              break;
             case "gif":
-                res.setHeader('Content-Type', 'image/gif');
-                break;
+              res.setHeader("Content-Type", "image/gif");
+              break;
           }
           stream.pipe(res);
         }
       });
-      if(!found){
+      if (!found) {
         res.write("Vacio");
         res.end();
       }
