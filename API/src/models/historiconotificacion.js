@@ -33,5 +33,5 @@ module.exports = conexion => {
     }
   });
 
-  return conexion.model("Notificacion", notificacion, "Notificaciones");
+  return conexion.model("HistoricoNotificacion", notificacion, "HistoricoNotificaciones");
 };
