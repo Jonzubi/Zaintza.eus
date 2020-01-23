@@ -12,7 +12,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { connect } from "react-redux";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
-import { trans, arrayOfFalses } from "../util/funciones";
+import { trans, arrayOfFalses, getTodayDate } from "../util/funciones";
 import Avatar from "react-avatar";
 import cogoToast from "cogo-toast";
 
@@ -94,18 +94,8 @@ class AcuerdosForm extends React.Component {
     if (acuerdo.estadoAcuerdo == 2) {
       return;
     }
-    var objToday = new Date();
-    var dd = objToday.getDate();
-    var mm = objToday.getMonth() + 1;
-
-    var yyyy = objToday.getFullYear();
-    if (dd < 10) {
-      dd = "0" + dd;
-    }
-    if (mm < 10) {
-      mm = "0" + mm;
-    }
-    var today = mm + "/" + dd + "/" + yyyy;
+    
+    let today = getTodayDate();
 
     await axios.patch("http://" + ipMaquina + ":3001/api/acuerdo/" + acuerdo._id, {
       estadoAcuerdo: 2,

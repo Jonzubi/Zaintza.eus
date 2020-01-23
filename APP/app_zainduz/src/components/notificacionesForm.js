@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import { connect } from "react-redux";
-import { trans, arrayOfFalses } from "../util/funciones";
+import { trans, arrayOfFalses, getTodayDate } from "../util/funciones";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faEye, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { Collapse } from "react-collapse";
@@ -91,18 +91,8 @@ class NotificacionesForm extends React.Component {
   }
 
   async handleGestionarPropuesta(notificacion, indice, ifAccept) {
-    var objToday = new Date();
-    var dd = objToday.getDate();
-    var mm = objToday.getMonth() + 1;
-
-    var yyyy = objToday.getFullYear();
-    if (dd < 10) {
-      dd = "0" + dd;
-    }
-    if (mm < 10) {
-      mm = "0" + mm;
-    }
-    var today = mm + "/" + dd + "/" + yyyy;
+    
+    let today = getTodayDate();
     const acuerdo = notificacion.acuerdo;
     let auxJsonNotif = this.state.jsonNotificaciones;
     //Squi estoy pillando el estado actual del acuerdo para comprobar que el acuerdo no se ha cancelado ya por el usuario.

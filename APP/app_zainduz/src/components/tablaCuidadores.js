@@ -25,7 +25,7 @@ import TimeInput from "react-time-input";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { connect } from "react-redux";
-import { trans } from "../util/funciones";
+import { trans, getTodayDate } from "../util/funciones";
 import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import municipios from "../util/municipos";
 
@@ -393,18 +393,8 @@ class Tabla extends React.Component {
     this.setState({
       propuestaIsLoading: true
     });
-    var objToday = new Date();
-    var dd = objToday.getDate();
-    var mm = objToday.getMonth() + 1;
 
-    var yyyy = objToday.getFullYear();
-    if (dd < 10) {
-      dd = "0" + dd;
-    }
-    if (mm < 10) {
-      mm = "0" + mm;
-    }
-    var today = mm + "/" + dd + "/" + yyyy;
+    var today = getTodayDate();
 
     //Aqui me monto el acuerdo para subirlo
     //Estado acuerdo no lo tengo definido todavia pero seria algo como:
