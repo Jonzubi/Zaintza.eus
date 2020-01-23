@@ -108,20 +108,18 @@ exports.delete = async (req, res, modelos) => {
   let tabla = req.params.tabla;
   let id = req.params.id;
   let modelo = modelos[tabla];
-  const modeloDelete = modelos["historico" + tabla];
-
-  try {
-    let oldItem = await modelo.findById(id);
-    await modeloDelete(oldItem).save();
-    await modelo.deleteOne({ _id, id });
-    res.writeHead(200, headerResponse);
-    res.write(JSON.stringify(doc));
-    res.end();
-  } catch (error) {
-    res.writeHead(500, headerResponse);
-    res.write(JSON.stringify(err));
-    res.end();
-  }
+  modelo
+    .deleteOne({ _id: id })
+    .then(deleted => {
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(deleted));
+      res.end();
+    })
+    .catch(error => {
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(error));
+      res.end();
+    });
 };
 
 exports.postImage = (req, res) => {
