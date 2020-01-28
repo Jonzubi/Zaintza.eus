@@ -442,35 +442,28 @@ class PerfilCuidador extends React.Component {
       isLoading: true
     });
 
-    var codContactImg = "";
+    let codContactImg = "";
+    let imgContactB64 = "";
 
     if (this.state.imgContact != "") {
       //Significa que quiere cambiar su imagen de contatco
       codContactImg = getRandomString(20);
-      var imgContactB64 = await toBase64(this.state.imgContact[0]);
-
-      await Axios.post("http://" + ipMaquina + ":3001/api/image/" + codContactImg, {
-        imageB64: imgContactB64
-      }).catch(err => {
-        cogoToast.error(<h5>{trans("perfilCliente.errorAvatarUpload")}</h5>);
-        return;
-      });
+      imgContactB64 = await toBase64(this.state.imgContact[0]);
     } else {
       codContactImg = this.props.direcFotoContacto;
     }
     {
-      /* Imagen contacto guardado, ahora toca imagen perfil */
+      /* Imagen contacto guardado en imgContactB64, ahora toca imagen perfil */
     }
 
-    var codAvatar = "";
+    //IMPORTANTE: ESTE MENSAJE VA PARA MI POR SI SE ME OLVIDA LO QUE ESTABA HACIENDO
+    //ESTOY REFACTORIZANDO EL CODIGO PARA QUE HAGA TODO EN UNA LLAMADA PISTA: patchCuidador (Procedure en la API)
+
+    let codAvatar = "";
+    let avatarPreview = "";
     if (this.state.avatarPreview != "") {
       codAvatar = getRandomString(20);
-      await Axios.post("http://" + ipMaquina + ":3001/api/image/" + codAvatar, {
-        imageB64: this.state.avatarPreview
-      }).catch(error => {
-        cogoToast.error(<h5>{trans("perfilCliente.errorAvatarUpload")}</h5>);
-        return;
-      });
+      avatarPreview = this.state.avatarPreview
     } else {
       codAvatar = this.props.direcFoto;
     }
@@ -483,6 +476,8 @@ class PerfilCuidador extends React.Component {
       sexo: this.state.txtSexo,
       direcFoto: codAvatar,
       direcFotoContacto: codContactImg,
+      imgContactB64: imgContactB64,//Los cambios son // Ahora mandare las imagenes en B64 a la API para guardarlo en un paso
+      avatarPreview: avatarPreview,//Estas dos lineas //
       descripcion: this.state.txtDescripcion,
       ubicaciones: this.state.ubicaciones,
       publicoDisponible: this.state.publicoDisponible,
