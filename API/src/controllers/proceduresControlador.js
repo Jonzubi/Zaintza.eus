@@ -198,7 +198,7 @@ exports.postNewCuidador = async (req, res, modelos) => {
     res.write(JSON.stringify(err));
     res.end();
   }
-}
+};
 
 exports.postNewCliente = async (req, res, modelos) => {
   const { nombre, apellido1, apellido2, avatarPreview,  telefono, email, contrasena } = req.body;
@@ -259,4 +259,8 @@ exports.postNewCliente = async (req, res, modelos) => {
     res.write(JSON.stringify(err));
     res.end();
   }
-}
+};
+
+exports.patchCuidador = async (req, res, modelos) => {
+
+};
