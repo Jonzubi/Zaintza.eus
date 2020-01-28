@@ -96,6 +96,7 @@ class AcuerdosForm extends React.Component {
     }
     
     let today = getTodayDate();
+    const objToday = new Date();
 
     await axios.patch("http://" + ipMaquina + ":3001/api/acuerdo/" + acuerdo._id, {
       estadoAcuerdo: 2,

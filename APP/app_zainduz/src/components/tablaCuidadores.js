@@ -395,6 +395,7 @@ class Tabla extends React.Component {
     });
 
     var today = getTodayDate();
+    const objToday = new Date();
 
     //Aqui me monto el acuerdo para subirlo
     //Estado acuerdo no lo tengo definido todavia pero seria algo como:

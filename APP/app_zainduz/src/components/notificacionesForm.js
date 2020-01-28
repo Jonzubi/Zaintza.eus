@@ -93,6 +93,7 @@ class NotificacionesForm extends React.Component {
   async handleGestionarPropuesta(notificacion, indice, ifAccept) {
     
     let today = getTodayDate();
+    const objToday = new Date();
     const acuerdo = notificacion.acuerdo;
     let auxJsonNotif = this.state.jsonNotificaciones;
     //Squi estoy pillando el estado actual del acuerdo para comprobar que el acuerdo no se ha cancelado ya por el usuario.
