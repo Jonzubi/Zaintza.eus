@@ -442,15 +442,11 @@ class PerfilCuidador extends React.Component {
       isLoading: true
     });
 
-    let codContactImg = "";
     let imgContactB64 = "";
 
     if (this.state.imgContact != "") {
       //Significa que quiere cambiar su imagen de contatco
-      codContactImg = getRandomString(20);
       imgContactB64 = await toBase64(this.state.imgContact[0]);
-    } else {
-      codContactImg = this.props.direcFotoContacto;
     }
     {
       /* Imagen contacto guardado en imgContactB64, ahora toca imagen perfil */
@@ -458,14 +454,9 @@ class PerfilCuidador extends React.Component {
 
     //IMPORTANTE: ESTE MENSAJE VA PARA MI POR SI SE ME OLVIDA LO QUE ESTABA HACIENDO
     //ESTOY REFACTORIZANDO EL CODIGO PARA QUE HAGA TODO EN UNA LLAMADA PISTA: patchCuidador (Procedure en la API)
-
-    let codAvatar = "";
     let avatarPreview = "";
     if (this.state.avatarPreview != "") {
-      codAvatar = getRandomString(20);
       avatarPreview = this.state.avatarPreview
-    } else {
-      codAvatar = this.props.direcFoto;
     }
 
     let formData = {
@@ -474,8 +465,6 @@ class PerfilCuidador extends React.Component {
       apellido2: this.state.txtApellido2,
       fechaNacimiento: this.state.txtFechaNacimiento,
       sexo: this.state.txtSexo,
-      direcFoto: codAvatar,
-      direcFotoContacto: codContactImg,
       imgContactB64: imgContactB64,//Los cambios son // Ahora mandare las imagenes en B64 a la API para guardarlo en un paso
       avatarPreview: avatarPreview,//Estas dos lineas //
       descripcion: this.state.txtDescripcion,
@@ -497,12 +486,12 @@ class PerfilCuidador extends React.Component {
     };
 
     Axios.patch(
-      "http://" + ipMaquina + ":3001/api/cuidador/" + this.props._id,
+      "http://" + ipMaquina + ":3001/api/procedures/patchCuidador/" + this.props._id,
       formData
     )
       .then(res => {
-
-        this.props.saveUserSession(formData);
+        const { direcFoto, direcFotoContacto } = res.data;
+        this.props.saveUserSession(Object.assign({}, formData, {direcFoto: direcFoto, direcFotoContacto: direcFotoContacto}));
         cogoToast.success(<h5>{trans("perfilCliente.datosActualizados")}</h5>);
       })
       .catch(err => {

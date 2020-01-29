@@ -262,5 +262,53 @@ exports.postNewCliente = async (req, res, modelos) => {
 };
 
 exports.patchCuidador = async (req, res, modelos) => {
+  const { nombre, apellido1, apellido2,
+    fechaNacimiento, sexo, descripcion, publicoDisponible, isPublic, precioPorPublico, diasDisponible,
+    ubicaciones, telefono, imgContactB64, avatarPreview } = req.body;
+  const { id } = req.params;
 
+  if (typeof nombre == "" || typeof nombre == "undefined" ||
+      typeof fechaNacimiento == "" || typeof fechaNacimiento == "undefined" ||
+      typeof sexo == "" || typeof sexo == "undefined" ||
+      typeof descripcion == "" || typeof descripcion == "undefined" ||
+      typeof ubicaciones == "" || typeof ubicaciones == "undefined" ||
+      typeof telefono == "" || typeof telefono == "undefined" ||
+      typeof imgContactB64 == "undefined" || typeof id == "undefined"){
+
+        res.writeHead(500, headerResponse);
+        res.write("Parametros incorrectos");
+        res.end();
+        return;
+  }
+
+  let codAvatar;
+  let formData = Object.assign({}, req.body);
+  if(avatarPreview.length > 0){
+    codAvatar = getRandomString(20);
+    writeImage(codAvatar, avatarPreview);
+    formData.direcFoto = codAvatar;
+  }
+  let codContactImg;
+  if(imgContactB64.length > 0){
+    codContactImg = getRandomString(20);
+    writeImage(codContactImg, imgContactB64);
+    formData.direcFotoContacto = codContactImg;
+  }
+
+  const modeloCuidadores = modelos.cuidador;
+  console.log(formData);
+  modeloCuidadores
+    .findByIdAndUpdate(id, formData)
+    .then(doc => {
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(doc));
+    })
+    .catch(err => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+    })
+    .finally(fin => {
+      res.end();
+    });  
 };

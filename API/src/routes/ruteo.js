@@ -17,6 +17,8 @@ module.exports = (app, modelos) => {
   app.route("/api/procedures/postNewCuidador").post((req, res) => proceduresControlador.postNewCuidador(req, res, modelos));
 
   app.route("/api/procedures/postNewCliente").post((req, res) => proceduresControlador.postNewCliente(req, res, modelos));
+
+  app.route("/api/procedures/patchCuidador/:id").patch((req, res) => proceduresControlador.patchCuidador(req, res, modelos));
   
   app.route("/Inicio/").get(mainControlador.inicio);
 
