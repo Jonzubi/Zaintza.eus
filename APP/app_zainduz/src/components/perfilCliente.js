@@ -115,33 +115,16 @@ class PerfilCliente extends React.Component {
           etiqueta: "Fijo",
           numero: this.state.txtFijo
         }
-      }
+      },
+      avatarPreview : this.state.avatarPreview
     };
 
-    var codAvatar = "";
-    if(this.state.avatarPreview != ""){
-      codAvatar = getRandomString(20);
-      await Axios
-        .post("http://" + ipMaquina + ":3001/api/image/" + codAvatar, {
-          imageB64: this.state.avatarPreview
-        })
-        .catch(error => {
-          cogoToast.error(
-            <h5>{trans("perfilCliente.errorAvatarUpload")}</h5>
-          );
-          return;
-        });
-      formData.direcFoto = codAvatar;
-    }
-    else{
-      formData.direcFoto = this.props.direcFoto;
-    }
-
     Axios
-        .patch("http://" + ipMaquina + ":3001/api/cliente/" + this.props._id, formData)
+        .patch("http://" + ipMaquina + ":3001/api/procedures/patchCliente/" + this.props._id, formData)
         .then(
           resultado => {
-            this.props.saveUserSession(formData);
+            const { direcFoto } = resultado.data;
+            this.props.saveUserSession(Object.assign({}, formData, {direcFoto: direcFoto}));
             cogoToast.success(
             <h5>{trans('perfilCliente.datosActualizados')}</h5>
             );            

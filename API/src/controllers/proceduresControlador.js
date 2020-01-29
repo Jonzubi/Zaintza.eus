@@ -318,3 +318,43 @@ exports.patchCuidador = async (req, res, modelos) => {
       res.end();
     });  
 };
+
+exports.patchCliente = async (req, res, modelos) => {
+  const { nombre, avatarPreview,  telefono} = req.body;
+  const { id } = req.params;
+
+  if(typeof nombre == "undefined" ||
+     typeof telefono == "undefined"){
+      res.writeHead(500, headerResponse);
+      res.write("Parametros incorrectos");
+      res.end();
+      return;
+  }
+
+  let codAvatar;
+  let formData = Object.assign({}, req.body);
+  if(avatarPreview.length > 0){
+    codAvatar = getRandomString(20);
+    writeImage(codAvatar, avatarPreview);
+    formData.direcFoto = codAvatar;
+  }
+
+  const modeloClientes = modelos.cliente;
+  modeloClientes
+    .findByIdAndUpdate(id, formData)
+    .then(doc => {
+      if(codAvatar != null){
+        doc.direcFoto = codAvatar
+      }
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(doc));
+    })
+    .catch(err => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+    })
+    .finally(fin => {
+      res.end();
+    });  
+}
