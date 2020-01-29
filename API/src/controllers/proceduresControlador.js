@@ -300,6 +300,12 @@ exports.patchCuidador = async (req, res, modelos) => {
   modeloCuidadores
     .findByIdAndUpdate(id, formData)
     .then(doc => {
+      if(codAvatar != null){
+        doc.direcFoto = codAvatar
+      }
+      if(codContactImg != null){
+        doc.direcFotoContacto = codContactImg;
+      }
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(doc));
     })
