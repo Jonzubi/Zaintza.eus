@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { trans } from "../util/funciones";
 import { changeFormContent } from "../redux/actions/app";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
@@ -28,9 +29,9 @@ class TablaClientes extends React.Component {
     if (tipoUsuario === "Cliente") {
       return (
         <div 
-          className="w-100 float-bottom btn btn-success"
+          className="d-flex justify-content-center btn btn-success"
           onClick= {() => changeFormContent('formAnuncio')}
-        >Añadir anuncio</div>
+      >{trans('tablaClientes.addAnuncio')}</div>
       );
     }
 

@@ -166,5 +166,14 @@
     "acuerdoRechazado": "Akordioa ezeztatu duzu",    
     "noData": "Ez daukazu abixurik",
     "acuerdoYaRechazado": "Akordio jada ezeztatua izanda"
+  },
+  "formAnuncio":{
+    "titulo": "Izenburua",
+    "descripcion": "Deskribapena",
+    "eligeUnaFoto": "Aukeratu irudi bat",
+    "eligeOtraFoto": "Aldatu irudia"
+  },
+  "tablaClientes":{
+    "addAnuncio": "Eskaera sortu"
   }
 }

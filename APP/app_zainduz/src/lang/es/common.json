@@ -166,6 +166,12 @@
       "acuerdoRechazado": "Akordioa ezeztatu duzu",    
       "noData": "Ez daukazu abixurik",
       "acuerdoYaRechazado": "Akordio jada ezeztatua izanda"
+    },
+    "formAnuncio":{
+      "titulo": "Titulo",
+      "descripcion": "Descripcion",
+      "eligeUnaFoto": "Elige una foto",
+      "eligeOtraFoto": "Cambiar la foto"
     }
   }
   
