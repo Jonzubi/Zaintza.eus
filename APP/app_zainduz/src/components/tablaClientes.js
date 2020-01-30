@@ -10,7 +10,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatcToProps = dispatch => {
+const mapDispatchToProps = dispatch => {
   return {
     changeFormContent: form => dispatch(changeFormContent(form))
   };
@@ -23,11 +23,14 @@ class TablaClientes extends React.Component {
   }
 
   botonAddAnuncio = () => {
-    const { tipoUsuario } = this.props;
+    const { tipoUsuario, changeFormContent } = this.props;
 
     if (tipoUsuario === "Cliente") {
       return (
-        <div className="w-100 float-bottom btn btn-success">Añadir anuncio</div>
+        <div 
+          className="w-100 float-bottom btn btn-success"
+          onClick= {() => changeFormContent('formAnuncio')}
+        >Añadir anuncio</div>
       );
     }
 
@@ -39,4 +42,4 @@ class TablaClientes extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatcToProps)(TablaClientes);
+export default connect(mapStateToProps, mapDispatchToProps)(TablaClientes);

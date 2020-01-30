@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 import AcuerdosForm from "./components/acuerdosForm";
 import NotificacionesForm from "./components/notificacionesForm";
 import CalendarioForm from "./components/calendarioForm";
+import FormAnuncio from "./components/formAnuncio";
 
 const mapStateToProps = state => {
   return { formContent: state.app.formContent };
@@ -44,6 +45,8 @@ class App extends React.Component {
         return <NotificacionesForm />;
       case "calendario":
         return <CalendarioForm />;
+      case "formAnuncio":
+        return <FormAnuncio />
       default:
         return <h5>Bad gateway</h5>
     }
