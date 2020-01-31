@@ -172,6 +172,16 @@
       "descripcion": "Descripcion",
       "eligeUnaFoto": "Elige una foto",
       "eligeOtraFoto": "Cambiar la foto"
+    },
+    "dropDownDias":{
+      "eligeDia": "Elige el día",
+      "lunes": "Lunes",
+      "martes": "Martes",
+      "miercoles": "Miércoles",
+      "jueves": "Jueves",
+      "viernes": "Viernes",
+      "sabado": "Sabado",
+      "domingo": "Domingo"
     }
   }
   

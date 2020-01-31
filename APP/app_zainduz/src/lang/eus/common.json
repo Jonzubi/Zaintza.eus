@@ -175,5 +175,15 @@
   },
   "tablaClientes":{
     "addAnuncio": "Eskaera sortu"
+  },
+  "dropDownDias":{
+    "eligeDia": "Aukeratu eguna",
+    "lunes": "Astelehena",
+    "martes": "Asteartea",
+    "miercoles": "Miercoles",
+    "jueves": "Osteguna",
+    "viernes": "Ostirala",
+    "sabado": "Larunbata",
+    "domingo": "Igandea"
   }
 }

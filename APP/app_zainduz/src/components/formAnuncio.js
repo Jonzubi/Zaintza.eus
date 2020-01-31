@@ -341,14 +341,14 @@ class FormAnuncio extends React.Component {
                         className="d-inline"
                         id={"dia" + indice}
                       >
-                        <option>Aukeratu eguna</option>
-                        <option value="1">Astelehena</option>
-                        <option value="2">Asteartea</option>
-                        <option value="3">Asteazkena</option>
-                        <option value="4">Osteguna</option>
-                        <option value="5">Ostirala</option>
-                        <option value="6">Larunbata</option>
-                        <option value="7">Igandea</option>
+                        <option>{i18next.t('dropDownDias.eligeDia')}</option>
+                        <option value="1">{i18next.t('dropDownDias.lunes')}</option>
+                        <option value="2">{i18next.t('dropDownDias.martes')}</option>
+                        <option value="3">{i18next.t('dropDownDias.miercoles')}</option>
+                        <option value="4">{i18next.t('dropDownDias.jueves')}</option>
+                        <option value="5">{i18next.t('dropDownDias.viernes')}</option>
+                        <option value="6">{i18next.t('dropDownDias.sabado')}</option>
+                        <option value="7">{i18next.t('dropDownDias.domingo')}</option>
                       </select>
                       <br />
                       <br />
