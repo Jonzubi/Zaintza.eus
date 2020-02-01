@@ -15,6 +15,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import municipios from "../util/municipos";
 import ipMaquina from "../util/ipMaquinaAPI";
+import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
+import imgTerceraEdad from "../util/images/terceraEdad.png";
+import imgNino from "../util/images/nino.png";
 
 class FormAnuncio extends React.Component {
   constructor(props) {
@@ -31,6 +34,19 @@ class FormAnuncio extends React.Component {
         horaInicio: "00:00",
         horaFin: "00:00"
       }],
+      publicoDisponible: {
+        nino: false,
+        terceraEdad: false,
+        necesidadEspecial: false
+      },
+      precioPorPublico: {
+        nino: "",
+        terceraEdad: "",
+        necesidadEspecial: ""
+      },
+      hoverNino: false,
+      hoverTerceraEdad: false,
+      hoverNecesidadEspecial: false,
       ubicaciones: [],
       error: false
     };
@@ -54,6 +70,10 @@ class FormAnuncio extends React.Component {
     this.handleDiasDisponibleChange = this.handleDiasDisponibleChange.bind(
       this
     );
+    this.handlePublicoChange = this.handlePublicoChange.bind(this);
+    this.handlePublicoHover = this.handlePublicoHover.bind(this);
+    this.handlePublicoLeave = this.handlePublicoLeave.bind(this);
+    this.handlePrecioChange = this.handlePrecioChange.bind(this)
   }
 
   onClose() {
@@ -218,6 +238,34 @@ class FormAnuncio extends React.Component {
         diasDisponible: auxDiasDisponible
       });
     }
+  }
+
+  handlePublicoHover(publico) {
+    this.setState({
+      [publico]: true
+    });
+  }
+
+  handlePublicoLeave(publico) {
+    this.setState({
+      [publico]: false
+    });
+  }
+
+  handlePublicoChange(publico) {
+    let auxPublicoDisponible = this.state.publicoDisponible;
+    auxPublicoDisponible[publico] = !auxPublicoDisponible[publico];
+    this.setState({
+      publicoDisponible: auxPublicoDisponible
+    });
+  }
+
+  handlePrecioChange(atributo, valor) {
+    let auxPrecioPublico = this.state.precioPorPublico;
+    auxPrecioPublico[atributo] = valor;
+    this.setState({
+      precioPorPublico: auxPrecioPublico
+    });
   }
 
   render() {
@@ -465,6 +513,200 @@ class FormAnuncio extends React.Component {
             <br />
           </div>
         </div>
+        <div className="form-group row">
+            <div className="form-group col">
+              {/* Insertar publico disponibles aqui */}
+              <label className="w-100 text-center lead">
+                {trans("registerFormCuidadores.publicoDisponible")}:
+              </label>
+              <div className="row md-2">
+                <div
+                  onClick={() => {
+                    this.handlePublicoChange("nino");
+                  }}
+                  onMouseEnter={() => {
+                    this.handlePublicoHover("hoverNino");
+                  }}
+                  onMouseLeave={() => {
+                    this.handlePublicoLeave("hoverNino");
+                  }}
+                  className="col-4 text-center p-1"
+                  style={{
+                    background: this.state.publicoDisponible.nino
+                      ? "#28a745"
+                      : this.state.hoverNino
+                      ? "#545b62"
+                      : ""
+                  }}
+                >
+                  <img src={imgNino} className="w-100 h-100" />
+                  <small className="font-weight-bold">
+                    {trans("registerFormCuidadores.ninos")}
+                  </small>
+                </div>
+                <div
+                  onClick={() => {
+                    this.handlePublicoChange("terceraEdad");
+                  }}
+                  onMouseEnter={() => {
+                    this.handlePublicoHover("hoverTerceraEdad");
+                  }}
+                  onMouseLeave={() => {
+                    this.handlePublicoLeave("hoverTerceraEdad");
+                  }}
+                  className="col-4 text-center p-1"
+                  style={{
+                    background: this.state.publicoDisponible.terceraEdad
+                      ? "#28a745"
+                      : this.state.hoverTerceraEdad
+                      ? "#545b62"
+                      : ""
+                  }}
+                >
+                  <img src={imgTerceraEdad} className="w-100 h-100" />
+                  <small className="font-weight-bold">
+                    {trans("registerFormCuidadores.terceraEdad")}
+                  </small>
+                </div>
+                <div
+                  onClick={() => {
+                    this.handlePublicoChange("necesidadEspecial");
+                  }}
+                  onMouseEnter={() => {
+                    this.handlePublicoHover("hoverNecesidadEspecial");
+                  }}
+                  onMouseLeave={() => {
+                    this.handlePublicoLeave("hoverNecesidadEspecial");
+                  }}
+                  className="col-4 text-center p-1"
+                  style={{
+                    background: this.state.publicoDisponible.necesidadEspecial
+                      ? "#28a745"
+                      : this.state.hoverNecesidadEspecial
+                      ? "#545b62"
+                      : ""
+                  }}
+                >
+                  <img src={imgNecesidadEspecial} className="w-100 h-100" />
+                  <small className="font-weight-bold">
+                    {trans("registerFormCuidadores.necesidadEspecial")}
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div className="form-group col">
+              {/* Insertar precioPublico disponibles aqui */}
+              <label className="w-100 text-center lead">
+                {trans("registerFormCuidadores.precioPorPublico")}:
+              </label>
+              <div className="list-group md-2">
+                {this.state.publicoDisponible.nino ? (
+                  <div className="list-group-item form-group text-center p-1">
+                    <small>
+                      <b>{trans("registerFormCuidadores.ninos")}</b>
+                    </small>
+                    <input
+                      onChange={event => {
+                        this.handlePrecioChange("nino", event.target.value);
+                      }}
+                      className="form-control"
+                      type="number"
+                      placeholder="Prezioa €/h"
+                    />
+                  </div>
+                ) : (
+                  <div className="list-group-item form-group text-center p-1">
+                    <small>
+                      <b>{trans("registerFormCuidadores.ninos")}</b>
+                    </small>
+                    <input
+                      onChange={event => {
+                        this.handlePrecioChange("nino", event.target.value);
+                      }}
+                      className="form-control"
+                      disabled
+                      type="number"
+                      placeholder="Prezioa €/h"
+                    />
+                  </div>
+                )}
+
+                {this.state.publicoDisponible.terceraEdad ? (
+                  <div className="list-group-item form-group text-center p-1">
+                    <small>
+                      <b>{trans("registerFormCuidadores.terceraEdad")}</b>
+                    </small>
+                    <input
+                      onChange={event => {
+                        this.handlePrecioChange(
+                          "terceraEdad",
+                          event.target.value
+                        );
+                      }}
+                      className="form-control"
+                      type="number"
+                      placeholder="Prezioa €/h"
+                    />
+                  </div>
+                ) : (
+                  <div className="list-group-item form-group text-center p-1">
+                    <small>
+                      <b>{trans("registerFormCuidadores.terceraEdad")}</b>
+                    </small>
+                    <input
+                      onChange={event => {
+                        this.handlePrecioChange(
+                          "terceraEdad",
+                          event.target.value
+                        );
+                      }}
+                      disabled
+                      className="form-control"
+                      type="number"
+                      placeholder="Prezioa €/h"
+                    />
+                  </div>
+                )}
+
+                {this.state.publicoDisponible.necesidadEspecial ? (
+                  <div className="list-group-item form-group text-center p-1">
+                    <small>
+                      <b>{trans("registerFormCuidadores.necesidadEspecial")}</b>
+                    </small>
+                    <input
+                      onChange={event => {
+                        this.handlePrecioChange(
+                          "necesidadEspecial",
+                          event.target.value
+                        );
+                      }}
+                      className="form-control"
+                      type="number"
+                      placeholder="Prezioa €/h"
+                    />
+                  </div>
+                ) : (
+                  <div className="list-group-item form-group text-center p-1">
+                    <small>
+                      <b>{trans("registerFormCuidadores.necesidadEspecial")}</b>
+                    </small>
+                    <input
+                      onChange={event => {
+                        this.handlePrecioChange(
+                          "necesidadEspecial",
+                          event.target.value
+                        );
+                      }}
+                      disabled
+                      className="form-control"
+                      type="number"
+                      placeholder="Prezioa €/h"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         <div id="loaderOrButton" className="w-100 mt-5 text-center">
             {this.state.isLoading ? (
               <img
