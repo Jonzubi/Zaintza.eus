@@ -34,11 +34,7 @@ class FormAnuncio extends React.Component {
         horaInicio: "00:00",
         horaFin: "00:00"
       }],
-      publicoDisponible: {
-        nino: false,
-        terceraEdad: false,
-        necesidadEspecial: false
-      },
+      publicoDisponible: "",
       precioPorPublico: {
         nino: "",
         terceraEdad: "",
@@ -253,10 +249,8 @@ class FormAnuncio extends React.Component {
   }
 
   handlePublicoChange(publico) {
-    let auxPublicoDisponible = this.state.publicoDisponible;
-    auxPublicoDisponible[publico] = !auxPublicoDisponible[publico];
     this.setState({
-      publicoDisponible: auxPublicoDisponible
+      publicoDisponible: publico
     });
   }
 
@@ -532,7 +526,7 @@ class FormAnuncio extends React.Component {
                   }}
                   className="col-4 text-center p-1"
                   style={{
-                    background: this.state.publicoDisponible.nino
+                    background: this.state.publicoDisponible === 'nino'
                       ? "#28a745"
                       : this.state.hoverNino
                       ? "#545b62"
@@ -556,7 +550,7 @@ class FormAnuncio extends React.Component {
                   }}
                   className="col-4 text-center p-1"
                   style={{
-                    background: this.state.publicoDisponible.terceraEdad
+                    background: this.state.publicoDisponible === 'terceraEdad'
                       ? "#28a745"
                       : this.state.hoverTerceraEdad
                       ? "#545b62"
@@ -580,7 +574,7 @@ class FormAnuncio extends React.Component {
                   }}
                   className="col-4 text-center p-1"
                   style={{
-                    background: this.state.publicoDisponible.necesidadEspecial
+                    background: this.state.publicoDisponible === 'necesidadEspecial'
                       ? "#28a745"
                       : this.state.hoverNecesidadEspecial
                       ? "#545b62"
@@ -600,7 +594,7 @@ class FormAnuncio extends React.Component {
                 {trans("registerFormCuidadores.precioPorPublico")}:
               </label>
               <div className="list-group md-2">
-                {this.state.publicoDisponible.nino ? (
+                {this.state.publicoDisponible === 'nino' ? (
                   <div className="list-group-item form-group text-center p-1">
                     <small>
                       <b>{trans("registerFormCuidadores.ninos")}</b>
@@ -631,7 +625,7 @@ class FormAnuncio extends React.Component {
                   </div>
                 )}
 
-                {this.state.publicoDisponible.terceraEdad ? (
+                {this.state.publicoDisponible === 'terceraEdad' ? (
                   <div className="list-group-item form-group text-center p-1">
                     <small>
                       <b>{trans("registerFormCuidadores.terceraEdad")}</b>
@@ -668,7 +662,7 @@ class FormAnuncio extends React.Component {
                   </div>
                 )}
 
-                {this.state.publicoDisponible.necesidadEspecial ? (
+                {this.state.publicoDisponible === 'necesidadEspecial' ? (
                   <div className="list-group-item form-group text-center p-1">
                     <small>
                       <b>{trans("registerFormCuidadores.necesidadEspecial")}</b>
