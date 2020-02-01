@@ -35,11 +35,7 @@ class FormAnuncio extends React.Component {
         horaFin: "00:00"
       }],
       publicoDisponible: "",
-      precioPorPublico: {
-        nino: "",
-        terceraEdad: "",
-        necesidadEspecial: ""
-      },
+      precioCuidado: "", 
       hoverNino: false,
       hoverTerceraEdad: false,
       hoverNecesidadEspecial: false,
@@ -254,11 +250,9 @@ class FormAnuncio extends React.Component {
     });
   }
 
-  handlePrecioChange(atributo, valor) {
-    let auxPrecioPublico = this.state.precioPorPublico;
-    auxPrecioPublico[atributo] = valor;
+  handlePrecioChange(valor) {
     this.setState({
-      precioPorPublico: auxPrecioPublico
+      precioCuidado: valor
     });
   }
 
@@ -516,7 +510,7 @@ class FormAnuncio extends React.Component {
               <div className="row md-2">
                 <div
                   onClick={() => {
-                    this.handlePublicoChange("nino");
+                    this.handlePublicoChange("ninos");
                   }}
                   onMouseEnter={() => {
                     this.handlePublicoHover("hoverNino");
@@ -526,7 +520,7 @@ class FormAnuncio extends React.Component {
                   }}
                   className="col-4 text-center p-1"
                   style={{
-                    background: this.state.publicoDisponible === 'nino'
+                    background: this.state.publicoDisponible === 'ninos'
                       ? "#28a745"
                       : this.state.hoverNino
                       ? "#545b62"
@@ -594,14 +588,14 @@ class FormAnuncio extends React.Component {
                 {trans("registerFormCuidadores.precioPorPublico")}:
               </label>
               <div className="list-group md-2">
-                {this.state.publicoDisponible === 'nino' ? (
+                {this.state.publicoDisponible !== '' ? (
                   <div className="list-group-item form-group text-center p-1">
                     <small>
-                      <b>{trans("registerFormCuidadores.ninos")}</b>
+                      <b>{trans(`registerFormCuidadores.${this.state.publicoDisponible}`)}</b>
                     </small>
                     <input
                       onChange={event => {
-                        this.handlePrecioChange("nino", event.target.value);
+                        this.handlePrecioChange(event.target.value);
                       }}
                       className="form-control"
                       type="number"
@@ -610,89 +604,12 @@ class FormAnuncio extends React.Component {
                   </div>
                 ) : (
                   <div className="list-group-item form-group text-center p-1">
-                    <small>
-                      <b>{trans("registerFormCuidadores.ninos")}</b>
-                    </small>
                     <input
                       onChange={event => {
-                        this.handlePrecioChange("nino", event.target.value);
+                        this.handlePrecioChange( event.target.value);
                       }}
                       className="form-control"
                       disabled
-                      type="number"
-                      placeholder="Prezioa €/h"
-                    />
-                  </div>
-                )}
-
-                {this.state.publicoDisponible === 'terceraEdad' ? (
-                  <div className="list-group-item form-group text-center p-1">
-                    <small>
-                      <b>{trans("registerFormCuidadores.terceraEdad")}</b>
-                    </small>
-                    <input
-                      onChange={event => {
-                        this.handlePrecioChange(
-                          "terceraEdad",
-                          event.target.value
-                        );
-                      }}
-                      className="form-control"
-                      type="number"
-                      placeholder="Prezioa €/h"
-                    />
-                  </div>
-                ) : (
-                  <div className="list-group-item form-group text-center p-1">
-                    <small>
-                      <b>{trans("registerFormCuidadores.terceraEdad")}</b>
-                    </small>
-                    <input
-                      onChange={event => {
-                        this.handlePrecioChange(
-                          "terceraEdad",
-                          event.target.value
-                        );
-                      }}
-                      disabled
-                      className="form-control"
-                      type="number"
-                      placeholder="Prezioa €/h"
-                    />
-                  </div>
-                )}
-
-                {this.state.publicoDisponible === 'necesidadEspecial' ? (
-                  <div className="list-group-item form-group text-center p-1">
-                    <small>
-                      <b>{trans("registerFormCuidadores.necesidadEspecial")}</b>
-                    </small>
-                    <input
-                      onChange={event => {
-                        this.handlePrecioChange(
-                          "necesidadEspecial",
-                          event.target.value
-                        );
-                      }}
-                      className="form-control"
-                      type="number"
-                      placeholder="Prezioa €/h"
-                    />
-                  </div>
-                ) : (
-                  <div className="list-group-item form-group text-center p-1">
-                    <small>
-                      <b>{trans("registerFormCuidadores.necesidadEspecial")}</b>
-                    </small>
-                    <input
-                      onChange={event => {
-                        this.handlePrecioChange(
-                          "necesidadEspecial",
-                          event.target.value
-                        );
-                      }}
-                      disabled
-                      className="form-control"
                       type="number"
                       placeholder="Prezioa €/h"
                     />
