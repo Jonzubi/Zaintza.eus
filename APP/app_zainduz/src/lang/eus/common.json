@@ -175,7 +175,9 @@
     "horasCuidado": "Zaintza ordutegia",
     "puebloCuidado": "Zaintza herria",
     "puebloSeleccionado": "Herria",
-    "eliminarPueblo": "Kendu herria"
+    "eliminarPueblo": "Kendu herria",
+    "publicoCuidado": "Ze eratako zaindua da?",
+    "precioCuidado": "Zaintza prezioa"
   },
   "tablaClientes":{
     "addAnuncio": "Eskaera sortu"

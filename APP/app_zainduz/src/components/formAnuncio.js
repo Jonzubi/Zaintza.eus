@@ -34,7 +34,7 @@ class FormAnuncio extends React.Component {
         horaInicio: "00:00",
         horaFin: "00:00"
       }],
-      publicoDisponible: "",
+      publicoCuidado: "",
       precioCuidado: "", 
       hoverNino: false,
       hoverTerceraEdad: false,
@@ -246,7 +246,7 @@ class FormAnuncio extends React.Component {
 
   handlePublicoChange(publico) {
     this.setState({
-      publicoDisponible: publico
+      publicoCuidado: publico
     });
   }
 
@@ -505,7 +505,7 @@ class FormAnuncio extends React.Component {
             <div className="form-group col">
               {/* Insertar publico disponibles aqui */}
               <label className="w-100 text-center lead">
-                {trans("registerFormCuidadores.publicoDisponible")}:
+                {trans("formAnuncio.publicoCuidado")}
               </label>
               <div className="row md-2">
                 <div
@@ -520,7 +520,7 @@ class FormAnuncio extends React.Component {
                   }}
                   className="col-4 text-center p-1"
                   style={{
-                    background: this.state.publicoDisponible === 'ninos'
+                    background: this.state.publicoCuidado === 'ninos'
                       ? "#28a745"
                       : this.state.hoverNino
                       ? "#545b62"
@@ -544,7 +544,7 @@ class FormAnuncio extends React.Component {
                   }}
                   className="col-4 text-center p-1"
                   style={{
-                    background: this.state.publicoDisponible === 'terceraEdad'
+                    background: this.state.publicoCuidado === 'terceraEdad'
                       ? "#28a745"
                       : this.state.hoverTerceraEdad
                       ? "#545b62"
@@ -568,7 +568,7 @@ class FormAnuncio extends React.Component {
                   }}
                   className="col-4 text-center p-1"
                   style={{
-                    background: this.state.publicoDisponible === 'necesidadEspecial'
+                    background: this.state.publicoCuidado === 'necesidadEspecial'
                       ? "#28a745"
                       : this.state.hoverNecesidadEspecial
                       ? "#545b62"
@@ -585,13 +585,13 @@ class FormAnuncio extends React.Component {
             <div className="form-group col">
               {/* Insertar precioPublico disponibles aqui */}
               <label className="w-100 text-center lead">
-                {trans("registerFormCuidadores.precioPorPublico")}:
+                {trans("formAnuncio.precioCuidado")}:
               </label>
               <div className="list-group md-2">
-                {this.state.publicoDisponible !== '' ? (
+                {this.state.publicoCuidado !== '' ? (
                   <div className="list-group-item form-group text-center p-1">
                     <small>
-                      <b>{trans(`registerFormCuidadores.${this.state.publicoDisponible}`)}</b>
+                      <b>{trans(`registerFormCuidadores.${this.state.publicoCuidado}`)}</b>
                     </small>
                     <input
                       onChange={event => {
@@ -627,7 +627,7 @@ class FormAnuncio extends React.Component {
               />
             ) : (
               <button
-                onClick={() => cogoToast.info("Handle subir anuncio")}
+                onClick={() => console.log(this.state)}
                 type="button"
                 className="w-100 btn btn-success "
               >
