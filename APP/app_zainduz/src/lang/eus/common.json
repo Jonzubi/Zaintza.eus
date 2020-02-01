@@ -171,7 +171,11 @@
     "titulo": "Izenburua",
     "descripcion": "Deskribapena",
     "eligeUnaFoto": "Aukeratu irudi bat",
-    "eligeOtraFoto": "Aldatu irudia"
+    "eligeOtraFoto": "Aldatu irudia",
+    "horasCuidado": "Zaintza ordutegia",
+    "puebloCuidado": "Zaintza herria",
+    "puebloSeleccionado": "Herria",
+    "eliminarPueblo": "Kendu herria"
   },
   "tablaClientes":{
     "addAnuncio": "Eskaera sortu"

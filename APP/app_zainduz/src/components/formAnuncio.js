@@ -26,7 +26,11 @@ class FormAnuncio extends React.Component {
       txtDescripcion: "",
       auxAddPueblo: "",
       suggestionsPueblos: [],
-      diasDisponible: [],
+      diasDisponible: [{
+        dia: 0,
+        horaInicio: "00:00",
+        horaFin: "00:00"
+      }],
       ubicaciones: [],
       error: false
     };
@@ -150,9 +154,10 @@ class FormAnuncio extends React.Component {
         return;
       }
     }
-    this.state.ubicaciones.push(pueblo);
+    let auxUbicaciones = this.state.ubicaciones
+    auxUbicaciones[0]= pueblo;
     this.setState({
-      ubicaciones: this.state.ubicaciones,
+      ubicaciones: auxUbicaciones,
       auxAddPueblo: ""
     });
   }
@@ -323,7 +328,7 @@ class FormAnuncio extends React.Component {
           <div className="form-group col">
             {/* Insertar dias disponibles aqui */}
             <label className="w-100 text-center lead">
-              {trans("registerFormCuidadores.diasDisponible")}:
+              {trans("formAnuncio.horasCuidado")}:
             </label>
             <br />
             <div className="w-100 mt-2" id="diasDisponible">
@@ -417,7 +422,7 @@ class FormAnuncio extends React.Component {
           <div className="form-group col">
             {/* Insertar ubicaciones disponibles aqui */}
             <label htmlFor="txtAddPueblos" className="w-100 text-center lead">
-              {trans("registerFormCuidadores.pueblosDisponible")}:
+              {trans("formAnuncio.puebloCuidado")}:
             </label>{" "}
             (<span className="text-danger font-weight-bold">*</span>)
             <div class="form-group mt-2">
@@ -434,7 +439,7 @@ class FormAnuncio extends React.Component {
               />
               {this.state.ubicaciones.length > 0 ? (
                 <h5 className="mt-2 lead">
-                  {trans("registerFormCuidadores.pueblosSeleccionados")}:
+                  {trans("formAnuncio.puebloSeleccionado")}:
                 </h5>
               ) : (
                 ""
@@ -450,7 +455,7 @@ class FormAnuncio extends React.Component {
                   onClick={this.handleRemovePueblo}
                   className="mt-4 btn btn-danger float-right text-light"
                 >
-                  {trans("registerFormCuidadores.eliminarPueblo")}{" "}
+                  {trans("formAnuncio.eliminarPueblo")}{" "}
                   <FontAwesomeIcon icon={faMinusCircle} />
                 </a>
               ) : (
