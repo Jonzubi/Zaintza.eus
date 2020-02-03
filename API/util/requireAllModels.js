@@ -2,6 +2,7 @@ module.exports = conexion => {
     let modelos = {};
 
     modelos.acuerdo = require("../src/models/acuerdo")(conexion);
+    modelos.anuncio = require("../src/models/anuncio")(conexion);
     modelos.historicoacuerdo = require("../src/models/historicoAcuerdo")(conexion);
     modelos.cliente = require("../src/models/cliente")(conexion);
     modelos.historicocliente = require("../src/models/historicocliente")(conexion);

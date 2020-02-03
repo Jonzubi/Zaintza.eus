@@ -358,3 +358,41 @@ exports.patchCliente = async (req, res, modelos) => {
       res.end();
     });  
 }
+
+exports.postAnuncio = async (req, res, modelos) => {
+  const { titulo, descripcion, pueblo, publico, imgAnuncio } = req.body;
+
+  if(typeof titulo === 'undefined' ||
+     typeof descripcion === 'undefined' ||
+     typeof publico === 'undefined' ||
+     typeof pueblo === 'undefined'){
+      res.writeHead(500, headerResponse);
+      res.write("Parametros incorrectos");
+      res.end();
+      return;
+     }
+
+  let codImagen;
+  let formData = Object.assign({}, req.body);
+  if(imgAnuncio.length > 0){
+    codImagen = getRandomString(20);
+    writeImage(codImagen, imgAnuncio);
+    formData.direcFoto = codImagen;
+  }
+  
+  const modeloAnuncio = modelos.anuncio;
+  modeloAnuncio
+    .save()
+    .then(doc => {
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(doc));
+    })
+    .catch(err => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+    })
+    .finally(fin => {
+      res.end();
+    });  
+}

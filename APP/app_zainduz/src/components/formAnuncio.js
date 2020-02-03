@@ -29,7 +29,6 @@ class FormAnuncio extends React.Component {
     super(props);
 
     this.requiredStates = [
-      "imgContact",
       "txtTitulo",
       "txtDescripcion",
       "ubicaciones",
@@ -37,7 +36,6 @@ class FormAnuncio extends React.Component {
     ]
 
     this.requiredStatesTraduc = {
-      imgContact: "formAnuncio.imagen",
       txtTitulo: "formAnuncio.titulo",
       txtDescripcion: "formAnuncio.descripcion",
       ubicaciones: "formAnuncio.puebloSeleccionado",
@@ -45,7 +43,7 @@ class FormAnuncio extends React.Component {
     }
 
     this.state = {
-      imgContact: null,
+      imgAnuncio: null,
       txtTitulo: "",
       txtDescripcion: "",
       auxAddPueblo: "",
@@ -110,7 +108,7 @@ class FormAnuncio extends React.Component {
       picture.shift();
     }
     this.setState({
-      imgContact: picture
+      imgAnuncio: picture
     });
   }
 
@@ -345,30 +343,30 @@ class FormAnuncio extends React.Component {
         <div className="form-group d-flex justify-content-center position-relative">
           <ImageUploader
             fileContainerStyle={
-              this.state.imgContact != null ? { background: "#28a745" } : {}
+              this.state.imgAnuncio != null ? { background: "#28a745" } : {}
             }
             buttonClassName={
-              this.state.imgContact != null ? "bg-light text-dark" : ""
+              this.state.imgAnuncio != null ? "bg-light text-dark" : ""
             }
             errorClass="bg-danger text-light"
             fileSizeError="handiegia da"
             fileTypeError="ez du formatu zuzena"
             singleImage={true}
             label={
-              this.state.imgContact != null
+              this.state.imgAnuncio != null
                 ? "Gehienez: 5MB | " +
-                  this.state.imgContact[0].name +
+                  this.state.imgAnuncio[0].name +
                   " (" +
-                  (this.state.imgContact[0].size / 1024 / 1024).toFixed(2) +
+                  (this.state.imgAnuncio[0].size / 1024 / 1024).toFixed(2) +
                   " MB)"
                 : "Gehienez: 5MB | Gomendaturiko dimentsioa (288x300)"
             }
             labelClass={
-              this.state.imgContact != null ? "text-light font-weight-bold" : ""
+              this.state.imgAnuncio != null ? "text-light font-weight-bold" : ""
             }
             withIcon={true}
             buttonText={
-              this.state.imgContact != null
+              this.state.imgAnuncio != null
                 ? i18next.t("formAnuncio.eligeOtraFoto")
                 : i18next.t("formAnuncio.eligeUnaFoto")
             }
