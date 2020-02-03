@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from 'react-redux';
 import cogoToast from "cogo-toast";
-import { trans } from "../util/funciones";
+import { trans, toBase64 } from "../util/funciones";
 import ImageUploader from "react-images-upload";
 import i18next from "i18next";
 import TimeInput from "react-time-input";
@@ -19,6 +19,7 @@ import ipMaquina from "../util/ipMaquinaAPI";
 import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
 import imgTerceraEdad from "../util/images/terceraEdad.png";
 import imgNino from "../util/images/nino.png";
+import Axios from "axios";
 
 const mapStateToProps = state => {
 
@@ -276,7 +277,8 @@ class FormAnuncio extends React.Component {
     });
   }
 
-  handleSubirAnuncio = () => {
+  async handleSubirAnuncio(){
+    const { imgAnuncio, txtTitulo, precioCuidado, txtDescripcion, diasDisponible, publicoCuidado, ubicaciones } = this.state;
     for(let clave in this.requiredStates) {
       //Hago primero la comprobacion de null ya que .length no existe en un null y peta.
       if(this.state[this.requiredStates[clave]] === null){
@@ -304,8 +306,37 @@ class FormAnuncio extends React.Component {
         return;
       }
     }
+    let imgAnuncioB64;
+    if(typeof imgAnuncio[0] !== 'undefined'){
+      imgAnuncioB64 = await toBase64(imgAnuncio[0]);
+    }
+
+    if (imgAnuncioB64 instanceof Error) {
+      cogoToast.error(<h5>{trans("registerFormCuidadores.errorImagen")}</h5>);
+      return;
+    }
 
     //Aqui ira la llamada a la procedure para subir el anuncio
+    let formData = {
+      imgAnuncio: imgAnuncioB64,
+      titulo: txtTitulo,
+      descripcion: txtDescripcion,
+      horario: diasDisponible,
+      pueblo: ubicaciones[0],
+      publico: publicoCuidado,
+      precio: precioCuidado
+    }
+
+    console.log(formData);
+
+    await Axios.post('http://' + ipMaquina + ':3001/api/procedures/postAnuncio', formData)
+      .catch(err => {
+      cogoToast.error(<h5>{trans('tablaCuidadores.errorGeneral')}</h5>)
+      });
+
+    cogoToast.success(
+    <h5>{trans('formAnuncio.anuncioSubido')}</h5>
+    );
   }
 
   render() {

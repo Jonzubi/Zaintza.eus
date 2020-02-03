@@ -178,7 +178,8 @@
     "puebloSeleccionado": "Herria",
     "eliminarPueblo": "Kendu herria",
     "publicoCuidado": "Ze eratako zaindua da?",
-    "precioCuidado": "Zaintza prezioa"
+    "precioCuidado": "Zaintza prezioa",
+    "anuncioSubido": "Zaintza eskaera argitaratu duzu"
   },
   "tablaClientes":{
     "addAnuncio": "Eskaera sortu"

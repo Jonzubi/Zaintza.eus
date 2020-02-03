@@ -1,6 +1,5 @@
-const mongoose = require('mongoose');
 module.exports = (conexion) => {
-    const Schema = mongoose.Schema;
+    const Schema = conexion.Schema;
 
     const anuncio = new Schema({
         direcFoto: String,
@@ -17,7 +16,7 @@ module.exports = (conexion) => {
             type: String,
             required: true
         },
-        tipoPublico: {
+        publico: {
             type: String,
             required: true
         },

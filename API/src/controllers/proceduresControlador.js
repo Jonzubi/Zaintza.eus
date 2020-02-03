@@ -381,7 +381,8 @@ exports.postAnuncio = async (req, res, modelos) => {
   }
   
   const modeloAnuncio = modelos.anuncio;
-  modeloAnuncio
+  console.log(modeloAnuncio);
+  modeloAnuncio(formData)
     .save()
     .then(doc => {
       res.writeHead(200, headerResponse);

@@ -18,6 +18,8 @@ module.exports = (app, modelos) => {
 
   app.route("/api/procedures/postNewCliente").post((req, res) => proceduresControlador.postNewCliente(req, res, modelos));
 
+  app.route("/api/procedures/postAnuncio").post((req, res) => proceduresControlador.postAnuncio(req, res, modelos));
+
   app.route("/api/procedures/patchCuidador/:id").patch((req, res) => proceduresControlador.patchCuidador(req, res, modelos));
 
   app.route("/api/procedures/patchCliente/:id").patch((req, res) => proceduresControlador.patchCliente(req, res, modelos));
