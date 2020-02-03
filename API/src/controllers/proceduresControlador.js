@@ -360,12 +360,13 @@ exports.patchCliente = async (req, res, modelos) => {
 }
 
 exports.postAnuncio = async (req, res, modelos) => {
-  const { titulo, descripcion, pueblo, publico, imgAnuncio } = req.body;
+  const { titulo, descripcion, pueblo, publico, imgAnuncio, idCliente } = req.body;
 
   if(typeof titulo === 'undefined' ||
      typeof descripcion === 'undefined' ||
      typeof publico === 'undefined' ||
-     typeof pueblo === 'undefined'){
+     typeof pueblo === 'undefined' ||
+     typeof idCliente === 'undefined'){
       res.writeHead(500, headerResponse);
       res.write("Parametros incorrectos");
       res.end();

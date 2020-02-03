@@ -22,7 +22,9 @@ import imgNino from "../util/images/nino.png";
 import Axios from "axios";
 
 const mapStateToProps = state => {
-
+  return {
+    _id: state.user._id
+  }
 }
 
 class FormAnuncio extends React.Component {
@@ -279,6 +281,7 @@ class FormAnuncio extends React.Component {
 
   async handleSubirAnuncio(){
     const { imgAnuncio, txtTitulo, precioCuidado, txtDescripcion, diasDisponible, publicoCuidado, ubicaciones } = this.state;
+    const { _id } = this.props;
     for(let clave in this.requiredStates) {
       //Hago primero la comprobacion de null ya que .length no existe en un null y peta.
       if(this.state[this.requiredStates[clave]] === null){
@@ -318,6 +321,7 @@ class FormAnuncio extends React.Component {
 
     //Aqui ira la llamada a la procedure para subir el anuncio
     let formData = {
+      idCliente: _id,
       imgAnuncio: imgAnuncioB64,
       titulo: txtTitulo,
       descripcion: txtDescripcion,

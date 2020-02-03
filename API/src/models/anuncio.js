@@ -2,6 +2,10 @@ module.exports = (conexion) => {
     const Schema = conexion.Schema;
 
     const anuncio = new Schema({
+        idCliente: {
+            type: String,
+            required: true
+        },
         direcFoto: String,
         titulo: {
             type: String,
