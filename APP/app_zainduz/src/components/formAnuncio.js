@@ -20,10 +20,17 @@ import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.p
 import imgTerceraEdad from "../util/images/terceraEdad.png";
 import imgNino from "../util/images/nino.png";
 import Axios from "axios";
+import { changeFormContent } from "../redux/actions/app";
 
 const mapStateToProps = state => {
   return {
     _id: state.user._id
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return{
+    changeFormContent: (form) => dispatch(changeFormContent(form))
   }
 }
 
@@ -62,7 +69,8 @@ class FormAnuncio extends React.Component {
       hoverTerceraEdad: false,
       hoverNecesidadEspecial: false,
       ubicaciones: [],
-      error: false
+      error: false,
+      isLoading: false
     };
 
     this.onClose = this.onClose.bind(this);
@@ -281,7 +289,7 @@ class FormAnuncio extends React.Component {
 
   async handleSubirAnuncio(){
     const { imgAnuncio, txtTitulo, precioCuidado, txtDescripcion, diasDisponible, publicoCuidado, ubicaciones } = this.state;
-    const { _id } = this.props;
+    const { _id, changeFormContent } = this.props;
     for(let clave in this.requiredStates) {
       //Hago primero la comprobacion de null ya que .length no existe en un null y peta.
       if(this.state[this.requiredStates[clave]] === null){
@@ -309,38 +317,47 @@ class FormAnuncio extends React.Component {
         return;
       }
     }
-    let imgAnuncioB64;
-    if(typeof imgAnuncio[0] !== 'undefined'){
-      imgAnuncioB64 = await toBase64(imgAnuncio[0]);
-    }
 
-    if (imgAnuncioB64 instanceof Error) {
-      cogoToast.error(<h5>{trans("registerFormCuidadores.errorImagen")}</h5>);
-      return;
-    }
+    this.setState({
+      isLoading: true
+    }, async () => {
+      let imgAnuncioB64;
+      if(typeof imgAnuncio[0] !== 'undefined'){
+        imgAnuncioB64 = await toBase64(imgAnuncio[0]);
+      }
 
-    //Aqui ira la llamada a la procedure para subir el anuncio
-    let formData = {
-      idCliente: _id,
-      imgAnuncio: imgAnuncioB64,
-      titulo: txtTitulo,
-      descripcion: txtDescripcion,
-      horario: diasDisponible,
-      pueblo: ubicaciones[0],
-      publico: publicoCuidado,
-      precio: precioCuidado
-    }
+      if (imgAnuncioB64 instanceof Error) {
+        cogoToast.error(<h5>{trans("registerFormCuidadores.errorImagen")}</h5>);
+        return;
+      }
 
-    console.log(formData);
+      //Aqui ira la llamada a la procedure para subir el anuncio
+      let formData = {
+        idCliente: _id,
+        imgAnuncio: imgAnuncioB64,
+        titulo: txtTitulo,
+        descripcion: txtDescripcion,
+        horario: diasDisponible,
+        pueblo: ubicaciones[0],
+        publico: publicoCuidado,
+        precio: precioCuidado
+      }
 
-    await Axios.post('http://' + ipMaquina + ':3001/api/procedures/postAnuncio', formData)
-      .catch(err => {
-      cogoToast.error(<h5>{trans('tablaCuidadores.errorGeneral')}</h5>)
-      });
+      console.log(formData);
 
-    cogoToast.success(
-    <h5>{trans('formAnuncio.anuncioSubido')}</h5>
-    );
+      await Axios.post('http://' + ipMaquina + ':3001/api/procedures/postAnuncio', formData)
+        .catch(err => {
+        cogoToast.error(<h5>{trans('tablaCuidadores.errorGeneral')}</h5>)
+        });
+
+      cogoToast.success(
+      <h5>{trans('formAnuncio.anuncioSubido')}</h5>
+      );
+
+      changeFormContent('tabla');
+    });
+
+    
   }
 
   render() {
@@ -727,4 +744,4 @@ class FormAnuncio extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, null)(FormAnuncio);
+export default connect(mapStateToProps, mapDispatchToProps)(FormAnuncio);
