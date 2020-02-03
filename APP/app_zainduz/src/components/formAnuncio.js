@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from 'react-redux';
 import cogoToast from "cogo-toast";
 import { trans } from "../util/funciones";
 import ImageUploader from "react-images-upload";
@@ -19,9 +20,29 @@ import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.p
 import imgTerceraEdad from "../util/images/terceraEdad.png";
 import imgNino from "../util/images/nino.png";
 
+const mapStateToProps = state => {
+
+}
+
 class FormAnuncio extends React.Component {
   constructor(props) {
     super(props);
+
+    this.requiredStates = [
+      "imgContact",
+      "txtTitulo",
+      "txtDescripcion",
+      "ubicaciones",
+      "publicoCuidado"
+    ]
+
+    this.requiredStatesTraduc = {
+      imgContact: "formAnuncio.imagen",
+      txtTitulo: "formAnuncio.titulo",
+      txtDescripcion: "formAnuncio.descripcion",
+      ubicaciones: "formAnuncio.puebloSeleccionado",
+      publicoCuidado: "formAnuncio.publicoCuidado"
+    }
 
     this.state = {
       imgContact: null,
@@ -65,7 +86,8 @@ class FormAnuncio extends React.Component {
     this.handlePublicoChange = this.handlePublicoChange.bind(this);
     this.handlePublicoHover = this.handlePublicoHover.bind(this);
     this.handlePublicoLeave = this.handlePublicoLeave.bind(this);
-    this.handlePrecioChange = this.handlePrecioChange.bind(this)
+    this.handlePrecioChange = this.handlePrecioChange.bind(this);
+    this.handleSubirAnuncio = this.handleSubirAnuncio.bind(this);
   }
 
   onClose() {
@@ -254,6 +276,38 @@ class FormAnuncio extends React.Component {
     this.setState({
       precioCuidado: valor
     });
+  }
+
+  handleSubirAnuncio = () => {
+    for(let clave in this.requiredStates) {
+      //Hago primero la comprobacion de null ya que .length no existe en un null y peta.
+      if(this.state[this.requiredStates[clave]] === null){
+        cogoToast.error(
+          <h5>
+            {trans("registerFormCuidadores.errorRellenaTodo")} (
+            {trans(this.requiredStatesTraduc[this.requiredStates[clave]])})
+          </h5>
+        );
+        this.setState({
+          error: true
+        });
+        return;
+      }
+      if(this.state[this.requiredStates[clave]].length === 0){
+        cogoToast.error(
+          <h5>
+            {trans("registerFormCuidadores.errorRellenaTodo")} (
+            {trans(this.requiredStatesTraduc[this.requiredStates[clave]])})
+          </h5>
+        );
+        this.setState({
+          error: true
+        });
+        return;
+      }
+    }
+
+    //Aqui ira la llamada a la procedure para subir el anuncio
   }
 
   render() {
@@ -502,7 +556,7 @@ class FormAnuncio extends React.Component {
           </div>
         </div>
         <div className="form-group row">
-            <div className="form-group col">
+            <div className={this.state.error ? "form-group col border border-danger" : "form-group col"}>
               {/* Insertar publico disponibles aqui */}
               <label className="w-100 text-center lead">
                 {trans("formAnuncio.publicoCuidado")}
@@ -627,7 +681,7 @@ class FormAnuncio extends React.Component {
               />
             ) : (
               <button
-                onClick={() => console.log(this.state)}
+                onClick={() => this.handleSubirAnuncio()}
                 type="button"
                 className="w-100 btn btn-success "
               >
@@ -640,4 +694,4 @@ class FormAnuncio extends React.Component {
   }
 }
 
-export default FormAnuncio;
+export default connect(mapStateToProps, null)(FormAnuncio);

@@ -169,6 +169,7 @@
   },
   "formAnuncio":{
     "titulo": "Izenburua",
+    "imagen": "Irudia",
     "descripcion": "Deskribapena",
     "eligeUnaFoto": "Aukeratu irudi bat",
     "eligeOtraFoto": "Aldatu irudia",
