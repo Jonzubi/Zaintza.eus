@@ -4,7 +4,8 @@ module.exports = (conexion) => {
     const anuncio = new Schema({
         idCliente: {
             type: String,
-            required: true
+            required: true,
+            ref: 'Cliente'
         },
         direcFoto: String,
         titulo: {

@@ -2,8 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { trans } from "../util/funciones";
 import { changeFormContent } from "../redux/actions/app";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 
 const mapStateToProps = state => {
   return {

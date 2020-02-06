@@ -111,6 +111,25 @@ exports.getUsuarioConPerfil = (req, res, modelos) => {
     });
 };
 
+exports.getAnunciosConPerfil = (req, res, modelos) => {
+  const modeloAnuncios = modelos.anuncio;
+
+  modeloAnuncios
+    .find()
+    .populate('idCliente')
+    .then(respuesta => {
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(respuesta));
+      res.end();
+    })
+    .catch(err => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+      res.end();
+    });
+};
+
 exports.postNewCuidador = async (req, res, modelos) => {
   const { email, contrasena, nombre, apellido1, apellido2,
           fechaNacimiento, sexo, descripcion, publicoDisponible, isPublic, precioPorPublico, diasDisponible,
