@@ -315,7 +315,6 @@ exports.patchCuidador = async (req, res, modelos) => {
   }
 
   const modeloCuidadores = modelos.cuidador;
-  console.log(formData);
   modeloCuidadores
     .findByIdAndUpdate(id, formData)
     .then(doc => {
@@ -401,7 +400,6 @@ exports.postAnuncio = async (req, res, modelos) => {
   }
   
   const modeloAnuncio = modelos.anuncio;
-  console.log(modeloAnuncio);
   modeloAnuncio(formData)
     .save()
     .then(doc => {

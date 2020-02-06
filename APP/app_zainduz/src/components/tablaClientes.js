@@ -2,6 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { trans } from "../util/funciones";
 import { changeFormContent } from "../redux/actions/app";
+import axios from 'axios';
+import cogoToast from 'cogo-toast';
+import ipMaquina from "../util/ipMaquinaAPI";
 
 const mapStateToProps = state => {
   return {
@@ -18,7 +21,22 @@ const mapDispatchToProps = dispatch => {
 class TablaClientes extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      jsonAnuncios: {}
+    };
+  }
+
+  componentDidMount(){
+    axios
+      .get('http://' + ipMaquina + ':3001/api/procedures/getAnunciosConPerfil')
+      .then(res => {
+        this.setState({
+          jsonAnuncios: res.data
+        });
+      })
+      .catch(err => {
+        cogoToast.error(<h5>{trans("notificaciones.servidorNoDisponible")}</h5>);
+      });
   }
 
   botonAddAnuncio = () => {
@@ -37,6 +55,8 @@ class TablaClientes extends React.Component {
   };
 
   render() {
+    const { jsonAnuncios } = this.state;
+    console.log(jsonAnuncios);
     return this.botonAddAnuncio();
   }
 }
