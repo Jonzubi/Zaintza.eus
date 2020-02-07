@@ -11,6 +11,8 @@ import {
   faCalendar,
   faHome
 } from "@fortawesome/free-solid-svg-icons";
+import Modal from "react-bootstrap/Modal";
+import ModalHeader from "react-bootstrap/ModalHeader";
 
 const mapStateToProps = state => {
   return {
@@ -28,7 +30,10 @@ class TablaAnuncios extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      jsonAnuncios: []
+      jsonAnuncios: [],
+      selectedAnuncio: null,
+      showModalTelefono: false,
+      showModalCalendar: false
     };
   }
 
@@ -65,7 +70,7 @@ class TablaAnuncios extends React.Component {
   };
 
   render() {
-    const { jsonAnuncios } = this.state;
+    const { jsonAnuncios, showModalTelefono, showModalCalendar } = this.state;
     console.log(jsonAnuncios);
     return (
       <div className="p-5">
@@ -101,20 +106,46 @@ class TablaAnuncios extends React.Component {
                 <h5>{anuncio.descripcion}</h5>
                 <div className="row">
                   <FontAwesomeIcon
+                    style={{cursor: 'pointer'}}
                     size={"2x"}
                     className="col text-success"
                     icon={faPhoneAlt}
+                    onClick={() => this.setState({
+                      showModalTelefono: true,
+                      selectedAnuncio: anuncio
+                    })}
                   />
                   <FontAwesomeIcon
+                    style={{cursor: 'pointer'}}
                     size={"2x"}
                     className="col text-success"
                     icon={faCalendar}
+                    onClick={() => this.setState({
+                      showModalCalendar: true,
+                      selectedAnuncio: anuncio
+                    })}
                   />
                 </div>
               </div>
             </div>
           );
         })}
+        <Modal
+          show={showModalTelefono}
+          onHide={() => this.setState({showModalTelefono: false})}
+        >
+          <ModalHeader closeButton>
+            Kontaktua
+          </ModalHeader>
+        </Modal>
+        <Modal
+          show={showModalCalendar}
+          onHide={() => this.setState({showModalCalendar: false})}
+        >
+          <ModalHeader closeButton>
+            Ordutegia
+          </ModalHeader>
+        </Modal>
       </div>
     );
   }
