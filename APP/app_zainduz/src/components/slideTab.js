@@ -3,7 +3,7 @@ import SwipeableViews from "react-swipeable-views";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import TablaCuidadores from "./tablaCuidadores";
-import TablaClientes from "./tablaClientes";
+import TablaAnuncios from "./tablaAnuncios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserMd, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import {trans} from "../util/funciones";
@@ -49,7 +49,7 @@ class SlideTab extends React.Component {
             <TablaCuidadores />
           </div>
           <div>
-            <TablaClientes />
+            <TablaAnuncios />
           </div>
         </SwipeableViews>
       </div>

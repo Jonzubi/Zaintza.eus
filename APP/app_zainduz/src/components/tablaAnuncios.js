@@ -18,7 +18,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-class TablaClientes extends React.Component {
+class TablaAnuncios extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,7 +47,7 @@ class TablaClientes extends React.Component {
         <div 
           className="d-flex justify-content-center btn btn-success"
           onClick= {() => changeFormContent('formAnuncio')}
-      >{trans('tablaClientes.addAnuncio')}</div>
+      >{trans('tablaAnuncios.addAnuncio')}</div>
       );
     }
 
@@ -61,4 +61,4 @@ class TablaClientes extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TablaClientes);
+export default connect(mapStateToProps, mapDispatchToProps)(TablaAnuncios);
