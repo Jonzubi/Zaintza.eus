@@ -159,7 +159,7 @@ class TablaAnuncios extends React.Component {
             <h5>Ordutegia</h5>
           </ModalHeader>
           <ModalBody className="d-flex align-middle justify-content-center">
-            {selectedAnuncio !== null ? selectedAnuncio.horario.map(horario => {
+            {selectedAnuncio !== null ? selectedAnuncio.horario.map(sesion => {
 
             }) : null }
           </ModalBody>

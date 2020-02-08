@@ -194,5 +194,14 @@
     "viernes": "Ostirala",
     "sabado": "Larunbata",
     "domingo": "Igandea"
+  },
+  "dias": {
+    "dia_0": "Igandea",
+    "dia_1": "Astelehena",
+    "dia_2": "Asteartea",
+    "dia_3": "Asteazkena",
+    "dia_4": "Osteguna",
+    "dia_5": "Ostirala",
+    "dia_6": "Larunbata"
   }
 }
