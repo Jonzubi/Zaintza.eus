@@ -10,7 +10,8 @@ import {
   faPhoneAlt,
   faCalendar,
   faMobileAlt,
-  faHome
+  faHome,
+  faUser
 } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/Modal";
 import ModalHeader from "react-bootstrap/ModalHeader";
@@ -143,8 +144,9 @@ class TablaAnuncios extends React.Component {
           </ModalHeader>
           <ModalBody className="d-flex align-middle justify-content-center">
             <div className="align-self-center row">
-              <FontAwesomeIcon className="col-3 mr-5 mb-5 text-success" size="2x" icon={faMobileAlt} />{selectedAnuncio !== null ? <span className="font-weight-bold">{selectedAnuncio.idCliente.telefono.movil.numero || trans('tablaAnuncios.noDefinido')}</span> : null}<br/>
-              <FontAwesomeIcon className="col-3 mr-5 text-success" size="2x" icon={faPhoneAlt} />{selectedAnuncio !== null ? <span className="font-weight-bold">{selectedAnuncio.idCliente.telefono.fijo.numero || trans('tablaAnuncios.noDefinido')}</span> : null}
+              <FontAwesomeIcon className="col-3 mb-5 text-success" size="2x" icon={faUser} />{selectedAnuncio !== null ? <span className="font-weight-bold col-9 text-center">{selectedAnuncio.idCliente.nombre + " " + selectedAnuncio.idCliente.apellido1}</span> : null}<br/>
+              <FontAwesomeIcon className="col-3 mb-5 text-success" size="2x" icon={faMobileAlt} />{selectedAnuncio !== null ? <span className="font-weight-bold col-9 text-center">{selectedAnuncio.idCliente.telefono.movil.numero || trans('tablaAnuncios.noDefinido')}</span> : null}<br/>
+              <FontAwesomeIcon className="col-3 text-success" size="2x" icon={faPhoneAlt} />{selectedAnuncio !== null ? <span className="font-weight-bold col-9 text-center">{selectedAnuncio.idCliente.telefono.fijo.numero || trans('tablaAnuncios.noDefinido')}</span> : null}
             </div>
           </ModalBody>
         </Modal>
