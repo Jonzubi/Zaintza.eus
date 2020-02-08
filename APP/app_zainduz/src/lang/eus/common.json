@@ -182,7 +182,8 @@
     "anuncioSubido": "Zaintza eskaera argitaratu duzu"
   },
   "tablaAnuncios":{
-    "addAnuncio": "Eskaera sortu"
+    "addAnuncio": "Eskaera sortu",
+    "noDefinido": "Ez definitua"
   },
   "dropDownDias":{
     "eligeDia": "Aukeratu eguna",

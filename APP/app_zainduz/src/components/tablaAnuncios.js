@@ -9,10 +9,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPhoneAlt,
   faCalendar,
+  faMobileAlt,
   faHome
 } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/Modal";
 import ModalHeader from "react-bootstrap/ModalHeader";
+import './styles/tablaAnuncios.css';
+import ModalBody from "react-bootstrap/ModalBody";
 
 const mapStateToProps = state => {
   return {
@@ -70,7 +73,7 @@ class TablaAnuncios extends React.Component {
   };
 
   render() {
-    const { jsonAnuncios, showModalTelefono, showModalCalendar } = this.state;
+    const { jsonAnuncios, showModalTelefono, showModalCalendar, selectedAnuncio } = this.state;
     console.log(jsonAnuncios);
     return (
       <div className="p-5">
@@ -131,20 +134,33 @@ class TablaAnuncios extends React.Component {
           );
         })}
         <Modal
+          className="modalAnuncio"
           show={showModalTelefono}
           onHide={() => this.setState({showModalTelefono: false})}
         >
           <ModalHeader closeButton>
-            Kontaktua
+            <h5>Kontaktua</h5>
           </ModalHeader>
+          <ModalBody className="d-flex align-middle justify-content-center">
+            <div className="align-self-center row">
+              <FontAwesomeIcon className="col-3 mr-5 mb-5 text-success" size="2x" icon={faMobileAlt} />{selectedAnuncio !== null ? <span className="font-weight-bold">{selectedAnuncio.idCliente.telefono.movil.numero || trans('tablaAnuncios.noDefinido')}</span> : null}<br/>
+              <FontAwesomeIcon className="col-3 mr-5 text-success" size="2x" icon={faPhoneAlt} />{selectedAnuncio !== null ? <span className="font-weight-bold">{selectedAnuncio.idCliente.telefono.fijo.numero || trans('tablaAnuncios.noDefinido')}</span> : null}
+            </div>
+          </ModalBody>
         </Modal>
         <Modal
+          className="modalAnuncio"
           show={showModalCalendar}
           onHide={() => this.setState({showModalCalendar: false})}
         >
           <ModalHeader closeButton>
-            Ordutegia
+            <h5>Ordutegia</h5>
           </ModalHeader>
+          <ModalBody className="d-flex align-middle justify-content-center">
+            {selectedAnuncio !== null ? selectedAnuncio.horario.map(horario => {
+
+            }) : null }
+          </ModalBody>
         </Modal>
       </div>
     );
