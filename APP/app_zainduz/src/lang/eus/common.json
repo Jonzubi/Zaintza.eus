@@ -183,7 +183,8 @@
   },
   "tablaAnuncios":{
     "addAnuncio": "Eskaera sortu",
-    "noDefinido": "Ez definitua"
+    "noDefinido": "Ez definitua",
+    "enviarPropuesta": "Bidali akordio proposamena"
   },
   "dropDownDias":{
     "eligeDia": "Aukeratu eguna",

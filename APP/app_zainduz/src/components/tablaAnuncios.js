@@ -162,6 +162,13 @@ class TablaAnuncios extends React.Component {
                       })
                     }
                   />
+                  <div
+                    size={"2x"}
+                    className="col btn btn-success"
+                    
+                  >
+                    {i18next.t('tablaAnuncios.enviarPropuesta')}
+                  </div>
                 </div>
               </div>
             </div>
