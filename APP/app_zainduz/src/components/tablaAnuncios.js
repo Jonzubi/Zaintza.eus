@@ -15,8 +15,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/Modal";
 import ModalHeader from "react-bootstrap/ModalHeader";
-import './styles/tablaAnuncios.css';
+import "./styles/tablaAnuncios.css";
 import ModalBody from "react-bootstrap/ModalBody";
+import i18next from "i18next";
 
 const mapStateToProps = state => {
   return {
@@ -39,6 +40,8 @@ class TablaAnuncios extends React.Component {
       showModalTelefono: false,
       showModalCalendar: false
     };
+
+    this.renderHorarioModal = this.renderHorarioModal.bind(this);
   }
 
   componentDidMount() {
@@ -54,6 +57,27 @@ class TablaAnuncios extends React.Component {
           <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
         );
       });
+  }
+
+  renderHorarioModal() {
+    const { selectedAnuncio } = this.state;
+    let resultado = [];
+    selectedAnuncio.horario.map(sesion => {
+      const auxDia = sesion.dia == 7 ? 0 : sesion.dia;
+      resultado.push(
+        <div className="list-group-item">
+          <span className="list-group-item border-right font-weight-bold text-center">
+            {i18next.t(`dias.dia_${auxDia}`)}
+          </span>
+          <span className="list-group-item text-center">
+            {sesion.horaInicio + " - " + sesion.horaFin}
+          </span>
+        </div>
+      );
+    });
+    console.log(selectedAnuncio);
+    console.log(resultado);
+    return resultado;
   }
 
   botonAddAnuncio = () => {
@@ -74,7 +98,12 @@ class TablaAnuncios extends React.Component {
   };
 
   render() {
-    const { jsonAnuncios, showModalTelefono, showModalCalendar, selectedAnuncio } = this.state;
+    const {
+      jsonAnuncios,
+      showModalTelefono,
+      showModalCalendar,
+      selectedAnuncio
+    } = this.state;
     console.log(jsonAnuncios);
     return (
       <div className="p-5">
@@ -110,24 +139,28 @@ class TablaAnuncios extends React.Component {
                 <h5>{anuncio.descripcion}</h5>
                 <div className="row">
                   <FontAwesomeIcon
-                    style={{cursor: 'pointer'}}
+                    style={{ cursor: "pointer" }}
                     size={"2x"}
                     className="col text-success"
                     icon={faPhoneAlt}
-                    onClick={() => this.setState({
-                      showModalTelefono: true,
-                      selectedAnuncio: anuncio
-                    })}
+                    onClick={() =>
+                      this.setState({
+                        showModalTelefono: true,
+                        selectedAnuncio: anuncio
+                      })
+                    }
                   />
                   <FontAwesomeIcon
-                    style={{cursor: 'pointer'}}
+                    style={{ cursor: "pointer" }}
                     size={"2x"}
                     className="col text-success"
                     icon={faCalendar}
-                    onClick={() => this.setState({
-                      showModalCalendar: true,
-                      selectedAnuncio: anuncio
-                    })}
+                    onClick={() =>
+                      this.setState({
+                        showModalCalendar: true,
+                        selectedAnuncio: anuncio
+                      })
+                    }
                   />
                 </div>
               </div>
@@ -137,31 +170,62 @@ class TablaAnuncios extends React.Component {
         <Modal
           className="modalAnuncio"
           show={showModalTelefono}
-          onHide={() => this.setState({showModalTelefono: false})}
+          onHide={() => this.setState({ showModalTelefono: false })}
         >
           <ModalHeader closeButton>
             <h5>Kontaktua</h5>
           </ModalHeader>
           <ModalBody className="d-flex align-middle justify-content-center">
             <div className="align-self-center row">
-              <FontAwesomeIcon className="col-3 mb-5 text-success" size="2x" icon={faUser} />{selectedAnuncio !== null ? <span className="font-weight-bold col-9 text-center">{selectedAnuncio.idCliente.nombre + " " + selectedAnuncio.idCliente.apellido1}</span> : null}<br/>
-              <FontAwesomeIcon className="col-3 mb-5 text-success" size="2x" icon={faMobileAlt} />{selectedAnuncio !== null ? <span className="font-weight-bold col-9 text-center">{selectedAnuncio.idCliente.telefono.movil.numero || trans('tablaAnuncios.noDefinido')}</span> : null}<br/>
-              <FontAwesomeIcon className="col-3 text-success" size="2x" icon={faPhoneAlt} />{selectedAnuncio !== null ? <span className="font-weight-bold col-9 text-center">{selectedAnuncio.idCliente.telefono.fijo.numero || trans('tablaAnuncios.noDefinido')}</span> : null}
+              <FontAwesomeIcon
+                className="col-3 mb-5 text-success"
+                size="2x"
+                icon={faUser}
+              />
+              {selectedAnuncio !== null ? (
+                <span className="font-weight-bold col-9 text-center">
+                  {selectedAnuncio.idCliente.nombre +
+                    " " +
+                    selectedAnuncio.idCliente.apellido1}
+                </span>
+              ) : null}
+              <br />
+              <FontAwesomeIcon
+                className="col-3 mb-5 text-success"
+                size="2x"
+                icon={faMobileAlt}
+              />
+              {selectedAnuncio !== null ? (
+                <span className="font-weight-bold col-9 text-center">
+                  {selectedAnuncio.idCliente.telefono.movil.numero ||
+                    trans("tablaAnuncios.noDefinido")}
+                </span>
+              ) : null}
+              <br />
+              <FontAwesomeIcon
+                className="col-3 text-success"
+                size="2x"
+                icon={faPhoneAlt}
+              />
+              {selectedAnuncio !== null ? (
+                <span className="font-weight-bold col-9 text-center">
+                  {selectedAnuncio.idCliente.telefono.fijo.numero ||
+                    trans("tablaAnuncios.noDefinido")}
+                </span>
+              ) : null}
             </div>
           </ModalBody>
         </Modal>
         <Modal
           className="modalAnuncio"
           show={showModalCalendar}
-          onHide={() => this.setState({showModalCalendar: false})}
+          onHide={() => this.setState({ showModalCalendar: false })}
         >
           <ModalHeader closeButton>
             <h5>Ordutegia</h5>
           </ModalHeader>
-          <ModalBody className="d-flex align-middle justify-content-center">
-            {selectedAnuncio !== null ? selectedAnuncio.horario.map(sesion => {
-
-            }) : null }
+          <ModalBody className="justify-content-center">
+            {selectedAnuncio !== null ? this.renderHorarioModal() : null}
           </ModalBody>
         </Modal>
       </div>
