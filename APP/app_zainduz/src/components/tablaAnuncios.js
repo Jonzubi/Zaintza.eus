@@ -167,7 +167,6 @@ class TablaAnuncios extends React.Component {
                     }
                   />
                   <div
-                    size={"2x"}
                     className="col btn btn-success"
                     key={`btnPropuesta${indice}`}
                   >
