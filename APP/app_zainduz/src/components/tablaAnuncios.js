@@ -75,8 +75,6 @@ class TablaAnuncios extends React.Component {
         </div>
       );
     });
-    console.log(selectedAnuncio);
-    console.log(resultado);
     return resultado;
   }
 
@@ -98,22 +96,23 @@ class TablaAnuncios extends React.Component {
   };
 
   render() {
+    console.log("rendeeerAnuncios");
     const {
       jsonAnuncios,
       showModalTelefono,
       showModalCalendar,
       selectedAnuncio
     } = this.state;
-    console.log(jsonAnuncios);
     return (
       <div className="p-5">
         {this.botonAddAnuncio()}
 
-        {jsonAnuncios.map(anuncio => {
+        {jsonAnuncios.map((anuncio, indice) => {
           return (
-            <div className="row card-header mt-2 mb-2">
-              <div style={{ width: "300px" }}>
+            <div key={`contAnuncio${indice}`} className="row card-header mt-2 mb-2">
+              <div key={`anuncio${indice}`} style={{ width: "300px" }}>
                 <img
+                  key={`img${indice}`}
                   className="img-responsive"
                   src={
                     "http://" +
@@ -127,18 +126,19 @@ class TablaAnuncios extends React.Component {
                     height: "auto"
                   }}
                 />
-                <div className="align-center text-center">
-                  <FontAwesomeIcon className="text-success" icon={faHome} />{" "}
-                  <span className="font-weight-bold">{anuncio.pueblo}</span>
+                <div key={`local${indice}`} className="align-center text-center">
+                  <FontAwesomeIcon key={`localizacion${indice}`} className="text-success" icon={faHome} />{" "}
+                  <span key={`nombreLocalizacion${indice}`} className="font-weight-bold">{anuncio.pueblo}</span>
                 </div>
               </div>
 
-              <div className="col">
-                <h3>{anuncio.titulo}</h3>
+              <div key={`info${indice}`} className="col">
+                <h3 key={`titulo${indice}`}>{anuncio.titulo}</h3>
                 <hr />
-                <h5>{anuncio.descripcion}</h5>
-                <div className="row">
+                <h5 key={`desc${indice}`}>{anuncio.descripcion}</h5>
+                <div key={`fila${indice}`} className="row">
                   <FontAwesomeIcon
+                    key={`iconTelefono${indice}`}
                     style={{ cursor: "pointer" }}
                     size={"2x"}
                     className="col text-success"
@@ -151,6 +151,7 @@ class TablaAnuncios extends React.Component {
                     }
                   />
                   <FontAwesomeIcon
+                    key={`iconCalendar${indice}`}
                     style={{ cursor: "pointer" }}
                     size={"2x"}
                     className="col text-success"
@@ -165,7 +166,7 @@ class TablaAnuncios extends React.Component {
                   <div
                     size={"2x"}
                     className="col btn btn-success"
-                    
+                    key={`btnPropuesta${indice}`}
                   >
                     {i18next.t('tablaAnuncios.enviarPropuesta')}
                   </div>
