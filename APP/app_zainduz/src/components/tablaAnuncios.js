@@ -62,6 +62,9 @@ class TablaAnuncios extends React.Component {
   renderHorarioModal() {
     const { selectedAnuncio } = this.state;
     let resultado = [];
+    if (selectedAnuncio.horario.length === 0){
+    return (<span className="text-center font-weight-bold">{trans('tablaAnuncios.noDefinido')}</span>);
+    }
     selectedAnuncio.horario.map(sesion => {
       const auxDia = sesion.dia == 7 ? 0 : sesion.dia;
       resultado.push(
