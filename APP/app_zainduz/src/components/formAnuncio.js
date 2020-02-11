@@ -42,14 +42,16 @@ class FormAnuncio extends React.Component {
       "txtTitulo",
       "txtDescripcion",
       "ubicaciones",
-      "publicoCuidado"
+      "publicoCuidado",
+      "diasDisponible"
     ]
 
     this.requiredStatesTraduc = {
       txtTitulo: "formAnuncio.titulo",
       txtDescripcion: "formAnuncio.descripcion",
       ubicaciones: "formAnuncio.puebloSeleccionado",
-      publicoCuidado: "formAnuncio.publicoCuidado"
+      publicoCuidado: "formAnuncio.publicoCuidado",
+      diasDisponible: "formAnuncio.diasDisponible"
     }
 
     this.state = {
@@ -316,13 +318,29 @@ class FormAnuncio extends React.Component {
         });
         return;
       }
+      //Hago una comporbacion diferente para los dias, para que haya elegido un dia en el combo
+      if (this.requiredStates[clave] == "diasDisponible") {
+        let error = false;
+        const diasSinElegir = diasDisponible.filter(confDia => {
+          return confDia.dia == 0 || isNaN(confDia.dia);          
+        });
+        if (diasSinElegir.length > 0) {
+          cogoToast.error(
+            <h5>{trans("registerFormCuidadores.errorDiaNoElegido")}</h5>
+          );
+          this.setState({
+            error: true
+          });
+          return;
+        }
+      }
     }
 
     this.setState({
       isLoading: true
     }, async () => {
       let imgAnuncioB64;
-      if(typeof imgAnuncio[0] !== 'undefined'){
+      if(imgAnuncio !== null){
         imgAnuncioB64 = await toBase64(imgAnuncio[0]);
       }
 
@@ -343,7 +361,7 @@ class FormAnuncio extends React.Component {
         precio: precioCuidado
       }
 
-      console.log(formData);
+      
 
       await Axios.post('http://' + ipMaquina + ':3001/api/procedures/postAnuncio', formData)
         .catch(err => {
@@ -471,7 +489,7 @@ class FormAnuncio extends React.Component {
               {trans("formAnuncio.horasCuidado")}:
             </label>
             <br />
-            <div className="w-100 mt-2" id="diasDisponible">
+            <div className={error ? "w-100 mt-2 border border-danger" : "w100 mt-2"} id="diasDisponible">
               {/* Aqui iran los dias dinamicamente */}
               {this.state.diasDisponible.map((objDia, indice) => {
                 return (

@@ -16,7 +16,10 @@ module.exports = (conexion) => {
             type: String,
             required: true
         },
-        horario: [Map],
+        horario: {
+            type: [Map],
+            required: true
+        },
         pueblo: {
             type: String,
             required: true

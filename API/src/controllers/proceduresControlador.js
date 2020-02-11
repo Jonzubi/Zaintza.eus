@@ -378,13 +378,14 @@ exports.patchCliente = async (req, res, modelos) => {
 }
 
 exports.postAnuncio = async (req, res, modelos) => {
-  const { titulo, descripcion, pueblo, publico, imgAnuncio, idCliente } = req.body;
+  const { titulo, descripcion, pueblo, publico, imgAnuncio, idCliente, horario } = req.body;
 
   if(typeof titulo === 'undefined' ||
      typeof descripcion === 'undefined' ||
      typeof publico === 'undefined' ||
      typeof pueblo === 'undefined' ||
-     typeof idCliente === 'undefined'){
+     typeof idCliente === 'undefined' ||
+     typeof horario === 'undefined'){
       res.writeHead(500, headerResponse);
       res.write("Parametros incorrectos");
       res.end();
@@ -393,7 +394,7 @@ exports.postAnuncio = async (req, res, modelos) => {
 
   let codImagen;
   let formData = Object.assign({}, req.body);
-  if(imgAnuncio.length > 0){
+  if(typeof imgAnuncio != 'undefined'){
     codImagen = getRandomString(20);
     writeImage(codImagen, imgAnuncio);
     formData.direcFoto = codImagen;
