@@ -82,12 +82,13 @@ class TablaAnuncios extends React.Component {
     return resultado;
   }
 
-  handleEnviarPropuesta = () => {
+  handleEnviarPropuesta = (anuncio) => {
     const { tipoUsuario } = this.props;
     if (tipoUsuario != "Cuidador"){
       cogoToast.error(
       <h5>{trans('formAnuncio.cuidadorNecesario')}</h5>
       )
+      return;
     }
   }
 
@@ -179,7 +180,7 @@ class TablaAnuncios extends React.Component {
                   <div
                     className="col btn btn-success"
                     key={`btnPropuesta${indice}`}
-                    onClick={() => this.handleEnviarPropuesta()}
+                    onClick={() => this.handleEnviarPropuesta(anuncio)}
                   >
                     {i18next.t('tablaAnuncios.enviarPropuesta')}
                   </div>
