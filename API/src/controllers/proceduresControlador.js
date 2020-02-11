@@ -398,7 +398,10 @@ exports.postAnuncio = async (req, res, modelos) => {
     codImagen = getRandomString(20);
     writeImage(codImagen, imgAnuncio);
     formData.direcFoto = codImagen;
+  } else {
+    codImagen = 'noImage';    
   }
+  formData.direcFoto = codImagen;
   
   const modeloAnuncio = modelos.anuncio;
   modeloAnuncio(formData)
