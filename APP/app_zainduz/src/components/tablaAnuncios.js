@@ -42,6 +42,7 @@ class TablaAnuncios extends React.Component {
     };
 
     this.renderHorarioModal = this.renderHorarioModal.bind(this);
+    this.handleEnviarPropuesta = this.handleEnviarPropuesta.bind(this);
   }
 
   componentDidMount() {
@@ -79,6 +80,15 @@ class TablaAnuncios extends React.Component {
       );
     });
     return resultado;
+  }
+
+  handleEnviarPropuesta = () => {
+    const { tipoUsuario } = this.props;
+    if (tipoUsuario != "Cuidador"){
+      cogoToast.error(
+      <h5>{trans('formAnuncio.cuidadorNecesario')}</h5>
+      )
+    }
   }
 
   botonAddAnuncio = () => {
@@ -169,6 +179,7 @@ class TablaAnuncios extends React.Component {
                   <div
                     className="col btn btn-success"
                     key={`btnPropuesta${indice}`}
+                    onClick={() => this.handleEnviarPropuesta()}
                   >
                     {i18next.t('tablaAnuncios.enviarPropuesta')}
                   </div>

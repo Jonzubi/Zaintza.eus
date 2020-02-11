@@ -180,7 +180,8 @@
     "eliminarPueblo": "Kendu herria",
     "publicoCuidado": "Ze eratako zaindua da?",
     "precioCuidado": "Zaintza prezioa",
-    "anuncioSubido": "Zaintza eskaera argitaratu duzu"
+    "anuncioSubido": "Zaintza eskaera argitaratu duzu",
+    "cuidadorNecesario": "Zaintzaile gisako kontua behar da eskaera honetarako"
   },
   "tablaAnuncios":{
     "addAnuncio": "Eskaera sortu",
