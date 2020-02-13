@@ -17,17 +17,20 @@ import Modal from "react-bootstrap/Modal";
 import ModalHeader from "react-bootstrap/ModalHeader";
 import "./styles/tablaAnuncios.css";
 import ModalBody from "react-bootstrap/ModalBody";
+import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import i18next from "i18next";
 
 const mapStateToProps = state => {
   return {
-    tipoUsuario: state.user.tipoUsuario
+    tipoUsuario: state.user.tipoUsuario,
+    idUsuario: state.user._id
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    changeFormContent: form => dispatch(changeFormContent(form))
+    changeFormContent: form => dispatch(changeFormContent(form)),
+    toogleMenuPerfil: payload => dispatch(toogleMenuPerfil(payload))
   };
 };
 
@@ -83,7 +86,13 @@ class TablaAnuncios extends React.Component {
   }
 
   handleEnviarPropuesta = (anuncio) => {
-    const { tipoUsuario } = this.props;
+    const { tipoUsuario, idUsuario, toogleMenuPerfil } = this.props;
+    if(!tipoUsuario){
+      cogoToast.error(<h5>{trans("tablaCuidadores.errorNoLogueado")}</h5>);
+      toogleMenuPerfil(true);
+      return;
+    }
+
     if (tipoUsuario != "Cuidador"){
       cogoToast.error(
       <h5>{trans('formAnuncio.cuidadorNecesario')}</h5>
