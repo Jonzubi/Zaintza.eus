@@ -86,7 +86,7 @@ class TablaAnuncios extends React.Component {
   }
 
   handleEnviarPropuesta = (anuncio) => {
-    const { tipoUsuario, idUsuario, toogleMenuPerfil } = this.props;
+    const { tipoUsuario, toogleMenuPerfil } = this.props;
     if(!tipoUsuario){
       cogoToast.error(<h5>{trans("tablaCuidadores.errorNoLogueado")}</h5>);
       toogleMenuPerfil(true);

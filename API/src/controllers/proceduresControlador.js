@@ -419,3 +419,7 @@ exports.postAnuncio = async (req, res, modelos) => {
       res.end();
     });  
 }
+
+exports.postPropuestaAcuerdo = async (req, res, modelos) => {
+
+};
