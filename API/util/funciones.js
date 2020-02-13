@@ -42,3 +42,19 @@ exports.getRandomString = length => {
     }
     return result;
   };
+
+  export const getTodayDate = () => {
+    var objToday = new Date();
+    var dd = objToday.getDate();
+    var mm = objToday.getMonth() + 1;
+  
+    var yyyy = objToday.getFullYear();
+    if (dd < 10) {
+      dd = "0" + dd;
+    }
+    if (mm < 10) {
+      mm = "0" + mm;
+    }
+    var today = mm + "/" + dd + "/" + yyyy;
+    return today;
+  };

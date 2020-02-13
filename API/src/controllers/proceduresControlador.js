@@ -1,4 +1,4 @@
-const { writeImage, getRandomString } = require("../../util/funciones");
+const { writeImage, getRandomString, getTodayDate } = require("../../util/funciones");
 const headerResponse = require("../../util/headerResponse");
 
 exports.getAcuerdosConUsuarios = (req, res, modelos) => {
@@ -421,5 +421,60 @@ exports.postAnuncio = async (req, res, modelos) => {
 }
 
 exports.postPropuestaAcuerdo = async (req, res, modelos) => {
+  const { idCuidador, idCliente, diasAcordados,tituloAcuerdo,
+          pueblo, descripcionAcuerdo, origenAcuerdo  } = req.body;
+  // TODO estadoAcuerdo y dateAcuerdo se calcularan en el servidor
 
+  if(typeof idCuidador === 'undefined' ||
+     typeof idCliente === 'undefined' ||
+     typeof diasAcordados === 'undefined' ||
+     typeof tituloAcuerdo === 'undefined' ||
+     typeof pueblo === 'undefined' ||
+     typeof descripcionAcuerdo === 'undefined' ||
+     typeof origenAcuerdo === 'undefined'){
+      res.writeHead(500, headerResponse);
+      res.write("Parametros incorrectos");
+      res.end();
+      return;
+    }
+  //Estado acuerdo indica de que el acuerdo creado estará en pendiente
+  const estadoAcuerdo = 0;
+  const dateAcuerdo = getTodayDate(); 
+
+  const modeloAcuerdos = modelos.acuerdo;
+  const modeloUsuarios = modelos.usuario
+  const modeloNotificaciones = modelos.notificacion;
+  
+  let formData= {
+    idCuidador,
+    idCliente,
+    diasAcordados,
+    tituloAcuerdo,
+    pueblo,
+    estadoAcuerdo,
+    dateAcuerdo,
+    descripcionAcuerdo,
+    origenAcuerdo
+  };
+  const acuerdoGuardado = await modeloAcuerdos(formData)
+                            .save()
+                            .catch(err => {
+                              console.log(err);
+                              res.writeHead(500, headerResponse);
+                              res.write(JSON.stringify(err));
+                              res.send();
+                            });
+  const usuarioBuscado = await modeloUsuarios
+                            .findOne({ idPerfil: idCliente })
+                            .catch(err => {
+                              console.log(err);
+                              res.writeHead(500, headerResponse);
+                              res.write(JSON.stringify(err));
+                              res.send();
+                            });
+  formData= {
+    idUsuario: usuarioBuscado._id,
+    
+  }
+                        
 };
