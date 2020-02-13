@@ -421,12 +421,14 @@ exports.postAnuncio = async (req, res, modelos) => {
 }
 
 exports.postPropuestaAcuerdo = async (req, res, modelos) => {
-  const { idCuidador, idCliente, diasAcordados,tituloAcuerdo,
+  //Nota -> idUsuario es el id del usuario que ha mandado la peticion lo usare en idRemitente de notificacion
+  const { idCuidador, idCliente, idUsuario, diasAcordados,tituloAcuerdo,
           pueblo, descripcionAcuerdo, origenAcuerdo  } = req.body;
   // TODO estadoAcuerdo y dateAcuerdo se calcularan en el servidor
 
   if(typeof idCuidador === 'undefined' ||
      typeof idCliente === 'undefined' ||
+     typeof idUsuario === 'undefined' ||
      typeof diasAcordados === 'undefined' ||
      typeof tituloAcuerdo === 'undefined' ||
      typeof pueblo === 'undefined' ||
@@ -439,9 +441,11 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
     }
   //Estado acuerdo indica de que el acuerdo creado estará en pendiente
   const estadoAcuerdo = 0;
-  const dateAcuerdo = getTodayDate(); 
+  const dateAcuerdo = getTodayDate();
+  const objDate = new Date();
 
   const modeloAcuerdos = modelos.acuerdo;
+  const sesion = await modeloAcuerdos.startSession();  
   const modeloUsuarios = modelos.usuario
   const modeloNotificaciones = modelos.notificacion;
   
@@ -456,13 +460,16 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
     descripcionAcuerdo,
     origenAcuerdo
   };
-  const acuerdoGuardado = await modeloAcuerdos(formData)
-                            .save()
+  sesion.startTransaction();
+  try {
+    const opts = { sesion };
+    const acuerdoGuardado = await modeloAcuerdos(formData)
+                            .save(opts)
                             .catch(err => {
                               console.log(err);
                               res.writeHead(500, headerResponse);
                               res.write(JSON.stringify(err));
-                              res.send();
+                              res.end();
                             });
   const usuarioBuscado = await modeloUsuarios
                             .findOne({ idPerfil: idCliente })
@@ -470,11 +477,29 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
                               console.log(err);
                               res.writeHead(500, headerResponse);
                               res.write(JSON.stringify(err));
-                              res.send();
+                              res.end();
                             });
   formData= {
     idUsuario: usuarioBuscado._id,
-    
+    idRemitente: idUsuario,
+    tipoNotificacion: "Acuerdo",
+    acuerdo: acuerdoGuardado,
+    visto: false,
+    dateEnvioNotificacion: `${dateAcuerdo} ${objDate.getHours()}:${objDate.getMinutes()}`                         
   }
-                        
+  await modeloNotificaciones(formData)
+    .save(opts);
+
+  await sesion.commitTransaction();
+   sesion.endSession();
+   res.writeHead(200, headerResponse);
+   res.end();
+  } catch (error){
+    await sesion.abortTransaction();
+    sesion.endSession();
+    console.log(err);
+    res.writeHead(500, headerResponse);
+    res.write(JSON.stringify(err));
+    res.end();
+  }                        
 };
