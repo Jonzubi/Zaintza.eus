@@ -43,7 +43,7 @@ exports.getRandomString = length => {
     return result;
   };
 
-  export const getTodayDate = () => {
+  exports.getTodayDate = () => {
     var objToday = new Date();
     var dd = objToday.getDate();
     var mm = objToday.getMonth() + 1;
