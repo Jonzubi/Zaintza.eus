@@ -408,8 +408,6 @@ class Tabla extends React.Component {
       diasAcordados: this.state.diasDisponible,
       tituloAcuerdo: this.state.txtTituloPropuesta,
       pueblo: this.state.ubicaciones[0],
-      estadoAcuerdo: 0,
-      dateAcuerdo: today,
       descripcionAcuerdo: this.state.txtDescripcion,
       origenAcuerdo: this.props.tipoUsuario
     };
