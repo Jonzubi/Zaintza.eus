@@ -448,6 +448,10 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
   const sesion = await modeloAcuerdos.startSession();  
   const modeloUsuarios = modelos.usuario
   const modeloNotificaciones = modelos.notificacion;
+  //Esto lo hago para saber quien est a enviando la propuesta
+  //Si lo manda un cliente se va a buscar el usuario que tenga ese idCuidador en idPerfil
+  //Es para despues mandar la notificacion del acuerdo a la otra parte
+  const idUsuarioABuscar = origenAcuerdo === "Cliente" ? idCuidador : idCliente;
   
   let formData= {
     idCuidador,
@@ -472,7 +476,7 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
                               res.end();
                             });
   const usuarioBuscado = await modeloUsuarios
-                            .findOne({ idPerfil: idCliente })
+                            .findOne({ idPerfil: idUsuarioABuscar })
                             .catch(err => {
                               console.log(err);
                               res.writeHead(500, headerResponse);
