@@ -23,7 +23,8 @@ import i18next from "i18next";
 const mapStateToProps = state => {
   return {
     tipoUsuario: state.user.tipoUsuario,
-    idUsuario: state.user._id
+    idPerfil: state.user._id,
+    idUsuario: state.user._idUsuario
   };
 };
 
@@ -85,8 +86,8 @@ class TablaAnuncios extends React.Component {
     return resultado;
   }
 
-  handleEnviarPropuesta = (anuncio) => {
-    const { tipoUsuario, toogleMenuPerfil } = this.props;
+  handleEnviarPropuesta = async (anuncio) => {
+    const { tipoUsuario, toogleMenuPerfil, idPerfil, idUsuario } = this.props;
     if(!tipoUsuario){
       cogoToast.error(<h5>{trans("tablaCuidadores.errorNoLogueado")}</h5>);
       toogleMenuPerfil(true);
@@ -99,6 +100,28 @@ class TablaAnuncios extends React.Component {
       )
       return;
     }
+
+    let formData = {
+      idCuidador: idPerfil,
+      idCliente: anuncio.idCliente,
+      idUsuario: idUsuario,
+      diasAcordados: anuncio.horario,
+      tituloAcuerdo: anuncio.titulo,
+      pueblo: anuncio.pueblo,
+      descripcionAcuerdo: anuncio.descripcion,
+      origenAcuerdo: "Cuidador"
+    };
+
+    await axios.post("http://" + ipMaquina + ":3001/api/procedures/postPropuestaAcuerdo", formData)
+      .catch(err => {
+        cogoToast.error(
+          <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
+        );
+        return;
+      });
+    cogoToast.success(
+    <h5>{trans('tablaAnuncios.propuestaEnviada')}</h5>
+    )
   }
 
   botonAddAnuncio = () => {
