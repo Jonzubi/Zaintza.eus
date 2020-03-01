@@ -79,6 +79,7 @@ class MenuPerfil extends React.Component {
     this.handleClickPerfil = this.handleClickPerfil.bind(this);
     this.handleClickAcuerdos = this.handleClickAcuerdos.bind(this);
     this.handleClickNotificaciones = this.handleClickNotificaciones.bind(this);
+    this.handleClickAjustes = this.handleClickAjustes.bind(this);
   }
 
   getAvatar() {
@@ -139,6 +140,11 @@ class MenuPerfil extends React.Component {
     this.props.toogleMenuPerfil(false);
   }
 
+  handleClickAjustes(){
+    this.props.changeFormContent("ajustes");
+    this.props.toogleMenuPerfil(false);
+  }
+
   getMenuContent() {
     if (!this.props.tipoUsuario) {
       return <LogInForm />;
@@ -178,7 +184,7 @@ class MenuPerfil extends React.Component {
                 </span>
               ) : null}
             </button>
-            <button type="button" className="w-100 btn btn-secondary">
+            <button type="button" className="w-100 btn btn-secondary" onClick={() => this.handleClickAjustes()}>
               {trans("menuPerfil.ajustes")}
             </button>
           </div>
