@@ -63,7 +63,8 @@ class LogInForm extends React.Component {
                 _id: idPerfil,
                 _idUsuario: idUsuario,
                 email: usuario.email,
-                tipoUsuario: usuario.tipoUsuario
+                tipoUsuario: usuario.tipoUsuario,
+                contrasena: usuario.contrasena
               }));
 
               if (this.state.chkRecordarme) {
