@@ -13,11 +13,13 @@ class AjustesForm extends React.Component {
     this.state = {
       txtActualPassword: "",
       txtNewPassword: "",
-      txtRepeatNewPassword: ""
+      txtRepeatNewPassword: "",
+      formChosen: "perfil"
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleChangePassword = this.handleChangePassword.bind(this);
+    this.handleChangeFormChosen = this.handleChangeFormChosen.bind(this);
   }
   handleChangePassword() {
     const {
@@ -65,17 +67,47 @@ class AjustesForm extends React.Component {
       [stateId]: e.target.value
     });
   }
+
+  handleChangeFormChosen(form) {
+    this.setState({
+      formChosen: form
+    });
+  }
   render() {
-    const { txtActualPassword, txtNewPassword, txtRepeatNewPassword} = this.state;
+    const {
+      txtActualPassword,
+      txtNewPassword,
+      txtRepeatNewPassword,
+      formChosen
+    } = this.state;
     return (
       <div className="p-5">
         <div className="row">
-          <ul className="nav flex-column col-3">
-            <li className="nav-item">
-              <div className="nav-link btn btn-success">Perfil</div>
-            </li>
-          </ul>
-          <div className="col-9 flex-column">
+          <div className="col-3">
+            <div
+              className={formChosen !== "perfil" ? "btn" : "btn btn-success"}
+              onClick={() => this.handleChangeFormChosen("perfil")}
+            >
+              Perfil
+            </div>
+            <br />
+            <div
+              className={formChosen !== "idioma" ? "btn" : "btn btn-success"}
+              onClick={() => this.handleChangeFormChosen("idioma")}
+            >
+              Idioma
+            </div>
+            <br />
+            <div
+              className={formChosen !== "app" ? "btn" : "btn btn-success"}
+              onClick={() => this.handleChangeFormChosen("app")}
+            >
+              Ajustes de la aplicacion
+            </div>
+          </div>
+          <div
+            className={formChosen === "perfil" ? "col-9 flex-column" : "d-none"}
+          >
             <h1>Perfil</h1>
             <hr />
             <h5>Contraseña</h5>
@@ -127,9 +159,24 @@ class AjustesForm extends React.Component {
                   Cambiar contraseña
                 </div>
               </div>
-
               <hr />
             </div>
+          </div>
+          <div
+            className={formChosen === "idioma" ? "col-9 flex-column" : "d-none"}
+          >
+            <h1>Idioma</h1>
+            <hr />
+            <h5>Idioma predeterminado</h5>
+            <hr />
+          </div>
+          <div
+            className={formChosen === "app" ? "col-9 flex-column" : "d-none"}
+          >
+            <h1>Ajustes de la aplicacion</h1>
+            <hr />
+            <h5>Cantidad de acuerdos a la vez</h5>
+            <hr />
           </div>
         </div>
       </div>
