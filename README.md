@@ -6,3 +6,17 @@ El proyecto de SEIM para Aplicación Web de 2º
 - Npm
 - MongoDB
 - Git 
+
+**Pasos para reproducir el proyecto en un entorno local**
+
+- Clonar el proyecto mediante este comando: "git clone https://github.com/Jonzubi/ProyectoAplicacionWeb.git"
+- En la raíz donde se ha ejecutado el proyecto aparecerá una carpeta que se llama *ProyectoAplicacionWeb*.
+- Con la terminal acceder a la carpeta ./API dentro de la carpeta clonada y hacer un: "npm i" (Esto traerá todos los modulos y dependencias necesarias).
+- Despues hacer lo mismo colocandose en la carpeta ./APP respecto a la carpeta clonada. Al acabar este paso ya esta todo lo necesario instalado.
+- Colocar otra vez en ./API con la terminal y hacer: npm run start. Es un comando que lanza la API y se pone escuchando el puerto :3001
+- Abrir otra terminal, colocarse en ./APP y hacer: npm start. Este comando compila el proyecto y lo va a lanzar automaticamente en el navegador predeterminado especificado por el sistema operativo.
+- Ya se podrá utilizar la aplicacion.
+
+**Notas**
+
+- Es necesario tener conexión a internet ya que la apluicacion accede a una base de datos en la nube.
