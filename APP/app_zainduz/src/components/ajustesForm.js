@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 import Axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import { saveUserSession } from "../redux/actions/user";
-import { trans, getRandomString } from "../util/funciones";
+import { trans } from "../util/funciones";
+import i18n from "i18next";
 
 class AjustesForm extends React.Component {
   constructor(props) {
@@ -14,13 +15,55 @@ class AjustesForm extends React.Component {
       txtActualPassword: "",
       txtNewPassword: "",
       txtRepeatNewPassword: "",
-      formChosen: "perfil"
+      formChosen: "perfil",
+      langChosen: i18n.language
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleChangePassword = this.handleChangePassword.bind(this);
     this.handleChangeFormChosen = this.handleChangeFormChosen.bind(this);
+    this.handleSaveLanguage = this.handleSaveLanguage.bind(this);
   }
+
+  handleSaveLanguage = () => {
+    const { langChosen } = this.state;
+    const { idUsuario } = this.props;
+
+    Axios.post(
+      "http://" + ipMaquina + ":3001/api/procedures/patchPredLang/" + idUsuario,
+      {
+        idLangPred: langChosen
+      }
+    )
+      .then(() => {
+        cogoToast.success(<h5>{trans("ajustesForm.idiomaCambiado")}</h5>);
+      })
+      .catch(() => {
+        cogoToast.error(<h5>{trans("perfilCliente.errorGeneral")}</h5>);
+      });
+  };
+
+  getAllLang = () => {
+    return Object.keys(i18n.services.resourceStore.data);
+  };
+
+  handleChangeLanguage = lang => {
+    this.setState({
+      langChosen: lang
+    });
+  };
+
+  getLangTraducido = code => {
+    switch (code) {
+      case "eus":
+        return "Euskara(EUS)";
+      case "es":
+        return "Español(ES)";
+      default:
+        return "ERROR";
+    }
+  };
+
   handleChangePassword() {
     const {
       txtNewPassword,
@@ -78,43 +121,50 @@ class AjustesForm extends React.Component {
       txtActualPassword,
       txtNewPassword,
       txtRepeatNewPassword,
-      formChosen
+      formChosen,
+      langChosen
     } = this.state;
     return (
       <div className="p-5">
         <div className="row">
           <div className="col-3">
+            <h5 className="d-flex align-items-stretch justify-content-center mb-5">
+              {trans("ajustesForm.ajustes")}
+            </h5>
             <div
-              className={formChosen !== "perfil" ? "btn" : "btn btn-success"}
+              className={
+                formChosen !== "perfil"
+                  ? "btn d-flex align-items-stretch"
+                  : "btn btn-success d-flex align-items-stretch"
+              }
               onClick={() => this.handleChangeFormChosen("perfil")}
             >
-              Perfil
+              {trans("ajustesForm.perfil")}
             </div>
             <br />
             <div
-              className={formChosen !== "idioma" ? "btn" : "btn btn-success"}
-              onClick={() => this.handleChangeFormChosen("idioma")}
-            >
-              Idioma
-            </div>
-            <br />
-            <div
-              className={formChosen !== "app" ? "btn" : "btn btn-success"}
+              className={
+                formChosen !== "app"
+                  ? "btn d-flex align-items-stretch"
+                  : "btn btn-success d-flex align-items-stretch"
+              }
               onClick={() => this.handleChangeFormChosen("app")}
             >
-              Ajustes de la aplicacion
+              {trans("ajustesForm.app")}
             </div>
           </div>
           <div
             className={formChosen === "perfil" ? "col-9 flex-column" : "d-none"}
           >
-            <h1>Perfil</h1>
+            <h1>{trans("ajustesForm.perfil")}</h1>
             <hr />
-            <h5>Contraseña</h5>
+            <h5>{trans("ajustesForm.contrasena")}</h5>
             <hr />
             <div className="">
               <div className="row">
-                <span className="col-3">Contraseña actual:</span>
+                <span className="col-3">
+                  {trans("ajustesForm.actualContrasena")}
+                </span>
                 <input
                   placeholder="Contraseña actual"
                   id="txtActualPassword"
@@ -127,7 +177,9 @@ class AjustesForm extends React.Component {
               <br />
               <br />
               <div className="row">
-                <span className="col-3">Nueva contraseña:</span>
+                <span className="col-3">
+                  {trans("ajustesForm.nuevaContrasena")}
+                </span>
                 <input
                   placeholder="Nueva contraseña"
                   id="txtNewPassword"
@@ -140,7 +192,9 @@ class AjustesForm extends React.Component {
               <br />
               <br />
               <div className="row">
-                <span className="col-3">Repetir nueva contraseña:</span>
+                <span className="col-3">
+                  {trans("ajustesForm.repetirNuevaContrasena")}
+                </span>
                 <input
                   placeholder="Repetir nueva contraseña"
                   id="txtRepeatNewPassword"
@@ -156,26 +210,55 @@ class AjustesForm extends React.Component {
                   className="btn btn-success"
                   onClick={() => this.handleChangePassword()}
                 >
-                  Cambiar contraseña
+                  {trans("ajustesForm.cambiarContrasena")}
                 </div>
               </div>
               <hr />
             </div>
           </div>
           <div
-            className={formChosen === "idioma" ? "col-9 flex-column" : "d-none"}
-          >
-            <h1>Idioma</h1>
-            <hr />
-            <h5>Idioma predeterminado</h5>
-            <hr />
-          </div>
-          <div
             className={formChosen === "app" ? "col-9 flex-column" : "d-none"}
           >
-            <h1>Ajustes de la aplicacion</h1>
+            <h1>{trans("ajustesForm.app")}</h1>
             <hr />
-            <h5>Cantidad de acuerdos a la vez</h5>
+            <h5>{trans("ajustesForm.idioma")}</h5>
+            <hr />
+            <span>{trans("ajustesForm.idiomaPredeterminado")}</span>
+            <div className="dropdown d-flex mt-2">
+              <button
+                className="btn btn-light dropdown-toggle w-100"
+                type="button"
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                {this.getLangTraducido(langChosen)}
+              </button>
+              <div
+                className="dropdown-menu w-100 text-center"
+                aria-labelledby="dropdownMenuButton"
+              >
+                {this.getAllLang().map(lang => {
+                  return (
+                    <a
+                      className="dropdown-item btn w-100"
+                      onClick={() => this.handleChangeLanguage(lang)}
+                    >
+                      {this.getLangTraducido(lang)}
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="d-flex justify-content-end mt-5">
+              <div
+                className="btn btn-success"
+                onClick={() => this.handleSaveLanguage()}
+              >
+                {trans("ajustesForm.definirIdioma")}
+              </div>
+            </div>
             <hr />
           </div>
         </div>

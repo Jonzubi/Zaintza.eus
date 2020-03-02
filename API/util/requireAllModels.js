@@ -14,6 +14,7 @@ module.exports = conexion => {
     modelos.historicopropuestaAcuerdo = require("../src/models/historicopropuestaAcuerdo")(conexion);
     modelos.usuario = require("../src/models/usuario")(conexion);
     modelos.historicousuario = require("../src/models/historicousuario")(conexion);
+    modelos.ajuste = require("../src/models/ajustes")(conexion);
 
     return modelos;
 }

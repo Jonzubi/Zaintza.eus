@@ -507,3 +507,33 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
     res.end();
   }                        
 };
+
+exports.patchPredLang = async (req, res, modelos) => {
+  const { id } = req.params;
+  const modeloAjustes = modelos.ajuste;
+
+  const ajusteExistente = await modeloAjustes.find({idUsuario: id});
+  console.log(ajusteExistente);
+  if (ajusteExistente.length === 0) {
+    const ajuste = await modeloAjustes({
+      idUsuario: id,
+      idLangPred: req.body.idLangPred
+    }).save().catch(err => {
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+      res.end();
+    });
+    res.writeHead(200, headerResponse);
+    res.write(JSON.stringify(ajuste));
+    res.end();
+  } else {
+    const ajuste = await modeloAjustes.findOneAndUpdate({idUsuario: id}, {idLangPred: req.body.idLangPred}).catch(err => {
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+      res.end();
+    });
+    res.writeHead(200, headerResponse);
+    res.write(JSON.stringify(ajuste));
+    res.end();
+  }
+}

@@ -182,6 +182,17 @@
       "viernes": "Viernes",
       "sabado": "Sabado",
       "domingo": "Domingo"
+    },
+    "ajustesForm": {
+      "perfil": "Perfil",
+      "idioma": "Idioma",
+      "app": "Ajustes de la aplicación",
+      "contrasena": "Contraseña",
+      "actualContrasena": "Contraseña actual:",
+      "nuevaContrasena": "Nueva contraseña:",
+      "repetirNuevaContrasena": "Repetir nueva contraseña:",
+      "cambiarContrasena": "Cambiar contraseña",
+      "ajustes": "Ajustes"
     }
   }
   

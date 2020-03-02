@@ -207,5 +207,18 @@
     "dia_4": "Osteguna",
     "dia_5": "Ostirala",
     "dia_6": "Larunbata"
+  },
+  "ajustesForm": {
+    "perfil": "Profila",
+    "idioma": "Hizkuntza",
+    "app": "Aplikazio ezarpenak",
+    "contrasena": "Pasahitza",
+    "actualContrasena": "Orain duzun pasahitza:",
+    "nuevaContrasena": "Pasahitz berria:",
+    "repetirNuevaContrasena": "Sartu pasahitz berria berriro:",
+    "cambiarContrasena": "Aldatu pasahitza",
+    "ajustes": "Ezarpenak",
+    "idiomaPredeterminado": "Hasieratik ezarriko den hizkuntza",
+    "definirIdioma": "Hizkuntza zehaztu"
   }
 }
