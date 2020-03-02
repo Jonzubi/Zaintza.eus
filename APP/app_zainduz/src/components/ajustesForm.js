@@ -124,6 +124,8 @@ class AjustesForm extends React.Component {
       formChosen,
       langChosen
     } = this.state;
+    const { idLangPred } = this.props;
+    console.log(idLangPred);
     return (
       <div className="p-5">
         <div className="row">
@@ -269,7 +271,8 @@ class AjustesForm extends React.Component {
 
 const mapStateToProps = state => ({
   contrasena: state.user.contrasena,
-  idUsuario: state.user._idUsuario
+  idUsuario: state.user._idUsuario,
+  idLangPred: state.user.idLangPred
 });
 
 const mapDispatchToProps = dispatch => ({
