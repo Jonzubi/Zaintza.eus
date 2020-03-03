@@ -142,7 +142,6 @@ class TablaAnuncios extends React.Component {
   };
 
   render() {
-    console.log("rendeeerAnuncios");
     const {
       jsonAnuncios,
       showModalTelefono,
