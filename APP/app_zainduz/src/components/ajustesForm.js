@@ -234,7 +234,7 @@ class AjustesForm extends React.Component {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                {this.getLangTraducido(idLangPred !== "" ? idLangPred : langChosen)}
+                {this.getLangTraducido(langChosen)}
               </button>
               <div
                 className="dropdown-menu w-100 text-center"

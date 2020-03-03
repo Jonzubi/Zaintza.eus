@@ -112,6 +112,7 @@ exports.getUsuarioConPerfil = async (req, res, modelos) => {
     res.write("Vacio");
     res.end();
   }
+}
   
 exports.getAnunciosConPerfil = (req, res, modelos) => {
   const modeloAnuncios = modelos.anuncio;
