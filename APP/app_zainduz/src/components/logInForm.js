@@ -54,8 +54,8 @@ class LogInForm extends React.Component {
             params: objFiltros
           })
           .then(resultado => {
-            if(resultado.data.length != 0) {
-              const usuario = resultado.data[0];
+            if(resultado.data !== "Vacio") {
+              const usuario = resultado.data.idUsuario;
               const idPerfil = usuario.idPerfil._id;
               const idUsuario = usuario._id;
 
@@ -65,7 +65,7 @@ class LogInForm extends React.Component {
                 email: usuario.email,
                 tipoUsuario: usuario.tipoUsuario,
                 contrasena: usuario.contrasena,
-                idLangPred: usuario.idLangPred
+                idLangPred: resultado.data.idLangPred
               }));
 
               if (this.state.chkRecordarme) {

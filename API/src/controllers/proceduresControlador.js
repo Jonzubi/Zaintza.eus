@@ -79,7 +79,7 @@ exports.getNotificacionesConUsuarios = (req, res, modelos) => {
     });
 };
 
-exports.getUsuarioConPerfil = (req, res, modelos) => {
+exports.getUsuarioConPerfil = async (req, res, modelos) => {
   const { email, contrasena } = req.query;
 
   if(typeof email == "undefined" || typeof contrasena == "undefined") {
@@ -90,27 +90,29 @@ exports.getUsuarioConPerfil = (req, res, modelos) => {
   }
 
   const modeloUsuario = modelos.usuario;
+  const modeloAjuste = modelos.ajuste;
   const filtros = {
     email: email,
     contrasena: contrasena
   }
 
-  modeloUsuario
-    .find(filtros)
-    .populate('idPerfil')
+  const usu = await modeloUsuario.findOne(filtros);
+  if (usu !== null) {
+    modeloAjuste.findOne({idUsuario: usu._id}).populate({
+      path: 'idUsuario',
+      populate: 'idPerfil'
+    })
     .then(respuesta => {
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(respuesta));
       res.end();
-    })
-    .catch(err => {
-      console.log(err);
-      res.writeHead(500, headerResponse);
-      res.write(JSON.stringify(err));
-      res.end();
     });
-};
-
+  } else {
+    res.writeHead(200, headerResponse);
+    res.write("Vacio");
+    res.end();
+  }
+  
 exports.getAnunciosConPerfil = (req, res, modelos) => {
   const modeloAnuncios = modelos.anuncio;
 
