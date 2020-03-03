@@ -1,14 +1,14 @@
 import React from "react";
 import i18n from "i18next";
+import { connect } from "react-redux";
 import ipMaquina from "../util/ipMaquinaAPI";
 
 class ChangeLang extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
-        nowLang: i18n.language
-    }
+      nowLang: props.idLangPred || i18n.language
+    };
   }
 
   getLangTraducido = code => {
@@ -26,17 +26,16 @@ class ChangeLang extends React.Component {
     return Object.keys(i18n.services.resourceStore.data);
   };
 
-  handleChangeLanguage = (lang) => {
+  handleChangeLanguage = lang => {
     i18n.changeLanguage(lang);
 
     this.setState({
-        nowLang: lang
+      nowLang: lang
     });
-  }
+  };
 
   render() {
-      const { nowLang } = this.state;
-      const { clase } = this.props;
+    const { nowLang } = this.state;
     return (
       <div className="dropdown w-100 d-flex mt-5">
         <button
@@ -49,10 +48,16 @@ class ChangeLang extends React.Component {
         >
           {this.getLangTraducido(nowLang)}
         </button>
-        <div className="dropdown-menu w-100 text-center" aria-labelledby="dropdownMenuButton">
+        <div
+          className="dropdown-menu w-100 text-center"
+          aria-labelledby="dropdownMenuButton"
+        >
           {this.getAllLang().map(lang => {
             return (
-              <a className="dropdown-item btn w-100" onClick={() => this.handleChangeLanguage(lang)}>
+              <a
+                className="dropdown-item btn w-100"
+                onClick={() => this.handleChangeLanguage(lang)}
+              >
                 {this.getLangTraducido(lang)}
               </a>
             );
@@ -63,4 +68,8 @@ class ChangeLang extends React.Component {
   }
 }
 
-export default ChangeLang;
+const mapStateToProps = state => ({
+  idLangPred: state.user.idLangPred
+});
+
+export default connect(mapStateToProps, null)(ChangeLang);

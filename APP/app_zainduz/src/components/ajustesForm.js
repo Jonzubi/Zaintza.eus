@@ -125,7 +125,6 @@ class AjustesForm extends React.Component {
       langChosen
     } = this.state;
     const { idLangPred } = this.props;
-    console.log(idLangPred);
     return (
       <div className="p-5">
         <div className="row">
@@ -235,7 +234,7 @@ class AjustesForm extends React.Component {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                {this.getLangTraducido(langChosen)}
+                {this.getLangTraducido(idLangPred !== "" ? idLangPred : langChosen)}
               </button>
               <div
                 className="dropdown-menu w-100 text-center"

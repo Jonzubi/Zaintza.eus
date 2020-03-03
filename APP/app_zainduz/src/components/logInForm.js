@@ -8,7 +8,7 @@ import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import { saveUserSession } from "../redux/actions/user";
 import { toogleModal } from "../redux/actions/modalRegistrarse";
 import { trans } from "../util/funciones";
-import i18next from "i18next";
+import i18n from "i18next";
 import {translate} from "react-i18next";
 
 const mapDispatchToProps = dispatch => {
@@ -76,6 +76,8 @@ class LogInForm extends React.Component {
                 window.localStorage.removeItem("password");
               }
 
+              i18n.changeLanguage(resultado.data.idLangPred);
+
               this.props.toogleMenuPerfil(false);
               cogoToast.success(
                 <h5>{trans("notificaciones.sesionIniciada")}</h5>
@@ -128,7 +130,7 @@ class LogInForm extends React.Component {
             className="form-control"
             id="txtEmail"
             aria-describedby="emailHelp"
-            placeholder={i18next.t('loginForm.insertEmail')}
+            placeholder={i18n.t('loginForm.insertEmail')}
             value={this.state.txtEmail}
           />
           
