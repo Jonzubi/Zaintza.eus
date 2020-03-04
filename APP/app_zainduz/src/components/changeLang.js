@@ -7,8 +7,17 @@ class ChangeLang extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      nowLang: props.idLangPred || i18n.language
+      nowLang: i18n.language
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    const { idLangPred } = this.props;
+    if (idLangPred !== prevProps.idLangPred && idLangPred !== "") {
+      this.setState({
+        nowLang: idLangPred
+      })
+    }
   }
 
   getLangTraducido = code => {
