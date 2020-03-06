@@ -13,10 +13,15 @@ import NotificacionesForm from "./components/notificacionesForm";
 import CalendarioForm from "./components/calendarioForm";
 import FormAnuncio from "./components/formAnuncio";
 import Ajustes from "./components/ajustesForm";
+import SocketContext from "./socketio/socket-context";
+import * as io from "socket.io-client";
+import ipMaquina from './util/ipMaquinaAPI';
 
 const mapStateToProps = state => {
   return { formContent: state.app.formContent };
 };
+
+const socket = io(`http://${ipMaquina}:3002`);
 
 class App extends React.Component {
   constructor(props) {
@@ -59,14 +64,16 @@ class App extends React.Component {
     const AppContent = this.getContent.bind(this);
 
     return (
-      <div>
-        <MenuPerfil />
-        <div id="outer-container" className="w-100">
-          <Cabecera />
-          <AppContent />
-          <ModalRegistrarse />
+      <SocketContext.Provider value={socket}>
+        <div>
+          <MenuPerfil />
+          <div id="outer-container" className="w-100">
+            <Cabecera />
+            <AppContent />
+            <ModalRegistrarse />
+          </div>
         </div>
-      </div>
+      </SocketContext.Provider>
     );
   }
 }

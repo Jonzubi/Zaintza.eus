@@ -3,7 +3,7 @@ var express = require("express"),
   cors = require("cors"),
   bodyParser = require("body-parser"),
   port = 3001,
-  conexion = require("./util/bdConnection");
+  conexion = require("./util/bdConnection")
 
 app.use(cors());
 app.use(bodyParser.json({limit: "50mb"}));

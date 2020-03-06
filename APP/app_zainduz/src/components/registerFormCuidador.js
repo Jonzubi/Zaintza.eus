@@ -28,6 +28,7 @@ import { changeFormContent } from "../redux/actions/app";
 import { saveUserSession } from "../redux/actions/user";
 import municipios from "../util/municipos";
 import { trans } from "../util/funciones";
+import SocketContext from "../socketio/socket-context";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -362,7 +363,7 @@ class RegisterForm extends React.Component {
     });
   }
 
-  async handleRegistrarse() {
+  async handleRegistrarse(socket) {
     for (var clave in this.state) {
       if (this.state[clave] === null) continue;
       if (
@@ -434,22 +435,21 @@ class RegisterForm extends React.Component {
       contrasena: this.state.txtContrasena,
       tipoUsuario: "Cuidador"
     };
-    const insertedCuidador = await axios.post(
-      "http://" + ipMaquina + ":3001/api/procedures/postNewCuidador",
-      formData
-    )
-    .catch(err => {
-      this.setState({
-        isLoading: false
+    const insertedCuidador = await axios
+      .post(
+        "http://" + ipMaquina + ":3001/api/procedures/postNewCuidador",
+        formData
+      )
+      .catch(err => {
+        this.setState({
+          isLoading: false
+        });
+        cogoToast.error(
+          <h5>{trans("registerFormCuidadores.errorGeneral")}</h5>
+        );
+        return;
       });
-      cogoToast.error(
-        <h5>{trans("registerFormCuidadores.errorGeneral")}</h5>
-      );
-      return;
-    });
 
-    console.log(insertedCuidador);
-    
     this.props.saveUserSession(
       Object.assign({}, formData, {
         _id: insertedCuidador.data._id,
@@ -492,6 +492,11 @@ class RegisterForm extends React.Component {
       hoverTerceraEdad: false,
       hoverNecesidadEspecial: false
     });
+
+    socket.emit('login', {
+      idUsuario: insertedCuidador.data._idUsuario
+    })
+
     cogoToast.success(
       <div>
         <h5>{trans("registerFormCuidadores.registroCompletado")}</h5>
@@ -535,650 +540,671 @@ class RegisterForm extends React.Component {
     };
 
     return (
-      <div className="p-5">
-        <form>
-          <div className="form-group row">
-            <div className="form-group col-3 text-center">
-              <Avatar
-                label="Aukeratu avatarra"
-                labelStyle={{
-                  fontSize: "15px",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  width: "100%",
-                  height: "100%"
-                }}
-                height={200}
-                width={200}
-                onCrop={this.onCrop}
-                onClose={this.onClose}
-                onBeforeFileLoad={this.onBeforeFileLoad}
-                src={this.state.avatarSrc}
-              />
-            </div>
-            <div className="col-3 mx-auto text-center">
-              <ImageUploader
-                fileContainerStyle={
-                  this.state.imgContact != null
-                    ? { background: "#28a745" }
-                    : this.state.error.txtNombre
-                    ? { background: "#dc3545" }
-                    : {}
-                }
-                buttonClassName={
-                  this.state.imgContact != null ? "bg-light text-dark" : ""
-                }
-                errorClass="bg-danger text-light"
-                fileSizeError="handiegia da"
-                fileTypeError="ez du formatu zuzena"
-                singleImage={true}
-                label={
-                  this.state.imgContact != null
-                    ? "Gehienez: 5MB | " +
-                      this.state.imgContact[0].name +
-                      " (" +
-                      (this.state.imgContact[0].size / 1024 / 1024).toFixed(2) +
-                      " MB)"
-                    : "Gehienez: 5MB | Gomendaturiko dimentsioa (288x300)"
-                }
-                labelClass={
-                  this.state.imgContact != null
-                    ? "text-light font-weight-bold"
-                    : ""
-                }
-                withIcon={true}
-                buttonText={
-                  this.state.imgContact != null
-                    ? "Aukeratu beste irudi bat"
-                    : "Aukeratu zure kontaktu irudia"
-                }
-                onChange={this.onChangeContactImg}
-                imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
-                maxFileSize={5242880}
-              />
-            </div>
+      <SocketContext.Consumer>
+        {socket => (
+          <div className="p-5">
+            <form>
+              <div className="form-group row">
+                <div className="form-group col-3 text-center">
+                  <Avatar
+                    label="Aukeratu avatarra"
+                    labelStyle={{
+                      fontSize: "15px",
+                      fontWeight: "bold",
+                      cursor: "pointer",
+                      width: "100%",
+                      height: "100%"
+                    }}
+                    height={200}
+                    width={200}
+                    onCrop={this.onCrop}
+                    onClose={this.onClose}
+                    onBeforeFileLoad={this.onBeforeFileLoad}
+                    src={this.state.avatarSrc}
+                  />
+                </div>
+                <div className="col-3 mx-auto text-center">
+                  <ImageUploader
+                    fileContainerStyle={
+                      this.state.imgContact != null
+                        ? { background: "#28a745" }
+                        : this.state.error.txtNombre
+                        ? { background: "#dc3545" }
+                        : {}
+                    }
+                    buttonClassName={
+                      this.state.imgContact != null ? "bg-light text-dark" : ""
+                    }
+                    errorClass="bg-danger text-light"
+                    fileSizeError="handiegia da"
+                    fileTypeError="ez du formatu zuzena"
+                    singleImage={true}
+                    label={
+                      this.state.imgContact != null
+                        ? "Gehienez: 5MB | " +
+                          this.state.imgContact[0].name +
+                          " (" +
+                          (this.state.imgContact[0].size / 1024 / 1024).toFixed(
+                            2
+                          ) +
+                          " MB)"
+                        : "Gehienez: 5MB | Gomendaturiko dimentsioa (288x300)"
+                    }
+                    labelClass={
+                      this.state.imgContact != null
+                        ? "text-light font-weight-bold"
+                        : ""
+                    }
+                    withIcon={true}
+                    buttonText={
+                      this.state.imgContact != null
+                        ? "Aukeratu beste irudi bat"
+                        : "Aukeratu zure kontaktu irudia"
+                    }
+                    onChange={this.onChangeContactImg}
+                    imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
+                    maxFileSize={5242880}
+                  />
+                </div>
 
-            <div className="form-group col-6">
+                <div className="form-group col-6">
+                  <div class="form-group">
+                    <label htmlFor="txtNombre">
+                      {trans("registerFormCuidadores.nombre")}
+                    </label>{" "}
+                    (<span className="text-danger font-weight-bold">*</span>)
+                    <input
+                      onChange={this.handleInputChange}
+                      type="text"
+                      class={
+                        this.state.error.txtNombre
+                          ? "border border-danger form-control"
+                          : "form-control"
+                      }
+                      id="txtNombre"
+                      aria-describedby="txtNombreHelp"
+                      placeholder="Introducir nombre..."
+                      value={this.state.txtNombre}
+                    />
+                  </div>
+                  <div class="form-group row">
+                    <div className="form-group col">
+                      <label htmlFor="txtApellido1">
+                        {trans("registerFormCuidadores.apellido1")}
+                      </label>
+                      <input
+                        onChange={this.handleInputChange}
+                        type="text"
+                        class="form-control"
+                        id="txtApellido1"
+                        aria-describedby="txtNombreHelp"
+                        placeholder="Introducir apellido 1..."
+                        value={this.state.txtApellido1}
+                      />
+                    </div>
+                    <div className="form-group col">
+                      <label htmlFor="txtApellido2">
+                        {trans("registerFormCuidadores.apellido2")}
+                      </label>
+                      <input
+                        onChange={this.handleInputChange}
+                        type="text"
+                        class="form-control"
+                        id="txtApellido2"
+                        aria-describedby="txtNombreHelp"
+                        placeholder="Introducir apellido 2..."
+                        value={this.state.txtApellido2}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div className="form-group col-6">
+                  <label htmlFor="txtFechaNacimiento">
+                    {trans("registerFormCuidadores.fechaNac")}
+                  </label>{" "}
+                  (<span className="text-danger font-weight-bold">*</span>)
+                  <br />
+                  <Calendario
+                    dateFormat="YYYY/MM/DD"
+                    inputClassName="form-control"
+                    inputStyle={{ width: "100%" }}
+                    className={
+                      this.state.error.txtNombre
+                        ? "border border-danger w-100"
+                        : "w-100"
+                    }
+                    allowPast={true}
+                    allowFuture={false}
+                    id="txtFechaNacimiento"
+                    handleChange={this.handleCalendarChange}
+                    value={this.state.txtFechaNacimiento}
+                  />
+                </div>
+                <div
+                  className={
+                    this.state.error.txtNombre
+                      ? "form-group col-3 text-center p-1 border border-danger"
+                      : "form-group col-3 text-center p-1"
+                  }
+                  onClick={() => this.handleSexChange("M")}
+                  onMouseEnter={() => this.handleSexHover("hoverSexoM")}
+                  onMouseLeave={() => this.handleSexLeave("hoverSexoM")}
+                  id="txtSexM"
+                  style={{
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    background:
+                      this.state.txtSexo == "M"
+                        ? "#28a745"
+                        : this.state.hoverSexoM
+                        ? "#545b62"
+                        : "",
+                    color:
+                      this.state.txtSexo == "M" || this.state.hoverSexoM
+                        ? "white"
+                        : "black"
+                  }}
+                >
+                  <FontAwesomeIcon className="fa-5x" icon={faMale} />
+                </div>
+                <div
+                  className={
+                    this.state.error.txtNombre
+                      ? "form-group col-3 text-center p-1 border border-danger"
+                      : "form-group col-3 text-center p-1"
+                  }
+                  id="txtSexF"
+                  onClick={() => this.handleSexChange("F")}
+                  onMouseEnter={() => this.handleSexHover("hoverSexoF")}
+                  onMouseLeave={() => this.handleSexLeave("hoverSexoF")}
+                  style={{
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    background:
+                      this.state.txtSexo == "F"
+                        ? "#28a745"
+                        : this.state.hoverSexoF
+                        ? "#545b62"
+                        : "",
+                    color:
+                      this.state.txtSexo == "F" || this.state.hoverSexoF
+                        ? "white"
+                        : "black"
+                  }}
+                >
+                  <FontAwesomeIcon className="fa-5x" icon={faFemale} />
+                </div>
+              </div>
+
+              <div className="form-group row">
+                <div class="form-group col">
+                  <label htmlFor="txtEmail">
+                    {trans("registerFormCuidadores.email")}
+                  </label>{" "}
+                  (<span className="text-danger font-weight-bold">*</span>)
+                  <input
+                    onChange={this.handleInputChange}
+                    type="email"
+                    class={
+                      this.state.error.txtNombre
+                        ? "border border-danger form-control"
+                        : "form-control"
+                    }
+                    id="txtEmail"
+                    aria-describedby="emailHelp"
+                    placeholder="Introducir email..."
+                    value={this.state.txtEmail}
+                  />
+                  <label className="pt-2" htmlFor="txtContrasena">
+                    {trans("registerFormCuidadores.contrasena")}
+                  </label>{" "}
+                  (<span className="text-danger font-weight-bold">*</span>)
+                  <input
+                    onChange={this.handleInputChange}
+                    type="password"
+                    class={
+                      this.state.error.txtNombre
+                        ? "border border-danger form-control"
+                        : "form-control"
+                    }
+                    id="txtContrasena"
+                    placeholder="Introducir contraseña..."
+                    value={this.state.txtContrasena}
+                  />
+                </div>
+                <div class="form-group col">
+                  <label htmlFor="txtMovil">
+                    {trans("registerFormCuidadores.movil")}
+                  </label>{" "}
+                  (<span className="text-danger font-weight-bold">*</span>)
+                  <input
+                    onChange={this.handleInputChange}
+                    type="number"
+                    class={
+                      this.state.error.txtNombre
+                        ? "border border-danger form-control"
+                        : "form-control"
+                    }
+                    id="txtMovil"
+                    aria-describedby="emailHelp"
+                    placeholder="Introducir movil..."
+                    value={this.state.txtMovil}
+                  />
+                  <label className="pt-2" htmlFor="txtTelefono">
+                    {trans("registerFormCuidadores.telefFijo")}
+                  </label>
+                  <input
+                    onChange={this.handleInputChange}
+                    type="number"
+                    class="form-control"
+                    id="txtTelefono"
+                    placeholder="Introducir telefono fijo..."
+                    value={this.state.txtTelefono}
+                  />
+                </div>
+              </div>
+              <div className="form-group row">
+                <div className="form-group col">
+                  {/* Insertar dias disponibles aqui */}
+                  <label className="w-100 text-center lead">
+                    {trans("registerFormCuidadores.diasDisponible")}:
+                  </label>
+                  <br />
+                  <div className="w-100 mt-2" id="diasDisponible">
+                    {/* Aqui iran los dias dinamicamente */}
+                    {this.state.diasDisponible.map((objDia, indice) => {
+                      return (
+                        <div
+                          className="col-6 mx-auto text-center"
+                          id={"diaDisponible" + indice}
+                        >
+                          <div className="form-control mt-4 w-100">
+                            <select
+                              value={this.state.diasDisponible[indice].dia}
+                              onChange={this.handleDiasDisponibleChange}
+                              className="d-inline"
+                              id={"dia" + indice}
+                            >
+                              <option>Aukeratu eguna</option>
+                              <option value="1">Astelehena</option>
+                              <option value="2">Asteartea</option>
+                              <option value="3">Asteazkena</option>
+                              <option value="4">Osteguna</option>
+                              <option value="5">Ostirala</option>
+                              <option value="6">Larunbata</option>
+                              <option value="7">Igandea</option>
+                            </select>
+                            <br />
+                            <br />
+                            <b>
+                              {trans("registerFormCuidadores.horaInicio")} :
+                            </b>
+                            <TimeInput
+                              onTimeChange={valor => {
+                                this.handleDiasDisponibleChange(
+                                  valor,
+                                  "horaInicio" + indice
+                                );
+                              }}
+                              id={"horaInicio" + indice}
+                              initTime={
+                                this.state.diasDisponible[indice].horaInicio !=
+                                "00:00"
+                                  ? this.state.diasDisponible[indice].horaInicio
+                                  : "00:00"
+                              }
+                              className="mt-1 text-center d-inline form-control"
+                            />
+                            <br />
+                            <b>{trans("registerFormCuidadores.horaFin")} :</b>
+                            <TimeInput
+                              onTimeChange={valor => {
+                                this.handleDiasDisponibleChange(
+                                  valor,
+                                  "horaFin" + indice
+                                );
+                              }}
+                              id={"horaFin" + indice}
+                              initTime={
+                                this.state.diasDisponible[indice].horaFin !=
+                                "00:00"
+                                  ? this.state.diasDisponible[indice].horaFin
+                                  : "00:00"
+                              }
+                              className="mt-1 text-center d-inline form-control"
+                            />
+                            <br />
+                            <br />
+                          </div>
+                        </div>
+                      );
+                    })}
+                    <div id="botonesDiasDisponible" className="w-100 mt-2">
+                      {this.state.diasDisponible.length > 0 ? (
+                        <a
+                          onClick={this.removeDiasDisponible}
+                          className="btn btn-danger float-left text-light"
+                        >
+                          {trans("registerFormCuidadores.eliminarDia")}{" "}
+                          <FontAwesomeIcon icon={faMinusCircle} />
+                        </a>
+                      ) : (
+                        ""
+                      )}
+                      <a
+                        onClick={this.addDiasDisponible}
+                        className="btn btn-success float-right text-light"
+                      >
+                        {trans("registerFormCuidadores.anadir")}{" "}
+                        <FontAwesomeIcon icon={faPlusCircle} />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div className="form-group col">
+                  {/* Insertar ubicaciones disponibles aqui */}
+                  <label
+                    htmlFor="txtAddPueblos"
+                    className="w-100 text-center lead"
+                  >
+                    {trans("registerFormCuidadores.pueblosDisponible")}:
+                  </label>{" "}
+                  (<span className="text-danger font-weight-bold">*</span>)
+                  <div class="form-group mt-2">
+                    <AutoSuggest
+                      suggestions={this.state.suggestionsPueblos}
+                      onSuggestionsFetchRequested={
+                        this.onSuggestionsFetchRequested
+                      }
+                      onSuggestionsClearRequested={
+                        this.onSuggestionsClearRequested
+                      }
+                      onSuggestionSelected={this.handleAddPueblo}
+                      getSuggestionValue={this.getSuggestionValue}
+                      renderSuggestion={this.renderSuggestion}
+                      inputProps={autoSuggestProps}
+                      theme={suggestionTheme}
+                      id="txtAddPueblos"
+                    />
+                    {this.state.ubicaciones.length > 0 ? (
+                      <h5 className="mt-2 lead">
+                        {trans("registerFormCuidadores.pueblosSeleccionados")}:
+                      </h5>
+                    ) : (
+                      ""
+                    )}
+
+                    <ul className="list-group">
+                      {this.state.ubicaciones.map(pueblo => {
+                        return <li className="list-group-item">{pueblo}</li>;
+                      })}
+                    </ul>
+                    {this.state.ubicaciones.length > 0 ? (
+                      <a
+                        onClick={this.handleRemovePueblo}
+                        className="mt-4 btn btn-danger float-right text-light"
+                      >
+                        {trans("registerFormCuidadores.eliminarPueblo")}{" "}
+                        <FontAwesomeIcon icon={faMinusCircle} />
+                      </a>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  <br />
+                </div>
+              </div>
+              <div className="form-group row">
+                <div className="form-group col">
+                  {/* Insertar publico disponibles aqui */}
+                  <label className="w-100 text-center lead">
+                    {trans("registerFormCuidadores.publicoDisponible")}:
+                  </label>
+                  <div className="row md-2">
+                    <div
+                      onClick={() => {
+                        this.handlePublicoChange("nino");
+                      }}
+                      onMouseEnter={() => {
+                        this.handlePublicoHover("hoverNino");
+                      }}
+                      onMouseLeave={() => {
+                        this.handlePublicoLeave("hoverNino");
+                      }}
+                      className="col-4 text-center p-1"
+                      style={{
+                        background: this.state.publicoDisponible.nino
+                          ? "#28a745"
+                          : this.state.hoverNino
+                          ? "#545b62"
+                          : ""
+                      }}
+                    >
+                      <img src={imgNino} className="w-100 h-100" />
+                      <small className="font-weight-bold">
+                        {trans("registerFormCuidadores.ninos")}
+                      </small>
+                    </div>
+                    <div
+                      onClick={() => {
+                        this.handlePublicoChange("terceraEdad");
+                      }}
+                      onMouseEnter={() => {
+                        this.handlePublicoHover("hoverTerceraEdad");
+                      }}
+                      onMouseLeave={() => {
+                        this.handlePublicoLeave("hoverTerceraEdad");
+                      }}
+                      className="col-4 text-center p-1"
+                      style={{
+                        background: this.state.publicoDisponible.terceraEdad
+                          ? "#28a745"
+                          : this.state.hoverTerceraEdad
+                          ? "#545b62"
+                          : ""
+                      }}
+                    >
+                      <img src={imgTerceraEdad} className="w-100 h-100" />
+                      <small className="font-weight-bold">
+                        {trans("registerFormCuidadores.terceraEdad")}
+                      </small>
+                    </div>
+                    <div
+                      onClick={() => {
+                        this.handlePublicoChange("necesidadEspecial");
+                      }}
+                      onMouseEnter={() => {
+                        this.handlePublicoHover("hoverNecesidadEspecial");
+                      }}
+                      onMouseLeave={() => {
+                        this.handlePublicoLeave("hoverNecesidadEspecial");
+                      }}
+                      className="col-4 text-center p-1"
+                      style={{
+                        background: this.state.publicoDisponible
+                          .necesidadEspecial
+                          ? "#28a745"
+                          : this.state.hoverNecesidadEspecial
+                          ? "#545b62"
+                          : ""
+                      }}
+                    >
+                      <img src={imgNecesidadEspecial} className="w-100 h-100" />
+                      <small className="font-weight-bold">
+                        {trans("registerFormCuidadores.necesidadEspecial")}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div className="form-group col">
+                  {/* Insertar precioPublico disponibles aqui */}
+                  <label className="w-100 text-center lead">
+                    {trans("registerFormCuidadores.precioPorPublico")}:
+                  </label>
+                  <div className="list-group md-2">
+                    {this.state.publicoDisponible.nino ? (
+                      <div className="list-group-item form-group text-center p-1">
+                        <small>
+                          <b>{trans("registerFormCuidadores.ninos")}</b>
+                        </small>
+                        <input
+                          onChange={event => {
+                            this.handlePrecioChange("nino", event.target.value);
+                          }}
+                          className="form-control"
+                          type="number"
+                          placeholder="Prezioa €/h"
+                        />
+                      </div>
+                    ) : (
+                      <div className="list-group-item form-group text-center p-1">
+                        <small>
+                          <b>{trans("registerFormCuidadores.ninos")}</b>
+                        </small>
+                        <input
+                          onChange={event => {
+                            this.handlePrecioChange("nino", event.target.value);
+                          }}
+                          className="form-control"
+                          disabled
+                          type="number"
+                          placeholder="Prezioa €/h"
+                        />
+                      </div>
+                    )}
+
+                    {this.state.publicoDisponible.terceraEdad ? (
+                      <div className="list-group-item form-group text-center p-1">
+                        <small>
+                          <b>{trans("registerFormCuidadores.terceraEdad")}</b>
+                        </small>
+                        <input
+                          onChange={event => {
+                            this.handlePrecioChange(
+                              "terceraEdad",
+                              event.target.value
+                            );
+                          }}
+                          className="form-control"
+                          type="number"
+                          placeholder="Prezioa €/h"
+                        />
+                      </div>
+                    ) : (
+                      <div className="list-group-item form-group text-center p-1">
+                        <small>
+                          <b>{trans("registerFormCuidadores.terceraEdad")}</b>
+                        </small>
+                        <input
+                          onChange={event => {
+                            this.handlePrecioChange(
+                              "terceraEdad",
+                              event.target.value
+                            );
+                          }}
+                          disabled
+                          className="form-control"
+                          type="number"
+                          placeholder="Prezioa €/h"
+                        />
+                      </div>
+                    )}
+
+                    {this.state.publicoDisponible.necesidadEspecial ? (
+                      <div className="list-group-item form-group text-center p-1">
+                        <small>
+                          <b>
+                            {trans("registerFormCuidadores.necesidadEspecial")}
+                          </b>
+                        </small>
+                        <input
+                          onChange={event => {
+                            this.handlePrecioChange(
+                              "necesidadEspecial",
+                              event.target.value
+                            );
+                          }}
+                          className="form-control"
+                          type="number"
+                          placeholder="Prezioa €/h"
+                        />
+                      </div>
+                    ) : (
+                      <div className="list-group-item form-group text-center p-1">
+                        <small>
+                          <b>
+                            {trans("registerFormCuidadores.necesidadEspecial")}
+                          </b>
+                        </small>
+                        <input
+                          onChange={event => {
+                            this.handlePrecioChange(
+                              "necesidadEspecial",
+                              event.target.value
+                            );
+                          }}
+                          disabled
+                          className="form-control"
+                          type="number"
+                          placeholder="Prezioa €/h"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
               <div class="form-group">
-                <label htmlFor="txtNombre">
-                  {trans("registerFormCuidadores.nombre")}
+                <label htmlFor="txtDescripcion">
+                  {trans("registerFormCuidadores.descripcion")}
                 </label>{" "}
                 (<span className="text-danger font-weight-bold">*</span>)
-                <input
+                <textarea
                   onChange={this.handleInputChange}
-                  type="text"
                   class={
                     this.state.error.txtNombre
                       ? "border border-danger form-control"
                       : "form-control"
                   }
-                  id="txtNombre"
-                  aria-describedby="txtNombreHelp"
-                  placeholder="Introducir nombre..."
-                  value={this.state.txtNombre}
+                  rows="5"
+                  id="txtDescripcion"
+                  placeholder="Tu descripcion..."
+                  value={this.state.txtDescripcion}
+                ></textarea>
+              </div>
+
+              <div>
+                <Switch
+                  onChange={this.handleIsPublicChange}
+                  checked={this.state.isPublic}
+                  id="isPublic"
                 />
+                <br />
+                <small>{trans("registerFormCuidadores.publicarAuto")}</small>
               </div>
-              <div class="form-group row">
-                <div className="form-group col">
-                  <label htmlFor="txtApellido1">
-                    {trans("registerFormCuidadores.apellido1")}
-                  </label>
-                  <input
-                    onChange={this.handleInputChange}
-                    type="text"
-                    class="form-control"
-                    id="txtApellido1"
-                    aria-describedby="txtNombreHelp"
-                    placeholder="Introducir apellido 1..."
-                    value={this.state.txtApellido1}
+
+              <div id="loaderOrButton" className="w-100 mt-5 text-center">
+                {this.state.isLoading ? (
+                  <img
+                    src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
+                    height={50}
+                    width={50}
                   />
-                </div>
-                <div className="form-group col">
-                  <label htmlFor="txtApellido2">
-                    {trans("registerFormCuidadores.apellido2")}
-                  </label>
-                  <input
-                    onChange={this.handleInputChange}
-                    type="text"
-                    class="form-control"
-                    id="txtApellido2"
-                    aria-describedby="txtNombreHelp"
-                    placeholder="Introducir apellido 2..."
-                    value={this.state.txtApellido2}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row">
-            <div className="form-group col-6">
-              <label htmlFor="txtFechaNacimiento">
-                {trans("registerFormCuidadores.fechaNac")}
-              </label>{" "}
-              (<span className="text-danger font-weight-bold">*</span>)
-              <br />
-              <Calendario
-                dateFormat="YYYY/MM/DD"
-                inputClassName="form-control"
-                inputStyle={{ width: "100%" }}
-                className={
-                  this.state.error.txtNombre
-                    ? "border border-danger w-100"
-                    : "w-100"
-                }
-                allowPast={true}
-                allowFuture={false}
-                id="txtFechaNacimiento"
-                handleChange={this.handleCalendarChange}
-                value={this.state.txtFechaNacimiento}
-              />
-            </div>
-            <div
-              className={
-                this.state.error.txtNombre
-                  ? "form-group col-3 text-center p-1 border border-danger"
-                  : "form-group col-3 text-center p-1"
-              }
-              onClick={() => this.handleSexChange("M")}
-              onMouseEnter={() => this.handleSexHover("hoverSexoM")}
-              onMouseLeave={() => this.handleSexLeave("hoverSexoM")}
-              id="txtSexM"
-              style={{
-                borderRadius: "8px",
-                cursor: "pointer",
-                background:
-                  this.state.txtSexo == "M"
-                    ? "#28a745"
-                    : this.state.hoverSexoM
-                    ? "#545b62"
-                    : "",
-                color:
-                  this.state.txtSexo == "M" || this.state.hoverSexoM
-                    ? "white"
-                    : "black"
-              }}
-            >
-              <FontAwesomeIcon className="fa-5x" icon={faMale} />
-            </div>
-            <div
-              className={
-                this.state.error.txtNombre
-                  ? "form-group col-3 text-center p-1 border border-danger"
-                  : "form-group col-3 text-center p-1"
-              }
-              id="txtSexF"
-              onClick={() => this.handleSexChange("F")}
-              onMouseEnter={() => this.handleSexHover("hoverSexoF")}
-              onMouseLeave={() => this.handleSexLeave("hoverSexoF")}
-              style={{
-                borderRadius: "8px",
-                cursor: "pointer",
-                background:
-                  this.state.txtSexo == "F"
-                    ? "#28a745"
-                    : this.state.hoverSexoF
-                    ? "#545b62"
-                    : "",
-                color:
-                  this.state.txtSexo == "F" || this.state.hoverSexoF
-                    ? "white"
-                    : "black"
-              }}
-            >
-              <FontAwesomeIcon className="fa-5x" icon={faFemale} />
-            </div>
-          </div>
-
-          <div className="form-group row">
-            <div class="form-group col">
-              <label htmlFor="txtEmail">
-                {trans("registerFormCuidadores.email")}
-              </label>{" "}
-              (<span className="text-danger font-weight-bold">*</span>)
-              <input
-                onChange={this.handleInputChange}
-                type="email"
-                class={
-                  this.state.error.txtNombre
-                    ? "border border-danger form-control"
-                    : "form-control"
-                }
-                id="txtEmail"
-                aria-describedby="emailHelp"
-                placeholder="Introducir email..."
-                value={this.state.txtEmail}
-              />
-              <label className="pt-2" htmlFor="txtContrasena">
-                {trans("registerFormCuidadores.contrasena")}
-              </label>{" "}
-              (<span className="text-danger font-weight-bold">*</span>)
-              <input
-                onChange={this.handleInputChange}
-                type="password"
-                class={
-                  this.state.error.txtNombre
-                    ? "border border-danger form-control"
-                    : "form-control"
-                }
-                id="txtContrasena"
-                placeholder="Introducir contraseña..."
-                value={this.state.txtContrasena}
-              />
-            </div>
-            <div class="form-group col">
-              <label htmlFor="txtMovil">
-                {trans("registerFormCuidadores.movil")}
-              </label>{" "}
-              (<span className="text-danger font-weight-bold">*</span>)
-              <input
-                onChange={this.handleInputChange}
-                type="number"
-                class={
-                  this.state.error.txtNombre
-                    ? "border border-danger form-control"
-                    : "form-control"
-                }
-                id="txtMovil"
-                aria-describedby="emailHelp"
-                placeholder="Introducir movil..."
-                value={this.state.txtMovil}
-              />
-              <label className="pt-2" htmlFor="txtTelefono">
-                {trans("registerFormCuidadores.telefFijo")}
-              </label>
-              <input
-                onChange={this.handleInputChange}
-                type="number"
-                class="form-control"
-                id="txtTelefono"
-                placeholder="Introducir telefono fijo..."
-                value={this.state.txtTelefono}
-              />
-            </div>
-          </div>
-          <div className="form-group row">
-            <div className="form-group col">
-              {/* Insertar dias disponibles aqui */}
-              <label className="w-100 text-center lead">
-                {trans("registerFormCuidadores.diasDisponible")}:
-              </label>
-              <br />
-              <div className="w-100 mt-2" id="diasDisponible">
-                {/* Aqui iran los dias dinamicamente */}
-                {this.state.diasDisponible.map((objDia, indice) => {
-                  return (
-                    <div
-                      className="col-6 mx-auto text-center"
-                      id={"diaDisponible" + indice}
-                    >
-                      <div className="form-control mt-4 w-100">
-                        <select
-                          value={this.state.diasDisponible[indice].dia}
-                          onChange={this.handleDiasDisponibleChange}
-                          className="d-inline"
-                          id={"dia" + indice}
-                        >
-                          <option>Aukeratu eguna</option>
-                          <option value="1">Astelehena</option>
-                          <option value="2">Asteartea</option>
-                          <option value="3">Asteazkena</option>
-                          <option value="4">Osteguna</option>
-                          <option value="5">Ostirala</option>
-                          <option value="6">Larunbata</option>
-                          <option value="7">Igandea</option>
-                        </select>
-                        <br />
-                        <br />
-                        <b>{trans("registerFormCuidadores.horaInicio")} :</b>
-                        <TimeInput
-                          onTimeChange={valor => {
-                            this.handleDiasDisponibleChange(
-                              valor,
-                              "horaInicio" + indice
-                            );
-                          }}
-                          id={"horaInicio" + indice}
-                          initTime={
-                            this.state.diasDisponible[indice].horaInicio !=
-                            "00:00"
-                              ? this.state.diasDisponible[indice].horaInicio
-                              : "00:00"
-                          }
-                          className="mt-1 text-center d-inline form-control"
-                        />
-                        <br />
-                        <b>{trans("registerFormCuidadores.horaFin")} :</b>
-                        <TimeInput
-                          onTimeChange={valor => {
-                            this.handleDiasDisponibleChange(
-                              valor,
-                              "horaFin" + indice
-                            );
-                          }}
-                          id={"horaFin" + indice}
-                          initTime={
-                            this.state.diasDisponible[indice].horaFin != "00:00"
-                              ? this.state.diasDisponible[indice].horaFin
-                              : "00:00"
-                          }
-                          className="mt-1 text-center d-inline form-control"
-                        />
-                        <br />
-                        <br />
-                      </div>
-                    </div>
-                  );
-                })}
-                <div id="botonesDiasDisponible" className="w-100 mt-2">
-                  {this.state.diasDisponible.length > 0 ? (
-                    <a
-                      onClick={this.removeDiasDisponible}
-                      className="btn btn-danger float-left text-light"
-                    >
-                      {trans("registerFormCuidadores.eliminarDia")}{" "}
-                      <FontAwesomeIcon icon={faMinusCircle} />
-                    </a>
-                  ) : (
-                    ""
-                  )}
-                  <a
-                    onClick={this.addDiasDisponible}
-                    className="btn btn-success float-right text-light"
+                ) : (
+                  <button
+                    onClick={() => this.handleRegistrarse(socket)}
+                    type="button"
+                    className="w-100 btn btn-success "
                   >
-                    {trans("registerFormCuidadores.anadir")}{" "}
-                    <FontAwesomeIcon icon={faPlusCircle} />
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="form-group col">
-              {/* Insertar ubicaciones disponibles aqui */}
-              <label htmlFor="txtAddPueblos" className="w-100 text-center lead">
-                {trans("registerFormCuidadores.pueblosDisponible")}:
-              </label>{" "}
-              (<span className="text-danger font-weight-bold">*</span>)
-              <div class="form-group mt-2">
-                <AutoSuggest
-                  suggestions={this.state.suggestionsPueblos}
-                  onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                  onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                  onSuggestionSelected={this.handleAddPueblo}
-                  getSuggestionValue={this.getSuggestionValue}
-                  renderSuggestion={this.renderSuggestion}
-                  inputProps={autoSuggestProps}
-                  theme={suggestionTheme}
-                  id="txtAddPueblos"
-                />
-                {this.state.ubicaciones.length > 0 ? (
-                  <h5 className="mt-2 lead">
-                    {trans("registerFormCuidadores.pueblosSeleccionados")}:
-                  </h5>
-                ) : (
-                  ""
-                )}
-
-                <ul className="list-group">
-                  {this.state.ubicaciones.map(pueblo => {
-                    return <li className="list-group-item">{pueblo}</li>;
-                  })}
-                </ul>
-                {this.state.ubicaciones.length > 0 ? (
-                  <a
-                    onClick={this.handleRemovePueblo}
-                    className="mt-4 btn btn-danger float-right text-light"
-                  >
-                    {trans("registerFormCuidadores.eliminarPueblo")}{" "}
-                    <FontAwesomeIcon icon={faMinusCircle} />
-                  </a>
-                ) : (
-                  ""
+                    {trans("registerFormCuidadores.registrarse")}
+                  </button>
                 )}
               </div>
-              <br />
-            </div>
+            </form>
           </div>
-          <div className="form-group row">
-            <div className="form-group col">
-              {/* Insertar publico disponibles aqui */}
-              <label className="w-100 text-center lead">
-                {trans("registerFormCuidadores.publicoDisponible")}:
-              </label>
-              <div className="row md-2">
-                <div
-                  onClick={() => {
-                    this.handlePublicoChange("nino");
-                  }}
-                  onMouseEnter={() => {
-                    this.handlePublicoHover("hoverNino");
-                  }}
-                  onMouseLeave={() => {
-                    this.handlePublicoLeave("hoverNino");
-                  }}
-                  className="col-4 text-center p-1"
-                  style={{
-                    background: this.state.publicoDisponible.nino
-                      ? "#28a745"
-                      : this.state.hoverNino
-                      ? "#545b62"
-                      : ""
-                  }}
-                >
-                  <img src={imgNino} className="w-100 h-100" />
-                  <small className="font-weight-bold">
-                    {trans("registerFormCuidadores.ninos")}
-                  </small>
-                </div>
-                <div
-                  onClick={() => {
-                    this.handlePublicoChange("terceraEdad");
-                  }}
-                  onMouseEnter={() => {
-                    this.handlePublicoHover("hoverTerceraEdad");
-                  }}
-                  onMouseLeave={() => {
-                    this.handlePublicoLeave("hoverTerceraEdad");
-                  }}
-                  className="col-4 text-center p-1"
-                  style={{
-                    background: this.state.publicoDisponible.terceraEdad
-                      ? "#28a745"
-                      : this.state.hoverTerceraEdad
-                      ? "#545b62"
-                      : ""
-                  }}
-                >
-                  <img src={imgTerceraEdad} className="w-100 h-100" />
-                  <small className="font-weight-bold">
-                    {trans("registerFormCuidadores.terceraEdad")}
-                  </small>
-                </div>
-                <div
-                  onClick={() => {
-                    this.handlePublicoChange("necesidadEspecial");
-                  }}
-                  onMouseEnter={() => {
-                    this.handlePublicoHover("hoverNecesidadEspecial");
-                  }}
-                  onMouseLeave={() => {
-                    this.handlePublicoLeave("hoverNecesidadEspecial");
-                  }}
-                  className="col-4 text-center p-1"
-                  style={{
-                    background: this.state.publicoDisponible.necesidadEspecial
-                      ? "#28a745"
-                      : this.state.hoverNecesidadEspecial
-                      ? "#545b62"
-                      : ""
-                  }}
-                >
-                  <img src={imgNecesidadEspecial} className="w-100 h-100" />
-                  <small className="font-weight-bold">
-                    {trans("registerFormCuidadores.necesidadEspecial")}
-                  </small>
-                </div>
-              </div>
-            </div>
-            <div className="form-group col">
-              {/* Insertar precioPublico disponibles aqui */}
-              <label className="w-100 text-center lead">
-                {trans("registerFormCuidadores.precioPorPublico")}:
-              </label>
-              <div className="list-group md-2">
-                {this.state.publicoDisponible.nino ? (
-                  <div className="list-group-item form-group text-center p-1">
-                    <small>
-                      <b>{trans("registerFormCuidadores.ninos")}</b>
-                    </small>
-                    <input
-                      onChange={event => {
-                        this.handlePrecioChange("nino", event.target.value);
-                      }}
-                      className="form-control"
-                      type="number"
-                      placeholder="Prezioa €/h"
-                    />
-                  </div>
-                ) : (
-                  <div className="list-group-item form-group text-center p-1">
-                    <small>
-                      <b>{trans("registerFormCuidadores.ninos")}</b>
-                    </small>
-                    <input
-                      onChange={event => {
-                        this.handlePrecioChange("nino", event.target.value);
-                      }}
-                      className="form-control"
-                      disabled
-                      type="number"
-                      placeholder="Prezioa €/h"
-                    />
-                  </div>
-                )}
-
-                {this.state.publicoDisponible.terceraEdad ? (
-                  <div className="list-group-item form-group text-center p-1">
-                    <small>
-                      <b>{trans("registerFormCuidadores.terceraEdad")}</b>
-                    </small>
-                    <input
-                      onChange={event => {
-                        this.handlePrecioChange(
-                          "terceraEdad",
-                          event.target.value
-                        );
-                      }}
-                      className="form-control"
-                      type="number"
-                      placeholder="Prezioa €/h"
-                    />
-                  </div>
-                ) : (
-                  <div className="list-group-item form-group text-center p-1">
-                    <small>
-                      <b>{trans("registerFormCuidadores.terceraEdad")}</b>
-                    </small>
-                    <input
-                      onChange={event => {
-                        this.handlePrecioChange(
-                          "terceraEdad",
-                          event.target.value
-                        );
-                      }}
-                      disabled
-                      className="form-control"
-                      type="number"
-                      placeholder="Prezioa €/h"
-                    />
-                  </div>
-                )}
-
-                {this.state.publicoDisponible.necesidadEspecial ? (
-                  <div className="list-group-item form-group text-center p-1">
-                    <small>
-                      <b>{trans("registerFormCuidadores.necesidadEspecial")}</b>
-                    </small>
-                    <input
-                      onChange={event => {
-                        this.handlePrecioChange(
-                          "necesidadEspecial",
-                          event.target.value
-                        );
-                      }}
-                      className="form-control"
-                      type="number"
-                      placeholder="Prezioa €/h"
-                    />
-                  </div>
-                ) : (
-                  <div className="list-group-item form-group text-center p-1">
-                    <small>
-                      <b>{trans("registerFormCuidadores.necesidadEspecial")}</b>
-                    </small>
-                    <input
-                      onChange={event => {
-                        this.handlePrecioChange(
-                          "necesidadEspecial",
-                          event.target.value
-                        );
-                      }}
-                      disabled
-                      className="form-control"
-                      type="number"
-                      placeholder="Prezioa €/h"
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label htmlFor="txtDescripcion">
-              {trans("registerFormCuidadores.descripcion")}
-            </label>{" "}
-            (<span className="text-danger font-weight-bold">*</span>)
-            <textarea
-              onChange={this.handleInputChange}
-              class={
-                this.state.error.txtNombre
-                  ? "border border-danger form-control"
-                  : "form-control"
-              }
-              rows="5"
-              id="txtDescripcion"
-              placeholder="Tu descripcion..."
-              value={this.state.txtDescripcion}
-            ></textarea>
-          </div>
-
-          <div>
-            <Switch
-              onChange={this.handleIsPublicChange}
-              checked={this.state.isPublic}
-              id="isPublic"
-            />
-            <br />
-            <small>{trans("registerFormCuidadores.publicarAuto")}</small>
-          </div>
-
-          <div id="loaderOrButton" className="w-100 mt-5 text-center">
-            {this.state.isLoading ? (
-              <img
-                src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
-                height={50}
-                width={50}
-              />
-            ) : (
-              <button
-                onClick={this.handleRegistrarse}
-                type="button"
-                className="w-100 btn btn-success "
-              >
-                {trans("registerFormCuidadores.registrarse")}
-              </button>
-            )}
-          </div>
-        </form>
-      </div>
+        )}
+      </SocketContext.Consumer>
     );
   }
 }

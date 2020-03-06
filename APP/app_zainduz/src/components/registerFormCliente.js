@@ -8,6 +8,7 @@ import { saveUserSession } from "../redux/actions/user";
 import { changeFormContent } from "../redux/actions/app";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
+import SocketContext from "../socketio/socket-context";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -81,7 +82,7 @@ class RegisterFormCliente extends React.Component {
     });
   }
 
-  async handleRegistrarse() {
+  async handleRegistrarse(socket) {
     for (var clave in this.state) {
       if (
         (this.state[clave].length == 0 || !this.state[clave]) &&
@@ -122,16 +123,18 @@ class RegisterFormCliente extends React.Component {
       contrasena: this.state.txtContrasena
     };
 
-    const insertedCliente = await axios.post("http://" + ipMaquina + ":3001/api/procedures/postNewCliente", formData).catch(err => {
-      this.setState({
-        isLoading: false
+    const insertedCliente = await axios
+      .post(
+        "http://" + ipMaquina + ":3001/api/procedures/postNewCliente",
+        formData
+      )
+      .catch(err => {
+        this.setState({
+          isLoading: false
+        });
+        cogoToast.error(<h5>{trans("registerFormClientes.errorGeneral")}</h5>);
+        return;
       });
-      cogoToast.error(
-        <h5>{trans("registerFormClientes.errorGeneral")}</h5>
-      );
-      return;
-    });
-    console.log(insertedCliente);
     this.props.saveUserSession(
       Object.assign({}, formData, {
         tipoUsuario: "Cliente",
@@ -157,6 +160,11 @@ class RegisterFormCliente extends React.Component {
         txtMovil: false
       }
     };
+
+    socket.emit('login', {
+      idUsuario: insertedCliente.data._idUsuario
+    });
+
     cogoToast.success(
       <div>
         <h5>{trans("registerFormClientes.registroCompletado")}</h5>
@@ -170,170 +178,174 @@ class RegisterFormCliente extends React.Component {
 
   render() {
     return (
-      <div className="p-5">
-        <div className="form-group d-flex justify-content-center position-relative">
-          <Avatar
-            label="Aukeratu avatarra"
-            labelStyle={{
-              fontSize: "15px",
-              fontWeight: "bold",
-              cursor: "pointer",
-              width: "100%",
-              height: "100%"
-            }}
-            height={200}
-            width={200}
-            onCrop={this.onCrop}
-            onClose={this.onClose}
-            onBeforeFileLoad={this.onBeforeFileLoad}
-            src={this.state.avatarPreview}
-          />
-        </div>
-        <div className="form-group row">
-          <div className="col-12">
-            <label htmlFor="txtNombre">
-              {trans("registerFormClientes.nombre")}
-            </label>{" "}
-            (<span className="text-danger font-weight-bold">*</span>)
-            <input
-              onChange={this.handleInputChange}
-              type="text"
-              className={
-                this.state.error.txtNombre
-                  ? "border border-danger form-control"
-                  : "form-control"
-              }
-              id="txtNombre"
-              aria-describedby="txtNombreHelp"
-              placeholder="Izena..."
-              value={this.state.txtNombre}
-            />
+      <SocketContext.Consumer>
+        {socket => (
+          <div className="p-5">
+            <div className="form-group d-flex justify-content-center position-relative">
+              <Avatar
+                label="Aukeratu avatarra"
+                labelStyle={{
+                  fontSize: "15px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  width: "100%",
+                  height: "100%"
+                }}
+                height={200}
+                width={200}
+                onCrop={this.onCrop}
+                onClose={this.onClose}
+                onBeforeFileLoad={this.onBeforeFileLoad}
+                src={this.state.avatarPreview}
+              />
+            </div>
+            <div className="form-group row">
+              <div className="col-12">
+                <label htmlFor="txtNombre">
+                  {trans("registerFormClientes.nombre")}
+                </label>{" "}
+                (<span className="text-danger font-weight-bold">*</span>)
+                <input
+                  onChange={this.handleInputChange}
+                  type="text"
+                  className={
+                    this.state.error.txtNombre
+                      ? "border border-danger form-control"
+                      : "form-control"
+                  }
+                  id="txtNombre"
+                  aria-describedby="txtNombreHelp"
+                  placeholder="Izena..."
+                  value={this.state.txtNombre}
+                />
+              </div>
+            </div>
+            <div className="form-group row">
+              <div className="col-6">
+                <label htmlFor="txtApellido1">
+                  {trans("registerFormClientes.apellido1")}
+                </label>
+                <input
+                  onChange={this.handleInputChange}
+                  type="text"
+                  className="form-control"
+                  id="txtApellido1"
+                  aria-describedby="txtNombreHelp"
+                  placeholder="Lehen abizena..."
+                  value={this.state.txtApellido1}
+                />
+              </div>
+              <div className="col-6">
+                <label htmlFor="txtApellido2">
+                  {trans("registerFormClientes.apellido2")}
+                </label>
+                <input
+                  onChange={this.handleInputChange}
+                  type="text"
+                  className="form-control"
+                  id="txtApellido2"
+                  aria-describedby="txtNombreHelp"
+                  placeholder="Bigarren abizena..."
+                  value={this.state.txtApellido2}
+                />
+              </div>
+            </div>
+            <div className="form-group row">
+              <div className="col-6">
+                <label htmlFor="txtEmail">
+                  {trans("registerFormClientes.email")}
+                </label>{" "}
+                (<span className="text-danger font-weight-bold">*</span>)
+                <input
+                  onChange={this.handleInputChange}
+                  type="email"
+                  class={
+                    this.state.error.txtNombre
+                      ? "border border-danger form-control"
+                      : "form-control"
+                  }
+                  id="txtEmail"
+                  aria-describedby="emailHelp"
+                  placeholder="Sartu emaila..."
+                  value={this.state.txtEmail}
+                />
+              </div>
+              <div className="col-6">
+                <label htmlFor="txtContrasena">
+                  {trans("registerFormClientes.contrasena")}
+                </label>{" "}
+                (<span className="text-danger font-weight-bold">*</span>)
+                <input
+                  onChange={this.handleInputChange}
+                  type="password"
+                  class={
+                    this.state.error.txtNombre
+                      ? "border border-danger form-control"
+                      : "form-control"
+                  }
+                  id="txtContrasena"
+                  placeholder="Sartu pasahitza..."
+                  value={this.state.txtContrasena}
+                />
+              </div>
+            </div>
+            <div className="form-group row">
+              <div className="col-6">
+                <label htmlFor="txtMovil">
+                  {trans("registerFormClientes.movil")}
+                </label>{" "}
+                (<span className="text-danger font-weight-bold">*</span>)
+                <input
+                  onChange={this.handleInputChange}
+                  type="number"
+                  class={
+                    this.state.error.txtNombre
+                      ? "border border-danger form-control"
+                      : "form-control"
+                  }
+                  id="txtMovil"
+                  placeholder="Sartu mugikorra..."
+                  value={this.state.txtMovil}
+                />
+              </div>
+              <div className="col-6">
+                <label htmlFor="txtFijo">
+                  {trans("registerFormClientes.telefFijo")}
+                </label>{" "}
+                <input
+                  onChange={this.handleInputChange}
+                  type="number"
+                  class={
+                    this.state.error.txtFijo
+                      ? "border border-danger form-control"
+                      : "form-control"
+                  }
+                  id="txtFijo"
+                  placeholder="Sartu telefono finkoa..."
+                  value={this.state.txtFijo}
+                />
+              </div>
+            </div>
+            <div id="loaderOrButton" className="w-100 mt-5 text-center">
+              {this.state.isLoading ? (
+                <img
+                  src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
+                  height={50}
+                  width={50}
+                />
+              ) : (
+                <button
+                  onClick={() => this.handleRegistrarse(socket)}
+                  type="button"
+                  className="w-100 btn btn-success "
+                >
+                  {trans("registerFormClientes.registrarse")}
+                </button>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="form-group row">
-          <div className="col-6">
-            <label htmlFor="txtApellido1">
-              {trans("registerFormClientes.apellido1")}
-            </label>
-            <input
-              onChange={this.handleInputChange}
-              type="text"
-              className="form-control"
-              id="txtApellido1"
-              aria-describedby="txtNombreHelp"
-              placeholder="Lehen abizena..."
-              value={this.state.txtApellido1}
-            />
-          </div>
-          <div className="col-6">
-            <label htmlFor="txtApellido2">
-              {trans("registerFormClientes.apellido2")}
-            </label>
-            <input
-              onChange={this.handleInputChange}
-              type="text"
-              className="form-control"
-              id="txtApellido2"
-              aria-describedby="txtNombreHelp"
-              placeholder="Bigarren abizena..."
-              value={this.state.txtApellido2}
-            />
-          </div>
-        </div>
-        <div className="form-group row">
-          <div className="col-6">
-            <label htmlFor="txtEmail">
-              {trans("registerFormClientes.email")}
-            </label>{" "}
-            (<span className="text-danger font-weight-bold">*</span>)
-            <input
-              onChange={this.handleInputChange}
-              type="email"
-              class={
-                this.state.error.txtNombre
-                  ? "border border-danger form-control"
-                  : "form-control"
-              }
-              id="txtEmail"
-              aria-describedby="emailHelp"
-              placeholder="Sartu emaila..."
-              value={this.state.txtEmail}
-            />
-          </div>
-          <div className="col-6">
-            <label htmlFor="txtContrasena">
-              {trans("registerFormClientes.contrasena")}
-            </label>{" "}
-            (<span className="text-danger font-weight-bold">*</span>)
-            <input
-              onChange={this.handleInputChange}
-              type="password"
-              class={
-                this.state.error.txtNombre
-                  ? "border border-danger form-control"
-                  : "form-control"
-              }
-              id="txtContrasena"
-              placeholder="Sartu pasahitza..."
-              value={this.state.txtContrasena}
-            />
-          </div>
-        </div>
-        <div className="form-group row">
-          <div className="col-6">
-            <label htmlFor="txtMovil">
-              {trans("registerFormClientes.movil")}
-            </label>{" "}
-            (<span className="text-danger font-weight-bold">*</span>)
-            <input
-              onChange={this.handleInputChange}
-              type="number"
-              class={
-                this.state.error.txtNombre
-                  ? "border border-danger form-control"
-                  : "form-control"
-              }
-              id="txtMovil"
-              placeholder="Sartu mugikorra..."
-              value={this.state.txtMovil}
-            />
-          </div>
-          <div className="col-6">
-            <label htmlFor="txtFijo">
-              {trans("registerFormClientes.telefFijo")}
-            </label>{" "}
-            <input
-              onChange={this.handleInputChange}
-              type="number"
-              class={
-                this.state.error.txtFijo
-                  ? "border border-danger form-control"
-                  : "form-control"
-              }
-              id="txtFijo"
-              placeholder="Sartu telefono finkoa..."
-              value={this.state.txtFijo}
-            />
-          </div>
-        </div>
-        <div id="loaderOrButton" className="w-100 mt-5 text-center">
-          {this.state.isLoading ? (
-            <img
-              src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
-              height={50}
-              width={50}
-            />
-          ) : (
-            <button
-              onClick={this.handleRegistrarse}
-              type="button"
-              className="w-100 btn btn-success "
-            >
-              {trans("registerFormClientes.registrarse")}
-            </button>
-          )}
-        </div>
-      </div>
+        )}
+      </SocketContext.Consumer>
     );
   }
 }
