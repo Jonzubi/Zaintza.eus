@@ -15,6 +15,7 @@ import cogoToast from "cogo-toast";
 import { trans } from "../util/funciones";
 import Axios from "axios";
 import ChangeLang from "../components/changeLang";
+import SocketContext from '../socketio/socket-context';
 
 const mapStateToProps = state => {
   return {
@@ -128,10 +129,15 @@ class MenuPerfil extends React.Component {
     this.props.toogleMenuPerfil(false);
   }
 
-  handleLogOut() {
+  handleLogOut(socket) {
+    const { idUsuario } = this.props;
+
     this.props.initializeUserSession();
     this.props.changeFormContent("tabla");
     this.props.toogleMenuPerfil(false);
+    socket.emit('logout', {
+      idUsuario: idUsuario
+    });
     cogoToast.success(<h5>{trans("notificaciones.sesionCerrada")}</h5>);
   }
 
@@ -150,53 +156,58 @@ class MenuPerfil extends React.Component {
       return <LogInForm />;
     } else {
       return (
-        <div id="menu-perfil-content" className="w-100">
-          <div
-            id="menu-perfil-opciones"
-            className="btn-group-vertical w-100 mt-5"
-          >
+        <SocketContext.Consumer>
+          {socket => (
+            <div id="menu-perfil-content" className="w-100">
+            <div
+              id="menu-perfil-opciones"
+              className="btn-group-vertical w-100 mt-5"
+            >
+              <button
+                type="button"
+                className="w-100 btn btn-secondary"
+                onClick={() => this.handleClickPerfil()}
+              >
+                {trans("menuPerfil.perfil")}
+              </button>
+              <button type="button" className="w-100 btn btn-secondary" onClick={() => this.handleClickCalendario()}>
+                {trans("menuPerfil.calendario")}
+              </button>
+              <button
+                type="button"
+                className="w-100 btn btn-secondary"
+                onClick={() => this.handleClickAcuerdos()}
+              >
+                {trans("menuPerfil.contratos")}
+              </button>
+              <button
+                type="button"
+                className="w-100 btn btn-secondary"
+                onClick={() => this.handleClickNotificaciones()}
+              >
+                {trans("menuPerfil.notificaciones")}
+                {this.state.countNotificaciones > 0 ? (
+                  <span className="badge badge-light ml-2">
+                    {this.state.countNotificaciones}
+                  </span>
+                ) : null}
+              </button>
+              <button type="button" className="w-100 btn btn-secondary" onClick={() => this.handleClickAjustes()}>
+                {trans("menuPerfil.ajustes")}
+              </button>
+            </div>
             <button
               type="button"
-              className="w-100 btn btn-secondary"
-              onClick={() => this.handleClickPerfil()}
+              className="mt-5 w-100 btn btn-danger"
+              onClick={() => this.handleLogOut(socket)}
             >
-              {trans("menuPerfil.perfil")}
-            </button>
-            <button type="button" className="w-100 btn btn-secondary" onClick={() => this.handleClickCalendario()}>
-              {trans("menuPerfil.calendario")}
-            </button>
-            <button
-              type="button"
-              className="w-100 btn btn-secondary"
-              onClick={() => this.handleClickAcuerdos()}
-            >
-              {trans("menuPerfil.contratos")}
-            </button>
-            <button
-              type="button"
-              className="w-100 btn btn-secondary"
-              onClick={() => this.handleClickNotificaciones()}
-            >
-              {trans("menuPerfil.notificaciones")}
-              {this.state.countNotificaciones > 0 ? (
-                <span className="badge badge-light ml-2">
-                  {this.state.countNotificaciones}
-                </span>
-              ) : null}
-            </button>
-            <button type="button" className="w-100 btn btn-secondary" onClick={() => this.handleClickAjustes()}>
-              {trans("menuPerfil.ajustes")}
+              <FontAwesomeIcon className="mt-1 float-left" icon={faTimes} />
+              {trans("menuPerfil.salir")}
             </button>
           </div>
-          <button
-            type="button"
-            className="mt-5 w-100 btn btn-danger"
-            onClick={() => this.handleLogOut()}
-          >
-            <FontAwesomeIcon className="mt-1 float-left" icon={faTimes} />
-            {trans("menuPerfil.salir")}
-          </button>
-        </div>
+          )}
+        </SocketContext.Consumer>
+        
       );
     }
   }

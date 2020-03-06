@@ -19,6 +19,11 @@ io.on('connection', (socket) => {
         printDataOnConsole()
     });
 
+    socket.on('logout', ({ idUsuario }) => {
+        usuariosLogueados = usuariosLogueados.filter(item => item.idUsuario !== idUsuario);
+        printDataOnConsole();
+    });
+
     socket.on('disconnect', () => {
         usuariosConectados = usuariosConectados.filter(item => item.socketId !== socket.id);
         usuariosLogueados = usuariosLogueados.filter(item => item.socketId !== socket.id);
