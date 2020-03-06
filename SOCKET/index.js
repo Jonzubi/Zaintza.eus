@@ -24,6 +24,13 @@ io.on('connection', (socket) => {
         printDataOnConsole();
     });
 
+    socket.on('notify', ({ idUsuario }) => {
+        const usertToNotify = usuariosLogueados.filter(item => item.idUsuario === idUsuario)[0];
+        if(usertToNotify !== undefined) {
+            io.to(`${usertToNotify.socketId}`).emit('notifyReceived');
+        }
+    });
+
     socket.on('disconnect', () => {
         usuariosConectados = usuariosConectados.filter(item => item.socketId !== socket.id);
         usuariosLogueados = usuariosLogueados.filter(item => item.socketId !== socket.id);
