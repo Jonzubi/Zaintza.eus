@@ -13,8 +13,6 @@ import NotificacionesForm from "./components/notificacionesForm";
 import CalendarioForm from "./components/calendarioForm";
 import FormAnuncio from "./components/formAnuncio";
 import Ajustes from "./components/ajustesForm";
-import openSocket from 'socket.io-client';
-import cogoToast from "cogo-toast";
 
 const mapStateToProps = state => {
   return { formContent: state.app.formContent };
@@ -27,13 +25,6 @@ class App extends React.Component {
       isOpenMenuPerfil: false,
       formContent: "tabla"
     };
-
-    this.socket = openSocket('http://127.0.0.1:3002');
-    this.socket.on('conectado', () => {
-      cogoToast.success(
-        <h5>Socket connectado wey</h5>
-      )
-    });
   }
 
   //Abre o cierra el menu segun el estado actual

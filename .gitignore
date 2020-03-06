@@ -2,3 +2,5 @@
 /API/package-lock.json
 /APP/app_zainduz/node_modules/
 /API/util/imagenes/
+/SOCKET/node_modules
+/SOCKET/package-lock.json
