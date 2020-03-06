@@ -1,4 +1,8 @@
-const { writeImage, getRandomString, getTodayDate } = require("../../util/funciones");
+const {
+  writeImage,
+  getRandomString,
+  getTodayDate
+} = require("../../util/funciones");
 const headerResponse = require("../../util/headerResponse");
 
 exports.getAcuerdosConUsuarios = (req, res, modelos) => {
@@ -16,11 +20,10 @@ exports.getAcuerdosConUsuarios = (req, res, modelos) => {
   if (tipoUsuario == "Cliente") {
     columna = "idCliente";
     columnaLaOtraPersona = "idCuidador";
-  } else if(tipoUsuario == "Cuidador"){
+  } else if (tipoUsuario == "Cuidador") {
     columna = "idCuidador";
     columnaLaOtraPersona = "idCliente";
-  }
-  else{
+  } else {
     res.writeHead(500, headerResponse);
     res.write("Parametros incorrectos");
     res.end();
@@ -29,12 +32,12 @@ exports.getAcuerdosConUsuarios = (req, res, modelos) => {
 
   let filtrosConsulta = { [columna]: idPerfil };
   //El parametro estadoAcuerdo es opcional para el procedure, si se le pasa lo va a aplicar
-  if(typeof estadoAcuerdo != "undefined"){
+  if (typeof estadoAcuerdo != "undefined") {
     filtrosConsulta.estadoAcuerdo = estadoAcuerdo;
   }
 
   modeloAcuerdos
-    .find( filtrosConsulta )    
+    .find(filtrosConsulta)
     .populate(columnaLaOtraPersona)
     .then(respuesta => {
       res.writeHead(200, headerResponse);
@@ -51,7 +54,7 @@ exports.getAcuerdosConUsuarios = (req, res, modelos) => {
 
 exports.getNotificacionesConUsuarios = (req, res, modelos) => {
   const idUsuario = req.query.idUsuario;
-  if(typeof idUsuario == "undefined"){
+  if (typeof idUsuario == "undefined") {
     res.writeHead(500, headerResponse);
     res.write("Parametros incorrectos");
     res.end();
@@ -61,10 +64,10 @@ exports.getNotificacionesConUsuarios = (req, res, modelos) => {
   const modeloNotificacion = modelos.notificacion;
 
   modeloNotificacion
-    .find( {idUsuario: idUsuario} )
+    .find({ idUsuario: idUsuario })
     .populate({
-      path: 'idRemitente',
-      populate: { path: 'idPerfil' }
+      path: "idRemitente",
+      populate: { path: "idPerfil" }
     })
     .then(respuesta => {
       res.writeHead(200, headerResponse);
@@ -82,7 +85,7 @@ exports.getNotificacionesConUsuarios = (req, res, modelos) => {
 exports.getUsuarioConPerfil = async (req, res, modelos) => {
   const { email, contrasena } = req.query;
 
-  if(typeof email == "undefined" || typeof contrasena == "undefined") {
+  if (typeof email == "undefined" || typeof contrasena == "undefined") {
     res.writeHead(500, headerResponse);
     res.write("Parametros incorrectos");
     res.end();
@@ -94,32 +97,57 @@ exports.getUsuarioConPerfil = async (req, res, modelos) => {
   const filtros = {
     email: email,
     contrasena: contrasena
-  }
+  };
 
   const usu = await modeloUsuario.findOne(filtros);
   if (usu !== null) {
-    modeloAjuste.findOne({idUsuario: usu._id}).populate({
-      path: 'idUsuario',
-      populate: 'idPerfil'
-    })
-    .then(respuesta => {
-      res.writeHead(200, headerResponse);
-      res.write(JSON.stringify(respuesta));
-      res.end();
-    });
+    const ajus = await modeloAjuste.findOne({ idUsuario: usu._id });
+    if (ajus !== null) {
+      modeloAjuste
+        .findOne({ idUsuario: usu._id })
+        .populate({
+          path: "idUsuario",
+          populate: "idPerfil"
+        })
+        .then(respuesta => {
+          res.writeHead(200, headerResponse);
+          res.write(JSON.stringify(respuesta));
+          res.end();
+        })
+        .catch(err => {
+          console.log(err);
+          res.writeHead(500, headerResponse);
+          res.write(JSON.stringify(err));
+          res.end();
+        });
+    } else {
+      modeloUsuario.findOne(filtros)
+        .populate('idPerfil')
+        .then(respuesta => {
+          res.writeHead(200, headerResponse);
+          res.write(JSON.stringify(respuesta));
+          res.end();
+        })
+        .catch(err => {
+          console.log(err);
+          res.writeHead(500, headerResponse);
+          res.write(JSON.stringify(err));
+          res.end();
+        });
+    }
   } else {
     res.writeHead(200, headerResponse);
     res.write("Vacio");
     res.end();
   }
-}
-  
+};
+
 exports.getAnunciosConPerfil = (req, res, modelos) => {
   const modeloAnuncios = modelos.anuncio;
 
   modeloAnuncios
     .find()
-    .populate('idCliente')
+    .populate("idCliente")
     .then(respuesta => {
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(respuesta));
@@ -134,30 +162,46 @@ exports.getAnunciosConPerfil = (req, res, modelos) => {
 };
 
 exports.postNewCuidador = async (req, res, modelos) => {
-  const { email, contrasena, nombre, apellido1, apellido2,
-          fechaNacimiento, sexo, descripcion, publicoDisponible, isPublic, precioPorPublico, diasDisponible,
-          ubicaciones, telefono, imgContactB64, avatarPreview } = req.body;
+  const {
+    email,
+    contrasena,
+    nombre,
+    apellido1,
+    apellido2,
+    fechaNacimiento,
+    sexo,
+    descripcion,
+    publicoDisponible,
+    isPublic,
+    precioPorPublico,
+    diasDisponible,
+    ubicaciones,
+    telefono,
+    imgContactB64,
+    avatarPreview
+  } = req.body;
   //Comprobamos que se han mandado los campos required del form cuidador
-  if (typeof nombre == "undefined" || 
-      typeof fechaNacimiento == "undefined" ||
-      typeof sexo == "undefined" ||
-      typeof descripcion == "undefined" || 
-      typeof ubicaciones == "undefined" || 
-      typeof telefono == "undefined" ||
-      typeof imgContactB64 == "undefined" ||
-      typeof email == "undefined" ||
-      typeof contrasena == "undefined"){
-
-        res.writeHead(500, headerResponse);
-        res.write("Parametros incorrectos");
-        res.end();
-        return;
+  if (
+    typeof nombre == "undefined" ||
+    typeof fechaNacimiento == "undefined" ||
+    typeof sexo == "undefined" ||
+    typeof descripcion == "undefined" ||
+    typeof ubicaciones == "undefined" ||
+    typeof telefono == "undefined" ||
+    typeof imgContactB64 == "undefined" ||
+    typeof email == "undefined" ||
+    typeof contrasena == "undefined"
+  ) {
+    res.writeHead(500, headerResponse);
+    res.write("Parametros incorrectos");
+    res.end();
+    return;
   }
   //Aqui los datos son validos y hay que insertarlos
   //Empezaremos con las fotos, comporbando que el campo opcional avatar se haya enviado o no
   //Pongo el codAvatar aqui ya que hay que insertarlo en la base de datos por si se ha definido
   let codAvatar;
-  if(avatarPreview.length > 0){
+  if (avatarPreview.length > 0) {
     //Se ha elegido una imagen para el perfil
     codAvatar = getRandomString(20);
     writeImage(codAvatar, avatarPreview);
@@ -189,26 +233,26 @@ exports.postNewCuidador = async (req, res, modelos) => {
       ubicaciones: ubicaciones,
       publicoDisponible: publicoDisponible,
       precioPorPublico: precioPorPublico
-    })
-    .save(opts);
+    }).save(opts);
     const usuarioInserted = await modeloUsuario({
       email: email,
       contrasena: contrasena,
       tipoUsuario: "Cuidador",
       idPerfil: cuidadorInserted._id
-    })
-    .save(opts);
+    }).save(opts);
 
     await sesion.commitTransaction();
     sesion.endSession();
 
     res.writeHead(200, headerResponse);
-    res.write(JSON.stringify({
-      _id: cuidadorInserted._id,
-      _idUsuario: usuarioInserted._id,
-      direcFoto: codAvatar,
-      direcFotoContacto: codContactImg
-    }));
+    res.write(
+      JSON.stringify({
+        _id: cuidadorInserted._id,
+        _idUsuario: usuarioInserted._id,
+        direcFoto: codAvatar,
+        direcFotoContacto: codContactImg
+      })
+    );
     res.end();
   } catch (error) {
     // If an error occurred, abort the whole transaction and
@@ -223,24 +267,34 @@ exports.postNewCuidador = async (req, res, modelos) => {
 };
 
 exports.postNewCliente = async (req, res, modelos) => {
-  const { nombre, apellido1, apellido2, avatarPreview,  telefono, email, contrasena } = req.body;
+  const {
+    nombre,
+    apellido1,
+    apellido2,
+    avatarPreview,
+    telefono,
+    email,
+    contrasena
+  } = req.body;
 
-  if(typeof nombre == "undefined" ||
-     typeof telefono == "undefined" ||
-     typeof email == "undefined" ||
-     typeof contrasena == "undefined"){
-      res.writeHead(500, headerResponse);
-      res.write("Parametros incorrectos");
-      res.end();
-      return;
+  if (
+    typeof nombre == "undefined" ||
+    typeof telefono == "undefined" ||
+    typeof email == "undefined" ||
+    typeof contrasena == "undefined"
+  ) {
+    res.writeHead(500, headerResponse);
+    res.write("Parametros incorrectos");
+    res.end();
+    return;
   }
 
   let codAvatar;
-  if(avatarPreview.length > 0){
+  if (avatarPreview.length > 0) {
     codAvatar = getRandomString(20);
     writeImage(codAvatar, avatarPreview);
   }
-  
+
   const modeloClientes = modelos.cliente;
   const modeluUsuarios = modelos.usuario;
 
@@ -255,23 +309,23 @@ exports.postNewCliente = async (req, res, modelos) => {
       apellido2: apellido2,
       telefono: telefono,
       direcFoto: codAvatar
-    })
-    .save(opts);
+    }).save(opts);
     const insertedUsuario = await modeluUsuarios({
       email: email,
       contrasena: contrasena,
       tipoUsuario: "Cliente",
       idPerfil: insertedCliente._id
-    })
-    .save(opts);
+    }).save(opts);
     await sesion.commitTransaction();
     sesion.endSession();
     res.writeHead(200, headerResponse);
-    res.write(JSON.stringify({
-      _id: insertedCliente._id,
-      _idUsuario: insertedUsuario._id,
-      direcFoto: codAvatar
-    }));
+    res.write(
+      JSON.stringify({
+        _id: insertedCliente._id,
+        _idUsuario: insertedUsuario._id,
+        direcFoto: codAvatar
+      })
+    );
     res.end();
   } catch (error) {
     await sesion.abortTransaction();
@@ -284,34 +338,55 @@ exports.postNewCliente = async (req, res, modelos) => {
 };
 
 exports.patchCuidador = async (req, res, modelos) => {
-  const { nombre, apellido1, apellido2,
-    fechaNacimiento, sexo, descripcion, publicoDisponible, isPublic, precioPorPublico, diasDisponible,
-    ubicaciones, telefono, imgContactB64, avatarPreview } = req.body;
+  const {
+    nombre,
+    apellido1,
+    apellido2,
+    fechaNacimiento,
+    sexo,
+    descripcion,
+    publicoDisponible,
+    isPublic,
+    precioPorPublico,
+    diasDisponible,
+    ubicaciones,
+    telefono,
+    imgContactB64,
+    avatarPreview
+  } = req.body;
   const { id } = req.params;
 
-  if (typeof nombre == "" || typeof nombre == "undefined" ||
-      typeof fechaNacimiento == "" || typeof fechaNacimiento == "undefined" ||
-      typeof sexo == "" || typeof sexo == "undefined" ||
-      typeof descripcion == "" || typeof descripcion == "undefined" ||
-      typeof ubicaciones == "" || typeof ubicaciones == "undefined" ||
-      typeof telefono == "" || typeof telefono == "undefined" ||
-      typeof imgContactB64 == "undefined" || typeof id == "undefined"){
-
-        res.writeHead(500, headerResponse);
-        res.write("Parametros incorrectos");
-        res.end();
-        return;
+  if (
+    typeof nombre == "" ||
+    typeof nombre == "undefined" ||
+    typeof fechaNacimiento == "" ||
+    typeof fechaNacimiento == "undefined" ||
+    typeof sexo == "" ||
+    typeof sexo == "undefined" ||
+    typeof descripcion == "" ||
+    typeof descripcion == "undefined" ||
+    typeof ubicaciones == "" ||
+    typeof ubicaciones == "undefined" ||
+    typeof telefono == "" ||
+    typeof telefono == "undefined" ||
+    typeof imgContactB64 == "undefined" ||
+    typeof id == "undefined"
+  ) {
+    res.writeHead(500, headerResponse);
+    res.write("Parametros incorrectos");
+    res.end();
+    return;
   }
 
   let codAvatar;
   let formData = Object.assign({}, req.body);
-  if(avatarPreview.length > 0){
+  if (avatarPreview.length > 0) {
     codAvatar = getRandomString(20);
     writeImage(codAvatar, avatarPreview);
     formData.direcFoto = codAvatar;
   }
   let codContactImg;
-  if(imgContactB64.length > 0){
+  if (imgContactB64.length > 0) {
     codContactImg = getRandomString(20);
     writeImage(codContactImg, imgContactB64);
     formData.direcFotoContacto = codContactImg;
@@ -321,10 +396,10 @@ exports.patchCuidador = async (req, res, modelos) => {
   modeloCuidadores
     .findByIdAndUpdate(id, formData)
     .then(doc => {
-      if(codAvatar != null){
-        doc.direcFoto = codAvatar
+      if (codAvatar != null) {
+        doc.direcFoto = codAvatar;
       }
-      if(codContactImg != null){
+      if (codContactImg != null) {
         doc.direcFotoContacto = codContactImg;
       }
       res.writeHead(200, headerResponse);
@@ -337,24 +412,23 @@ exports.patchCuidador = async (req, res, modelos) => {
     })
     .finally(fin => {
       res.end();
-    });  
+    });
 };
 
 exports.patchCliente = async (req, res, modelos) => {
-  const { nombre, avatarPreview,  telefono} = req.body;
+  const { nombre, avatarPreview, telefono } = req.body;
   const { id } = req.params;
 
-  if(typeof nombre == "undefined" ||
-     typeof telefono == "undefined"){
-      res.writeHead(500, headerResponse);
-      res.write("Parametros incorrectos");
-      res.end();
-      return;
+  if (typeof nombre == "undefined" || typeof telefono == "undefined") {
+    res.writeHead(500, headerResponse);
+    res.write("Parametros incorrectos");
+    res.end();
+    return;
   }
 
   let codAvatar;
   let formData = Object.assign({}, req.body);
-  if(avatarPreview.length > 0){
+  if (avatarPreview.length > 0) {
     codAvatar = getRandomString(20);
     writeImage(codAvatar, avatarPreview);
     formData.direcFoto = codAvatar;
@@ -364,8 +438,8 @@ exports.patchCliente = async (req, res, modelos) => {
   modeloClientes
     .findByIdAndUpdate(id, formData)
     .then(doc => {
-      if(codAvatar != null){
-        doc.direcFoto = codAvatar
+      if (codAvatar != null) {
+        doc.direcFoto = codAvatar;
       }
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(doc));
@@ -377,35 +451,45 @@ exports.patchCliente = async (req, res, modelos) => {
     })
     .finally(fin => {
       res.end();
-    });  
-}
+    });
+};
 
 exports.postAnuncio = async (req, res, modelos) => {
-  const { titulo, descripcion, pueblo, publico, imgAnuncio, idCliente, horario } = req.body;
+  const {
+    titulo,
+    descripcion,
+    pueblo,
+    publico,
+    imgAnuncio,
+    idCliente,
+    horario
+  } = req.body;
 
-  if(typeof titulo === 'undefined' ||
-     typeof descripcion === 'undefined' ||
-     typeof publico === 'undefined' ||
-     typeof pueblo === 'undefined' ||
-     typeof idCliente === 'undefined' ||
-     typeof horario === 'undefined'){
-      res.writeHead(500, headerResponse);
-      res.write("Parametros incorrectos");
-      res.end();
-      return;
-     }
+  if (
+    typeof titulo === "undefined" ||
+    typeof descripcion === "undefined" ||
+    typeof publico === "undefined" ||
+    typeof pueblo === "undefined" ||
+    typeof idCliente === "undefined" ||
+    typeof horario === "undefined"
+  ) {
+    res.writeHead(500, headerResponse);
+    res.write("Parametros incorrectos");
+    res.end();
+    return;
+  }
 
   let codImagen;
   let formData = Object.assign({}, req.body);
-  if(typeof imgAnuncio != 'undefined'){
+  if (typeof imgAnuncio != "undefined") {
     codImagen = getRandomString(20);
     writeImage(codImagen, imgAnuncio);
     formData.direcFoto = codImagen;
   } else {
-    codImagen = 'noImage';    
+    codImagen = "noImage";
   }
   formData.direcFoto = codImagen;
-  
+
   const modeloAnuncio = modelos.anuncio;
   modeloAnuncio(formData)
     .save()
@@ -420,43 +504,53 @@ exports.postAnuncio = async (req, res, modelos) => {
     })
     .finally(fin => {
       res.end();
-    });  
-}
+    });
+};
 
 exports.postPropuestaAcuerdo = async (req, res, modelos) => {
   //Nota -> idUsuario es el id del usuario que ha mandado la peticion lo usare en idRemitente de notificacion
-  const { idCuidador, idCliente, idUsuario, diasAcordados,tituloAcuerdo,
-          pueblo, descripcionAcuerdo, origenAcuerdo  } = req.body;
+  const {
+    idCuidador,
+    idCliente,
+    idUsuario,
+    diasAcordados,
+    tituloAcuerdo,
+    pueblo,
+    descripcionAcuerdo,
+    origenAcuerdo
+  } = req.body;
   // TODO estadoAcuerdo y dateAcuerdo se calcularan en el servidor
 
-  if(typeof idCuidador === 'undefined' ||
-     typeof idCliente === 'undefined' ||
-     typeof idUsuario === 'undefined' ||
-     typeof diasAcordados === 'undefined' ||
-     typeof tituloAcuerdo === 'undefined' ||
-     typeof pueblo === 'undefined' ||
-     typeof descripcionAcuerdo === 'undefined' ||
-     typeof origenAcuerdo === 'undefined'){
-      res.writeHead(500, headerResponse);
-      res.write("Parametros incorrectos");
-      res.end();
-      return;
-    }
+  if (
+    typeof idCuidador === "undefined" ||
+    typeof idCliente === "undefined" ||
+    typeof idUsuario === "undefined" ||
+    typeof diasAcordados === "undefined" ||
+    typeof tituloAcuerdo === "undefined" ||
+    typeof pueblo === "undefined" ||
+    typeof descripcionAcuerdo === "undefined" ||
+    typeof origenAcuerdo === "undefined"
+  ) {
+    res.writeHead(500, headerResponse);
+    res.write("Parametros incorrectos");
+    res.end();
+    return;
+  }
   //Estado acuerdo indica de que el acuerdo creado estará en pendiente
   const estadoAcuerdo = 0;
   const dateAcuerdo = getTodayDate();
   const objDate = new Date();
 
   const modeloAcuerdos = modelos.acuerdo;
-  const sesion = await modeloAcuerdos.startSession();  
-  const modeloUsuarios = modelos.usuario
+  const sesion = await modeloAcuerdos.startSession();
+  const modeloUsuarios = modelos.usuario;
   const modeloNotificaciones = modelos.notificacion;
   //Esto lo hago para saber quien est a enviando la propuesta
   //Si lo manda un cliente se va a buscar el usuario que tenga ese idCuidador en idPerfil
   //Es para despues mandar la notificacion del acuerdo a la otra parte
   const idUsuarioABuscar = origenAcuerdo === "Cliente" ? idCuidador : idCliente;
-  
-  let formData= {
+
+  let formData = {
     idCuidador,
     idCliente,
     diasAcordados,
@@ -471,72 +565,75 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
   try {
     const opts = { sesion };
     const acuerdoGuardado = await modeloAcuerdos(formData)
-                            .save(opts)
-                            .catch(err => {
-                              console.log(err);
-                              res.writeHead(500, headerResponse);
-                              res.write(JSON.stringify(err));
-                              res.end();
-                            });
-  const usuarioBuscado = await modeloUsuarios
-                            .findOne({ idPerfil: idUsuarioABuscar })
-                            .catch(err => {
-                              console.log(err);
-                              res.writeHead(500, headerResponse);
-                              res.write(JSON.stringify(err));
-                              res.end();
-                            });
-  formData= {
-    idUsuario: usuarioBuscado._id,
-    idRemitente: idUsuario,
-    tipoNotificacion: "Acuerdo",
-    acuerdo: acuerdoGuardado,
-    visto: false,
-    dateEnvioNotificacion: `${dateAcuerdo} ${objDate.getHours()}:${objDate.getMinutes()}`                         
-  }
-  await modeloNotificaciones(formData)
-    .save(opts);
+      .save(opts)
+      .catch(err => {
+        console.log(err);
+        res.writeHead(500, headerResponse);
+        res.write(JSON.stringify(err));
+        res.end();
+      });
+    const usuarioBuscado = await modeloUsuarios
+      .findOne({ idPerfil: idUsuarioABuscar })
+      .catch(err => {
+        console.log(err);
+        res.writeHead(500, headerResponse);
+        res.write(JSON.stringify(err));
+        res.end();
+      });
+    formData = {
+      idUsuario: usuarioBuscado._id,
+      idRemitente: idUsuario,
+      tipoNotificacion: "Acuerdo",
+      acuerdo: acuerdoGuardado,
+      visto: false,
+      dateEnvioNotificacion: `${dateAcuerdo} ${objDate.getHours()}:${objDate.getMinutes()}`
+    };
+    await modeloNotificaciones(formData).save(opts);
 
-  await sesion.commitTransaction();
-   sesion.endSession();
-   res.writeHead(200, headerResponse);
-   res.end();
-  } catch (error){
+    await sesion.commitTransaction();
+    sesion.endSession();
+    res.writeHead(200, headerResponse);
+    res.end();
+  } catch (error) {
     await sesion.abortTransaction();
     sesion.endSession();
     console.log(err);
     res.writeHead(500, headerResponse);
     res.write(JSON.stringify(err));
     res.end();
-  }                        
+  }
 };
 
 exports.patchPredLang = async (req, res, modelos) => {
   const { id } = req.params;
   const modeloAjustes = modelos.ajuste;
 
-  const ajusteExistente = await modeloAjustes.find({idUsuario: id});
+  const ajusteExistente = await modeloAjustes.find({ idUsuario: id });
   console.log(ajusteExistente);
   if (ajusteExistente.length === 0) {
     const ajuste = await modeloAjustes({
       idUsuario: id,
       idLangPred: req.body.idLangPred
-    }).save().catch(err => {
-      res.writeHead(500, headerResponse);
-      res.write(JSON.stringify(err));
-      res.end();
-    });
+    })
+      .save()
+      .catch(err => {
+        res.writeHead(500, headerResponse);
+        res.write(JSON.stringify(err));
+        res.end();
+      });
     res.writeHead(200, headerResponse);
     res.write(JSON.stringify(ajuste));
     res.end();
   } else {
-    const ajuste = await modeloAjustes.findOneAndUpdate({idUsuario: id}, {idLangPred: req.body.idLangPred}).catch(err => {
-      res.writeHead(500, headerResponse);
-      res.write(JSON.stringify(err));
-      res.end();
-    });
+    const ajuste = await modeloAjustes
+      .findOneAndUpdate({ idUsuario: id }, { idLangPred: req.body.idLangPred })
+      .catch(err => {
+        res.writeHead(500, headerResponse);
+        res.write(JSON.stringify(err));
+        res.end();
+      });
     res.writeHead(200, headerResponse);
     res.write(JSON.stringify(ajuste));
     res.end();
   }
-}
+};

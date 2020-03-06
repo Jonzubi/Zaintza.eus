@@ -56,7 +56,9 @@ class LogInForm extends React.Component {
           })
           .then(resultado => {
             if(resultado.data !== "Vacio") {
-              const usuario = resultado.data.idUsuario;
+              //usuario se define de dos formas porque el usuario puede tener ajustes o no configurados
+              //Entonces de la API viene de 2 formas
+              const usuario = resultado.data.idUsuario || resultado.data;
               const idPerfil = usuario.idPerfil._id;
               const idUsuario = usuario._id;
 
@@ -66,7 +68,7 @@ class LogInForm extends React.Component {
                 email: usuario.email,
                 tipoUsuario: usuario.tipoUsuario,
                 contrasena: usuario.contrasena,
-                idLangPred: resultado.data.idLangPred
+                idLangPred: resultado.data.idLangPred || ""
               }));
 
               if (this.state.chkRecordarme) {
