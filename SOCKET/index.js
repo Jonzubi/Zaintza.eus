@@ -12,23 +12,31 @@ io.on('connection', (socket) => {
     usuariosConectados.push({
         socketId: socket.id
     });
-    console.log("USUARIOS CONECTADOS");
-    console.log("-------------------");
-    console.log(usuariosConectados);
+    printDataOnConsole()
 
     socket.on('login', (loggedData) => {
         usuariosLogueados.push(Object.assign({socketId: socket.id}, loggedData));
-        console.log("USUARIOS LOGUEADOS");
-        console.log("-------------------");
-        console.log(usuariosLogueados);
+        printDataOnConsole()
     });
 
     socket.on('disconnect', () => {
         usuariosConectados = usuariosConectados.filter(item => item.socketId !== socket.id);
         usuariosLogueados = usuariosLogueados.filter(item => item.socketId !== socket.id);
+        printDataOnConsole();
     });
 })
 
 http.listen(port, () => {
     console.log(`[SOCKET] Escuchando el puerto: ${port}`);
 });
+
+const printDataOnConsole = () => {
+    console.clear();
+    console.log("USUARIOS CONECTADOS");
+    console.log("-------------------");
+    console.log(usuariosConectados);
+    console.log("\n\n");
+    console.log("USUARIOS LOGUEADOS");
+    console.log("-------------------");
+    console.log(usuariosLogueados);
+}
