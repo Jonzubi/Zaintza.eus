@@ -10,6 +10,7 @@ import { toogleModal } from "../redux/actions/modalRegistrarse";
 import { trans } from "../util/funciones";
 import i18n from "i18next";
 import {translate} from "react-i18next";
+import SocketContext from "../socketio/socket-context";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -36,7 +37,7 @@ class LogInForm extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  async handleLogIn() {
+  async handleLogIn(socket) {
     const vEmail = this.state.txtEmail;
     const vContrasena = this.state.txtContrasena;
     var objFiltros = {
@@ -77,6 +78,10 @@ class LogInForm extends React.Component {
               }
 
               i18n.changeLanguage(resultado.data.idLangPred);
+
+              socket.emit('login', {
+                idUsuario: idUsuario
+              });
 
               this.props.toogleMenuPerfil(false);
               cogoToast.success(
@@ -120,7 +125,8 @@ class LogInForm extends React.Component {
 
   render() {
     return (
-      <form className="mt-5">
+      <SocketContext.Consumer>
+        {socket => (<form className="mt-5">
         <div>
           <label htmlFor="txtEmail">{trans("loginForm.email")}</label>
           
@@ -165,7 +171,7 @@ class LogInForm extends React.Component {
         ) : (
           <div className="row mt-3">
             <button
-              onClick={() => this.handleLogIn()}
+              onClick={() => this.handleLogIn(socket)}
               name="btnLogIn"
               type="button"
               className="btn btn-light col-5"
@@ -186,7 +192,8 @@ class LogInForm extends React.Component {
             </button>
           </div>
         )}
-      </form>
+      </form>)}
+      </SocketContext.Consumer>      
     );
   }
 }
