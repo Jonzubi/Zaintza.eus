@@ -194,9 +194,11 @@ class NotificacionesForm extends React.Component {
       "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id
     );
     delete auxJsonNotif[indice];
-
-    setCountNotify(countNotifies - 1);
-
+    
+    if(!notificacion.visto){
+      setCountNotify(countNotifies - 1);
+    }
+    
     this.setState({
       jsonNotificaciones: auxJsonNotif
     });
