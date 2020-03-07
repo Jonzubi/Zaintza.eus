@@ -42,9 +42,6 @@ const mapDispatchToProps = dispatch => {
 
 class MenuPerfil extends React.Component {
   handleNotifyReceived = () => {
-    cogoToast.info(
-    <h5>{trans('menuPerfil.notificacionRecibida')}</h5>
-    );
       //Si no esta logueado no queremos saber notificaciones;
       if (
         typeof this.props.idUsuario == "undefined" ||
@@ -63,10 +60,13 @@ class MenuPerfil extends React.Component {
         if (
           resultado.data != "Vacio" &&
           this.state.countNotificaciones != resultado.data.length
-        ) {
+        ) {         
           this.setState({
             countNotificaciones: resultado.data.length
           });
+          cogoToast.info(
+            <h5>{trans('menuPerfil.notificacionRecibida')}</h5>
+            );
         } else if (
           resultado.data == "Vacio" &&
           this.state.countNotificaciones != 0

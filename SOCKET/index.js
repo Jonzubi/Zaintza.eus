@@ -16,6 +16,7 @@ io.on('connection', (socket) => {
 
     socket.on('login', (loggedData) => {
         usuariosLogueados.push(Object.assign({socketId: socket.id}, loggedData));
+        io.to(`${socket.id}`).emit('notifyReceived');
         printDataOnConsole()
     });
 
