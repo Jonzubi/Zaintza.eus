@@ -28,6 +28,8 @@ io.on('connection', (socket) => {
         const usertToNotify = usuariosLogueados.filter(item => item.idUsuario === idUsuario)[0];
         if(usertToNotify !== undefined) {
             io.to(`${usertToNotify.socketId}`).emit('notifyReceived');
+        } else {
+            console.log("[Evento Notify] Destinatario no encontrado");
         }
     });
 

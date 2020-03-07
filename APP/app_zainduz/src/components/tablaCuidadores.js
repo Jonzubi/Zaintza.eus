@@ -28,6 +28,7 @@ import { connect } from "react-redux";
 import { trans, getTodayDate } from "../util/funciones";
 import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import municipios from "../util/municipos";
+import SocketContext from "../socketio/socket-context";
 
 const mapStateToProps = state => {
   return {
@@ -43,13 +44,15 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
+let gSocket = null;
+
 class Tabla extends React.Component {
   componentDidMount() {
     Axios.get("http://" + ipMaquina + ":3001/api/cuidador", {
       params: {
-        filtros:{
+        filtros: {
           isPublic: true
-        }        
+        }
       }
     })
       .then(data => {
@@ -62,7 +65,9 @@ class Tabla extends React.Component {
         this.setState({
           buscado: true
         });
-        cogoToast.error(<h5>{trans("notificaciones.servidorNoDisponible")}</h5>);
+        cogoToast.error(
+          <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
+        );
       });
   }
 
@@ -316,7 +321,9 @@ class Tabla extends React.Component {
       this.props.toogleMenuPerfil(true);
       return;
     } else if (this.props.tipoUsuario != "Cliente") {
-      cogoToast.error(<h5>{trans("tablaCuidadores.errorClienteObligatorio")}</h5>);
+      cogoToast.error(
+        <h5>{trans("tablaCuidadores.errorClienteObligatorio")}</h5>
+      );
       this.handleShowModalChange(false);
       return;
     }
@@ -328,7 +335,7 @@ class Tabla extends React.Component {
           filtros: {
             idCliente: this.props.idCliente,
             idCuidador: this.state.selectedCuidador._id,
-            $or:[{estadoAcuerdo: 1}, {estadoAcuerdo: 0}]
+            $or: [{ estadoAcuerdo: 1 }, { estadoAcuerdo: 0 }]
           }
         }
       }
@@ -409,7 +416,9 @@ class Tabla extends React.Component {
       tituloAcuerdo: this.state.txtTituloPropuesta,
       pueblo: this.state.ubicaciones[0],
       descripcionAcuerdo: this.state.txtDescripcion,
-      origenAcuerdo: this.props.tipoUsuario
+      origenAcuerdo: this.props.tipoUsuario,
+      estadoAcuerdo: 0,
+      dateAcuerdo: today
     };
 
     Axios.post("http://" + ipMaquina + ":3001/api/acuerdo", formData)
@@ -427,7 +436,8 @@ class Tabla extends React.Component {
             tipoNotificacion: "Acuerdo",
             acuerdo: resultado.data,
             visto: false,
-            dateEnvioNotificacion: today + " " + objToday.getHours() + ":" + objToday.getMinutes()
+            dateEnvioNotificacion:
+              today + " " + objToday.getHours() + ":" + objToday.getMinutes()
           };
           Axios.post(
             "http://" + ipMaquina + ":3001/api/notificacion",
@@ -446,6 +456,10 @@ class Tabla extends React.Component {
               ubicaciones: [],
               txtTituloPropuesta: "",
               txtDescripcion: ""
+            });
+
+            gSocket.emit('notify', {
+              idUsuario: usuario.data[0]._id
             });
 
             cogoToast.success(
@@ -524,592 +538,640 @@ class Tabla extends React.Component {
     };
 
     return (
-      <div className="d-flex flex-wrap justify-content-center">
-        {typeof this.state.jsonCuidadores.map != "undefined" &&
-        this.state.buscado ? (
-          this.state.jsonCuidadores.map((cuidador, indice) => {
-            return (
-              <div className="card w-20 m-4" style={{ width: "18rem" }}>
-                <div
-                  style={{
-                    //backgroundImage:"url(http://" + ipMaquina + ":3001/api/image/" + cuidador.direcFotoContacto + ")",
-                    height: "300px",
-                    width: "calc(100% - 20px)",
-                    backgroundSize: "cover",
-                    backgroundPosition: "top",
-                    backgroundRepeat: "no-repeat",
-                    margin: "10px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    overflow: "hidden"
-                  }}
-                  className="card-img-top"
-                  alt="Imagen no disponible"
-                >
+      <SocketContext.Consumer>
+        {socket => {
+          gSocket = socket;
+          return (
+            <div className="d-flex flex-wrap justify-content-center">
+              {typeof this.state.jsonCuidadores.map != "undefined" &&
+              this.state.buscado ? (
+                this.state.jsonCuidadores.map((cuidador, indice) => {
+                  return (
+                    <div className="card w-20 m-4" style={{ width: "18rem" }}>
+                      <div
+                        style={{
+                          //backgroundImage:"url(http://" + ipMaquina + ":3001/api/image/" + cuidador.direcFotoContacto + ")",
+                          height: "300px",
+                          width: "calc(100% - 20px)",
+                          backgroundSize: "cover",
+                          backgroundPosition: "top",
+                          backgroundRepeat: "no-repeat",
+                          margin: "10px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          overflow: "hidden"
+                        }}
+                        className="card-img-top"
+                        alt="Imagen no disponible"
+                      >
+                        <img
+                          style={{ maxHeight: "250px", height: "auto" }}
+                          src={
+                            "http://" +
+                            ipMaquina +
+                            ":3001/api/image/" +
+                            cuidador.direcFotoContacto
+                          }
+                        />
+                      </div>
+                      <div className="card-body">
+                        <h5 className="card-title mt-2">
+                          {cuidador.nombre + " " + cuidador.apellido1}
+                        </h5>
+                        <p
+                          className="card-text"
+                          style={{ maxHeight: "75px", overflow: "hidden" }}
+                        >
+                          {cuidador.descripcion}
+                        </p>
+                      </div>
+                      <div className="card-body">
+                        <div className="row text-muted card-title">
+                          <div className="col text-center">
+                            {trans("tablaCuidadores.ninos")}
+                          </div>
+                          <div className="col text-center">
+                            {trans("tablaCuidadores.terceraEdad")}
+                          </div>
+                          <OverlayTrigger
+                            key="top"
+                            placement="top"
+                            overlay={
+                              <Tooltip>
+                                {trans("tablaCuidadores.necesidadEspecial")}
+                              </Tooltip>
+                            }
+                          >
+                            <div className="col text-center">
+                              {trans(
+                                "tablaCuidadores.necesidadEspecialAcortado"
+                              )}
+                            </div>
+                          </OverlayTrigger>
+                        </div>
+
+                        <div className="row">
+                          <div className="col text-center">
+                            {cuidador.publicoDisponible.nino ? (
+                              <FontAwesomeIcon
+                                className="text-success"
+                                icon={faCheck}
+                              />
+                            ) : (
+                              <FontAwesomeIcon
+                                className="text-danger"
+                                icon={faTimes}
+                              />
+                            )}
+                          </div>
+                          <div className="col text-center">
+                            {cuidador.publicoDisponible.terceraEdad ? (
+                              <FontAwesomeIcon
+                                className="text-success"
+                                icon={faCheck}
+                              />
+                            ) : (
+                              <FontAwesomeIcon
+                                className="text-danger"
+                                icon={faTimes}
+                              />
+                            )}
+                          </div>
+                          <div className="col text-center">
+                            {cuidador.publicoDisponible.necesidadEspecial ? (
+                              <FontAwesomeIcon
+                                className="text-success"
+                                icon={faCheck}
+                              />
+                            ) : (
+                              <FontAwesomeIcon
+                                className="text-danger"
+                                icon={faTimes}
+                              />
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="card-body card-footer">
+                        <a
+                          className="mr-0 w-100 btn btn-success text-light"
+                          onClick={() => {
+                            this.handleViewCuidador(cuidador);
+                          }}
+                        >
+                          {trans("tablaCuidadores.ver")}
+                          <FontAwesomeIcon className="ml-1" icon={faEye} />
+                        </a>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : typeof this.state.jsonCuidadores.map == "undefined" &&
+                !this.state.buscado ? (
+                <div className="w-100 text-center">
                   <img
-                    style={{ maxHeight: "250px", height: "auto" }}
-                    src={
-                      "http://" +
-                      ipMaquina +
-                      ":3001/api/image/" +
-                      cuidador.direcFotoContacto
-                    }
+                    style={{ marginTop: "300px" }}
+                    src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
+                    height={100}
+                    width={100}
                   />
                 </div>
-                <div className="card-body">
-                  <h5 className="card-title mt-2">
-                    {cuidador.nombre + " " + cuidador.apellido1}
+              ) : (
+                <small
+                  style={{ marginTop: "300px" }}
+                  className="text-danger text-center w-100"
+                >
+                  {trans("tablaCuidadores.noData")}
+                </small>
+              )}
+
+              <Modal
+                className="modalCustomClass"
+                show={this.state.showModal}
+                onHide={() => this.handleShowModalChange(false)}
+              >
+                <ModalHeader closeLabel="Itxi" closeButton></ModalHeader>
+                <ModalBody className="container-fluid">
+                  <h5 style={{ marginBottom: "20px" }} className="display-4">
+                    {trans("tablaCuidadores.datosPersonales")}
                   </h5>
-                  <p
-                    className="card-text"
-                    style={{ maxHeight: "75px", overflow: "hidden" }}
-                  >
-                    {cuidador.descripcion}
-                  </p>
-                </div>
-                <div className="card-body">
-                  <div className="row text-muted card-title">
-                    <div className="col text-center">
-                      {trans("tablaCuidadores.ninos")}
-                    </div>
-                    <div className="col text-center">
-                      {trans("tablaCuidadores.terceraEdad")}
-                    </div>
-                    <OverlayTrigger
-                      key="top"
-                      placement="top"
-                      overlay={
-                        <Tooltip>
-                          {trans("tablaCuidadores.necesidadEspecial")}
-                        </Tooltip>
-                      }
-                    >
-                      <div className="col text-center">
-                        {trans("tablaCuidadores.necesidadEspecialAcortado")}
-                      </div>
-                    </OverlayTrigger>
-                  </div>
-
-                  <div className="row">
-                    <div className="col text-center">
-                      {cuidador.publicoDisponible.nino ? (
-                        <FontAwesomeIcon
-                          className="text-success"
-                          icon={faCheck}
-                        />
-                      ) : (
-                        <FontAwesomeIcon
-                          className="text-danger"
-                          icon={faTimes}
-                        />
-                      )}
-                    </div>
-                    <div className="col text-center">
-                      {cuidador.publicoDisponible.terceraEdad ? (
-                        <FontAwesomeIcon
-                          className="text-success"
-                          icon={faCheck}
-                        />
-                      ) : (
-                        <FontAwesomeIcon
-                          className="text-danger"
-                          icon={faTimes}
-                        />
-                      )}
-                    </div>
-                    <div className="col text-center">
-                      {cuidador.publicoDisponible.necesidadEspecial ? (
-                        <FontAwesomeIcon
-                          className="text-success"
-                          icon={faCheck}
-                        />
-                      ) : (
-                        <FontAwesomeIcon
-                          className="text-danger"
-                          icon={faTimes}
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="card-body card-footer">
-                  <a
-                    className="mr-0 w-100 btn btn-success text-light"
-                    onClick={() => {
-                      this.handleViewCuidador(cuidador);
+                  <div
+                    style={{
+                      width: "calc(100% - 20px)",
+                      backgroundSize: "cover",
+                      backgroundPosition: "top",
+                      backgroundRepeat: "no-repeat",
+                      margin: "10px",
+                      display: "flex",
+                      overflow: "hidden"
                     }}
+                    className=""
+                    alt="Imagen no disponible"
                   >
-                    {trans("tablaCuidadores.ver")}
-                    <FontAwesomeIcon className="ml-1" icon={faEye} />
-                  </a>
-                </div>
-              </div>
-            );
-          })
-        ) : typeof this.state.jsonCuidadores.map == "undefined" &&
-          !this.state.buscado ? (
-          <div className="w-100 text-center">
-            <img
-              style={{ marginTop: "300px" }}
-              src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
-              height={100}
-              width={100}
-            />
-          </div>
-        ) : (
-          <small
-            style={{ marginTop: "300px" }}
-            className="text-danger text-center w-100"
-          >
-            {trans("tablaCuidadores.noData")}
-          </small>
-        )}
+                    <img
+                      style={{
+                        minHeight: "300px",
+                        maxHeight: "300px",
+                        height: "auto"
+                      }}
+                      src={
+                        "http://" +
+                        ipMaquina +
+                        ":3001/api/image/" +
+                        vSelectedCuidador.direcFotoContacto
+                      }
+                    />
+                    <div className="table mb-0">
+                      {/* Aqui van los datos personales en forma de tabla */}
+                      <div className="row h-100">
+                        <div className="col-5 h-100 border-right border-top">
+                          <div className="row ml-0 h-25 border-bottom">
+                            <span className="col-3 text-center my-auto font-weight-bold">
+                              {trans("tablaCuidadores.nombre")}:
+                            </span>
+                            <span className="col-9 text-center my-auto">
+                              {vSelectedCuidador.nombre}
+                            </span>
+                          </div>
 
-        <Modal
-          className="modalCustomClass"
-          show={this.state.showModal}
-          onHide={() => this.handleShowModalChange(false)}
-        >
-          <ModalHeader closeLabel="Itxi" closeButton></ModalHeader>
-          <ModalBody className="container-fluid">
-            <h5 style={{ marginBottom: "20px" }} className="display-4">
-              {trans("tablaCuidadores.datosPersonales")}
-            </h5>
-            <div
-              style={{
-                width: "calc(100% - 20px)",
-                backgroundSize: "cover",
-                backgroundPosition: "top",
-                backgroundRepeat: "no-repeat",
-                margin: "10px",
-                display: "flex",
-                overflow: "hidden"
-              }}
-              className=""
-              alt="Imagen no disponible"
-            >
-              <img
-                style={{
-                  minHeight: "300px",
-                  maxHeight: "300px",
-                  height: "auto"
-                }}
-                src={
-                  "http://" +
-                  ipMaquina +
-                  ":3001/api/image/" +
-                  vSelectedCuidador.direcFotoContacto
-                }
-              />
-              <div className="table mb-0">
-                {/* Aqui van los datos personales en forma de tabla */}
-                <div className="row h-100">
-                  <div className="col-5 h-100 border-right border-top">
-                    <div className="row ml-0 h-25 border-bottom">
-                      <span className="col-3 text-center my-auto font-weight-bold">
-                        {trans("tablaCuidadores.nombre")}:
-                      </span>
-                      <span className="col-9 text-center my-auto">
-                        {vSelectedCuidador.nombre}
-                      </span>
+                          <div className="row ml-0 h-25 border-bottom">
+                            <span className="col-3 text-center my-auto font-weight-bold">
+                              {trans("tablaCuidadores.apellidos")}:
+                            </span>
+                            <span className="col-9 text-center my-auto">
+                              {(
+                                vSelectedCuidador.apellido1 +
+                                " " +
+                                vSelectedCuidador.apellido2
+                              ).length > 1 ? (
+                                vSelectedCuidador.apellido1 +
+                                " " +
+                                vSelectedCuidador.apellido2
+                              ) : (
+                                <em>{trans("tablaCuidadores.sinDefinir")}</em>
+                              )}
+                            </span>
+                          </div>
+
+                          <div className="row ml-0 h-25 border-bottom">
+                            <span className="col-3 text-center my-auto font-weight-bold">
+                              {trans("tablaCuidadores.fechaNac")}:
+                            </span>
+                            <span className="col-9 text-center my-auto">
+                              {fechaNacCuidador.getFullYear() +
+                                "/" +
+                                (fechaNacCuidador.getMonth() + 1) +
+                                "/" +
+                                fechaNacCuidador.getDate()}
+                            </span>
+                          </div>
+                          <div className="row ml-0 h-25 border-bottom">
+                            <span className="col-3 text-center my-auto font-weight-bold">
+                              {trans("tablaCuidadores.sexo")}:
+                            </span>
+                            <span className="col-9 text-center my-auto">
+                              {vSelectedCuidador.sexo == "M"
+                                ? "Gizonezkoa"
+                                : "Emakumezkoa"}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="col-3 h-100 border-right p-0 border-top">
+                          <div
+                            className="row ml-0 mr-0 border-bottom"
+                            style={{ height: "34%" }}
+                          >
+                            <span className="col-3 text-center my-auto font-weight-bold">
+                              {trans("tablaCuidadores.email")}:
+                            </span>
+                            <span className="col-9 text-center my-auto">
+                              {vSelectedCuidador.email}
+                            </span>
+                          </div>
+                          <div
+                            className="row ml-0 mr-0 border-bottom"
+                            style={{ height: "33%" }}
+                          >
+                            <span className="col-3 text-center my-auto font-weight-bold">
+                              {trans("tablaCuidadores.movil")}:
+                            </span>
+                            <span className="col-9 text-center my-auto">
+                              {telefonoMovilCuidador}
+                            </span>
+                          </div>
+                          <div
+                            className="row ml-0 mr-0 border-bottom"
+                            style={{ height: "33%" }}
+                          >
+                            <span className="col-3 text-center my-auto font-weight-bold">
+                              {trans("tablaCuidadores.telefFijo")}:
+                            </span>
+                            <span className="col-9 text-center my-auto">
+                              {telefonoFijoCuidador}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="col-4 h-100 p-0 border-bottom border-top border-right">
+                          <div className="panel panel-default">
+                            <div className="panel-header text-center mb-5 font-weight-bold">
+                              {trans("tablaCuidadores.descripcion")}
+                            </div>
+                            <div className="panel-body p-2">
+                              {vSelectedCuidador.descripcion}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                  </div>
 
-                    <div className="row ml-0 h-25 border-bottom">
-                      <span className="col-3 text-center my-auto font-weight-bold">
-                        {trans("tablaCuidadores.apellidos")}:
-                      </span>
-                      <span className="col-9 text-center my-auto">
-                        {(
-                          vSelectedCuidador.apellido1 +
-                          " " +
-                          vSelectedCuidador.apellido2
-                        ).length > 1 ? (
-                          vSelectedCuidador.apellido1 +
-                          " " +
-                          vSelectedCuidador.apellido2
+                  <h5 style={{ margin: "20px 0px" }} className="display-4">
+                    {trans("tablaCuidadores.condiciones")}
+                  </h5>
+                  <hr />
+                  <div className="row h-100">
+                    <div className="col-4 h-100 panel panel-default">
+                      <h5 className="panel-header text-center">
+                        {trans("tablaCuidadores.pueblos")}
+                      </h5>
+                      <div className="panel-body list-group">
+                        {typeof vSelectedCuidador.ubicaciones != "undefined"
+                          ? vSelectedCuidador.ubicaciones.map(
+                              (ubicacion, index) => {
+                                return (
+                                  <span className="list-group-item">
+                                    {ubicacion}
+                                  </span>
+                                );
+                              }
+                            )
+                          : null}
+                      </div>
+                    </div>
+                    <div className="col-4 h-100">
+                      <h5 className="panel-header text-center">
+                        {trans("tablaCuidadores.horasLibres")}
+                      </h5>
+                      <div className="list-group">
+                        {typeof vSelectedCuidador.diasDisponible !=
+                          "undefined" &&
+                        vSelectedCuidador.diasDisponible.length > 0 ? (
+                          vSelectedCuidador.diasDisponible.map(dia => {
+                            return (
+                              <div className="list-group-item">
+                                <span className="list-group-item border-right font-weight-bold text-center">
+                                  {traducDias[dia.dia - 1]}
+                                </span>
+                                <span className="list-group-item text-center">
+                                  {dia.horaInicio + " - " + dia.horaFin}
+                                </span>
+                              </div>
+                            );
+                          })
                         ) : (
-                          <em>{trans("tablaCuidadores.sinDefinir")}</em>
+                          <div className="list-group">
+                            <em className="text-center list-group-item">
+                              {trans("tablaCuidadores.sinDefinir")}
+                            </em>
+                          </div>
                         )}
-                      </span>
-                    </div>
-
-                    <div className="row ml-0 h-25 border-bottom">
-                      <span className="col-3 text-center my-auto font-weight-bold">
-                        {trans("tablaCuidadores.fechaNac")}:
-                      </span>
-                      <span className="col-9 text-center my-auto">
-                        {fechaNacCuidador.getFullYear() +
-                          "/" +
-                          (fechaNacCuidador.getMonth() + 1) +
-                          "/" +
-                          fechaNacCuidador.getDate()}
-                      </span>
-                    </div>
-                    <div className="row ml-0 h-25 border-bottom">
-                      <span className="col-3 text-center my-auto font-weight-bold">
-                        {trans("tablaCuidadores.sexo")}:
-                      </span>
-                      <span className="col-9 text-center my-auto">
-                        {vSelectedCuidador.sexo == "M"
-                          ? "Gizonezkoa"
-                          : "Emakumezkoa"}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="col-3 h-100 border-right p-0 border-top">
-                    <div
-                      className="row ml-0 mr-0 border-bottom"
-                      style={{ height: "34%" }}
-                    >
-                      <span className="col-3 text-center my-auto font-weight-bold">
-                        {trans("tablaCuidadores.email")}:
-                      </span>
-                      <span className="col-9 text-center my-auto">
-                        {vSelectedCuidador.email}
-                      </span>
-                    </div>
-                    <div
-                      className="row ml-0 mr-0 border-bottom"
-                      style={{ height: "33%" }}
-                    >
-                      <span className="col-3 text-center my-auto font-weight-bold">
-                        {trans("tablaCuidadores.movil")}:
-                      </span>
-                      <span className="col-9 text-center my-auto">
-                        {telefonoMovilCuidador}
-                      </span>
-                    </div>
-                    <div
-                      className="row ml-0 mr-0 border-bottom"
-                      style={{ height: "33%" }}
-                    >
-                      <span className="col-3 text-center my-auto font-weight-bold">
-                        {trans("tablaCuidadores.telefFijo")}:
-                      </span>
-                      <span className="col-9 text-center my-auto">
-                        {telefonoFijoCuidador}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="col-4 h-100 p-0 border-bottom border-top border-right">
-                    <div className="panel panel-default">
-                      <div className="panel-header text-center mb-5 font-weight-bold">
-                        {trans("tablaCuidadores.descripcion")}
-                      </div>
-                      <div className="panel-body p-2">
-                        {vSelectedCuidador.descripcion}
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <h5 style={{ margin: "20px 0px" }} className="display-4">
-              {trans("tablaCuidadores.condiciones")}
-            </h5>
-            <hr />
-            <div className="row h-100">
-              <div className="col-4 h-100 panel panel-default">
-                <h5 className="panel-header text-center">
-                  {trans("tablaCuidadores.pueblos")}
-                </h5>
-                <div className="panel-body list-group">
-                  {typeof vSelectedCuidador.ubicaciones != "undefined"
-                    ? vSelectedCuidador.ubicaciones.map((ubicacion, index) => {
-                        return (
-                          <span className="list-group-item">{ubicacion}</span>
-                        );
-                      })
-                    : null}
-                </div>
-              </div>
-              <div className="col-4 h-100">
-                <h5 className="panel-header text-center">
-                  {trans("tablaCuidadores.horasLibres")}
-                </h5>
-                <div className="list-group">
-                  {typeof vSelectedCuidador.diasDisponible != "undefined" &&
-                  vSelectedCuidador.diasDisponible.length > 0 ? (
-                    vSelectedCuidador.diasDisponible.map(dia => {
-                      return (
+                    <div className="col-4 h-100">
+                      <h5 className="panel-header text-center">
+                        {trans("tablaCuidadores.precios")}
+                      </h5>
+                      <div className="list-group">
                         <div className="list-group-item">
-                          <span className="list-group-item border-right font-weight-bold text-center">
-                            {traducDias[dia.dia - 1]}
+                          <span className="list-group-item font-weight-bold">
+                            {trans("tablaCuidadores.ninos")}
                           </span>
-                          <span className="list-group-item text-center">
-                            {dia.horaInicio + " - " + dia.horaFin}
+                          <span className="list-group-item">
+                            {typeof vSelectedCuidador.precioPorPublico !=
+                            "undefined" ? (
+                              vSelectedCuidador.precioPorPublico.nino != "" ? (
+                                vSelectedCuidador.precioPorPublico.nino +
+                                "€ /orduko"
+                              ) : (
+                                <em>Definitu gabe</em>
+                              )
+                            ) : null}
                           </span>
                         </div>
-                      );
-                    })
-                  ) : (
-                    <div className="list-group">
-                      <em className="text-center list-group-item">
-                        {trans("tablaCuidadores.sinDefinir")}
-                      </em>
+                        <div className="list-group-item">
+                          <span className="list-group-item font-weight-bold">
+                            {trans("tablaCuidadores.terceraEdad")}
+                          </span>
+                          <span className="list-group-item">
+                            {typeof vSelectedCuidador.precioPorPublico !=
+                            "undefined" ? (
+                              vSelectedCuidador.precioPorPublico.terceraEdad !=
+                              "" ? (
+                                vSelectedCuidador.precioPorPublico.terceraEdad +
+                                "€ /orduko"
+                              ) : (
+                                <em>Definitu gabe</em>
+                              )
+                            ) : null}
+                          </span>
+                        </div>
+                        <div className="list-group-item">
+                          <span className="list-group-item font-weight-bold">
+                            {trans("tablaCuidadores.necesidadEspecial")}
+                          </span>
+                          <span className="list-group-item">
+                            {typeof vSelectedCuidador.precioPorPublico !=
+                            "undefined" ? (
+                              vSelectedCuidador.precioPorPublico
+                                .necesidadEspecial != "" ? (
+                                vSelectedCuidador.precioPorPublico
+                                  .necesidadEspecial + "€ /orduko"
+                              ) : (
+                                <em>Definitu gabe</em>
+                              )
+                            ) : null}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  )}
-                </div>
-              </div>
-              <div className="col-4 h-100">
-                <h5 className="panel-header text-center">
-                  {trans("tablaCuidadores.precios")}
-                </h5>
-                <div className="list-group">
-                  <div className="list-group-item">
-                    <span className="list-group-item font-weight-bold">
-                      {trans("tablaCuidadores.ninos")}
-                    </span>
-                    <span className="list-group-item">
-                      {typeof vSelectedCuidador.precioPorPublico !=
-                      "undefined" ? (
-                        vSelectedCuidador.precioPorPublico.nino != "" ? (
-                          vSelectedCuidador.precioPorPublico.nino + "€ /orduko"
-                        ) : (
-                          <em>Definitu gabe</em>
-                        )
-                      ) : null}
-                    </span>
-                  </div>
-                  <div className="list-group-item">
-                    <span className="list-group-item font-weight-bold">
-                      {trans("tablaCuidadores.terceraEdad")}
-                    </span>
-                    <span className="list-group-item">
-                      {typeof vSelectedCuidador.precioPorPublico !=
-                      "undefined" ? (
-                        vSelectedCuidador.precioPorPublico.terceraEdad != "" ? (
-                          vSelectedCuidador.precioPorPublico.terceraEdad +
-                          "€ /orduko"
-                        ) : (
-                          <em>Definitu gabe</em>
-                        )
-                      ) : null}
-                    </span>
-                  </div>
-                  <div className="list-group-item">
-                    <span className="list-group-item font-weight-bold">
-                      {trans("tablaCuidadores.necesidadEspecial")}
-                    </span>
-                    <span className="list-group-item">
-                      {typeof vSelectedCuidador.precioPorPublico !=
-                      "undefined" ? (
-                        vSelectedCuidador.precioPorPublico.necesidadEspecial !=
-                        "" ? (
-                          vSelectedCuidador.precioPorPublico.necesidadEspecial +
-                          "€ /orduko"
-                        ) : (
-                          <em>Definitu gabe</em>
-                        )
-                      ) : null}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <Collapse className="w-100" in={this.state.showPropuestaModal}>
-                <div>
-                  <h5 className="display-4 mb-2">
-                    {trans("tablaCuidadores.tuPropuesta")}
-                  </h5>
-                  <div className="row mr-0 ml-0 mb-2 p-2 text-center">
-                    <label
-                      className="w-100 text-center"
-                      htmlFor="txtTituloPropuesta"
+                    <Collapse
+                      className="w-100"
+                      in={this.state.showPropuestaModal}
                     >
-                      {trans("tablaCuidadores.tituloPropuesta")}
-                    </label>
-                    <input
-                      onChange={this.handleInputChange}
-                      type="text"
-                      className="form-control"
-                      id="txtTituloPropuesta"
-                      aria-describedby="txtNombreHelp"
-                      placeholder="Idatzi proposamen izenburua..."
-                      value={this.state.txtTituloPropuesta}
-                    />
-                  </div>
-                  <div className="row ml-0 mr-0 mb-2">
-                    <div className="col-6">
-                      <label className="w-100 text-center">
-                        {trans("tablaCuidadores.horasPropuesta")}:
-                      </label>
-                      <div className="w-100 mt-2" id="diasDisponible">
-                        {/* Aqui iran los dias dinamicamente */}
-                        {this.state.diasDisponible.map((objDia, indice) => {
-                          return (
-                            <div
-                              className="col-6 mx-auto text-center"
-                              id={"diaDisponible" + indice}
-                            >
-                              <div className="form-control mt-4 w-100">
-                                <select
-                                  value={this.state.diasDisponible[indice].dia}
-                                  onChange={this.handleDiasDisponibleChange}
-                                  className="d-inline"
-                                  id={"dia" + indice}
+                      <div>
+                        <h5 className="display-4 mb-2">
+                          {trans("tablaCuidadores.tuPropuesta")}
+                        </h5>
+                        <div className="row mr-0 ml-0 mb-2 p-2 text-center">
+                          <label
+                            className="w-100 text-center"
+                            htmlFor="txtTituloPropuesta"
+                          >
+                            {trans("tablaCuidadores.tituloPropuesta")}
+                          </label>
+                          <input
+                            onChange={this.handleInputChange}
+                            type="text"
+                            className="form-control"
+                            id="txtTituloPropuesta"
+                            aria-describedby="txtNombreHelp"
+                            placeholder="Idatzi proposamen izenburua..."
+                            value={this.state.txtTituloPropuesta}
+                          />
+                        </div>
+                        <div className="row ml-0 mr-0 mb-2">
+                          <div className="col-6">
+                            <label className="w-100 text-center">
+                              {trans("tablaCuidadores.horasPropuesta")}:
+                            </label>
+                            <div className="w-100 mt-2" id="diasDisponible">
+                              {/* Aqui iran los dias dinamicamente */}
+                              {this.state.diasDisponible.map(
+                                (objDia, indice) => {
+                                  return (
+                                    <div
+                                      className="col-6 mx-auto text-center"
+                                      id={"diaDisponible" + indice}
+                                    >
+                                      <div className="form-control mt-4 w-100">
+                                        <select
+                                          value={
+                                            this.state.diasDisponible[indice]
+                                              .dia
+                                          }
+                                          onChange={
+                                            this.handleDiasDisponibleChange
+                                          }
+                                          className="d-inline"
+                                          id={"dia" + indice}
+                                        >
+                                          <option>Aukeratu eguna</option>
+                                          <option value="1">Astelehena</option>
+                                          <option value="2">Asteartea</option>
+                                          <option value="3">Asteazkena</option>
+                                          <option value="4">Osteguna</option>
+                                          <option value="5">Ostirala</option>
+                                          <option value="6">Larunbata</option>
+                                          <option value="7">Igandea</option>
+                                        </select>
+                                        <br />
+                                        <br />
+                                        <b>
+                                          {trans(
+                                            "registerFormCuidadores.horaInicio"
+                                          )}{" "}
+                                          :
+                                        </b>
+                                        <TimeInput
+                                          onTimeChange={valor => {
+                                            this.handleDiasDisponibleChange(
+                                              valor,
+                                              "horaInicio" + indice
+                                            );
+                                          }}
+                                          id={"horaInicio" + indice}
+                                          initTime={
+                                            this.state.diasDisponible[indice]
+                                              .horaInicio != "00:00"
+                                              ? this.state.diasDisponible[
+                                                  indice
+                                                ].horaInicio
+                                              : "00:00"
+                                          }
+                                          className="mt-1 text-center d-inline form-control"
+                                        />
+                                        <br />
+                                        <b>
+                                          {trans(
+                                            "registerFormCuidadores.horaFin"
+                                          )}{" "}
+                                          :
+                                        </b>
+                                        <TimeInput
+                                          onTimeChange={valor => {
+                                            this.handleDiasDisponibleChange(
+                                              valor,
+                                              "horaFin" + indice
+                                            );
+                                          }}
+                                          id={"horaFin" + indice}
+                                          initTime={
+                                            this.state.diasDisponible[indice]
+                                              .horaFin != "00:00"
+                                              ? this.state.diasDisponible[
+                                                  indice
+                                                ].horaFin
+                                              : "00:00"
+                                          }
+                                          className="mt-1 text-center d-inline form-control"
+                                        />
+                                        <br />
+                                        <br />
+                                      </div>
+                                    </div>
+                                  );
+                                }
+                              )}
+                              <div
+                                id="botonesDiasDisponible"
+                                className="w-100 mt-2"
+                              >
+                                {this.state.diasDisponible.length > 0 ? (
+                                  <a
+                                    onClick={this.removeDiasDisponible}
+                                    className="btn btn-danger float-left text-light"
+                                  >
+                                    {trans(
+                                      "registerFormCuidadores.eliminarDia"
+                                    )}{" "}
+                                    <FontAwesomeIcon icon={faMinusCircle} />
+                                  </a>
+                                ) : (
+                                  ""
+                                )}
+                                <a
+                                  onClick={this.addDiasDisponible}
+                                  className="btn btn-success float-right text-light"
                                 >
-                                  <option>Aukeratu eguna</option>
-                                  <option value="1">Astelehena</option>
-                                  <option value="2">Asteartea</option>
-                                  <option value="3">Asteazkena</option>
-                                  <option value="4">Osteguna</option>
-                                  <option value="5">Ostirala</option>
-                                  <option value="6">Larunbata</option>
-                                  <option value="7">Igandea</option>
-                                </select>
-                                <br />
-                                <br />
-                                <b>
-                                  {trans("registerFormCuidadores.horaInicio")} :
-                                </b>
-                                <TimeInput
-                                  onTimeChange={valor => {
-                                    this.handleDiasDisponibleChange(
-                                      valor,
-                                      "horaInicio" + indice
-                                    );
-                                  }}
-                                  id={"horaInicio" + indice}
-                                  initTime={
-                                    this.state.diasDisponible[indice]
-                                      .horaInicio != "00:00"
-                                      ? this.state.diasDisponible[indice]
-                                          .horaInicio
-                                      : "00:00"
-                                  }
-                                  className="mt-1 text-center d-inline form-control"
-                                />
-                                <br />
-                                <b>{trans("registerFormCuidadores.horaFin")} :</b>
-                                <TimeInput
-                                  onTimeChange={valor => {
-                                    this.handleDiasDisponibleChange(
-                                      valor,
-                                      "horaFin" + indice
-                                    );
-                                  }}
-                                  id={"horaFin" + indice}
-                                  initTime={
-                                    this.state.diasDisponible[indice].horaFin !=
-                                    "00:00"
-                                      ? this.state.diasDisponible[indice]
-                                          .horaFin
-                                      : "00:00"
-                                  }
-                                  className="mt-1 text-center d-inline form-control"
-                                />
-                                <br />
-                                <br />
+                                  {trans("registerFormCuidadores.anadir")}{" "}
+                                  <FontAwesomeIcon icon={faPlusCircle} />
+                                </a>
                               </div>
                             </div>
-                          );
-                        })}
-                        <div id="botonesDiasDisponible" className="w-100 mt-2">
-                          {this.state.diasDisponible.length > 0 ? (
-                            <a
-                              onClick={this.removeDiasDisponible}
-                              className="btn btn-danger float-left text-light"
-                            >
-                              {trans("registerFormCuidadores.eliminarDia")}{" "}
-                              <FontAwesomeIcon icon={faMinusCircle} />
-                            </a>
-                          ) : (
-                            ""
-                          )}
-                          <a
-                            onClick={this.addDiasDisponible}
-                            className="btn btn-success float-right text-light"
-                          >
-                            {trans("registerFormCuidadores.anadir")}{" "}
-                            <FontAwesomeIcon icon={faPlusCircle} />
-                          </a>
+                          </div>
+                          <div className="col-6">
+                            <label className="w-100 text-center">
+                              {trans("tablaCuidadores.pueblos")}:
+                            </label>
+                            <div className="form-group mt-2">
+                              <AutoSuggest
+                                suggestions={this.state.suggestionsPueblos}
+                                onSuggestionsFetchRequested={
+                                  this.onSuggestionsFetchRequested
+                                }
+                                onSuggestionsClearRequested={
+                                  this.onSuggestionsClearRequested
+                                }
+                                onSuggestionSelected={this.handleAddPueblo}
+                                getSuggestionValue={this.getSuggestionValue}
+                                renderSuggestion={this.renderSuggestion}
+                                inputProps={autoSuggestProps}
+                                theme={suggestionTheme}
+                                id="txtAddPueblos"
+                              />
+                              {this.state.ubicaciones.length > 0 ? (
+                                <h5 className="mt-2 lead">
+                                  {trans(
+                                    "registerFormCuidadores.pueblosSeleccionados"
+                                  )}
+                                  :
+                                </h5>
+                              ) : (
+                                ""
+                              )}
+
+                              <ul className="list-group">
+                                {this.state.ubicaciones.map(pueblo => {
+                                  return (
+                                    <li className="list-group-item">
+                                      {pueblo}
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                              {this.state.ubicaciones.length > 0 ? (
+                                <a
+                                  onClick={this.handleRemovePueblo}
+                                  className="mt-4 btn btn-danger float-right text-light"
+                                >
+                                  {trans(
+                                    "registerFormCuidadores.eliminarPueblo"
+                                  )}{" "}
+                                  <FontAwesomeIcon icon={faMinusCircle} />
+                                </a>
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row ml-0 mr-0 p-2">
+                          <label htmlFor="txtDescripcion">
+                            {trans("tablaCuidadores.descripcion")}
+                          </label>
+                          <textarea
+                            onChange={this.handleInputChange}
+                            className={
+                              this.state.error.txtNombre
+                                ? "border border-danger form-control"
+                                : "form-control"
+                            }
+                            rows="5"
+                            id="txtDescripcion"
+                            placeholder="Idatzi zure proposamenaren deskribapen zehatza..."
+                            value={this.state.txtDescripcion}
+                          ></textarea>
                         </div>
                       </div>
-                    </div>
-                    <div className="col-6">
-                      <label className="w-100 text-center">
-                        {trans("tablaCuidadores.pueblos")}:
-                      </label>
-                      <div className="form-group mt-2">
-                        <AutoSuggest
-                          suggestions={this.state.suggestionsPueblos}
-                          onSuggestionsFetchRequested={
-                            this.onSuggestionsFetchRequested
-                          }
-                          onSuggestionsClearRequested={
-                            this.onSuggestionsClearRequested
-                          }
-                          onSuggestionSelected={this.handleAddPueblo}
-                          getSuggestionValue={this.getSuggestionValue}
-                          renderSuggestion={this.renderSuggestion}
-                          inputProps={autoSuggestProps}
-                          theme={suggestionTheme}
-                          id="txtAddPueblos"
-                        />
-                        {this.state.ubicaciones.length > 0 ? (
-                          <h5 className="mt-2 lead">
-                            {trans("registerFormCuidadores.pueblosSeleccionados")}:
-                          </h5>
-                        ) : (
-                          ""
-                        )}
-
-                        <ul className="list-group">
-                          {this.state.ubicaciones.map(pueblo => {
-                            return (
-                              <li className="list-group-item">{pueblo}</li>
-                            );
-                          })}
-                        </ul>
-                        {this.state.ubicaciones.length > 0 ? (
-                          <a
-                            onClick={this.handleRemovePueblo}
-                            className="mt-4 btn btn-danger float-right text-light"
-                          >
-                            {trans("registerFormCuidadores.eliminarPueblo")}{" "}
-                            <FontAwesomeIcon icon={faMinusCircle} />
-                          </a>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                    </div>
+                    </Collapse>
                   </div>
-                  <div className="row ml-0 mr-0 p-2">
-                    <label htmlFor="txtDescripcion">
-                      {trans("tablaCuidadores.descripcion")}
-                    </label>
-                    <textarea
-                      onChange={this.handleInputChange}
-                      className={
-                        this.state.error.txtNombre
-                          ? "border border-danger form-control"
-                          : "form-control"
-                      }
-                      rows="5"
-                      id="txtDescripcion"
-                      placeholder="Idatzi zure proposamenaren deskribapen zehatza..."
-                      value={this.state.txtDescripcion}
-                    ></textarea>
-                  </div>
-                </div>
-              </Collapse>
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    className="w-100 btn-success"
+                    onClick={() => this.handlePedirCuidado()}
+                  >
+                    {this.state.showPropuestaModal
+                      ? trans("tablaCuidadores.enviarAcuerdo")
+                      : trans("tablaCuidadores.acordar")}
+                  </Button>
+                </ModalFooter>
+              </Modal>
             </div>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              className="w-100 btn-success"
-              onClick={() => this.handlePedirCuidado()}
-            >
-              {this.state.showPropuestaModal
-                ? trans("tablaCuidadores.enviarAcuerdo")
-                : trans("tablaCuidadores.acordar")}
-            </Button>
-          </ModalFooter>
-        </Modal>
-      </div>
+          );
+        }}
+      </SocketContext.Consumer>
     );
   }
 }
