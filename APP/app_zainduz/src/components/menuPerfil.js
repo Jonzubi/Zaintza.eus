@@ -30,6 +30,7 @@ const mapStateToProps = state => {
 };
 
 let gSocket = null;
+let notifyReceiving = false;
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -40,8 +41,10 @@ const mapDispatchToProps = dispatch => {
 };
 
 class MenuPerfil extends React.Component {
-  handleNotifyReceived = (socket) => {
-    socket.on("notifyReceived", () => {
+  handleNotifyReceived = () => {
+    cogoToast.info(
+    <h5>{trans('menuPerfil.notificacionRecibida')}</h5>
+    );
       //Si no esta logueado no queremos saber notificaciones;
       if (
         typeof this.props.idUsuario == "undefined" ||
@@ -73,7 +76,6 @@ class MenuPerfil extends React.Component {
           });
         }
       });
-    });
   }
   constructor(props) {
     super(props);
@@ -164,7 +166,11 @@ class MenuPerfil extends React.Component {
         <SocketContext.Consumer>
           {socket => {
             gSocket = socket;
-            socket.on('notifyReceived', () => this.handleNotifyReceived(socket));
+            if(!notifyReceiving){
+              socket.on('notifyReceived', this.handleNotifyReceived);
+              notifyReceiving = true;
+            }
+            
             return (
               <div id="menu-perfil-content" className="w-100">
                 <div

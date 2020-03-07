@@ -25,7 +25,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('notify', ({ idUsuario }) => {
-        const usertToNotify = usuariosLogueados.filter(item => item.idUsuario === idUsuario)[0];
+        const usertToNotify = usuariosLogueados.filter(item => item.idUsuario === idUsuario.toString())[0];
         if(usertToNotify !== undefined) {
             io.to(`${usertToNotify.socketId}`).emit('notifyReceived');
         } else {
