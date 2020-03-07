@@ -8,13 +8,7 @@ import { faCaretDown, faEye, faTrashAlt } from "@fortawesome/free-solid-svg-icon
 import { Collapse } from "react-collapse";
 import Avatar from "react-avatar";
 import cogoToast from "cogo-toast";
-
-const mapStateToProps = state => {
-  return {
-    idUsuario: state.user._idUsuario,
-    tipoUsuario: state.user.tipoUsuario
-  };
-};
+import { setCountNotify } from "../redux/actions/notifications";
 
 class NotificacionesForm extends React.Component {
   componentDidMount() {
@@ -49,6 +43,7 @@ class NotificacionesForm extends React.Component {
   }
 
   async handleToogleCollapseNotificacion(index) {
+    const { setCountNotify, countNotifies } =this.props;
     let aux = this.state.notificacionesCollapseState;
     aux[index] = !aux[index];
 
@@ -61,6 +56,7 @@ class NotificacionesForm extends React.Component {
         }
       );
       auxJsonNotif[index].visto = true;
+      setCountNotify(countNotifies - 1);
     }
 
     this.setState({
@@ -168,10 +164,13 @@ class NotificacionesForm extends React.Component {
   }
 
   async handleDeleteNotificacion(notificacion, indice){
+    const { countNotifies, setCountNotify } = this.props;
     let auxJsonNotif = this.state.jsonNotificaciones;
 
     await axios.delete("http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id);
     delete auxJsonNotif[indice];
+
+    setCountNotify(countNotifies - 1);
 
     this.setState({
       jsonNotificaciones: auxJsonNotif
@@ -368,4 +367,16 @@ class NotificacionesForm extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, null)(NotificacionesForm);
+const mapStateToProps = state => {
+  return {
+    idUsuario: state.user._idUsuario,
+    tipoUsuario: state.user.tipoUsuario,
+    countNotifies: state.notification.countNotifies
+  };
+};
+
+const mapDispatchToPros = dispatch => ({
+  setCountNotify: payload => dispatch(setCountNotify(payload))
+});
+
+export default connect(mapStateToProps, mapDispatchToPros)(NotificacionesForm);

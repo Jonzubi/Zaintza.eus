@@ -16,6 +16,7 @@ import { trans } from "../util/funciones";
 import Axios from "axios";
 import ChangeLang from "../components/changeLang";
 import SocketContext from "../socketio/socket-context";
+import { setCountNotify } from "../redux/actions/notifications";
 
 const mapStateToProps = state => {
   return {
@@ -25,7 +26,8 @@ const mapStateToProps = state => {
     idPerfil: state.user._id,
     idUsuario: state.user._idUsuario,
     nombre: state.user.nombre,
-    apellido1: state.user.apellido1
+    apellido1: state.user.apellido1,
+    countNotifies: state.notification.countNotifies
   };
 };
 
@@ -36,53 +38,39 @@ const mapDispatchToProps = dispatch => {
   return {
     toogleMenuPerfil: payload => dispatch(toogleMenuPerfil(payload)),
     initializeUserSession: () => dispatch(initializeUserSession()),
-    changeFormContent: form => dispatch(changeFormContent(form))
+    changeFormContent: form => dispatch(changeFormContent(form)),
+    setCountNotify: payload => dispatch(setCountNotify(payload))
   };
 };
 
 class MenuPerfil extends React.Component {
   handleNotifyReceived = () => {
-      //Si no esta logueado no queremos saber notificaciones;
-      if (
-        typeof this.props.idUsuario == "undefined" ||
-        this.props.idUsuario == ""
-      )
-        return;
+    const { countNotifies, setCountNotify } = this.props;
+    //Si no esta logueado no queremos saber notificaciones;
+    if (
+      typeof this.props.idUsuario == "undefined" ||
+      this.props.idUsuario == ""
+    )
+      return;
 
-      Axios.get("http://" + ipMaquina + ":3001/api/notificacion", {
-        params: {
-          filtros: {
-            idUsuario: this.props.idUsuario,
-            visto: false
-          }
+    Axios.get("http://" + ipMaquina + ":3001/api/notificacion", {
+      params: {
+        filtros: {
+          idUsuario: this.props.idUsuario,
+          visto: false
         }
-      }).then(resultado => {
-        if (
-          resultado.data != "Vacio" &&
-          this.state.countNotificaciones != resultado.data.length
-        ) {         
-          this.setState({
-            countNotificaciones: resultado.data.length
-          });
-          cogoToast.info(
-            <h5>{trans('menuPerfil.notificacionRecibida')}</h5>
-            );
-        } else if (
-          resultado.data == "Vacio" &&
-          this.state.countNotificaciones != 0
-        ) {
-          this.setState({
-            countNotificaciones: 0
-          });
-        }
-      });
-  }
+      }
+    }).then(resultado => {
+      if (resultado.data != "Vacio" && countNotifies != resultado.data.length) {
+        setCountNotify(resultado.data.length);
+        cogoToast.info(<h5>{trans("menuPerfil.notificacionRecibida")}</h5>);
+      } else if (resultado.data == "Vacio" && countNotifies != 0) {
+        setCountNotify(0);
+      }
+    });
+  };
   constructor(props) {
     super(props);
-
-    this.state = {
-      countNotificaciones: 0
-    };
 
     this.handleClickPerfil = this.handleClickPerfil.bind(this);
     this.handleClickAcuerdos = this.handleClickAcuerdos.bind(this);
@@ -166,11 +154,12 @@ class MenuPerfil extends React.Component {
         <SocketContext.Consumer>
           {socket => {
             gSocket = socket;
-            if(!notifyReceiving){
-              socket.on('notifyReceived', this.handleNotifyReceived);
+            if (!notifyReceiving) {
+              socket.on("notifyReceived", this.handleNotifyReceived);
               notifyReceiving = true;
             }
-            
+            const { countNotifies } = this.props;
+
             return (
               <div id="menu-perfil-content" className="w-100">
                 <div
@@ -204,9 +193,9 @@ class MenuPerfil extends React.Component {
                     onClick={() => this.handleClickNotificaciones()}
                   >
                     {trans("menuPerfil.notificaciones")}
-                    {this.state.countNotificaciones > 0 ? (
+                    {countNotifies > 0 ? (
                       <span className="badge badge-light ml-2">
-                        {this.state.countNotificaciones}
+                        {countNotifies}
                       </span>
                     ) : null}
                   </button>
