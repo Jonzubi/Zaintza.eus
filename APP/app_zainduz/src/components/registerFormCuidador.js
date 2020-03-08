@@ -922,6 +922,7 @@ class RegisterForm extends React.Component {
                         this.onSuggestionsClearRequested
                       }
                       onSuggestionSelected={this.handleAddPueblo}
+                      //onSuggestionHighlighted={({suggestion}) => {this.setState({auxAddPueblo: suggestion})}} //Con esto se arregla  el bug de la seleccion pero se crea otro
                       getSuggestionValue={this.getSuggestionValue}
                       renderSuggestion={this.renderSuggestion}
                       inputProps={autoSuggestProps}
