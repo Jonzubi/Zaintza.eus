@@ -53,7 +53,6 @@ exports.get = function(req, res, modelos) {
 };
 
 exports.insert = function(req, res, modelos) {
-  console.log(req.body);
   let tabla = req.params.tabla;
   let modelo = modelos[tabla];
 
@@ -69,7 +68,6 @@ exports.insert = function(req, res, modelos) {
   modeloConfiged
     .save()
     .then(doc => {
-      console.log(doc);
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(doc));
     })
@@ -87,7 +85,6 @@ exports.update = function(req, res, modelos) {
   let tabla = req.params.tabla;
   let id = req.params.id;
   let modelo = modelos[tabla];
-  console.log(req.body);
   modelo
     .findByIdAndUpdate(id, req.body)
     .then(doc => {
@@ -181,7 +178,6 @@ exports.getImage = (req, res) => {
 
 //Funcion para ver si el server esta en linea
 exports.inicio = function(req, res) {
-  console.log("Solicitud recibida");
   res.writeHead(200, headerResponse);
   res.write("Solicitud recibida");
   res.end();

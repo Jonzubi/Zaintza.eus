@@ -219,34 +219,39 @@ class RegisterForm extends React.Component {
     });
   }
 
-  handleAddPueblo() {
-    let pueblo = this.state.auxAddPueblo;
-    if (pueblo == "") return;
+  handleAddPueblo(c, { suggestion }) {
+    this.setState({
+      auxAddPueblo: suggestion
+    }, () => {
+      let pueblo = this.state.auxAddPueblo;
+      if (pueblo == "") return;
 
-    if (!municipios.includes(pueblo)) {
-      cogoToast.error(
-        <h5>
-          {pueblo} {trans("registerFormCuidadores.errorPuebloNoExiste")}
-        </h5>
-      );
-      return;
-    }
-
-    for (var clave in this.state.ubicaciones) {
-      if (this.state.ubicaciones[clave] == pueblo) {
+      if (!municipios.includes(pueblo)) {
         cogoToast.error(
           <h5>
-            {pueblo} {trans("registerFormCuidadores.errorPuebloRepetido")}
+            {pueblo} {trans("registerFormCuidadores.errorPuebloNoExiste")}
           </h5>
         );
         return;
       }
-    }
-    this.state.ubicaciones.push(pueblo);
-    this.setState({
-      ubicaciones: this.state.ubicaciones,
-      auxAddPueblo: ""
+
+      for (var clave in this.state.ubicaciones) {
+        if (this.state.ubicaciones[clave] == pueblo) {
+          cogoToast.error(
+            <h5>
+              {pueblo} {trans("registerFormCuidadores.errorPuebloRepetido")}
+            </h5>
+          );
+          return;
+        }
+      }
+      this.state.ubicaciones.push(pueblo);
+      this.setState({
+        ubicaciones: this.state.ubicaciones,
+        auxAddPueblo: ""
+      });
     });
+    
   }
 
   handleRemovePueblo() {
@@ -922,7 +927,6 @@ class RegisterForm extends React.Component {
                         this.onSuggestionsClearRequested
                       }
                       onSuggestionSelected={this.handleAddPueblo}
-                      //onSuggestionHighlighted={({suggestion}) => {this.setState({auxAddPueblo: suggestion})}} //Con esto se arregla  el bug de la seleccion pero se crea otro
                       getSuggestionValue={this.getSuggestionValue}
                       renderSuggestion={this.renderSuggestion}
                       inputProps={autoSuggestProps}

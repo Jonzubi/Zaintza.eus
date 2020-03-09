@@ -609,7 +609,6 @@ exports.patchPredLang = async (req, res, modelos) => {
   const modeloAjustes = modelos.ajuste;
 
   const ajusteExistente = await modeloAjustes.find({ idUsuario: id });
-  console.log(ajusteExistente);
   if (ajusteExistente.length === 0) {
     const ajuste = await modeloAjustes({
       idUsuario: id,

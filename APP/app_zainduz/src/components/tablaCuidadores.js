@@ -169,34 +169,39 @@ class Tabla extends React.Component {
     });
   };
 
-  handleAddPueblo() {
-    let pueblo = this.state.auxAddPueblo;
-    if (pueblo == "") return;
+  handleAddPueblo(c, { suggestion }) {
+    this.setState({
 
-    if (!municipios.includes(pueblo)) {
-      cogoToast.error(
-        <h5>
-          {pueblo} {trans("registerFormCuidadores.errorPuebloNoExiste")}
-        </h5>
-      );
-      return;
-    }
-
-    for (var clave in this.state.ubicaciones) {
-      if (this.state.ubicaciones[clave] == pueblo) {
+    }, () => {
+      let pueblo = this.state.auxAddPueblo;
+      if (pueblo == "") return;
+      
+      if (!municipios.includes(pueblo)) {
         cogoToast.error(
           <h5>
-            {pueblo} {trans("registerFormCuidadores.errorPuebloRepetido")}
+            {pueblo} {trans("registerFormCuidadores.errorPuebloNoExiste")}
           </h5>
         );
         return;
       }
-    }
-    this.state.ubicaciones.push(pueblo);
-    this.setState({
-      ubicaciones: this.state.ubicaciones,
-      auxAddPueblo: ""
+    
+      for (var clave in this.state.ubicaciones) {
+        if (this.state.ubicaciones[clave] == pueblo) {
+          cogoToast.error(
+            <h5>
+              {pueblo} {trans("registerFormCuidadores.errorPuebloRepetido")}
+            </h5>
+          );
+          return;
+        }
+      }
+      this.state.ubicaciones.push(pueblo);
+      this.setState({
+        ubicaciones: this.state.ubicaciones,
+        auxAddPueblo: ""
+      });
     });
+    
   }
 
   handleRemovePueblo() {

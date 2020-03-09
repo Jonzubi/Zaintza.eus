@@ -150,7 +150,6 @@ class NotificacionesForm extends React.Component {
       }
     );
     laOtraPersonaUsu = laOtraPersonaUsu.data[0];
-    console.log(laOtraPersonaUsu);
     //Aqui se manda la notificacion con el usuario recogido anteriormente,
     //el acuerdo ha sido gestionado con un valor de aceptado o rechazado en el valorGestion
     await axios.post("http://" + ipMaquina + ":3001/api/notificacion", {
