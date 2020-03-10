@@ -14,5 +14,5 @@ let modelos = require("./util/requireAllModels")(conexion)
 routes(app, modelos);
 
 app.listen(port, function() {
-  console.log("[API]Escuchando en el puerto : " + port);
+  console.log("[API] Escuchando en el puerto : " + port);
 });

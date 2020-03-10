@@ -4,3 +4,5 @@
 /API/util/imagenes/
 /SOCKET/node_modules
 /SOCKET/package-lock.json
+/SMTP/package-lock.json
+/SMTP/node_modules
