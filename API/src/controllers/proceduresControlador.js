@@ -238,7 +238,8 @@ exports.postNewCuidador = async (req, res, modelos) => {
       email: email,
       contrasena: contrasena,
       tipoUsuario: "Cuidador",
-      idPerfil: cuidadorInserted._id
+      idPerfil: cuidadorInserted._id,
+      validado: false
     }).save(opts);
 
     await sesion.commitTransaction();
