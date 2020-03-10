@@ -1,0 +1,1 @@
+export default "EuskalHerria-34";
