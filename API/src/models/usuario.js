@@ -19,6 +19,10 @@ module.exports = conexion => {
       type: String,
       required: true,
       refPath: 'tipoUsuario'
+    },
+    validado: {
+      type: Boolean,
+      required: true
     }
   });
 

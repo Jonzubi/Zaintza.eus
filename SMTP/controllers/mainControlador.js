@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const handlebars = require("handlebars");
 const headerResponse = require("../util/headerResponse");
 const readHTMLFile = require("../util/functions");
 const pswd = require("../util/smtpPSW");
@@ -7,20 +8,25 @@ const fromEmail = require("../util/smtpEmail");
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: email,
+    user: fromEmail,
     pass: pswd
   }
 });
 
 exports.sendRegisterEmail = (req, res) => {
-  const toEmail = req.body;
+  const { toEmail, nombre, apellido } = req.body;
   if (toEmail) {
     readHTMLFile("verification", (err, html) => {
+      const template = handlebars.compile(html);
+      const htmlToSend = template({
+        nombre,
+        apellido
+      });
       const mailOptions = {
         from: fromEmail,
         to: toEmail,
         subject: "[Zaintza.eus] Egiaztatu kontua",
-        html: html
+        html: htmlToSend
       };
 
       transporter.sendMail(mailOptions, function(error, info) {

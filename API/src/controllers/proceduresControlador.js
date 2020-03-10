@@ -314,7 +314,8 @@ exports.postNewCliente = async (req, res, modelos) => {
       email: email,
       contrasena: contrasena,
       tipoUsuario: "Cliente",
-      idPerfil: insertedCliente._id
+      idPerfil: insertedCliente._id,
+      validado: false
     }).save(opts);
     await sesion.commitTransaction();
     sesion.endSession();

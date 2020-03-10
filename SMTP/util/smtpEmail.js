@@ -1,1 +1,1 @@
-export default "jonzubi97@gmail.com";
+module.exports = "jonzubi97@gmail.com";
