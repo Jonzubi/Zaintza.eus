@@ -7,7 +7,6 @@ let usuariosConectados = [];
 let usuariosLogueados = [];
 
 io.on('connection', (socket) => {
-    console.log("Socket funcionando");
 
     usuariosConectados.push({
         socketId: socket.id

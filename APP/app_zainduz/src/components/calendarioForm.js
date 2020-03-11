@@ -33,6 +33,8 @@ class CalendarioForm extends React.Component {
         this.setState({
           jsonEventos: acuerdos.data,
           isLoading: false
+        }, () => {
+          this.handleOnRangeChange(this.getActualWeekDays());
         });
       })
       .catch(err => {
@@ -44,62 +46,93 @@ class CalendarioForm extends React.Component {
 
     this.state = {
       jsonEventos: [],
+      displayEventos: [],
       isLoading: true
     };
+    moment.lang('es', {
+      months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
+      monthsShort: 'Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.'.split('_'),
+      weekdays: 'Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado'.split('_'),
+      weekdaysShort: 'Dom._Lun._Mar._Mier._Jue._Vier._Sab.'.split('_'),
+      weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')}
+    );
   }
 
-  addDays(date, days) {
-    const copy = new Date(date);
-    copy.setDate(date.getDate() + days);
-    return copy;
+  getActualWeekDays = () => {
+    let days = [];
+    let iDate = moment().subtract(moment().day(), 'd');
+    days.push(iDate.toDate());
+    for (let i = 0; i < 6;i++) {
+      iDate = moment(iDate).add(1, 'd').toDate();
+      days.push(iDate);
+    }
+    return days;
   }
 
-  getEventsJson() {
-    let jsonForCalendar = [];
+  handleOnRangeChange = (dates) => {
+    const { jsonEventos } = this.state;
     const { tipoUsuario } = this.props;
     const columnaLaOtraPersona =
       tipoUsuario == "Cliente" ? "idCuidador" : "idCliente";
-    const cuantosDiasDeEventosMostrar = 10;
-    let fecha = new Date();
-    for (let i = 0; i < cuantosDiasDeEventosMostrar; i++) {
-      let dia = fecha.getDay();
-      this.state.jsonEventos.forEach((evento, indice) => {
-        evento.diasAcordados.forEach(diaAcordado => {
-          //La siguiente linea adapta el dia para compararlo con el dia del getDay(). Ya que la clase Date devuelve un 0 si es Domingo. En mi base de datos Domingo es 7
-          const adaptarDia = diaAcordado.dia == 7 ? 0 : diaAcordado.dia;
-          if (dia == adaptarDia) {
-            let fechaStart = new Date(fecha.getTime());
-            fechaStart.setHours(
-              parseInt(diaAcordado.horaInicio.split(":")[0]),
-              parseInt(diaAcordado.horaInicio.split(":")[1])
-            );
-            let fechaEnd = new Date(fecha.getTime());
-            fechaEnd.setHours(
-              parseInt(diaAcordado.horaFin.split(":")[0]),
-              parseInt(diaAcordado.horaFin.split(":")[1])
-            );
-            let eventoData = {
-              id: indice,
-              title:
-                evento[columnaLaOtraPersona].nombre +
-                " " +
-                evento[columnaLaOtraPersona].apellido1,
-              start: fechaStart,
-              end: fechaEnd
-            };
-            jsonForCalendar.push(eventoData);
-          }
+    const jsonForCalendar = [];
+    if (Array.isArray(dates)){
+      dates.forEach(date => {
+        jsonEventos.forEach((evento, indice) => {
+          evento.diasAcordados.forEach(diaAcordado => {
+            const adaptarDia = diaAcordado.dia == 7 ? 0 : diaAcordado.dia;
+            if(moment(date).day() == adaptarDia){
+              const horaInicio = diaAcordado.horaInicio.split(':');
+              const horaFin = diaAcordado.horaFin.split(':');
+              const fechaStart = moment(date).set('hour', parseInt(horaInicio[0])).set('minute', horaInicio[1]).toDate();
+              const fechaFin = moment(date).set('hour', parseInt(horaFin[0])).set('minute', horaFin[1]).toDate();
+              const eventoData = {
+                id: indice,
+                title:
+                  evento[columnaLaOtraPersona].nombre +
+                  " " +
+                  evento[columnaLaOtraPersona].apellido1,
+                start: fechaStart,
+                end: fechaFin
+              };
+              jsonForCalendar.push(eventoData);
+            }
+          });
         });
       });
-      fecha = this.addDays(fecha, 1);
+    } else {
+      for (let iDate = moment(dates.start); iDate.isBefore(moment(dates.end)); iDate.add(1, 'd')){
+        jsonEventos.forEach((evento, indice) => {
+          evento.diasAcordados.forEach(diaAcordado => {
+            const adaptarDia = diaAcordado.dia == 7 ? 0 : diaAcordado.dia;
+            if(moment(iDate).day() == adaptarDia){
+              const horaInicio = diaAcordado.horaInicio.split(':');
+              const horaFin = diaAcordado.horaFin.split(':');
+              const fechaStart = moment(iDate).set('hour', parseInt(horaInicio[0])).set('minute', horaInicio[1]).toDate();
+              const fechaFin = moment(iDate).set('hour', parseInt(horaFin[0])).set('minute', horaFin[1]).toDate();
+              const eventoData = {
+                id: indice,
+                title:
+                  evento[columnaLaOtraPersona].nombre +
+                  " " +
+                  evento[columnaLaOtraPersona].apellido1,
+                start: fechaStart,
+                end: fechaFin
+              };
+              jsonForCalendar.push(eventoData);
+            }
+          });
+        });
+      }
     }
 
-    return jsonForCalendar;
+    this.setState({
+      displayEventos: jsonForCalendar
+    })
   }
 
   render() {
     const localizer = momentLocalizer(moment);
-    const { isLoading } = this.state;
+    const { isLoading, displayEventos } = this.state;
     return isLoading ? (
       <div className="row mt-3 justify-content-center">
         <img
@@ -113,7 +146,8 @@ class CalendarioForm extends React.Component {
         views={["week", "day", "agenda"]}
         defaultView={"week"}
         localizer={localizer}
-        events={this.getEventsJson()}
+        events={displayEventos}
+        onRangeChange={this.handleOnRangeChange}
       />
     );
   }
