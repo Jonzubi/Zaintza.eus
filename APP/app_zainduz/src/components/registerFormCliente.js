@@ -102,6 +102,23 @@ class RegisterFormCliente extends React.Component {
         return;
       }
     }
+
+    const checkIfEmailExists = await axios.get(
+      `http://${ipMaquina}:3001/api/usuario/`,
+      {
+        params: {
+          filtros: {
+            email: this.state.txtEmail
+          }
+        }
+      }
+    );
+
+    if (checkIfEmailExists.data !== "Vacio") {
+      cogoToast.error(<h5>{trans("registerFormCuidadores.emailExistente")}</h5>);
+      return;
+    }
+
     this.setState({ isLoading: true });
 
     var formData = {
