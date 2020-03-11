@@ -220,38 +220,40 @@ class RegisterForm extends React.Component {
   }
 
   handleAddPueblo(c, { suggestion }) {
-    this.setState({
-      auxAddPueblo: suggestion
-    }, () => {
-      let pueblo = this.state.auxAddPueblo;
-      if (pueblo == "") return;
+    this.setState(
+      {
+        auxAddPueblo: suggestion
+      },
+      () => {
+        let pueblo = this.state.auxAddPueblo;
+        if (pueblo == "") return;
 
-      if (!municipios.includes(pueblo)) {
-        cogoToast.error(
-          <h5>
-            {pueblo} {trans("registerFormCuidadores.errorPuebloNoExiste")}
-          </h5>
-        );
-        return;
-      }
-
-      for (var clave in this.state.ubicaciones) {
-        if (this.state.ubicaciones[clave] == pueblo) {
+        if (!municipios.includes(pueblo)) {
           cogoToast.error(
             <h5>
-              {pueblo} {trans("registerFormCuidadores.errorPuebloRepetido")}
+              {pueblo} {trans("registerFormCuidadores.errorPuebloNoExiste")}
             </h5>
           );
           return;
         }
+
+        for (var clave in this.state.ubicaciones) {
+          if (this.state.ubicaciones[clave] == pueblo) {
+            cogoToast.error(
+              <h5>
+                {pueblo} {trans("registerFormCuidadores.errorPuebloRepetido")}
+              </h5>
+            );
+            return;
+          }
+        }
+        this.state.ubicaciones.push(pueblo);
+        this.setState({
+          ubicaciones: this.state.ubicaciones,
+          auxAddPueblo: ""
+        });
       }
-      this.state.ubicaciones.push(pueblo);
-      this.setState({
-        ubicaciones: this.state.ubicaciones,
-        auxAddPueblo: ""
-      });
-    });
-    
+    );
   }
 
   handleRemovePueblo() {
@@ -403,6 +405,23 @@ class RegisterForm extends React.Component {
         if (error) return;
       }
     }
+
+    const checkIfEmailExists = await axios.get(
+      `http://${ipMaquina}:3001/api/usuario/`,
+      {
+        params: {
+          filtros: {
+            email: this.state.txtEmail
+          }
+        }
+      }
+    );
+
+    if (checkIfEmailExists.data !== "Vacio") {
+      cogoToast.error(<h5>{trans("registerFormCuidadores.emailExistente")}</h5>);
+      return;
+    }
+
     this.setState({ isLoading: true });
 
     var imgContactB64 = await toBase64(this.state.imgContact[0]);
@@ -455,52 +474,11 @@ class RegisterForm extends React.Component {
         return;
       });
 
-    this.props.saveUserSession(
-      Object.assign({}, formData, {
-        _id: insertedCuidador.data._id,
-        _idUsuario: insertedCuidador.data._idUsuario,
-        direcFoto: insertedCuidador.data.direcFoto,
-        direcFotoContacto: insertedCuidador.data.direcFotoContacto
-      })
-    );
-    this.setState({
-      txtNombre: "",
-      txtApellido1: "",
-      txtApellido2: "",
-      txtEmail: "",
-      txtSexo: "",
-      txtFechaNacimiento: "",
-      txtContrasena: "",
-      txtMovil: "",
-      txtTelefono: "",
-      diasDisponible: [],
-      publicoDisponible: {
-        nino: false,
-        terceraEdad: false,
-        necesidadEspecial: false
-      },
-      precioPorPublico: {
-        nino: "",
-        terceraEdad: "",
-        necesidadEspecial: ""
-      },
-      ubicaciones: [],
-      txtDescripcion: "",
-      isPublic: true,
-      avatarSrc: "",
-      avatarPreview: "",
-      hoverSexoM: false,
-      hoverSexoF: false,
-      isLoading: false,
-      auxAddPueblo: "",
-      hoverNino: false,
-      hoverTerceraEdad: false,
-      hoverNecesidadEspecial: false
+    axios.post(`http://${ipMaquina}:3003/smtp/registerEmail`, {
+      toEmail: this.state.txtEmail,
+      nombre: this.state.txtNombre,
+      apellido: this.state.txtApellido1
     });
-
-    socket.emit('login', {
-      idUsuario: insertedCuidador.data._idUsuario
-    })
 
     cogoToast.success(
       <div>

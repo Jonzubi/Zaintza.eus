@@ -104,23 +104,25 @@ class RegisterFormCliente extends React.Component {
     }
     this.setState({ isLoading: true });
 
+    const { txtNombre, txtApellido1, txtApellido2, txtMovil, txtFijo, avatarPreview, txtEmail, txtContrasena} = this.state;
+
     var formData = {
-      nombre: this.state.txtNombre,
-      apellido1: this.state.txtApellido1,
-      apellido2: this.state.txtApellido2,
+      nombre: txtNombre,
+      apellido1: txtApellido1,
+      apellido2: txtApellido2,
       telefono: {
         movil: {
           etiqueta: "Movil",
-          numero: this.state.txtMovil
+          numero: txtMovil
         },
         fijo: {
           etiqueta: "Fijo",
-          numero: this.state.txtFijo
+          numero: txtFijo
         }
       },
-      avatarPreview: this.state.avatarPreview,
-      email: this.state.txtEmail,
-      contrasena: this.state.txtContrasena
+      avatarPreview: avatarPreview,
+      email: txtEmail,
+      contrasena: txtContrasena
     };
 
     const insertedCliente = await axios
@@ -135,35 +137,12 @@ class RegisterFormCliente extends React.Component {
         cogoToast.error(<h5>{trans("registerFormClientes.errorGeneral")}</h5>);
         return;
       });
-    this.props.saveUserSession(
-      Object.assign({}, formData, {
-        tipoUsuario: "Cliente",
-        email: formData.email,
-        _id: insertedCliente.data._id,
-        _idUsuario: insertedCliente.data._idUsuario,
-        direcFoto: insertedCliente.data.direcFoto
-      })
-    );
-
-    this.state = {
-      avatarPreview: "",
-      txtNombre: "",
-      txtApellido1: "",
-      txtApellido2: "",
-      txtEmail: "",
-      txtContrasena: "",
-      isLoading: false,
-      error: {
-        txtNombre: false,
-        txtEmail: false,
-        txtContrasena: false,
-        txtMovil: false
-      }
-    };
-
-    socket.emit('login', {
-      idUsuario: insertedCliente.data._idUsuario
-    });
+    
+      axios.post(`http://${ipMaquina}:3003/smtp/registerEmail`, {
+        toEmail: txtEmail,
+        nombre: txtNombre,
+        apellido: txtApellido1
+      });
 
     cogoToast.success(
       <div>
