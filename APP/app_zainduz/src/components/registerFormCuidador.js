@@ -220,38 +220,40 @@ class RegisterForm extends React.Component {
   }
 
   handleAddPueblo(c, { suggestion }) {
-    this.setState({
-      auxAddPueblo: suggestion
-    }, () => {
-      let pueblo = this.state.auxAddPueblo;
-      if (pueblo == "") return;
+    this.setState(
+      {
+        auxAddPueblo: suggestion
+      },
+      () => {
+        let pueblo = this.state.auxAddPueblo;
+        if (pueblo == "") return;
 
-      if (!municipios.includes(pueblo)) {
-        cogoToast.error(
-          <h5>
-            {pueblo} {trans("registerFormCuidadores.errorPuebloNoExiste")}
-          </h5>
-        );
-        return;
-      }
-
-      for (var clave in this.state.ubicaciones) {
-        if (this.state.ubicaciones[clave] == pueblo) {
+        if (!municipios.includes(pueblo)) {
           cogoToast.error(
             <h5>
-              {pueblo} {trans("registerFormCuidadores.errorPuebloRepetido")}
+              {pueblo} {trans("registerFormCuidadores.errorPuebloNoExiste")}
             </h5>
           );
           return;
         }
+
+        for (var clave in this.state.ubicaciones) {
+          if (this.state.ubicaciones[clave] == pueblo) {
+            cogoToast.error(
+              <h5>
+                {pueblo} {trans("registerFormCuidadores.errorPuebloRepetido")}
+              </h5>
+            );
+            return;
+          }
+        }
+        this.state.ubicaciones.push(pueblo);
+        this.setState({
+          ubicaciones: this.state.ubicaciones,
+          auxAddPueblo: ""
+        });
       }
-      this.state.ubicaciones.push(pueblo);
-      this.setState({
-        ubicaciones: this.state.ubicaciones,
-        auxAddPueblo: ""
-      });
-    });
-    
+    );
   }
 
   handleRemovePueblo() {
@@ -403,6 +405,23 @@ class RegisterForm extends React.Component {
         if (error) return;
       }
     }
+
+    const checkIfEmailExists = await axios.get(
+      `http://${ipMaquina}:3001/api/usuario/`,
+      {
+        params: {
+          filtros: {
+            email: this.state.txtEmail
+          }
+        }
+      }
+    );
+
+    if (checkIfEmailExists.data !== "Vacio") {
+      cogoToast.error(<h5>{trans("registerFormCuidadores.emailExistente")}</h5>);
+      return;
+    }
+
     this.setState({ isLoading: true });
 
     var imgContactB64 = await toBase64(this.state.imgContact[0]);
