@@ -6,3 +6,4 @@
 /SOCKET/package-lock.json
 /SMTP/package-lock.json
 /SMTP/node_modules
+./package-lock.json
