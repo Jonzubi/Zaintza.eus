@@ -62,6 +62,16 @@ class LogInForm extends React.Component {
               const idPerfil = usuario.idPerfil._id;
               const idUsuario = usuario._id;
 
+              if(usuario.validado == false) {
+                cogoToast.error(
+                <h5>{trans('loginForm.validarEmail')}</h5>
+                );
+                this.setState({
+                  isLoading: false
+                });
+                return;
+              }
+
               this.props.saveUserSession(Object.assign({}, usuario.idPerfil, {
                 _id: idPerfil,
                 _idUsuario: idUsuario,

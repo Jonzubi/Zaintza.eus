@@ -19,7 +19,8 @@
     "contrasena": "Pasahitza",
     "recordarme": "Gogorarazi",
     "iniciarSesion": "Sartu",
-    "registrarse": "Izena eman"
+    "registrarse": "Izena eman",
+    "validarEmail": "Emaila egiaztatu behar duzu, joan zure emailera"
   },
   "notificaciones": {
     "sesionIniciada": "Saioa behar bezala hasi da",
