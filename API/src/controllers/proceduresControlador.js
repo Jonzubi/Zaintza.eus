@@ -178,7 +178,8 @@ exports.postNewCuidador = async (req, res, modelos) => {
     ubicaciones,
     telefono,
     imgContactB64,
-    avatarPreview
+    avatarPreview,
+    validationToken
   } = req.body;
   //Comprobamos que se han mandado los campos required del form cuidador
   if (
@@ -239,7 +240,8 @@ exports.postNewCuidador = async (req, res, modelos) => {
       contrasena: contrasena,
       tipoUsuario: "Cuidador",
       idPerfil: cuidadorInserted._id,
-      validado: false
+      validado: false,
+      validationToken
     }).save(opts);
 
     await sesion.commitTransaction();
@@ -260,9 +262,9 @@ exports.postNewCuidador = async (req, res, modelos) => {
     // undo any changes that might have happened
     await sesion.abortTransaction();
     sesion.endSession();
-    console.log(err);
+    console.log(error);
     res.writeHead(500, headerResponse);
-    res.write(JSON.stringify(err));
+    res.write(JSON.stringify(error));
     res.end();
   }
 };
