@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const handlebars = require("handlebars");
 const headerResponse = require("../util/headerResponse");
-const readHTMLFile = require("../util/functions");
+const { readHTMLFile, caesarShift } = require("../util/functions");
 const pswd = require("../util/smtpPSW");
 const fromEmail = require("../util/smtpEmail");
 const ipMaquina = require("../util/ipMaquinaAPI");
@@ -22,7 +22,7 @@ exports.sendRegisterEmail = (req, res) => {
       const htmlToSend = template({
         nombre,
         apellido,
-        validationToken,
+        validationToken: caesarShift(validationToken, 10),
         ipMaquina
       });
       const mailOptions = {
