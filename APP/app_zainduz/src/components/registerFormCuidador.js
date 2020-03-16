@@ -431,6 +431,8 @@ class RegisterForm extends React.Component {
       return;
     }
 
+    const validationToken = getRandomString(30);
+
     const formData = {
       nombre: this.state.txtNombre,
       apellido1: this.state.txtApellido1,
@@ -457,8 +459,10 @@ class RegisterForm extends React.Component {
       precioPorPublico: this.state.precioPorPublico,
       email: this.state.txtEmail,
       contrasena: this.state.txtContrasena,
-      tipoUsuario: "Cuidador"
+      tipoUsuario: "Cuidador",
+      validationToken
     };
+
     const insertedCuidador = await axios
       .post(
         "http://" + ipMaquina + ":3001/api/procedures/postNewCuidador",
@@ -477,7 +481,8 @@ class RegisterForm extends React.Component {
     axios.post(`http://${ipMaquina}:3003/smtp/registerEmail`, {
       toEmail: this.state.txtEmail,
       nombre: this.state.txtNombre,
-      apellido: this.state.txtApellido1
+      apellido: this.state.txtApellido1,
+      validationToken
     });
 
     cogoToast.success(

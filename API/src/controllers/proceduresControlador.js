@@ -178,7 +178,8 @@ exports.postNewCuidador = async (req, res, modelos) => {
     ubicaciones,
     telefono,
     imgContactB64,
-    avatarPreview
+    avatarPreview,
+    validationToken
   } = req.body;
   //Comprobamos que se han mandado los campos required del form cuidador
   if (
@@ -239,7 +240,8 @@ exports.postNewCuidador = async (req, res, modelos) => {
       contrasena: contrasena,
       tipoUsuario: "Cuidador",
       idPerfil: cuidadorInserted._id,
-      validado: false
+      validado: false,
+      validationToken
     }).save(opts);
 
     await sesion.commitTransaction();
@@ -260,9 +262,9 @@ exports.postNewCuidador = async (req, res, modelos) => {
     // undo any changes that might have happened
     await sesion.abortTransaction();
     sesion.endSession();
-    console.log(err);
+    console.log(error);
     res.writeHead(500, headerResponse);
-    res.write(JSON.stringify(err));
+    res.write(JSON.stringify(error));
     res.end();
   }
 };
@@ -275,7 +277,8 @@ exports.postNewCliente = async (req, res, modelos) => {
     avatarPreview,
     telefono,
     email,
-    contrasena
+    contrasena,
+    validationToken
   } = req.body;
 
   if (
@@ -316,7 +319,8 @@ exports.postNewCliente = async (req, res, modelos) => {
       contrasena: contrasena,
       tipoUsuario: "Cliente",
       idPerfil: insertedCliente._id,
-      validado: false
+      validado: false,
+      validationToken
     }).save(opts);
     await sesion.commitTransaction();
     sesion.endSession();
@@ -638,3 +642,19 @@ exports.patchPredLang = async (req, res, modelos) => {
     res.end();
   }
 };
+
+exports.confirmarEmail = async (req, res, modelos) => {
+  const modeloUsuarios = modelos.usuario;
+  const { validationToken } = req.query;
+
+  const usuarioBuscado = await modeloUsuarios.findOneAndUpdate({ validationToken }, { validado: true});
+  if(usuarioBuscado) {
+    res.writeHead(200, headerResponse);
+    res.write("Email verificado");
+    res.end();
+  } else {
+    res.writeHead(204, headerResponse);
+    res.write("No email");
+    res.end();
+  }
+}

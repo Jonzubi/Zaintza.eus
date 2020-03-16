@@ -123,6 +123,8 @@ class RegisterFormCliente extends React.Component {
 
     const { txtNombre, txtApellido1, txtApellido2, txtMovil, txtFijo, avatarPreview, txtEmail, txtContrasena} = this.state;
 
+    const validationToken = getRandomString(30);
+
     var formData = {
       nombre: txtNombre,
       apellido1: txtApellido1,
@@ -139,7 +141,8 @@ class RegisterFormCliente extends React.Component {
       },
       avatarPreview: avatarPreview,
       email: txtEmail,
-      contrasena: txtContrasena
+      contrasena: txtContrasena,
+      validationToken
     };
 
     const insertedCliente = await axios
@@ -158,7 +161,8 @@ class RegisterFormCliente extends React.Component {
       axios.post(`http://${ipMaquina}:3003/smtp/registerEmail`, {
         toEmail: txtEmail,
         nombre: txtNombre,
-        apellido: txtApellido1
+        apellido: txtApellido1,
+        validationToken
       });
 
     cogoToast.success(

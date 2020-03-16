@@ -23,6 +23,10 @@ module.exports = conexion => {
     validado: {
       type: Boolean,
       required: true
+    },
+    validationToken: {
+      type: String,
+      required: true
     }
   });
 

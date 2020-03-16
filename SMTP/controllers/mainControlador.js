@@ -4,6 +4,7 @@ const headerResponse = require("../util/headerResponse");
 const readHTMLFile = require("../util/functions");
 const pswd = require("../util/smtpPSW");
 const fromEmail = require("../util/smtpEmail");
+const ipMaquina = require("../util/ipMaquinaAPI");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -14,13 +15,15 @@ const transporter = nodemailer.createTransport({
 });
 
 exports.sendRegisterEmail = (req, res) => {
-  const { toEmail, nombre, apellido } = req.body;
+  const { toEmail, nombre, apellido, validationToken } = req.body;
   if (toEmail) {
     readHTMLFile("verification", (err, html) => {
       const template = handlebars.compile(html);
       const htmlToSend = template({
         nombre,
-        apellido
+        apellido,
+        validationToken,
+        ipMaquina
       });
       const mailOptions = {
         from: fromEmail,
