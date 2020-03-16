@@ -1,7 +1,8 @@
 const {
   writeImage,
   getRandomString,
-  getTodayDate
+  getTodayDate,
+  caesarShift
 } = require("../../util/funciones");
 const headerResponse = require("../../util/headerResponse");
 
@@ -241,7 +242,7 @@ exports.postNewCuidador = async (req, res, modelos) => {
       tipoUsuario: "Cuidador",
       idPerfil: cuidadorInserted._id,
       validado: false,
-      validationToken
+      validationToken: caesarShift(validationToken, 10)
     }).save(opts);
 
     await sesion.commitTransaction();
@@ -320,7 +321,7 @@ exports.postNewCliente = async (req, res, modelos) => {
       tipoUsuario: "Cliente",
       idPerfil: insertedCliente._id,
       validado: false,
-      validationToken
+      validationToken: caesarShift(validationToken, 10)
     }).save(opts);
     await sesion.commitTransaction();
     sesion.endSession();
