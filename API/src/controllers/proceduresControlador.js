@@ -275,7 +275,8 @@ exports.postNewCliente = async (req, res, modelos) => {
     avatarPreview,
     telefono,
     email,
-    contrasena
+    contrasena,
+    validationToken
   } = req.body;
 
   if (
@@ -316,7 +317,8 @@ exports.postNewCliente = async (req, res, modelos) => {
       contrasena: contrasena,
       tipoUsuario: "Cliente",
       idPerfil: insertedCliente._id,
-      validado: false
+      validado: false,
+      validationToken
     }).save(opts);
     await sesion.commitTransaction();
     sesion.endSession();
@@ -638,3 +640,19 @@ exports.patchPredLang = async (req, res, modelos) => {
     res.end();
   }
 };
+
+exports.confirmarEmail = async (req, res, modelos) => {
+  const modeloUsuarios = modelos.usuario;
+  const { validationToken } = req.query;
+
+  const usuarioBuscado = await modeloUsuarios.findOneAndUpdate({ validationToken }, { validado: true});
+  if(usuarioBuscado) {
+    res.writeHead(200, headerResponse);
+    res.write("Email verificado");
+    res.end();
+  } else {
+    res.writeHead(204, headerResponse);
+    res.write("No email");
+    res.end();
+  }
+}

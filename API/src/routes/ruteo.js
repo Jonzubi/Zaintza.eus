@@ -29,6 +29,8 @@ module.exports = (app, modelos) => {
   app.route("/api/procedures/patchCliente/:id").patch((req, res) => proceduresControlador.patchCliente(req, res, modelos));
 
   app.route("/api/procedures/patchPredLang/:id").post((req, res) => proceduresControlador.patchPredLang(req, res, modelos));
+
+  app.route("/api/procedures/confirmarEmail").get((req, res) => proceduresControlador.confirmarEmail(req, res, modelos));
   
   app.route("/Inicio/").get(mainControlador.inicio);
 
