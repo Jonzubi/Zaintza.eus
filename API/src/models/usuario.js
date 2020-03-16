@@ -24,7 +24,7 @@ module.exports = conexion => {
       type: Boolean,
       required: true
     },
-    validation_token: {
+    validationToken: {
       type: String,
       required: true
     }
