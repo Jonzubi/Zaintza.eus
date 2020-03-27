@@ -19,6 +19,7 @@ import "./styles/tablaAnuncios.css";
 import ModalBody from "react-bootstrap/ModalBody";
 import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import i18next from "i18next";
+import BottomScrollListener  from 'react-bottom-scroll-listener';
 
 const mapStateToProps = state => {
   return {
@@ -42,7 +43,8 @@ class TablaAnuncios extends React.Component {
       jsonAnuncios: [],
       selectedAnuncio: null,
       showModalTelefono: false,
-      showModalCalendar: false
+      showModalCalendar: false,
+      requiredCards: 100
     };
 
     this.renderHorarioModal = this.renderHorarioModal.bind(this);
@@ -50,8 +52,15 @@ class TablaAnuncios extends React.Component {
   }
 
   componentDidMount() {
+    const { requiredCards } = this.state;
     axios
-      .get("http://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil")
+      .get("http://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil", {
+        params: {
+          options: {
+            limit: requiredCards 
+          }
+        }
+      })
       .then(res => {
         this.setState({
           jsonAnuncios: res.data
@@ -62,6 +71,31 @@ class TablaAnuncios extends React.Component {
           <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
         );
       });
+  }
+
+  onScreenBottom = () => {
+    const { jsonAnuncios, requiredCards } = this.state;
+    
+    if (jsonAnuncios.length === requiredCards) {
+      axios.get("http://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil", {
+      params: {
+        options: {
+          limit: requiredCards + 100
+        }
+      }
+    })
+      .then(data => {
+        this.setState({
+          jsonAnuncios: data.data,
+          requiredCards: requiredCards + 100
+        });
+      })
+      .catch(err => {
+        cogoToast.error(
+          <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
+        );
+      });
+    }
   }
 
   renderHorarioModal() {
@@ -149,139 +183,141 @@ class TablaAnuncios extends React.Component {
       selectedAnuncio
     } = this.state;
     return (
-      <div className="p-5">
-        {this.botonAddAnuncio()}
+      <BottomScrollListener onBottom={this.onScreenBottom}>
+        <div className="p-5">
+          {this.botonAddAnuncio()}
 
-        {jsonAnuncios.map((anuncio, indice) => {
-          return (
-            <div key={`contAnuncio${indice}`} className="row card-header mt-2 mb-2">
-              <div key={`anuncio${indice}`} style={{ width: "300px" }}>
-                <img
-                  key={`img${indice}`}
-                  className="img-responsive"
-                  src={
-                    "http://" +
-                    ipMaquina +
-                    ":3001/api/image/" +
-                    anuncio.direcFoto
-                  }
-                  style={{
-                    minHeight: "300px",
-                    maxHeight: "300px",
-                    height: "auto"
-                  }}
-                />
-                <div key={`local${indice}`} className="align-center text-center">
-                  <FontAwesomeIcon key={`localizacion${indice}`} className="text-success" icon={faHome} />{" "}
-                  <span key={`nombreLocalizacion${indice}`} className="font-weight-bold">{anuncio.pueblo}</span>
+          {jsonAnuncios.map((anuncio, indice) => {
+            return (
+              <div key={`contAnuncio${indice}`} className="row card-header mt-2 mb-2">
+                <div key={`anuncio${indice}`} style={{ width: "300px" }}>
+                  <img
+                    key={`img${indice}`}
+                    className="img-responsive"
+                    src={
+                      "http://" +
+                      ipMaquina +
+                      ":3001/api/image/" +
+                      anuncio.direcFoto
+                    }
+                    style={{
+                      minHeight: "300px",
+                      maxHeight: "300px",
+                      height: "auto"
+                    }}
+                  />
+                  <div key={`local${indice}`} className="align-center text-center">
+                    <FontAwesomeIcon key={`localizacion${indice}`} className="text-success" icon={faHome} />{" "}
+                    <span key={`nombreLocalizacion${indice}`} className="font-weight-bold">{anuncio.pueblo}</span>
+                  </div>
                 </div>
-              </div>
 
-              <div key={`info${indice}`} className="col">
-                <h3 key={`titulo${indice}`}>{anuncio.titulo}</h3>
-                <hr />
-                <h5 key={`desc${indice}`}>{anuncio.descripcion}</h5>
-                <div key={`fila${indice}`} className="row">
-                  <FontAwesomeIcon
-                    key={`iconTelefono${indice}`}
-                    style={{ cursor: "pointer" }}
-                    size={"2x"}
-                    className="col text-success"
-                    icon={faPhoneAlt}
-                    onClick={() =>
-                      this.setState({
-                        showModalTelefono: true,
-                        selectedAnuncio: anuncio
-                      })
-                    }
-                  />
-                  <FontAwesomeIcon
-                    key={`iconCalendar${indice}`}
-                    style={{ cursor: "pointer" }}
-                    size={"2x"}
-                    className="col text-success"
-                    icon={faCalendar}
-                    onClick={() =>
-                      this.setState({
-                        showModalCalendar: true,
-                        selectedAnuncio: anuncio
-                      })
-                    }
-                  />
-                  <div
-                    className="col btn btn-success"
-                    key={`btnPropuesta${indice}`}
-                    onClick={() => this.handleEnviarPropuesta(anuncio)}
-                  >
-                    {i18next.t('tablaAnuncios.enviarPropuesta')}
+                <div key={`info${indice}`} className="col">
+                  <h3 key={`titulo${indice}`}>{anuncio.titulo}</h3>
+                  <hr />
+                  <h5 key={`desc${indice}`}>{anuncio.descripcion}</h5>
+                  <div key={`fila${indice}`} className="row">
+                    <FontAwesomeIcon
+                      key={`iconTelefono${indice}`}
+                      style={{ cursor: "pointer" }}
+                      size={"2x"}
+                      className="col text-success"
+                      icon={faPhoneAlt}
+                      onClick={() =>
+                        this.setState({
+                          showModalTelefono: true,
+                          selectedAnuncio: anuncio
+                        })
+                      }
+                    />
+                    <FontAwesomeIcon
+                      key={`iconCalendar${indice}`}
+                      style={{ cursor: "pointer" }}
+                      size={"2x"}
+                      className="col text-success"
+                      icon={faCalendar}
+                      onClick={() =>
+                        this.setState({
+                          showModalCalendar: true,
+                          selectedAnuncio: anuncio
+                        })
+                      }
+                    />
+                    <div
+                      className="col btn btn-success"
+                      key={`btnPropuesta${indice}`}
+                      onClick={() => this.handleEnviarPropuesta(anuncio)}
+                    >
+                      {i18next.t('tablaAnuncios.enviarPropuesta')}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
-        <Modal
-          className="modalAnuncio"
-          show={showModalTelefono}
-          onHide={() => this.setState({ showModalTelefono: false })}
-        >
-          <ModalHeader closeButton>
-            <h5>Kontaktua</h5>
-          </ModalHeader>
-          <ModalBody className="d-flex align-middle justify-content-center">
-            <div className="align-self-center row">
-              <FontAwesomeIcon
-                className="col-3 mb-5 text-success"
-                size="2x"
-                icon={faUser}
-              />
-              {selectedAnuncio !== null ? (
-                <span className="font-weight-bold col-9 text-center">
-                  {selectedAnuncio.idCliente.nombre +
-                    " " +
-                    selectedAnuncio.idCliente.apellido1}
-                </span>
-              ) : null}
-              <br />
-              <FontAwesomeIcon
-                className="col-3 mb-5 text-success"
-                size="2x"
-                icon={faMobileAlt}
-              />
-              {selectedAnuncio !== null ? (
-                <span className="font-weight-bold col-9 text-center">
-                  {selectedAnuncio.idCliente.telefono.movil.numero ||
-                    trans("tablaAnuncios.noDefinido")}
-                </span>
-              ) : null}
-              <br />
-              <FontAwesomeIcon
-                className="col-3 text-success"
-                size="2x"
-                icon={faPhoneAlt}
-              />
-              {selectedAnuncio !== null ? (
-                <span className="font-weight-bold col-9 text-center">
-                  {selectedAnuncio.idCliente.telefono.fijo.numero ||
-                    trans("tablaAnuncios.noDefinido")}
-                </span>
-              ) : null}
-            </div>
-          </ModalBody>
-        </Modal>
-        <Modal
-          className="modalAnuncio"
-          show={showModalCalendar}
-          onHide={() => this.setState({ showModalCalendar: false })}
-        >
-          <ModalHeader closeButton>
-            <h5>Ordutegia</h5>
-          </ModalHeader>
-          <ModalBody className="justify-content-center">
-            {selectedAnuncio !== null ? this.renderHorarioModal() : null}
-          </ModalBody>
-        </Modal>
-      </div>
+            );
+          })}
+          <Modal
+            className="modalAnuncio"
+            show={showModalTelefono}
+            onHide={() => this.setState({ showModalTelefono: false })}
+          >
+            <ModalHeader closeButton>
+              <h5>Kontaktua</h5>
+            </ModalHeader>
+            <ModalBody className="d-flex align-middle justify-content-center">
+              <div className="align-self-center row">
+                <FontAwesomeIcon
+                  className="col-3 mb-5 text-success"
+                  size="2x"
+                  icon={faUser}
+                />
+                {selectedAnuncio !== null ? (
+                  <span className="font-weight-bold col-9 text-center">
+                    {selectedAnuncio.idCliente.nombre +
+                      " " +
+                      selectedAnuncio.idCliente.apellido1}
+                  </span>
+                ) : null}
+                <br />
+                <FontAwesomeIcon
+                  className="col-3 mb-5 text-success"
+                  size="2x"
+                  icon={faMobileAlt}
+                />
+                {selectedAnuncio !== null ? (
+                  <span className="font-weight-bold col-9 text-center">
+                    {selectedAnuncio.idCliente.telefono.movil.numero ||
+                      trans("tablaAnuncios.noDefinido")}
+                  </span>
+                ) : null}
+                <br />
+                <FontAwesomeIcon
+                  className="col-3 text-success"
+                  size="2x"
+                  icon={faPhoneAlt}
+                />
+                {selectedAnuncio !== null ? (
+                  <span className="font-weight-bold col-9 text-center">
+                    {selectedAnuncio.idCliente.telefono.fijo.numero ||
+                      trans("tablaAnuncios.noDefinido")}
+                  </span>
+                ) : null}
+              </div>
+            </ModalBody>
+          </Modal>
+          <Modal
+            className="modalAnuncio"
+            show={showModalCalendar}
+            onHide={() => this.setState({ showModalCalendar: false })}
+          >
+            <ModalHeader closeButton>
+              <h5>Ordutegia</h5>
+            </ModalHeader>
+            <ModalBody className="justify-content-center">
+              {selectedAnuncio !== null ? this.renderHorarioModal() : null}
+            </ModalBody>
+          </Modal>
+        </div>
+      </BottomScrollListener>
     );
   }
 }

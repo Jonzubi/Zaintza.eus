@@ -145,9 +145,15 @@ exports.getUsuarioConPerfil = async (req, res, modelos) => {
 
 exports.getAnunciosConPerfil = (req, res, modelos) => {
   const modeloAnuncios = modelos.anuncio;
-
+  let strColumnas, objFiltros, objOptions;
+  if (typeof req.query.filtros != "undefined") {
+    objFilter = JSON.parse(req.query.filtros);
+  }
+  if (typeof req.query.options !== 'undefined') {
+    objOptions = JSON.parse(req.query.options);
+  }
   modeloAnuncios
-    .find()
+    .find(strColumnas, objFiltros, objOptions)
     .populate("idCliente")
     .then(respuesta => {
       res.writeHead(200, headerResponse);

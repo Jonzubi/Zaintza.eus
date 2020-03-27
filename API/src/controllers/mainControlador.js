@@ -8,17 +8,18 @@ exports.get = function(req, res, modelos) {
   //La idea es en query mandar un string columnas = "nombre apellido1 apellido2" asi se lo incrusto directo a la query
   let strColumnas = req.query.columnas;
   let objFilter;
-  let objJoin = null;
+  let objOptions;
   if (typeof req.query.filtros != "undefined") {
     objFilter = JSON.parse(req.query.filtros);
   }
-  if (typeof req.query.join != "undefined") {
-    objJoin = JSON.parse(req.query.join);
+  if (typeof req.query.options !== 'undefined') {
+    objOptions = JSON.parse(req.query.options);
   }
+
   let modelo = modelos[tabla];
   if (typeof id == "undefined") {
     modelo
-      .find(objFilter, strColumnas)
+      .find(objFilter, strColumnas, objOptions)
       .then(doc => {
         if (doc.length == 0) {
           res.writeHead(200, headerResponse);
@@ -37,7 +38,7 @@ exports.get = function(req, res, modelos) {
       });
   } else {
     modelo
-      .findById(id, strColumnas)
+      .findById(id, strColumnas, objOptions)
       .then(doc => {
         res.writeHead(200, headerResponse);
         res.write(JSON.stringify(doc));
