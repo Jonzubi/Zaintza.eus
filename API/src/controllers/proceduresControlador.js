@@ -343,9 +343,9 @@ exports.postNewCliente = async (req, res, modelos) => {
   } catch (error) {
     await sesion.abortTransaction();
     sesion.endSession();
-    console.log(err);
+    console.log(error);
     res.writeHead(500, headerResponse);
-    res.write(JSON.stringify(err));
+    res.write(JSON.stringify(error));
     res.end();
   }
 };
