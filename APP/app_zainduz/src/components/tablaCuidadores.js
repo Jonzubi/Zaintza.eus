@@ -592,8 +592,8 @@ class Tabla extends React.Component {
           key="divFilter"
           className={
             hoverFilter
-              ? "d-flex mb-3 align-items-center bg-success text-white ml-5 mr-5 p-1 justify-content-between"
-              : "d-flex mb-3 align-items-center ml-5 mr-5 p-1 justify-content-between"
+              ? "d-flex mb-3 align-items-center bg-success text-white mt-5 ml-5 mr-5 p-1 justify-content-between"
+              : "d-flex mb-3 align-items-center mt-5 ml-5 mr-5 p-1 justify-content-between"
           }
           onMouseEnter={() => this.handleHoverFilter(true)}
           onMouseLeave={() => this.handleHoverFilter(false)}
