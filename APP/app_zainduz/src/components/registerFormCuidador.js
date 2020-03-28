@@ -478,6 +478,12 @@ class RegisterForm extends React.Component {
         return;
       });
 
+      if (insertedCuidador === undefined) {
+        //Si entra aqui el servidor a tenido un error
+        //Por ahora ese error seria un duplicado de email
+        return;
+      }
+
     axios.post(`http://${ipMaquina}:3003/smtp/registerEmail`, {
       toEmail: this.state.txtEmail,
       nombre: this.state.txtNombre,

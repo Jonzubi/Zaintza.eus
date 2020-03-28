@@ -157,6 +157,12 @@ class RegisterFormCliente extends React.Component {
         cogoToast.error(<h5>{trans("registerFormClientes.errorGeneral")}</h5>);
         return;
       });
+      
+      if (insertedCliente === undefined) {
+        //Si entra aqui el servidor a tenido un error
+        //Por ahora ese error seria un duplicado de email
+        return;
+      }
     
       axios.post(`http://${ipMaquina}:3003/smtp/registerEmail`, {
         toEmail: txtEmail,

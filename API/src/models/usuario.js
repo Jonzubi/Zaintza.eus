@@ -4,7 +4,8 @@ module.exports = conexion => {
   var usuario = new Schema({
     email: {
       type: String,
-      required: true
+      required: true,
+      unique: true
     },
     contrasena: {
       type: String,
