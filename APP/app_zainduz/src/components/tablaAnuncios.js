@@ -11,7 +11,8 @@ import {
   faCalendar,
   faMobileAlt,
   faHome,
-  faUser
+  faUser,
+  faFilter
 } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/Modal";
 import ModalHeader from "react-bootstrap/ModalHeader";
@@ -19,7 +20,7 @@ import "./styles/tablaAnuncios.css";
 import ModalBody from "react-bootstrap/ModalBody";
 import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import i18next from "i18next";
-import BottomScrollListener  from 'react-bottom-scroll-listener';
+import BottomScrollListener from "react-bottom-scroll-listener";
 
 const mapStateToProps = state => {
   return {
@@ -44,7 +45,9 @@ class TablaAnuncios extends React.Component {
       selectedAnuncio: null,
       showModalTelefono: false,
       showModalCalendar: false,
-      requiredCards: 100
+      showModalFilter: false,
+      requiredCards: 100,
+      hoverFilter: false
     };
 
     this.renderHorarioModal = this.renderHorarioModal.bind(this);
@@ -54,13 +57,16 @@ class TablaAnuncios extends React.Component {
   componentDidMount() {
     const { requiredCards } = this.state;
     axios
-      .get("http://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil", {
-        params: {
-          options: {
-            limit: requiredCards 
+      .get(
+        "http://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil",
+        {
+          params: {
+            options: {
+              limit: requiredCards
+            }
           }
         }
-      })
+      )
       .then(res => {
         this.setState({
           jsonAnuncios: res.data
@@ -75,34 +81,42 @@ class TablaAnuncios extends React.Component {
 
   onScreenBottom = () => {
     const { jsonAnuncios, requiredCards } = this.state;
-    
+
     if (jsonAnuncios.length === requiredCards) {
-      axios.get("http://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil", {
-      params: {
-        options: {
-          limit: requiredCards + 100
-        }
-      }
-    })
-      .then(data => {
-        this.setState({
-          jsonAnuncios: data.data,
-          requiredCards: requiredCards + 100
+      axios
+        .get(
+          "http://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil",
+          {
+            params: {
+              options: {
+                limit: requiredCards + 100
+              }
+            }
+          }
+        )
+        .then(data => {
+          this.setState({
+            jsonAnuncios: data.data,
+            requiredCards: requiredCards + 100
+          });
+        })
+        .catch(err => {
+          cogoToast.error(
+            <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
+          );
         });
-      })
-      .catch(err => {
-        cogoToast.error(
-          <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
-        );
-      });
     }
-  }
+  };
 
   renderHorarioModal() {
     const { selectedAnuncio } = this.state;
     let resultado = [];
-    if (selectedAnuncio.horario.length === 0){
-    return (<span className="text-center font-weight-bold">{trans('tablaAnuncios.noDefinido')}</span>);
+    if (selectedAnuncio.horario.length === 0) {
+      return (
+        <span className="text-center font-weight-bold">
+          {trans("tablaAnuncios.noDefinido")}
+        </span>
+      );
     }
     selectedAnuncio.horario.map(sesion => {
       const auxDia = sesion.dia == 7 ? 0 : sesion.dia;
@@ -120,18 +134,16 @@ class TablaAnuncios extends React.Component {
     return resultado;
   }
 
-  handleEnviarPropuesta = async (anuncio) => {
+  handleEnviarPropuesta = async anuncio => {
     const { tipoUsuario, toogleMenuPerfil, idPerfil, idUsuario } = this.props;
-    if(!tipoUsuario){
+    if (!tipoUsuario) {
       cogoToast.error(<h5>{trans("tablaCuidadores.errorNoLogueado")}</h5>);
       toogleMenuPerfil(true);
       return;
     }
 
-    if (tipoUsuario != "Cuidador"){
-      cogoToast.error(
-      <h5>{trans('formAnuncio.cuidadorNecesario')}</h5>
-      )
+    if (tipoUsuario != "Cuidador") {
+      cogoToast.error(<h5>{trans("formAnuncio.cuidadorNecesario")}</h5>);
       return;
     }
 
@@ -146,17 +158,19 @@ class TablaAnuncios extends React.Component {
       origenAcuerdo: "Cuidador"
     };
 
-    await axios.post("http://" + ipMaquina + ":3001/api/procedures/postPropuestaAcuerdo", formData)
+    await axios
+      .post(
+        "http://" + ipMaquina + ":3001/api/procedures/postPropuestaAcuerdo",
+        formData
+      )
       .catch(err => {
         cogoToast.error(
           <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
         );
         return;
       });
-    cogoToast.success(
-    <h5>{trans('tablaAnuncios.propuestaEnviada')}</h5>
-    )
-  }
+    cogoToast.success(<h5>{trans("tablaAnuncios.propuestaEnviada")}</h5>);
+  };
 
   botonAddAnuncio = () => {
     const { tipoUsuario, changeFormContent } = this.props;
@@ -175,21 +189,58 @@ class TablaAnuncios extends React.Component {
     return null;
   };
 
+  handleHoverFilter = isHover => {
+    this.setState({
+      hoverFilter: isHover
+    });
+  };
+
   render() {
     const {
       jsonAnuncios,
       showModalTelefono,
       showModalCalendar,
-      selectedAnuncio
+      showModalFilter,
+      selectedAnuncio,
+      hoverFilter
     } = this.state;
     return (
       <BottomScrollListener onBottom={this.onScreenBottom}>
         <div className="p-5">
           {this.botonAddAnuncio()}
-
+          <div
+            onClick={() => {
+              this.setState({ showModalFilter: true });
+            }}
+            style={{ cursor: "pointer" }}
+            key="divFilter"
+            className={
+              hoverFilter
+                ? "d-flex mb-3 align-items-center bg-success text-white p-1 justify-content-between"
+                : "d-flex mb-3 align-items-center p-1 justify-content-between"
+            }
+            onMouseEnter={() => this.handleHoverFilter(true)}
+            onMouseLeave={() => this.handleHoverFilter(false)}
+          >
+            <span
+              className="pl-1"
+              style={{ fontSize: 40, color: hoverFilter ? "white" : "black" }}
+            >
+              Filtros aplicados:
+            </span>
+            <FontAwesomeIcon
+              className={hoverFilter ? "text-white" : "text-success"}
+              key="iconFilter"
+              size={"2x"}
+              icon={faFilter}
+            />
+          </div>
           {jsonAnuncios.map((anuncio, indice) => {
             return (
-              <div key={`contAnuncio${indice}`} className="row card-header mt-2 mb-2">
+              <div
+                key={`contAnuncio${indice}`}
+                className="row card-header mt-2 mb-2"
+              >
                 <div key={`anuncio${indice}`} style={{ width: "300px" }}>
                   <img
                     key={`img${indice}`}
@@ -206,9 +257,21 @@ class TablaAnuncios extends React.Component {
                       height: "auto"
                     }}
                   />
-                  <div key={`local${indice}`} className="align-center text-center">
-                    <FontAwesomeIcon key={`localizacion${indice}`} className="text-success" icon={faHome} />{" "}
-                    <span key={`nombreLocalizacion${indice}`} className="font-weight-bold">{anuncio.pueblo}</span>
+                  <div
+                    key={`local${indice}`}
+                    className="align-center text-center"
+                  >
+                    <FontAwesomeIcon
+                      key={`localizacion${indice}`}
+                      className="text-success"
+                      icon={faHome}
+                    />{" "}
+                    <span
+                      key={`nombreLocalizacion${indice}`}
+                      className="font-weight-bold"
+                    >
+                      {anuncio.pueblo}
+                    </span>
                   </div>
                 </div>
 
@@ -248,7 +311,7 @@ class TablaAnuncios extends React.Component {
                       key={`btnPropuesta${indice}`}
                       onClick={() => this.handleEnviarPropuesta(anuncio)}
                     >
-                      {i18next.t('tablaAnuncios.enviarPropuesta')}
+                      {i18next.t("tablaAnuncios.enviarPropuesta")}
                     </div>
                   </div>
                 </div>
@@ -315,6 +378,16 @@ class TablaAnuncios extends React.Component {
             <ModalBody className="justify-content-center">
               {selectedAnuncio !== null ? this.renderHorarioModal() : null}
             </ModalBody>
+          </Modal>
+          <Modal
+            className="modalAnuncio"
+            show={showModalFilter}
+            onHide={() => this.setState({ showModalFilter: false })}
+          >
+            <ModalHeader closeButton>
+              <h5>Filtrar</h5>
+            </ModalHeader>
+            <ModalBody className="justify-content-center">Filtroaaak</ModalBody>
           </Modal>
         </div>
       </BottomScrollListener>

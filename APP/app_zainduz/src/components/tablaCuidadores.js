@@ -7,7 +7,8 @@ import {
   faUser,
   faCalendarAlt,
   faPlusCircle,
-  faMinusCircle
+  faMinusCircle,
+  faFilter
 } from "@fortawesome/free-solid-svg-icons";
 import loadGif from "../util/gifs/loadGif.gif";
 import Axios from "axios";
@@ -29,7 +30,7 @@ import { trans, getTodayDate } from "../util/funciones";
 import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import municipios from "../util/municipos";
 import SocketContext from "../socketio/socket-context";
-import BottomScrollListener  from 'react-bottom-scroll-listener';
+import BottomScrollListener from "react-bottom-scroll-listener";
 
 const mapStateToProps = state => {
   return {
@@ -85,6 +86,7 @@ class Tabla extends React.Component {
       jsonCuidadores: {},
       showModal: false,
       showPropuestaModal: false,
+      showModalFilter: false,
       selectedCuidador: {},
       suggestionsPueblos: [],
       auxAddPueblo: "",
@@ -141,31 +143,31 @@ class Tabla extends React.Component {
 
   onScreenBottom = () => {
     const { jsonCuidadores, requiredCards } = this.state;
-    
+
     if (jsonCuidadores.length === requiredCards) {
       Axios.get("http://" + ipMaquina + ":3001/api/cuidador", {
-      params: {
-        filtros: {
-          isPublic: true
-        },
-        options: {
-          limit: requiredCards + 100
+        params: {
+          filtros: {
+            isPublic: true
+          },
+          options: {
+            limit: requiredCards + 100
+          }
         }
-      }
-    })
-      .then(data => {
-        this.setState({
-          jsonCuidadores: data.data,
-          requiredCards: requiredCards + 100
-        });
       })
-      .catch(err => {
-        cogoToast.error(
-          <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
-        );
-      });
+        .then(data => {
+          this.setState({
+            jsonCuidadores: data.data,
+            requiredCards: requiredCards + 100
+          });
+        })
+        .catch(err => {
+          cogoToast.error(
+            <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
+          );
+        });
     }
-  }
+  };
 
   escapeRegexCharacters(str) {
     return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -204,12 +206,10 @@ class Tabla extends React.Component {
   };
 
   handleAddPueblo(c, { suggestion }) {
-    this.setState({
-
-    }, () => {
+    this.setState({}, () => {
       let pueblo = this.state.auxAddPueblo;
       if (pueblo == "") return;
-      
+
       if (!municipios.includes(pueblo)) {
         cogoToast.error(
           <h5>
@@ -218,7 +218,7 @@ class Tabla extends React.Component {
         );
         return;
       }
-    
+
       for (var clave in this.state.ubicaciones) {
         if (this.state.ubicaciones[clave] == pueblo) {
           cogoToast.error(
@@ -235,7 +235,6 @@ class Tabla extends React.Component {
         auxAddPueblo: ""
       });
     });
-    
   }
 
   handleRemovePueblo() {
@@ -259,6 +258,12 @@ class Tabla extends React.Component {
       diasDisponible: auxDiasDisponible
     });
   }
+
+  handleHoverFilter = isHover => {
+    this.setState({
+      hoverFilter: isHover
+    });
+  };
 
   handleDiasDisponibleChange(e, indice) {
     if (typeof indice == "undefined") {
@@ -497,7 +502,7 @@ class Tabla extends React.Component {
               txtDescripcion: ""
             });
 
-            gSocket.emit('notify', {
+            gSocket.emit("notify", {
               idUsuario: usuario.data[0]._id
             });
 
@@ -520,6 +525,7 @@ class Tabla extends React.Component {
   }
 
   render() {
+    const { hoverFilter, showModalFilter } = this.state;
     const vSelectedCuidador = this.state.selectedCuidador;
     const fechaNacCuidador = new Date(vSelectedCuidador.fechaNacimiento);
     const telefonoFijoCuidador =
@@ -578,6 +584,33 @@ class Tabla extends React.Component {
 
     return (
       <BottomScrollListener onBottom={this.onScreenBottom}>
+        <div
+          onClick={() => {
+            this.setState({ showModalFilter: true });
+          }}
+          style={{ cursor: "pointer" }}
+          key="divFilter"
+          className={
+            hoverFilter
+              ? "d-flex mb-3 align-items-center bg-success text-white ml-5 mr-5 p-1 justify-content-between"
+              : "d-flex mb-3 align-items-center ml-5 mr-5 p-1 justify-content-between"
+          }
+          onMouseEnter={() => this.handleHoverFilter(true)}
+          onMouseLeave={() => this.handleHoverFilter(false)}
+        >
+          <span
+            className="pl-1"
+            style={{ fontSize: 40, color: hoverFilter ? "white" : "black" }}
+          >
+            Filtros aplicados:
+          </span>
+          <FontAwesomeIcon
+            className={hoverFilter ? "text-white" : "text-success"}
+            key="iconFilter"
+            size={"2x"}
+            icon={faFilter}
+          />
+        </div>
         <SocketContext.Consumer>
           {socket => {
             gSocket = socket;
@@ -930,7 +963,8 @@ class Tabla extends React.Component {
                             <span className="list-group-item">
                               {typeof vSelectedCuidador.precioPorPublico !=
                               "undefined" ? (
-                                vSelectedCuidador.precioPorPublico.nino != "" ? (
+                                vSelectedCuidador.precioPorPublico.nino !=
+                                "" ? (
                                   vSelectedCuidador.precioPorPublico.nino +
                                   "€ /orduko"
                                 ) : (
@@ -946,10 +980,10 @@ class Tabla extends React.Component {
                             <span className="list-group-item">
                               {typeof vSelectedCuidador.precioPorPublico !=
                               "undefined" ? (
-                                vSelectedCuidador.precioPorPublico.terceraEdad !=
-                                "" ? (
-                                  vSelectedCuidador.precioPorPublico.terceraEdad +
-                                  "€ /orduko"
+                                vSelectedCuidador.precioPorPublico
+                                  .terceraEdad != "" ? (
+                                  vSelectedCuidador.precioPorPublico
+                                    .terceraEdad + "€ /orduko"
                                 ) : (
                                   <em>Definitu gabe</em>
                                 )
@@ -1027,9 +1061,13 @@ class Tabla extends React.Component {
                                             id={"dia" + indice}
                                           >
                                             <option>Aukeratu eguna</option>
-                                            <option value="1">Astelehena</option>
+                                            <option value="1">
+                                              Astelehena
+                                            </option>
                                             <option value="2">Asteartea</option>
-                                            <option value="3">Asteazkena</option>
+                                            <option value="3">
+                                              Asteazkena
+                                            </option>
                                             <option value="4">Osteguna</option>
                                             <option value="5">Ostirala</option>
                                             <option value="6">Larunbata</option>
@@ -1207,6 +1245,18 @@ class Tabla extends React.Component {
                         : trans("tablaCuidadores.acordar")}
                     </Button>
                   </ModalFooter>
+                </Modal>
+                <Modal
+                  className="modalAnuncio"
+                  show={showModalFilter}
+                  onHide={() => this.setState({ showModalFilter: false })}
+                >
+                  <ModalHeader closeButton>
+                    <h5>Filtrar</h5>
+                  </ModalHeader>
+                  <ModalBody className="justify-content-center">
+                    Filtroaaak
+                  </ModalBody>
                 </Modal>
               </div>
             );
