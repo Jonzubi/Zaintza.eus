@@ -537,6 +537,14 @@ class Tabla extends React.Component {
   handleApplyFilters = () => {
     const { auxFilterPueblo, requiredCards } = this.state;
 
+    let objFiltros = {
+      isPublic: true
+    };
+
+    if (auxFilterPueblo !== ""){
+      objFiltros.ubicaciones = auxFilterPueblo;
+    }
+
     this.setState(
       {
         jsonCuidadores: {},
@@ -545,10 +553,7 @@ class Tabla extends React.Component {
       () => {
         Axios.get("http://" + ipMaquina + ":3001/api/cuidador", {
           params: {
-            filtros: {
-              isPublic: true,
-              ubicaciones: auxFilterPueblo
-            },
+            filtros: objFiltros,
             options: {
               limit: requiredCards
             }
