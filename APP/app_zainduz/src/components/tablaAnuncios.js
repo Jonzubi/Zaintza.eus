@@ -21,6 +21,8 @@ import ModalBody from "react-bootstrap/ModalBody";
 import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import i18next from "i18next";
 import BottomScrollListener from "react-bottom-scroll-listener";
+import PuebloAutosuggest from "./pueblosAutosuggest";
+import Button from "react-bootstrap/Button";
 
 const mapStateToProps = state => {
   return {
@@ -42,12 +44,15 @@ class TablaAnuncios extends React.Component {
     super(props);
     this.state = {
       jsonAnuncios: [],
+      buscado: false,
       selectedAnuncio: null,
       showModalTelefono: false,
       showModalCalendar: false,
       showModalFilter: false,
       requiredCards: 100,
-      hoverFilter: false
+      hoverFilter: false,
+      isFiltering: false,
+      auxFilterPueblo: ""
     };
 
     this.renderHorarioModal = this.renderHorarioModal.bind(this);
@@ -69,7 +74,8 @@ class TablaAnuncios extends React.Component {
       )
       .then(res => {
         this.setState({
-          jsonAnuncios: res.data
+          jsonAnuncios: res.data,
+          buscado: true
         });
       })
       .catch(err => {
@@ -195,6 +201,101 @@ class TablaAnuncios extends React.Component {
     });
   };
 
+  handleFilterPuebloSelected = (c, { suggestion }) => {
+    this.setState({
+      auxFilterPueblo: suggestion
+    });
+  };
+
+  handleApplyFilters = () => {
+    const { auxFilterPueblo, requiredCards } = this.state;
+
+    let objFiltros= {};
+
+    if (auxFilterPueblo !== ""){
+      objFiltros.pueblo = auxFilterPueblo;
+    }
+
+    this.setState(
+      {
+        jsonAnuncios: [],
+        buscado: false
+      },
+      () => {
+        axios
+          .get(
+            "http://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil",
+            {
+              params: {
+                options: {
+                  limit: requiredCards
+                },
+                filtros: objFiltros
+              }
+            }
+          )
+          .then(res => {
+            this.setState({
+              jsonAnuncios: res.data,
+              buscado: true,
+              showModalFilter: false,
+              isFiltering: true
+            });
+          })
+          .catch(err => {
+            this.setState({
+              buscado: true,
+              showModalFilter: false,
+            })
+            cogoToast.error(
+              <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
+            );
+          });
+      }
+    );
+  };
+
+  handleResetFilters = () => {
+    const { requiredCards } = this.state;
+    this.setState(
+      {
+        jsonAnuncios: {},
+        buscado: false,
+        auxFilterPueblo: ""
+      },
+      () => {
+        axios
+          .get(
+            "http://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil",
+            {
+              params: {
+                options: {
+                  limit: requiredCards
+                }
+              }
+            }
+          )
+          .then(res => {
+            this.setState({
+              jsonAnuncios: res.data,
+              buscado: true,
+              showModalFilter: false,
+              isFiltering: false
+            });
+          })
+          .catch(err => {
+            this.setState({
+              buscado: true,
+              showModalFilter: false
+            })
+            cogoToast.error(
+              <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
+            );
+          });
+      }
+    );
+  };
+
   render() {
     const {
       jsonAnuncios,
@@ -202,7 +303,10 @@ class TablaAnuncios extends React.Component {
       showModalCalendar,
       showModalFilter,
       selectedAnuncio,
-      hoverFilter
+      hoverFilter,
+      auxFilterPueblo,
+      isFiltering,
+      buscado
     } = this.state;
     return (
       <BottomScrollListener onBottom={this.onScreenBottom}>
@@ -235,89 +339,100 @@ class TablaAnuncios extends React.Component {
               icon={faFilter}
             />
           </div>
-          {jsonAnuncios.map((anuncio, indice) => {
-            return (
-              <div
-                key={`contAnuncio${indice}`}
-                className="row card-header mt-2 mb-2"
-              >
-                <div key={`anuncio${indice}`} style={{ width: "300px" }}>
-                  <img
-                    key={`img${indice}`}
-                    className="img-responsive"
-                    src={
-                      "http://" +
-                      ipMaquina +
-                      ":3001/api/image/" +
-                      anuncio.direcFoto
-                    }
-                    style={{
-                      minHeight: "300px",
-                      maxHeight: "300px",
-                      height: "auto"
-                    }}
-                  />
-                  <div
-                    key={`local${indice}`}
-                    className="align-center text-center"
-                  >
-                    <FontAwesomeIcon
-                      key={`localizacion${indice}`}
-                      className="text-success"
-                      icon={faHome}
-                    />{" "}
-                    <span
-                      key={`nombreLocalizacion${indice}`}
-                      className="font-weight-bold"
-                    >
-                      {anuncio.pueblo}
-                    </span>
-                  </div>
-                </div>
-
-                <div key={`info${indice}`} className="col">
-                  <h3 key={`titulo${indice}`}>{anuncio.titulo}</h3>
-                  <hr />
-                  <h5 key={`desc${indice}`}>{anuncio.descripcion}</h5>
-                  <div key={`fila${indice}`} className="row">
-                    <FontAwesomeIcon
-                      key={`iconTelefono${indice}`}
-                      style={{ cursor: "pointer" }}
-                      size={"2x"}
-                      className="col text-success"
-                      icon={faPhoneAlt}
-                      onClick={() =>
-                        this.setState({
-                          showModalTelefono: true,
-                          selectedAnuncio: anuncio
-                        })
+          {buscado ? (
+            jsonAnuncios.map((anuncio, indice) => {
+              return (
+                <div
+                  key={`contAnuncio${indice}`}
+                  className="row card-header mt-2 mb-2"
+                >
+                  <div key={`anuncio${indice}`} style={{ width: "300px" }}>
+                    <img
+                      key={`img${indice}`}
+                      className="img-responsive"
+                      src={
+                        "http://" +
+                        ipMaquina +
+                        ":3001/api/image/" +
+                        anuncio.direcFoto
                       }
-                    />
-                    <FontAwesomeIcon
-                      key={`iconCalendar${indice}`}
-                      style={{ cursor: "pointer" }}
-                      size={"2x"}
-                      className="col text-success"
-                      icon={faCalendar}
-                      onClick={() =>
-                        this.setState({
-                          showModalCalendar: true,
-                          selectedAnuncio: anuncio
-                        })
-                      }
+                      style={{
+                        minHeight: "300px",
+                        maxHeight: "300px",
+                        height: "auto"
+                      }}
                     />
                     <div
-                      className="col btn btn-success"
-                      key={`btnPropuesta${indice}`}
-                      onClick={() => this.handleEnviarPropuesta(anuncio)}
+                      key={`local${indice}`}
+                      className="align-center text-center"
                     >
-                      {i18next.t("tablaAnuncios.enviarPropuesta")}
+                      <FontAwesomeIcon
+                        key={`localizacion${indice}`}
+                        className="text-success"
+                        icon={faHome}
+                      />{" "}
+                      <span
+                        key={`nombreLocalizacion${indice}`}
+                        className="font-weight-bold"
+                      >
+                        {anuncio.pueblo}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div key={`info${indice}`} className="col">
+                    <h3 key={`titulo${indice}`}>{anuncio.titulo}</h3>
+                    <hr />
+                    <h5 key={`desc${indice}`}>{anuncio.descripcion}</h5>
+                    <div key={`fila${indice}`} className="row">
+                      <FontAwesomeIcon
+                        key={`iconTelefono${indice}`}
+                        style={{ cursor: "pointer" }}
+                        size={"2x"}
+                        className="col text-success"
+                        icon={faPhoneAlt}
+                        onClick={() =>
+                          this.setState({
+                            showModalTelefono: true,
+                            selectedAnuncio: anuncio
+                          })
+                        }
+                      />
+                      <FontAwesomeIcon
+                        key={`iconCalendar${indice}`}
+                        style={{ cursor: "pointer" }}
+                        size={"2x"}
+                        className="col text-success"
+                        icon={faCalendar}
+                        onClick={() =>
+                          this.setState({
+                            showModalCalendar: true,
+                            selectedAnuncio: anuncio
+                          })
+                        }
+                      />
+                      <div
+                        className="col btn btn-success"
+                        key={`btnPropuesta${indice}`}
+                        onClick={() => this.handleEnviarPropuesta(anuncio)}
+                      >
+                        {i18next.t("tablaAnuncios.enviarPropuesta")}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <div className="w-100 text-center">
+              <img
+                style={{ marginTop: "300px" }}
+                src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
+                height={100}
+                width={100}
+              />
+            </div>
+          )}
           <Modal
             className="modalAnuncio"
             show={showModalTelefono}
@@ -387,7 +502,34 @@ class TablaAnuncios extends React.Component {
             <ModalHeader closeButton>
               <h5>Filtrar</h5>
             </ModalHeader>
-            <ModalBody className="justify-content-center">Filtroaaak</ModalBody>
+            <ModalBody className="d-flex flex-column justify-content-between align-items-stretch">
+              <div className="d-flex flex-row align-items-center justify-content-center">
+                <FontAwesomeIcon className="text-success mr-2" icon={faHome} />
+                <PuebloAutosuggest
+                  onSuggestionSelected={this.handleFilterPuebloSelected}
+                />
+                {auxFilterPueblo !== "" ? (
+                  <span className="ml-2 font-weight-bold">
+                    {auxFilterPueblo}
+                  </span>
+                ) : null}
+              </div>
+              <div className="d-flex flex-row justify-content-between">
+                <Button
+                  onClick={this.handleApplyFilters}
+                  className="btn btn-success"
+                >
+                  Aplicar filtro
+                </Button>
+                <Button
+                  onClick={this.handleResetFilters}
+                  disabled={!isFiltering}
+                  className="btn btn-danger"
+                >
+                  Restablecer filtros
+                </Button>
+              </div>
+            </ModalBody>
           </Modal>
         </div>
       </BottomScrollListener>

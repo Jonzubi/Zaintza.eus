@@ -147,13 +147,13 @@ exports.getAnunciosConPerfil = (req, res, modelos) => {
   const modeloAnuncios = modelos.anuncio;
   let strColumnas, objFiltros, objOptions;
   if (typeof req.query.filtros != "undefined") {
-    objFilter = JSON.parse(req.query.filtros);
+    objFiltros = JSON.parse(req.query.filtros);
   }
   if (typeof req.query.options !== 'undefined') {
     objOptions = JSON.parse(req.query.options);
   }
   modeloAnuncios
-    .find(strColumnas, objFiltros, objOptions)
+    .find(objFiltros, strColumnas, objOptions)
     .populate("idCliente")
     .then(respuesta => {
       res.writeHead(200, headerResponse);
