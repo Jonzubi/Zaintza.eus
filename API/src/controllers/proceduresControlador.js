@@ -2,9 +2,12 @@ const {
   writeImage,
   getRandomString,
   getTodayDate,
-  caesarShift
+  caesarShift,
+  readHTMLFile
 } = require("../../util/funciones");
 const headerResponse = require("../../util/headerResponse");
+const ipMaquina = require("../../util/ipMaquina");
+const handlebars = require("handlebars");
 
 exports.getAcuerdosConUsuarios = (req, res, modelos) => {
   const { tipoUsuario, idPerfil, estadoAcuerdo } = req.query;
@@ -656,9 +659,16 @@ exports.confirmarEmail = async (req, res, modelos) => {
 
   const usuarioBuscado = await modeloUsuarios.findOneAndUpdate({ validationToken }, { validado: true});
   if(usuarioBuscado) {
-    res.writeHead(200, headerResponse);
-    res.write("Email verificado");
-    res.end();
+    res.writeHead(200, {"Content-Type": "text/html"});
+    readHTMLFile("emailConfirmado", (err, html) => {
+      const template = handlebars.compile(html);
+      const htmlToSend = template({
+        ipMaquina
+      });
+      res.write(htmlToSend);
+      res.end();
+    });
+    
   } else {
     res.writeHead(204, headerResponse);
     res.write("No email");

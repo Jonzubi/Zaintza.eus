@@ -1,4 +1,5 @@
 const fs = require("fs");
+const templatesFolder = __dirname.substring(0, __dirname.lastIndexOf("\\")) + "\\src\\templates\\";
 exports.writeImage = (cod, b64) => {
   let idImage = cod;
   let imageBase64 = b64.split(",")[1];
@@ -99,3 +100,15 @@ exports.getRandomString = length => {
     return output;
   
   };
+
+  exports.readHTMLFile = (fileName, callback) => {
+    fs.readFile(templatesFolder + fileName + ".html", {encoding: 'utf-8'}, function (err, html) {
+        if (err) {
+            throw err;
+            callback(err);
+        }
+        else {
+            callback(null, html);
+        }
+    });
+};
