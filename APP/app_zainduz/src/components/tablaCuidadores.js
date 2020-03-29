@@ -8,13 +8,15 @@ import {
   faCalendarAlt,
   faPlusCircle,
   faMinusCircle,
-  faFilter
+  faFilter,
+  faHome
 } from "@fortawesome/free-solid-svg-icons";
 import loadGif from "../util/gifs/loadGif.gif";
 import Axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import Collapse from "react-bootstrap/Collapse";
 import AutoSuggest from "react-autosuggest";
+import PuebloAutosuggest from "./pueblosAutosuggest";
 import ModalHeader from "react-bootstrap/ModalHeader";
 import ModalBody from "react-bootstrap/ModalBody";
 import ModalFooter from "react-bootstrap/ModalFooter";
@@ -102,7 +104,9 @@ class Tabla extends React.Component {
           horaFin: "00:00"
         }
       ],
-      txtDescripcion: ""
+      txtDescripcion: "",
+      auxFilterPueblo: "",
+      isFiltering: false
     };
 
     this.requiredStates = [
@@ -236,6 +240,12 @@ class Tabla extends React.Component {
       });
     });
   }
+
+  handleFilterPuebloSelected = (c, { suggestion }) => {
+    this.setState({
+      auxFilterPueblo: suggestion
+    });
+  };
 
   handleRemovePueblo() {
     this.setState({
@@ -524,8 +534,99 @@ class Tabla extends React.Component {
       });
   }
 
+  handleApplyFilters = () => {
+    const { auxFilterPueblo, requiredCards } = this.state;
+
+    let objFiltros = {
+      isPublic: true
+    };
+
+    if (auxFilterPueblo !== ""){
+      objFiltros.ubicaciones = auxFilterPueblo;
+    }
+
+    this.setState(
+      {
+        jsonCuidadores: {},
+        buscado: false
+      },
+      () => {
+        Axios.get("http://" + ipMaquina + ":3001/api/cuidador", {
+          params: {
+            filtros: objFiltros,
+            options: {
+              limit: requiredCards
+            }
+          }
+        })
+          .then(data => {
+            this.setState({
+              jsonCuidadores: data.data,
+              buscado: true,
+              showModalFilter: false,
+              isFiltering: true
+            });
+          })
+          .catch(err => {
+            this.setState({
+              buscado: true,
+              showModalFilter: false
+            });
+            cogoToast.error(
+              <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
+            );
+          });
+      }
+    );
+  };
+
+  handleResetFilters = () => {
+    const { requiredCards } = this.state;
+    this.setState(
+      {
+        jsonCuidadores: {},
+        buscado: false,
+        auxFilterPueblo: ""
+      },
+      () => {
+        Axios.get("http://" + ipMaquina + ":3001/api/cuidador", {
+          params: {
+            filtros: {
+              isPublic: true
+            },
+            options: {
+              limit: requiredCards
+            }
+          }
+        })
+          .then(data => {
+            this.setState({
+              jsonCuidadores: data.data,
+              buscado: true,
+              isFiltering: false,
+              showModalFilter: false
+            });
+          })
+          .catch(err => {
+            this.setState({
+              buscado: true,
+              showModalFilter: false
+            });
+            cogoToast.error(
+              <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
+            );
+          });
+      }
+    );
+  };
+
   render() {
-    const { hoverFilter, showModalFilter } = this.state;
+    const {
+      hoverFilter,
+      showModalFilter,
+      auxFilterPueblo,
+      isFiltering
+    } = this.state;
     const vSelectedCuidador = this.state.selectedCuidador;
     const fechaNacCuidador = new Date(vSelectedCuidador.fechaNacimiento);
     const telefonoFijoCuidador =
@@ -1254,8 +1355,36 @@ class Tabla extends React.Component {
                   <ModalHeader closeButton>
                     <h5>Filtrar</h5>
                   </ModalHeader>
-                  <ModalBody className="justify-content-center">
-                    Filtroaaak
+                  <ModalBody className="d-flex flex-column justify-content-between align-items-stretch">
+                    <div className="d-flex flex-row align-items-center justify-content-center">
+                      <FontAwesomeIcon
+                        className="text-success mr-2"
+                        icon={faHome}
+                      />
+                      <PuebloAutosuggest
+                        onSuggestionSelected={this.handleFilterPuebloSelected}
+                      />
+                      {auxFilterPueblo !== "" ? (
+                        <span className="ml-2 font-weight-bold">
+                          {auxFilterPueblo}
+                        </span>
+                      ) : null}
+                    </div>
+                    <div className="d-flex flex-row justify-content-between">
+                    <Button
+                      onClick={this.handleApplyFilters}
+                      className="btn btn-success"
+                    >
+                      Aplicar filtro
+                    </Button>
+                    <Button
+                      onClick={this.handleResetFilters}
+                      disabled={!isFiltering}
+                      className="btn btn-danger"
+                    >
+                      Restablecer filtros
+                    </Button>
+                    </div>
                   </ModalBody>
                 </Modal>
               </div>
