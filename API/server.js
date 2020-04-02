@@ -1,11 +1,20 @@
-var express = require("express"),
+const express = require("express"),
   app = express(),
   cors = require("cors"),
   bodyParser = require("body-parser"),
   port = 3001,
-  conexion = require("./util/bdConnection")
+  conexion = require("./util/bdConnection");
 
-app.use(cors());
+const whitelist = ['http://www.zaintza.eus', 'http://localhost'];
+app.use(cors({
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}));
 app.use(bodyParser.json({limit: "50mb"}));
 app.use(bodyParser.urlencoded({extended: true, limit:"50mb"}));
 
