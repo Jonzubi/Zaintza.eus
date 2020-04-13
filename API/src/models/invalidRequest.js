@@ -10,6 +10,10 @@ module.exports = (conexion) => {
             type: String,
             required: true
         },
+        requestMethod: {
+            type: String,
+            required: true
+        },
         errorMsg: {
             type: String
         }

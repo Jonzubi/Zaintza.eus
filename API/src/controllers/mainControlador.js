@@ -4,6 +4,31 @@ const { writeImage } = require("../../util/funciones");
 
 const modelosPermitidos = ["cuidador", "anuncio"];
 
+const isValidRequest = (req, res, modelos) => {
+  const tabla = req.params.tabla;
+  if (!modelosPermitidos.includes(tabla)) {
+    const invalidRequestModel = modelos.invalidRequest;    
+    const ipAddress = req.connection.remoteAddress;
+    const requestMethod = req.method;
+    const formData = {
+      errorCode: 405,
+      ipAddress,
+      requestMethod,
+      errorMsg: `Intento de intrusion a ${req.originalUrl}`
+    }
+    console.log(formData);
+    const invalidRequestConfigurado = new invalidRequestModel(formData);
+    //invalidRequestConfigurado.save();
+    res.writeHead(405, headerResponse);
+    res.write(`La IP: ${ipAddress} ha sido registrada por una operacion no lícita`);
+    res.end();
+
+    return false;
+  }
+
+  return true;
+}
+
 exports.get = function(req, res, modelos) {
   let tabla = req.params.tabla;
   let id = req.params.id;
@@ -17,21 +42,8 @@ exports.get = function(req, res, modelos) {
   if (typeof req.query.options !== 'undefined') {
     objOptions = JSON.parse(req.query.options);
   }
-
-  if (!modelosPermitidos.includes(tabla)) {
-    const invalidRequestModel = modelos.invalidRequest;    
-    const ipAddress = req.connection.remoteAddress;
-    const formData = {
-      errorCode: 405,
-      ipAddress,
-      errorMsg: `Intento de intrusion a ${req.originalUrl}`
-    }
-    console.log(formData);
-    const invalidRequestConfigurado = new invalidRequestModel(formData);
-    //invalidRequestConfigurado.save();
-    res.writeHead(405, headerResponse);
-    res.write(`La IP: ${ipAddress} ha sido registrada por una operacion no lícita`);
-    res.end();
+  //Trozo de codigo que comprueba que lo que se hace es licito
+  if(!isValidRequest(req, res, modelos)) {
     return;
   }
 
@@ -83,6 +95,11 @@ exports.insert = function(req, res, modelos) {
     return;
   }
 
+  //Trozo de codigo que comprueba que lo que se hace es licito
+  if(!isValidRequest(req, res, modelos)) {
+    return;
+  }
+
   let modeloConfiged = new modelo(req.body);
 
   modeloConfiged
@@ -102,6 +119,11 @@ exports.insert = function(req, res, modelos) {
 };
 
 exports.update = function(req, res, modelos) {
+  //Trozo de codigo que comprueba que lo que se hace es licito
+  if(!isValidRequest(req, res, modelos)) {
+    return;
+  }
+
   let tabla = req.params.tabla;
   let id = req.params.id;
   let modelo = modelos[tabla];
@@ -122,6 +144,10 @@ exports.update = function(req, res, modelos) {
 };
 
 exports.delete = async (req, res, modelos) => {
+  //Trozo de codigo que comprueba que lo que se hace es licito
+  if(!isValidRequest(req, res, modelos)) {
+    return;
+  }
   let tabla = req.params.tabla;
   let id = req.params.id;
   let modelo = modelos[tabla];
