@@ -114,18 +114,9 @@ class AcuerdosForm extends React.Component {
     let buscarUsuOrCuid =
       this.props.tipoUsuario == "Cliente" ? "idCuidador" : "idCliente";
     const idElOtro = acuerdo[buscarUsuOrCuid];
-    let elOtroUsu = await axios.get(
-      "http://" + ipMaquina + ":3001/api/usuario",
-      {
-        params: {
-          filtros: {
-            idPerfil: idElOtro
-          }
-        }
-      }
-    );
+    let elOtroUsu = await axios.get(`http://${ipMaquina}:3001/api/usuario/${idElOtro}`);
     const notificacionData = {
-      idUsuario: elOtroUsu.data[0]._id,
+      idUsuario: elOtroUsu.data,
       idRemitente: this.props.idUsuario,
       tipoNotificacion: "AcuerdoGestionado",
       valorGestion: false,
@@ -139,7 +130,7 @@ class AcuerdosForm extends React.Component {
     );
 
     socket.emit('notify', {
-      idUsuario: elOtroUsu.data[0]._id
+      idUsuario: elOtroUsu.data
     });
 
     let auxJsonAcuerdos = this.state.jsonAcuerdos;
