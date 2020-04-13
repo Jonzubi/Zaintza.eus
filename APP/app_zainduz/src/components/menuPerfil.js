@@ -27,7 +27,9 @@ const mapStateToProps = state => {
     idUsuario: state.user._idUsuario,
     nombre: state.user.nombre,
     apellido1: state.user.apellido1,
-    countNotifies: state.notification.countNotifies
+    countNotifies: state.notification.countNotifies,
+    email: state.user.email,
+    contrasena: state.user.contrasena
   };
 };
 
@@ -45,7 +47,7 @@ const mapDispatchToProps = dispatch => {
 
 class MenuPerfil extends React.Component {
   handleNotifyReceived = () => {
-    const { countNotifies, setCountNotify } = this.props;
+    const { countNotifies, setCountNotify, idUsuario, email, contrasena } = this.props;
     //Si no esta logueado no queremos saber notificaciones;
     if (
       typeof this.props.idUsuario == "undefined" ||
@@ -53,13 +55,9 @@ class MenuPerfil extends React.Component {
     )
       return;
 
-    Axios.get("http://" + ipMaquina + ":3001/api/notificacion", {
-      params: {
-        filtros: {
-          idUsuario: this.props.idUsuario,
-          visto: false
-        }
-      }
+    Axios.post(`http://${ipMaquina}:3001/api/procedures/getNotificationsWithIdUsuario/${idUsuario}`, {
+      email,
+      contrasena
     }).then(resultado => {
       if (resultado.data != "Vacio" && countNotifies != resultado.data.length) {
         setCountNotify(resultado.data.length);
