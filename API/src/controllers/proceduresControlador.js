@@ -68,7 +68,7 @@ exports.getNotificacionesConUsuarios = (req, res, modelos) => {
   const modeloNotificacion = modelos.notificacion;
 
   modeloNotificacion
-    .find({ idUsuario: idUsuario })
+    .find({ idUsuario: idUsuario, show: true })
     .populate({
       path: "idRemitente",
       populate: { path: "idPerfil" }

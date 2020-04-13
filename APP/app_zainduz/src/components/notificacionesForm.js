@@ -54,7 +54,7 @@ class NotificacionesForm extends React.Component {
   }
 
   async handleToogleCollapseNotificacion(index) {
-    const { setCountNotify, countNotifies } = this.props;
+    const { setCountNotify, countNotifies, email, contrasena } = this.props;
     let aux = this.state.notificacionesCollapseState;
     aux[index] = !aux[index];
 
@@ -66,7 +66,9 @@ class NotificacionesForm extends React.Component {
           ":3001/api/notificacion/" +
           auxJsonNotif[index]._id,
         {
-          visto: true
+          visto: true,
+          email,
+          contrasena
         }
       );
       auxJsonNotif[index].visto = true;
@@ -101,6 +103,7 @@ class NotificacionesForm extends React.Component {
   }
 
   async handleGestionarPropuesta(notificacion, indice, ifAccept, socket) {
+    const { email, contrasena } = this.props;
     let today = getTodayDate();
     const objToday = new Date();
     const acuerdo = notificacion.acuerdo;
@@ -121,8 +124,12 @@ class NotificacionesForm extends React.Component {
       cogoToast.error(
         <h5>{trans("notificacionesForm.acuerdoYaRechazado")}</h5>
       );
-      await axios.delete(
-        "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id
+      await axios.patch(
+        "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id, {
+          show: false,
+          email,
+          contrasena
+        }
       );
       delete auxJsonNotif[indice];
       this.setState({
@@ -137,19 +144,6 @@ class NotificacionesForm extends React.Component {
         estadoAcuerdo: ifAccept ? 1 : 2 //Si Accept es true acepta el acuerdo mandando un 1 a la BD, si no un 2
       }
     );
-    //La otra personaUsua recoge el _id de la tabla usuario para mandar
-    //la notificacion a la otra parte del acuerdo de que el acuerdo ha sido o aceptado o rechazado
-    let laOtraPersonaUsu = await axios.get(
-      "http://" + ipMaquina + ":3001/api/usuario",
-      {
-        params: {
-          filtros: {
-            idPerfil: notificacion.idRemitente._id
-          }
-        }
-      }
-    );
-    laOtraPersonaUsu = laOtraPersonaUsu.data[0];
     //Aqui se manda la notificacion con el usuario recogido anteriormente,
     //el acuerdo ha sido gestionado con un valor de aceptado o rechazado en el valorGestion
     await axios.post("http://" + ipMaquina + ":3001/api/notificacion", {
@@ -158,6 +152,7 @@ class NotificacionesForm extends React.Component {
       tipoNotificacion: "AcuerdoGestionado",
       valorGestion: ifAccept,
       visto: false,
+      show: true,
       dateEnvioNotificacion:
         today + " " + objToday.getHours() + ":" + objToday.getMinutes()
     });
@@ -165,8 +160,12 @@ class NotificacionesForm extends React.Component {
     socket.emit('notify', {
       idUsuario: notificacion.idRemitente._id
     });
-    await axios.delete(
-      "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id
+    await axios.patch(
+      "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id, {
+        show: false,
+        email,
+        contrasena
+      }
     );
     delete auxJsonNotif[indice];
     this.setState(
@@ -186,11 +185,15 @@ class NotificacionesForm extends React.Component {
   }
 
   async handleDeleteNotificacion(notificacion, indice) {
-    const { countNotifies, setCountNotify } = this.props;
+    const { countNotifies, setCountNotify, email, contrasena } = this.props;
     let auxJsonNotif = this.state.jsonNotificaciones;
 
-    await axios.delete(
-      "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id
+    await axios.patch(
+      "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id, {
+        show: false,
+        email,
+        contrasena
+      }
     );
     delete auxJsonNotif[indice];
     
@@ -424,7 +427,9 @@ const mapStateToProps = state => {
   return {
     idUsuario: state.user._idUsuario,
     tipoUsuario: state.user.tipoUsuario,
-    countNotifies: state.notification.countNotifies
+    countNotifies: state.notification.countNotifies,
+    email: state.user.email,
+    contrasena: state.user.contrasena
   };
 };
 
