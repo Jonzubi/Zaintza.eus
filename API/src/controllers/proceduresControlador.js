@@ -704,3 +704,14 @@ exports.getNotificationsWithIdUsuario = async (req, res, modelos) => {
     res.end();
   }
 }
+
+exports.getIdUsuarioConIdPerfil = async (req, res, modelos) => {
+  const { idPerfil } = req.params;
+
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findOne({ idPerfil });
+  let id = usuario._id.toString();
+  res.writeHead(200, {"Content-Type": "text/plain"});
+  res.write(id);
+  res.end();
+}
