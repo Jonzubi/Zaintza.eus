@@ -2,6 +2,8 @@ const headerResponse = require("../../util/headerResponse");
 const fs = require("fs");
 const { writeImage } = require("../../util/funciones");
 
+const modelosPermitidos = ["cuidador", "anuncio"];
+
 exports.get = function(req, res, modelos) {
   let tabla = req.params.tabla;
   let id = req.params.id;
@@ -14,6 +16,23 @@ exports.get = function(req, res, modelos) {
   }
   if (typeof req.query.options !== 'undefined') {
     objOptions = JSON.parse(req.query.options);
+  }
+
+  if (!modelosPermitidos.includes(tabla)) {
+    const invalidRequestModel = modelos.invalidRequest;    
+    const ipAddress = req.connection.remoteAddress;
+    const formData = {
+      errorCode: 405,
+      ipAddress,
+      errorMsg: `Intento de intrusion a ${req.originalUrl}`
+    }
+    console.log(formData);
+    const invalidRequestConfigurado = new invalidRequestModel(formData);
+    invalidRequestConfigurado.save();
+    res.writeHead(405, headerResponse);
+    res.write(`La IP: ${ipAddress} ha sido registrada por una operacion no lícita`);
+    res.end();
+    return;
   }
 
   let modelo = modelos[tabla];
