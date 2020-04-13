@@ -349,17 +349,14 @@ class Tabla extends React.Component {
     const objFiltros = {
       idPerfil: idPerfil
     };
-    Axios.get("http://" + ipMaquina + ":3001/api/usuario", {
-      params: {
-        filtros: JSON.stringify(objFiltros)
-      }
-    })
-      .then(resultado => {
-        resultado = resultado.data[0];
+    Axios
+      .get(`http://${ipMaquina}:3001/api/procedures/getEmailWithIdPerfil/${idPerfil}`)
+      .then(email => {
+        const response = email.data;
         this.setState({
           showModal: true,
           selectedCuidador: Object.assign({}, cuidador, {
-            email: resultado.email
+            email: response !== 'Vacio' ? response : 'ERROR'
           })
         });
       })

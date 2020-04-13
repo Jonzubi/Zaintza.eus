@@ -675,3 +675,14 @@ exports.confirmarEmail = async (req, res, modelos) => {
     res.end();
   }
 }
+
+exports.getEmailWithIdPerfil = async (req, res, modelos) => {
+  const { idPerfil } = req.params;
+  const modeloUsuario = modelos.usuario;
+
+  const usuarioFound = await modeloUsuario.findOne({ idPerfil }, "email");
+  res.writeHead(200, {"Content-Type": "text/plain"});
+  const response = usuarioFound !== null ? usuarioFound.email : "Vacio";
+  res.write(response);
+  res.end();
+}
