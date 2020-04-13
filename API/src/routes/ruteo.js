@@ -33,6 +33,8 @@ module.exports = (app, modelos) => {
   app.route("/api/procedures/confirmarEmail").get((req, res) => proceduresControlador.confirmarEmail(req, res, modelos));
 
   app.route("/api/procedures/getEmailWithIdPerfil/:idPerfil").get((req, res) => proceduresControlador.getEmailWithIdPerfil(req, res, modelos));
+
+  app.route("/api/procedures/getNotificationsWithIdUsuario/:idUsuario").post((req, res) => proceduresControlador.getNotificationsWithIdUsuario(req, res, modelos));
   
   app.route("/Inicio/").get(mainControlador.inicio);
 

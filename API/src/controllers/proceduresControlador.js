@@ -686,3 +686,21 @@ exports.getEmailWithIdPerfil = async (req, res, modelos) => {
   res.write(response);
   res.end();
 }
+
+exports.getNotificationsWithIdUsuario = async (req, res, modelos) => {
+  const { idUsuario } = req.params;
+  const { email, contrasena } = req.body;
+  const modeloUsuario = modelos.usuario;
+  const modeloNotificacion = modelos.notificacion;
+  const validUser = await modeloUsuario.findById(idUsuario);
+  if (validUser.email === email && validUser.contrasena === contrasena) {
+    const notificaciones = await modeloNotificacion.find({ idUsuario, visto: false});
+    res.writeHead(200, headerResponse);
+    res.write(JSON.stringify(notificaciones));
+    res.end();
+  } else {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+  }
+}
