@@ -14,6 +14,9 @@ module.exports = (conexion) => {
             type: String,
             required: true
         },
+        requestParams: Object,
+        requestQuery: Object,
+        requestBody: Object,
         errorMsg: {
             type: String
         }
