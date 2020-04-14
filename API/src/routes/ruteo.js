@@ -49,6 +49,8 @@ module.exports = (app, modelos) => {
   app.route("/api/procedures/terminarAcuerdo/:idAcuerdo").patch((req, res) => proceduresControlador.terminarAcuerdo(req, res, modelos));
 
   app.route("/api/procedures/gestionarAcuerdo/:idAcuerdo").patch((req, res) => proceduresControlador.gestionarAcuerdo(req, res, modelos));
+
+  app.route("/api/procedures/checkIfAcuerdoExists/:idAcuerdo").post((req, res) => proceduresControlador.checkIfAcuerdoExists(req, res, modelos));
   
   app.route("/Inicio/").get(mainControlador.inicio);
 

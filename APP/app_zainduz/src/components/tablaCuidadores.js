@@ -366,6 +366,9 @@ class Tabla extends React.Component {
   }
 
   async handlePedirCuidado() {
+    const { email, contrasena, tipoUsuario, idCliente } = this.props;
+    const { selectedCuidador } = this.state;
+
     if (!this.props.tipoUsuario) {
       cogoToast.error(<h5>{trans("tablaCuidadores.errorNoLogueado")}</h5>);
       this.handleShowModalChange(false);
@@ -379,16 +382,14 @@ class Tabla extends React.Component {
       return;
     }
 
-    let comprobAcuerdoUnico = await Axios.get(
-      "http://" + ipMaquina + ":3001/api/acuerdo",
+    let comprobAcuerdoUnico = await Axios.post(
+      "http://" + ipMaquina + ":3001/api/procedures/checkIfAcuerdoExists",
       {
-        params: {
-          filtros: {
-            idCliente: this.props.idCliente,
-            idCuidador: this.state.selectedCuidador._id,
-            $or: [{ estadoAcuerdo: 1 }, { estadoAcuerdo: 0 }]
-          }
-        }
+        idCliente,
+        idCuidador: selectedCuidador._id,
+        whoAmI: tipoUsuario,
+        email,
+        contrasena
       }
     );
     if (comprobAcuerdoUnico.data != "Vacio") {

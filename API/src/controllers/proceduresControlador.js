@@ -949,3 +949,38 @@ exports.gestionarAcuerdo = async (req, res, modelos) => {
       res.end()
     });    
 }
+
+exports.checkIfAcuerdoExists = async (req, res, modelos) => {
+  const { idCliente, idCuidador, email, contrasena, whoAmI } = req.body;
+
+  const modeloUsuario = modelos.usuario;
+  const idPerfil = whoAmI === "Cliente" ? idCliente : idCuidador;
+  const usuario = await modeloUsuario.find({ idPerfil });
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena === contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  const modeloAcuerdos = modelos.acuerdo;
+  const acuerdo = modeloAcuerdos.findOne({
+    idCliente,
+    idCuidador,
+    $or: [{ estadoAcuerdo: 1 }, { estadoAcuerdo: 0 }]
+  });
+  
+  const response = acuerdo !== null ? "Exists" : "Vacio";
+  
+  req.writeHead(200, {"Content-Type": "text/plain"});
+  res.write(response);
+  res.end();
+}
