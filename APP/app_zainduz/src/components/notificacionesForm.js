@@ -146,7 +146,7 @@ class NotificacionesForm extends React.Component {
     );
     //Aqui se manda la notificacion con el usuario recogido anteriormente,
     //el acuerdo ha sido gestionado con un valor de aceptado o rechazado en el valorGestion
-    await axios.post("http://" + ipMaquina + ":3001/api/notificacion", {
+    await axios.post("http://" + ipMaquina + ":3001/api/procedures/newNotification", {
       idUsuario: notificacion.idRemitente._id,
       idRemitente: notificacion.idUsuario,
       tipoNotificacion: "AcuerdoGestionado",
@@ -154,7 +154,9 @@ class NotificacionesForm extends React.Component {
       visto: false,
       show: true,
       dateEnvioNotificacion:
-        today + " " + objToday.getHours() + ":" + objToday.getMinutes()
+        today + " " + objToday.getHours() + ":" + objToday.getMinutes(),
+      email,
+      contrasena
     });
 
     socket.emit('notify', {
