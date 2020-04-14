@@ -755,3 +755,15 @@ exports.patchPassword = async (req, res, modelos) => {
     res.end();
   }
 }
+
+exports.checkIfEmailExists = async (req, res, modelos) => {
+  const { email } = req.params;
+  const modeloUsuarios = modelos.usuario;
+
+  const emailEncontrado = await modeloUsuarios.findOne({ email });
+
+  const response = emailEncontrado !== null ? "True" : "Vacio";
+  res.writeHead(200, headerResponse);
+  res.write(response)
+  res.end();
+}

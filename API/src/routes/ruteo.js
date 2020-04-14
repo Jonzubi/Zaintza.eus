@@ -39,6 +39,8 @@ module.exports = (app, modelos) => {
   app.route("/api/procedures/getIdUsuarioConIdPerfil/:idPerfil").get((req, res) => proceduresControlador.getIdUsuarioConIdPerfil(req, res, modelos));
 
   app.route("/api/procedures/patchPassword/:idUsuario").patch((req, res) => proceduresControlador.patchPassword(req, res, modelos));
+
+  app.route("/api/procedures/checkIfEmailExists/:email").get((req, res) => proceduresControlador.checkIfEmailExists(req, res, modelos));
   
   app.route("/Inicio/").get(mainControlador.inicio);
 
