@@ -715,3 +715,31 @@ exports.getIdUsuarioConIdPerfil = async (req, res, modelos) => {
   res.write(id);
   res.end();
 }
+
+exports.patchPassword = async (req, res, modelos) => {
+  const { idUsuario } = req.params;
+  const { contrasena, newPassword, email } = req.body;
+  const modeloUsuarios = modelos.usuario;
+  const modeloEncontrado = await modeloUsuarios.findById(idUsuario);
+
+  if (modeloEncontrado.email === email && modeloEncontrado.contrasena === contrasena){
+    modeloUsuarios
+      .findByIdAndUpdate(idUsuario, { contrasena: newPassword })
+      .then(doc => {
+        res.writeHead(200, headerResponse);
+        res.write(JSON.stringify(doc));
+      })
+      .catch(err => {
+        console.log(err);
+        res.writeHead(500, headerResponse);
+        res.write(JSON.stringify(err));
+      })
+      .finally(() => {
+        res.end();
+      });
+  } else {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+  }
+}
