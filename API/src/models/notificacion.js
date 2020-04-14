@@ -24,6 +24,7 @@ module.exports = conexion => {
     },
     show: {
       type: Boolean,
+      default: true
     },
     //Este es el acuerdo en caso de que la notificacion sea una propuesta de acuerdo
     acuerdo: Object,
