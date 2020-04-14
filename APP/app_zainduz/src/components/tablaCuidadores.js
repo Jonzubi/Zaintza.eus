@@ -38,7 +38,9 @@ const mapStateToProps = state => {
   return {
     tipoUsuario: state.user.tipoUsuario,
     idCliente: state.user._id,
-    idUsuario: state.user._idUsuario
+    idUsuario: state.user._idUsuario,
+    email: state.user.email,
+    contrasena: state.user.contrasena
   };
 };
 
@@ -449,6 +451,8 @@ class Tabla extends React.Component {
   }
 
   async handleEnviarPropuesta() {
+    const { email, tipoUsuario, contrasena } = this.props;
+
     this.setState({
       propuestaIsLoading: true
     });
@@ -469,8 +473,9 @@ class Tabla extends React.Component {
       pueblo: this.state.ubicaciones[0],
       descripcionAcuerdo: this.state.txtDescripcion,
       origenAcuerdo: this.props.tipoUsuario,
-      estadoAcuerdo: 0,
-      dateAcuerdo: today
+      whoAmI: tipoUsuario,
+      email,
+      contrasena
     };
 
     Axios.post("http://" + ipMaquina + ":3001/api/acuerdo", formData)

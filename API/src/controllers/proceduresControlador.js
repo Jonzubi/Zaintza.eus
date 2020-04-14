@@ -979,8 +979,89 @@ exports.checkIfAcuerdoExists = async (req, res, modelos) => {
   });
   
   const response = acuerdo !== null ? "Exists" : "Vacio";
-  
+
   req.writeHead(200, {"Content-Type": "text/plain"});
   res.write(response);
   res.end();
+}
+
+exports.newAcuerdo = async (req, res, modelos) => {
+  const {
+    whoAmI, idCuidador, idCliente, email, contrasena,
+    diasAcordados, tituloAcuerdo, pueblo, descripcionAcuerdo,
+    origenAcuerdo
+  } = req.body;
+
+  const modeloUsuario = modelos.usuario;
+  const idPerfil = whoAmI === "Cliente" ? idCliente : idCuidador;
+  const usuario = await modeloUsuario.find({ idPerfil });
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena === contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  //Ahora se comprobara si el otro usuario existe por integridad de datos
+  const elOtroModeloNombre = whoAmI === "Cliente" ? "cliente" : "cuidador";
+  const elOtroId = whoAmI === "Cliente" ? idCuidador : idCliente;
+  const elOtroModelo = modelos[elOtroModeloNombre];
+  const elOtro = elOtroModelo.findById(elOtroId);
+
+  if (elOtro === null) {
+    res.writeHead(405, headerResponse);
+    res.write("No existe el otro usuario");
+    res.end();
+    return;
+  }
+
+  // Ahora se comprueba si ya existe un acuerdo
+  const modeloAcuerdos = modelos.acuerdo;
+  const acuerdo = modeloAcuerdos.findOne({
+    idCliente,
+    idCuidador,
+    $or: [{ estadoAcuerdo: 1 }, { estadoAcuerdo: 0 }]
+  });
+
+  if (acuerdo !== null) {
+    res.writeHead(405, headerResponse);
+    res.write("El acuerdo ya existe");
+    res.end();
+    return;
+  }
+
+  // Insertamos el acuerdo porque es v?lido
+  const modeloConfigurado = new modeloAcuerdos({
+    idCuidador,
+    idCliente,
+    diasAcordados,
+    tituloAcuerdo,
+    pueblo,
+    descripcionAcuerdo,
+    origenAcuerdo,
+    estadoAcuerdo: 0,
+    dateAcuerdo: getTodayDate()
+  });
+  modeloConfigurado
+    .save()
+    .then(doc => {
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(doc));
+    })
+    .catch(err => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+    })
+    .finally(() => {
+      res.end()
+    });
 }
