@@ -101,15 +101,16 @@ class AcuerdosForm extends React.Component {
     if (acuerdo.estadoAcuerdo == 2) {
       return;
     }
-    const { email, contrasena } = this.props;
+    const { email, contrasena, tipoUsuario } = this.props;
     let today = getTodayDate();
     const objToday = new Date();
 
     await axios.patch(
-      "http://" + ipMaquina + ":3001/api/acuerdo/" + acuerdo._id,
+      "http://" + ipMaquina + ":3001/api/procedures/terminarAcuerdo/" + acuerdo._id,
       {
-        estadoAcuerdo: 2,
-        dateFinAcuerdo: today
+        whoAmI: tipoUsuario,
+        email,
+        contrasena
       }
     );
     //Ahora se quiere notificar a la otra parte del acuerdo de la finalizacion del acuerdo
