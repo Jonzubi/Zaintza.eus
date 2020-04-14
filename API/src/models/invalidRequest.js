@@ -19,7 +19,8 @@ module.exports = (conexion) => {
         requestBody: Object,
         errorMsg: {
             type: String
-        }
+        },
+        date: Date
     });
 
     return conexion.model("InvalidRequest", invalidRequest, "InvalidRequest")

@@ -30,7 +30,8 @@ const isValidRequest = async (req, res, modelos) => {
       errorMsg: `Intento de intrusion a ${req.originalUrl}`,
       requestParams: req.params,
       requestQuery: req.query,
-      requestBody: req.body
+      requestBody: req.body,
+      date: new Date()
     }
     console.log(formData);
     const invalidRequestConfigurado = new invalidRequestModel(formData);
