@@ -138,9 +138,12 @@ class NotificacionesForm extends React.Component {
     }
 
     await axios.patch(
-      "http://" + ipMaquina + ":3001/api/acuerdo/" + acuerdo._id,
+      "http://" + ipMaquina + ":3001/api/procedures/gestionarAcuerdo/" + acuerdo._id,
       {
-        estadoAcuerdo: ifAccept ? 1 : 2 //Si Accept es true acepta el acuerdo mandando un 1 a la BD, si no un 2
+        estadoAcuerdo: ifAccept ? 1 : 2, //Si Accept es true acepta el acuerdo mandando un 1 a la BD, si no un 2
+        email,
+        contrasena,
+        whoAmI: tipoUsuario
       }
     );
     //Aqui se manda la notificacion con el usuario recogido anteriormente,
