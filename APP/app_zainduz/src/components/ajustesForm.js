@@ -27,12 +27,14 @@ class AjustesForm extends React.Component {
 
   handleSaveLanguage = () => {
     const { langChosen } = this.state;
-    const { idUsuario } = this.props;
+    const { idUsuario, email, contrasena } = this.props;
 
     Axios.post(
       "http://" + ipMaquina + ":3001/api/procedures/patchPredLang/" + idUsuario,
       {
-        idLangPred: langChosen
+        idLangPred: langChosen,
+        email,
+        contrasena
       }
     )
       .then(() => {
@@ -273,7 +275,8 @@ const mapStateToProps = state => ({
   contrasena: state.user.contrasena,
   idUsuario: state.user._idUsuario,
   idLangPred: state.user.idLangPred,
-  email: state.user.email
+  email: state.user.email,
+  contrasena: state.user.contrasena
 });
 
 const mapDispatchToProps = dispatch => ({

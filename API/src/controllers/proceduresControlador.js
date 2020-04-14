@@ -634,6 +634,16 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
 
 exports.patchPredLang = async (req, res, modelos) => {
   const { id } = req.params;
+  const { email, contrasena } = req.body;
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findById(id);
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+  }
+  
   const modeloAjustes = modelos.ajuste;
 
   const ajusteExistente = await modeloAjustes.find({ idUsuario: id });
