@@ -103,23 +103,22 @@ class NotificacionesForm extends React.Component {
   }
 
   async handleGestionarPropuesta(notificacion, indice, ifAccept, socket) {
-    const { email, contrasena } = this.props;
+    const { email, contrasena, tipoUsuario } = this.props;
     let today = getTodayDate();
     const objToday = new Date();
     const acuerdo = notificacion.acuerdo;
     let auxJsonNotif = this.state.jsonNotificaciones;
     //Squi estoy pillando el estado actual del acuerdo para comprobar que el acuerdo no se ha cancelado ya por el usuario.
     //Por ejemplo sui ha hecho una propuesta erronea
-    let estadoAcuerdo = await axios.get(
-      "http://" + ipMaquina + ":3001/api/acuerdo/" + notificacion.acuerdo._id,
+    let estadoAcuerdo = await axios.post(
+      "http://" + ipMaquina + ":3001/api/procedure/getAcuerdoStatus/" + notificacion.acuerdo._id,
       {
-        params: {
-          columnas: "estadoAcuerdo"
-        }
+        whoAmI: tipoUsuario,
+        email,
+        contrasena
       }
     );
-    //Hago esto para que sea mas legible, ya que con el axios estado acuerdo contiene data y despues data contiene el dato del estadoAcuerdo: X
-    estadoAcuerdo = estadoAcuerdo.data.estadoAcuerdo;
+    estadoAcuerdo = estadoAcuerdo.data;
     if (estadoAcuerdo == 2) {
       cogoToast.error(
         <h5>{trans("notificacionesForm.acuerdoYaRechazado")}</h5>
