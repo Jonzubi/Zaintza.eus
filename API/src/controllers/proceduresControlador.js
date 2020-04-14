@@ -356,6 +356,9 @@ exports.postNewCliente = async (req, res, modelos) => {
 exports.patchCuidador = async (req, res, modelos) => {
   const {
     nombre,
+    email,
+    contrasena,
+    idUsuario,
     apellido1,
     apellido2,
     fechaNacimiento,
@@ -390,6 +393,15 @@ exports.patchCuidador = async (req, res, modelos) => {
   ) {
     res.writeHead(500, headerResponse);
     res.write("Parametros incorrectos");
+    res.end();
+    return;
+  }
+
+  const modeloUsuarios = modelos.usuario;
+  const usuario = await modeloUsuarios.findById(idUsuario);
+  if(usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
     res.end();
     return;
   }
