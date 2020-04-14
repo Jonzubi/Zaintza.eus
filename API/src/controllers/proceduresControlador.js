@@ -862,3 +862,47 @@ exports.getAcuerdoStatus = async (req, res, modelos) => {
   res.write(JSON.stringify(acuerdo.estadoAcuerdo));
   res.end();
 }
+
+exports.terminarAcuerdo = async (req, res, modelos) => {
+  const { idAcuerdo } = req.params;
+  const { whoAmI, email, contrasena } = req.body;
+
+  const modeloAcuerdo = modelos.acuerdo;
+  const acuerdo = await modeloAcuerdo.findById(idAcuerdo);
+  const columna = whoAmI === "Cliente" ? "idCliente" : "idCuidador";
+  const idPerfil = acuerdo[columna];
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findOne({ idPerfil });
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena === contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  modeloAcuerdo
+    .findByIdAndUpdate(idAcuerdo, {
+      estadoAcuerdo: 2,
+      dateFinAcuerdo: getTodayDate() 
+    })
+    .then(doc => {
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(doc));
+    })
+    .catch(err => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+    })
+    .finally(() => {
+      res.end()
+    });  
+}
