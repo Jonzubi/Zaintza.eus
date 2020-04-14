@@ -104,14 +104,7 @@ class RegisterFormCliente extends React.Component {
     }
 
     const checkIfEmailExists = await axios.get(
-      `http://${ipMaquina}:3001/api/usuario/`,
-      {
-        params: {
-          filtros: {
-            email: this.state.txtEmail
-          }
-        }
-      }
+      `http://${ipMaquina}:3001/api/procedures/checkIfEmailExists/${this.state.txtEmail}`
     );
 
     if (checkIfEmailExists.data !== "Vacio") {
