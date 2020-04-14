@@ -643,7 +643,7 @@ exports.patchPredLang = async (req, res, modelos) => {
     res.write("Operacion denegada");
     res.end();
   }
-  
+
   const modeloAjustes = modelos.ajuste;
 
   const ajusteExistente = await modeloAjustes.find({ idUsuario: id });
@@ -832,4 +832,33 @@ exports.newNotification = async (req, res, modelos) => {
     .finally(() => {
       res.end()
     });
+}
+
+exports.getAcuerdoStatus = async (req, res, modelos) => {
+  const { idAcuerdo } = req.params;
+  const { whoAmI, email, contrasena } = req.body;
+
+  const modeloAcuerdo = modelos.acuerdo;
+  const acuerdo = await modeloAcuerdo.findById(idAcuerdo);
+  const columna = whoAmI === "Cliente" ? "idCliente" : "idCuidador";
+  const idUsuario = acuerdo[columna];
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findOne({ idPerfil: idUsuario });
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  res.writeHead(200, headerResponse);
+  res.write(JSON.stringify(acuerdo.estadoAcuerdo));
+  res.end();
 }

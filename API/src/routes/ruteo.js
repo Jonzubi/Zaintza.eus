@@ -43,6 +43,8 @@ module.exports = (app, modelos) => {
   app.route("/api/procedures/checkIfEmailExists/:email").get((req, res) => proceduresControlador.checkIfEmailExists(req, res, modelos));
 
   app.route("/api/procedures/newNotification").post((req, res) => proceduresControlador.newNotification(req, res, modelos));
+
+  app.route("/api/procedures/getAcuerdoStatus/:idAcuerdo").post((req, res) => proceduresControlador.getAcuerdoStatus(req, res, modelos));
   
   app.route("/Inicio/").get(mainControlador.inicio);
 
