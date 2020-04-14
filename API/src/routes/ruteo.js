@@ -41,6 +41,8 @@ module.exports = (app, modelos) => {
   app.route("/api/procedures/patchPassword/:idUsuario").patch((req, res) => proceduresControlador.patchPassword(req, res, modelos));
 
   app.route("/api/procedures/checkIfEmailExists/:email").get((req, res) => proceduresControlador.checkIfEmailExists(req, res, modelos));
+
+  app.route("/api/procedures/newNotification").post((req, res) => proceduresControlador.newNotification(req, res, modelos));
   
   app.route("/Inicio/").get(mainControlador.inicio);
 

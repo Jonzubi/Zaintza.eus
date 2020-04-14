@@ -21,7 +21,9 @@ const mapStateToProps = state => {
   return {
     idPerfil: state.user._id,
     idUsuario: state.user._idUsuario,
-    tipoUsuario: state.user.tipoUsuario
+    tipoUsuario: state.user.tipoUsuario,
+    email: state.user.email,
+    contrasena: state.user.contrasena
   };
 };
 
@@ -99,7 +101,7 @@ class AcuerdosForm extends React.Component {
     if (acuerdo.estadoAcuerdo == 2) {
       return;
     }
-
+    const { email, contrasena } = this.props;
     let today = getTodayDate();
     const objToday = new Date();
 
@@ -114,7 +116,7 @@ class AcuerdosForm extends React.Component {
     let buscarUsuOrCuid =
       this.props.tipoUsuario == "Cliente" ? "idCuidador" : "idCliente";
     const idElOtro = acuerdo[buscarUsuOrCuid];
-    let elOtroUsu = await axios.get(`http://${ipMaquina}:3001/api/usuario/${idElOtro}`);
+    let elOtroUsu = await axios.get(`http://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${idElOtro}`);
     const notificacionData = {
       idUsuario: elOtroUsu.data,
       idRemitente: this.props.idUsuario,
@@ -122,10 +124,12 @@ class AcuerdosForm extends React.Component {
       valorGestion: false,
       visto: false,
       dateEnvioNotificacion:
-        today + " " + objToday.getHours() + ":" + objToday.getMinutes()
+        today + " " + objToday.getHours() + ":" + objToday.getMinutes(),
+      email,
+      contrasena
     };
     await axios.post(
-      "http://" + ipMaquina + ":3001/api/notificacion",
+      "http://" + ipMaquina + ":3001/api/procedures/newNotification",
       notificacionData
     );
 
