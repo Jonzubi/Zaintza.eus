@@ -475,15 +475,10 @@ class Tabla extends React.Component {
 
     Axios.post("http://" + ipMaquina + ":3001/api/acuerdo", formData)
       .then(resultado => {
-        Axios.get("http://" + ipMaquina + ":3001/api/usuario", {
-          params: {
-            filtros: {
-              idPerfil: this.state.selectedCuidador._id
-            }
-          }
-        }).then(usuario => {
+        Axios.get("http://" + ipMaquina + ":3001/api/procedures/getIdUsuarioConIdPerfil/" + this.state.selectedCuidador._id)
+        .then(usuario => {
           let notificacionData = {
-            idUsuario: usuario.data[0]._id,
+            idUsuario: usuario.data,
             idRemitente: this.props.idUsuario,
             tipoNotificacion: "Acuerdo",
             acuerdo: resultado.data,
