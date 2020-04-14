@@ -487,12 +487,11 @@ class Tabla extends React.Component {
             idRemitente: this.props.idUsuario,
             tipoNotificacion: "Acuerdo",
             acuerdo: resultado.data,
-            visto: false,
-            dateEnvioNotificacion:
-              today + " " + objToday.getHours() + ":" + objToday.getMinutes()
+            email,
+            contrasena
           };
           Axios.post(
-            "http://" + ipMaquina + ":3001/api/notificacion",
+            "http://" + ipMaquina + ":3001/api/procedures/newNotification",
             notificacionData
           ).then(notif => {
             this.setState({
