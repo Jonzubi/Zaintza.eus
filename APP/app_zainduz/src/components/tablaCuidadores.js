@@ -478,7 +478,7 @@ class Tabla extends React.Component {
       contrasena
     };
 
-    Axios.post("http://" + ipMaquina + ":3001/api/acuerdo", formData)
+    Axios.post("http://" + ipMaquina + ":3001/api/procedures/newAcuerdo", formData)
       .then(resultado => {
         Axios.get("http://" + ipMaquina + ":3001/api/procedures/getIdUsuarioConIdPerfil/" + this.state.selectedCuidador._id)
         .then(usuario => {
