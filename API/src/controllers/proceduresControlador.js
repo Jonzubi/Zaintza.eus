@@ -767,3 +767,59 @@ exports.checkIfEmailExists = async (req, res, modelos) => {
   res.write(response)
   res.end();
 }
+
+exports.newNotification = async (req, res, modelos) => {
+  const {
+    idUsuario,
+    idRemitente,
+    tipoNotificacion,
+    valorGestion,
+    email,
+    contrasena,
+    acuerdo
+  } = req.body;
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findById(idRemitente);
+  
+  if(usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+  const objetivo = await modeloUsuario.findById(idUsuario);
+
+  if(objetivo === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  const modeloNotificacion = modelos.notificacion;
+  const objToday = new Date();
+  const notificacion = new modeloNotificacion({
+    idUsuario,
+    idRemitente,
+    tipoNotificacion,
+    acuerdo,
+    valorGestion,
+    visto: false,
+    show: true,
+    dateEnvioNotificacion: `${getTodayDate()} ${objToday.getHours()}:${objToday.getMinutes()}`
+  });
+  notificacion
+    .save()
+    .then(doc => {
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(doc));
+    })
+    .catch(err => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+    })
+    .finally(() => {
+      res.end()
+    });
+}
