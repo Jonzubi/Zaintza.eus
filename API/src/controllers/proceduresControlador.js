@@ -20,6 +20,13 @@ exports.getAcuerdosConUsuarios = (req, res, modelos) => {
   const modeloUsuario = modelos.usuario;
   const usuario = modeloUsuario.findOne({ idPerfil });
 
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
   if (usuario.email !== email || usuario.contrasena === contrasena) {
     res.writeHead(405, headerResponse);
     res.write("Operacion denegada");
@@ -510,7 +517,9 @@ exports.postAnuncio = async (req, res, modelos) => {
     publico,
     imgAnuncio,
     idCliente,
-    horario
+    horario,
+    email,
+    contrasena
   } = req.body;
 
   if (
@@ -523,6 +532,23 @@ exports.postAnuncio = async (req, res, modelos) => {
   ) {
     res.writeHead(500, headerResponse);
     res.write("Parametros incorrectos");
+    res.end();
+    return;
+  }
+
+  const modeloUsuario = modelos.usuario;
+  const usuario = modeloUsuario.findOne({ idPerfil: idCliente });
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
     res.end();
     return;
   }
