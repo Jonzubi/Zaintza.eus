@@ -28,7 +28,10 @@ const mapStateToProps = state => {
     apellido2: state.user.apellido2,
     direcFoto: state.user.direcFoto,
     movil: movil,
-    telefFijo: telefFijo
+    telefFijo: telefFijo,
+    email: state.user.email,
+    contrasena: state.user.contrasena,
+    idUsuario: state.user._idUsuario
   };
 };
 
@@ -78,6 +81,7 @@ class PerfilCliente extends React.Component {
   }
 
   async handleGuardarCambios() {
+    const { email, contrasena, idUsuario } = this.props;
     for (var clave in this.state) {
       if (
         (this.state[clave].length == 0 || !this.state[clave]) &&
@@ -116,7 +120,10 @@ class PerfilCliente extends React.Component {
           numero: this.state.txtFijo
         }
       },
-      avatarPreview : this.state.avatarPreview
+      avatarPreview : this.state.avatarPreview,
+      email,
+      contrasena,
+      idUsuario
     };
 
     Axios

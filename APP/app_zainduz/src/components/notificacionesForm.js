@@ -17,17 +17,17 @@ import SocketContext from "../socketio/socket-context";
 
 class NotificacionesForm extends React.Component {
   componentDidMount() {
-    const { idUsuario } = this.props;
+    const { idUsuario, email, contrasena } = this.props;
 
     axios
-      .get(
+      .post(
         "http://" +
           ipMaquina +
           ":3001/api/procedures/getNotificacionesConUsuarios",
-        {
-          params: {
-            idUsuario: idUsuario
-          }
+        {          
+          idUsuario: idUsuario,
+          email,
+          contrasena          
         }
       )
       .then(notificaciones => {
@@ -54,7 +54,7 @@ class NotificacionesForm extends React.Component {
   }
 
   async handleToogleCollapseNotificacion(index) {
-    const { setCountNotify, countNotifies } = this.props;
+    const { setCountNotify, countNotifies, email, contrasena } = this.props;
     let aux = this.state.notificacionesCollapseState;
     aux[index] = !aux[index];
 
@@ -66,7 +66,9 @@ class NotificacionesForm extends React.Component {
           ":3001/api/notificacion/" +
           auxJsonNotif[index]._id,
         {
-          visto: true
+          visto: true,
+          email,
+          contrasena
         }
       );
       auxJsonNotif[index].visto = true;
@@ -101,28 +103,32 @@ class NotificacionesForm extends React.Component {
   }
 
   async handleGestionarPropuesta(notificacion, indice, ifAccept, socket) {
+    const { email, contrasena, tipoUsuario } = this.props;
     let today = getTodayDate();
     const objToday = new Date();
     const acuerdo = notificacion.acuerdo;
     let auxJsonNotif = this.state.jsonNotificaciones;
     //Squi estoy pillando el estado actual del acuerdo para comprobar que el acuerdo no se ha cancelado ya por el usuario.
     //Por ejemplo sui ha hecho una propuesta erronea
-    let estadoAcuerdo = await axios.get(
-      "http://" + ipMaquina + ":3001/api/acuerdo/" + notificacion.acuerdo._id,
+    let estadoAcuerdo = await axios.post(
+      "http://" + ipMaquina + ":3001/api/procedures/getAcuerdoStatus/" + notificacion.acuerdo._id,
       {
-        params: {
-          columnas: "estadoAcuerdo"
-        }
+        whoAmI: tipoUsuario,
+        email,
+        contrasena
       }
     );
-    //Hago esto para que sea mas legible, ya que con el axios estado acuerdo contiene data y despues data contiene el dato del estadoAcuerdo: X
-    estadoAcuerdo = estadoAcuerdo.data.estadoAcuerdo;
+    estadoAcuerdo = estadoAcuerdo.data;
     if (estadoAcuerdo == 2) {
       cogoToast.error(
         <h5>{trans("notificacionesForm.acuerdoYaRechazado")}</h5>
       );
-      await axios.delete(
-        "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id
+      await axios.patch(
+        "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id, {
+          show: false,
+          email,
+          contrasena
+        }
       );
       delete auxJsonNotif[indice];
       this.setState({
@@ -132,41 +138,38 @@ class NotificacionesForm extends React.Component {
     }
 
     await axios.patch(
-      "http://" + ipMaquina + ":3001/api/acuerdo/" + acuerdo._id,
+      "http://" + ipMaquina + ":3001/api/procedures/gestionarAcuerdo/" + acuerdo._id,
       {
-        estadoAcuerdo: ifAccept ? 1 : 2 //Si Accept es true acepta el acuerdo mandando un 1 a la BD, si no un 2
+        estadoAcuerdo: ifAccept ? 1 : 2, //Si Accept es true acepta el acuerdo mandando un 1 a la BD, si no un 2
+        email,
+        contrasena,
+        whoAmI: tipoUsuario
       }
     );
-    //La otra personaUsua recoge el _id de la tabla usuario para mandar
-    //la notificacion a la otra parte del acuerdo de que el acuerdo ha sido o aceptado o rechazado
-    let laOtraPersonaUsu = await axios.get(
-      "http://" + ipMaquina + ":3001/api/usuario",
-      {
-        params: {
-          filtros: {
-            idPerfil: notificacion.idRemitente._id
-          }
-        }
-      }
-    );
-    laOtraPersonaUsu = laOtraPersonaUsu.data[0];
     //Aqui se manda la notificacion con el usuario recogido anteriormente,
     //el acuerdo ha sido gestionado con un valor de aceptado o rechazado en el valorGestion
-    await axios.post("http://" + ipMaquina + ":3001/api/notificacion", {
+    await axios.post("http://" + ipMaquina + ":3001/api/procedures/newNotification", {
       idUsuario: notificacion.idRemitente._id,
       idRemitente: notificacion.idUsuario,
       tipoNotificacion: "AcuerdoGestionado",
       valorGestion: ifAccept,
       visto: false,
+      show: true,
       dateEnvioNotificacion:
-        today + " " + objToday.getHours() + ":" + objToday.getMinutes()
+        today + " " + objToday.getHours() + ":" + objToday.getMinutes(),
+      email,
+      contrasena
     });
 
     socket.emit('notify', {
       idUsuario: notificacion.idRemitente._id
     });
-    await axios.delete(
-      "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id
+    await axios.patch(
+      "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id, {
+        show: false,
+        email,
+        contrasena
+      }
     );
     delete auxJsonNotif[indice];
     this.setState(
@@ -186,11 +189,15 @@ class NotificacionesForm extends React.Component {
   }
 
   async handleDeleteNotificacion(notificacion, indice) {
-    const { countNotifies, setCountNotify } = this.props;
+    const { countNotifies, setCountNotify, email, contrasena } = this.props;
     let auxJsonNotif = this.state.jsonNotificaciones;
 
-    await axios.delete(
-      "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id
+    await axios.patch(
+      "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id, {
+        show: false,
+        email,
+        contrasena
+      }
     );
     delete auxJsonNotif[indice];
     
@@ -424,7 +431,9 @@ const mapStateToProps = state => {
   return {
     idUsuario: state.user._idUsuario,
     tipoUsuario: state.user.tipoUsuario,
-    countNotifies: state.notification.countNotifies
+    countNotifies: state.notification.countNotifies,
+    email: state.user.email,
+    contrasena: state.user.contrasena
   };
 };
 

@@ -38,7 +38,9 @@ const mapStateToProps = state => {
   return {
     tipoUsuario: state.user.tipoUsuario,
     idCliente: state.user._id,
-    idUsuario: state.user._idUsuario
+    idUsuario: state.user._idUsuario,
+    email: state.user.email,
+    contrasena: state.user.contrasena
   };
 };
 
@@ -349,17 +351,14 @@ class Tabla extends React.Component {
     const objFiltros = {
       idPerfil: idPerfil
     };
-    Axios.get("http://" + ipMaquina + ":3001/api/usuario", {
-      params: {
-        filtros: JSON.stringify(objFiltros)
-      }
-    })
-      .then(resultado => {
-        resultado = resultado.data[0];
+    Axios
+      .get(`http://${ipMaquina}:3001/api/procedures/getEmailWithIdPerfil/${idPerfil}`)
+      .then(email => {
+        const response = email.data;
         this.setState({
           showModal: true,
           selectedCuidador: Object.assign({}, cuidador, {
-            email: resultado.email
+            email: response !== 'Vacio' ? response : 'ERROR'
           })
         });
       })
@@ -369,6 +368,9 @@ class Tabla extends React.Component {
   }
 
   async handlePedirCuidado() {
+    const { email, contrasena, tipoUsuario, idCliente } = this.props;
+    const { selectedCuidador } = this.state;
+
     if (!this.props.tipoUsuario) {
       cogoToast.error(<h5>{trans("tablaCuidadores.errorNoLogueado")}</h5>);
       this.handleShowModalChange(false);
@@ -382,16 +384,14 @@ class Tabla extends React.Component {
       return;
     }
 
-    let comprobAcuerdoUnico = await Axios.get(
-      "http://" + ipMaquina + ":3001/api/acuerdo",
+    let comprobAcuerdoUnico = await Axios.post(
+      "http://" + ipMaquina + ":3001/api/procedures/checkIfAcuerdoExists",
       {
-        params: {
-          filtros: {
-            idCliente: this.props.idCliente,
-            idCuidador: this.state.selectedCuidador._id,
-            $or: [{ estadoAcuerdo: 1 }, { estadoAcuerdo: 0 }]
-          }
-        }
+        idCliente,
+        idCuidador: selectedCuidador._id,
+        whoAmI: tipoUsuario,
+        email,
+        contrasena
       }
     );
     if (comprobAcuerdoUnico.data != "Vacio") {
@@ -451,6 +451,8 @@ class Tabla extends React.Component {
   }
 
   async handleEnviarPropuesta() {
+    const { email, tipoUsuario, contrasena } = this.props;
+
     this.setState({
       propuestaIsLoading: true
     });
@@ -471,30 +473,25 @@ class Tabla extends React.Component {
       pueblo: this.state.ubicaciones[0],
       descripcionAcuerdo: this.state.txtDescripcion,
       origenAcuerdo: this.props.tipoUsuario,
-      estadoAcuerdo: 0,
-      dateAcuerdo: today
+      whoAmI: tipoUsuario,
+      email,
+      contrasena
     };
 
-    Axios.post("http://" + ipMaquina + ":3001/api/acuerdo", formData)
+    Axios.post("http://" + ipMaquina + ":3001/api/procedures/newAcuerdo", formData)
       .then(resultado => {
-        Axios.get("http://" + ipMaquina + ":3001/api/usuario", {
-          params: {
-            filtros: {
-              idPerfil: this.state.selectedCuidador._id
-            }
-          }
-        }).then(usuario => {
+        Axios.get("http://" + ipMaquina + ":3001/api/procedures/getIdUsuarioConIdPerfil/" + this.state.selectedCuidador._id)
+        .then(usuario => {
           let notificacionData = {
-            idUsuario: usuario.data[0]._id,
+            idUsuario: usuario.data,
             idRemitente: this.props.idUsuario,
             tipoNotificacion: "Acuerdo",
             acuerdo: resultado.data,
-            visto: false,
-            dateEnvioNotificacion:
-              today + " " + objToday.getHours() + ":" + objToday.getMinutes()
+            email,
+            contrasena
           };
           Axios.post(
-            "http://" + ipMaquina + ":3001/api/notificacion",
+            "http://" + ipMaquina + ":3001/api/procedures/newNotification",
             notificacionData
           ).then(notif => {
             this.setState({
@@ -513,7 +510,7 @@ class Tabla extends React.Component {
             });
 
             gSocket.emit("notify", {
-              idUsuario: usuario.data[0]._id
+              idUsuario: usuario.data
             });
 
             cogoToast.success(

@@ -24,7 +24,9 @@ import { changeFormContent } from "../redux/actions/app";
 
 const mapStateToProps = state => {
   return {
-    _id: state.user._id
+    _id: state.user._id,
+    email: state.user.email,
+    contrasena: state.user.contrasena
   }
 }
 
@@ -296,7 +298,7 @@ class FormAnuncio extends React.Component {
 
   async handleSubirAnuncio(){
     const { imgAnuncio, txtTitulo, precioCuidado, txtDescripcion, diasDisponible, publicoCuidado, ubicaciones } = this.state;
-    const { _id, changeFormContent } = this.props;
+    const { _id, changeFormContent, email, contrasena } = this.props;
     for(let clave in this.requiredStates) {
       //Hago primero la comprobacion de null ya que .length no existe en un null y peta.
       if(this.state[this.requiredStates[clave]] === null){
@@ -363,7 +365,9 @@ class FormAnuncio extends React.Component {
         horario: diasDisponible,
         pueblo: ubicaciones[0],
         publico: publicoCuidado,
-        precio: precioCuidado
+        precio: precioCuidado,
+        email,
+        contrasena
       }
 
       

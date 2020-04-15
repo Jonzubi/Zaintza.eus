@@ -21,7 +21,9 @@ const mapStateToProps = state => {
   return {
     idPerfil: state.user._id,
     idUsuario: state.user._idUsuario,
-    tipoUsuario: state.user.tipoUsuario
+    tipoUsuario: state.user.tipoUsuario,
+    email: state.user.email,
+    contrasena: state.user.contrasena
   };
 };
 
@@ -29,16 +31,16 @@ class AcuerdosForm extends React.Component {
   componentDidMount() {
     //buscarUsuOrCuid =>> En esta variable guardo si el usuario iniciado es cliente o cuidador para asi si es cuidador
     //buscar cliente en el acuerdo y viceversa, ESTO ME DARA LA INFORMACION DE LA OTRA PARTE DEL ACUERDO
-    const { idPerfil, tipoUsuario } = this.props;
+    const { idPerfil, tipoUsuario, email, contrasena } = this.props;
 
     axios
-      .get(
+      .post(
         "http://" + ipMaquina + ":3001/api/procedures/getAcuerdosConUsuarios",
         {
-          params: {
-            tipoUsuario: tipoUsuario,
-            idPerfil: idPerfil
-          }
+          tipoUsuario: tipoUsuario,
+          idPerfil: idPerfil,
+          email,
+          contrasena
         }
       )
       .then(resultado => {
@@ -99,47 +101,41 @@ class AcuerdosForm extends React.Component {
     if (acuerdo.estadoAcuerdo == 2) {
       return;
     }
-
+    const { email, contrasena, tipoUsuario } = this.props;
     let today = getTodayDate();
     const objToday = new Date();
 
     await axios.patch(
-      "http://" + ipMaquina + ":3001/api/acuerdo/" + acuerdo._id,
+      "http://" + ipMaquina + ":3001/api/procedures/terminarAcuerdo/" + acuerdo._id,
       {
-        estadoAcuerdo: 2,
-        dateFinAcuerdo: today
+        whoAmI: tipoUsuario,
+        email,
+        contrasena
       }
     );
     //Ahora se quiere notificar a la otra parte del acuerdo de la finalizacion del acuerdo
     let buscarUsuOrCuid =
       this.props.tipoUsuario == "Cliente" ? "idCuidador" : "idCliente";
-    const idElOtro = acuerdo[buscarUsuOrCuid];
-    let elOtroUsu = await axios.get(
-      "http://" + ipMaquina + ":3001/api/usuario",
-      {
-        params: {
-          filtros: {
-            idPerfil: idElOtro
-          }
-        }
-      }
-    );
+    const idElOtro = acuerdo[buscarUsuOrCuid]._id;
+    let elOtroUsu = await axios.get(`http://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${idElOtro}`);
     const notificacionData = {
-      idUsuario: elOtroUsu.data[0]._id,
+      idUsuario: elOtroUsu.data,
       idRemitente: this.props.idUsuario,
       tipoNotificacion: "AcuerdoGestionado",
       valorGestion: false,
       visto: false,
       dateEnvioNotificacion:
-        today + " " + objToday.getHours() + ":" + objToday.getMinutes()
+        today + " " + objToday.getHours() + ":" + objToday.getMinutes(),
+      email,
+      contrasena
     };
     await axios.post(
-      "http://" + ipMaquina + ":3001/api/notificacion",
+      "http://" + ipMaquina + ":3001/api/procedures/newNotification",
       notificacionData
     );
 
     socket.emit('notify', {
-      idUsuario: elOtroUsu.data[0]._id
+      idUsuario: elOtroUsu.data
     });
 
     let auxJsonAcuerdos = this.state.jsonAcuerdos;

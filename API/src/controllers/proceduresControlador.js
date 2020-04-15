@@ -9,11 +9,27 @@ const headerResponse = require("../../util/headerResponse");
 const ipMaquina = require("../../util/ipMaquina");
 const handlebars = require("handlebars");
 
-exports.getAcuerdosConUsuarios = (req, res, modelos) => {
-  const { tipoUsuario, idPerfil, estadoAcuerdo } = req.query;
+exports.getAcuerdosConUsuarios = async (req, res, modelos) => {
+  const { email, contrasena, tipoUsuario, idPerfil, estadoAcuerdo } = req.body;
   if (typeof tipoUsuario == "undefined" || typeof idPerfil == "undefined") {
     res.writeHead(500, headerResponse);
     res.write("Parametros incorrectos");
+    res.end();
+    return;
+  }
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findOne({ idPerfil });
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
     res.end();
     return;
   }
@@ -35,7 +51,7 @@ exports.getAcuerdosConUsuarios = (req, res, modelos) => {
   }
 
   let filtrosConsulta = { [columna]: idPerfil };
-  //El parametro estadoAcuerdo es opcional para el procedure, si se le pasa lo va a aplicar
+  //El parametro estadoAcuerdo es opcional para el procedure, si se le pasa lo va a aplicar en los FILTROS
   if (typeof estadoAcuerdo != "undefined") {
     filtrosConsulta.estadoAcuerdo = estadoAcuerdo;
   }
@@ -56,8 +72,8 @@ exports.getAcuerdosConUsuarios = (req, res, modelos) => {
     });
 };
 
-exports.getNotificacionesConUsuarios = (req, res, modelos) => {
-  const idUsuario = req.query.idUsuario;
+exports.getNotificacionesConUsuarios = async (req, res, modelos) => {
+  const { email, contrasena, idUsuario } = req.body;
   if (typeof idUsuario == "undefined") {
     res.writeHead(500, headerResponse);
     res.write("Parametros incorrectos");
@@ -65,12 +81,30 @@ exports.getNotificacionesConUsuarios = (req, res, modelos) => {
     return;
   }
 
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findById(idUsuario);
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
   const modeloNotificacion = modelos.notificacion;
 
   modeloNotificacion
-    .find({ idUsuario: idUsuario })
+    .find({ idUsuario: idUsuario, show: true })
     .populate({
       path: "idRemitente",
+      select: "-contrasena -email -validado -validationToken",
       populate: { path: "idPerfil" }
     })
     .then(respuesta => {
@@ -208,6 +242,17 @@ exports.postNewCuidador = async (req, res, modelos) => {
     res.end();
     return;
   }
+
+  // Comprobamos que el email no existe
+  const modeloUsuario = modelos.usuario;
+  const emailEncontrado = await modeloUsuario.findOne({ email });
+
+  if (emailEncontrado !== null) {
+    res.writeHead(405, headerResponse);
+    res.write("Email existente");
+    res.end();
+    return;
+  }
   //Aqui los datos son validos y hay que insertarlos
   //Empezaremos con las fotos, comporbando que el campo opcional avatar se haya enviado o no
   //Pongo el codAvatar aqui ya que hay que insertarlo en la base de datos por si se ha definido
@@ -222,7 +267,7 @@ exports.postNewCuidador = async (req, res, modelos) => {
   writeImage(codContactImg, imgContactB64);
 
   const modeloCuidadores = modelos.cuidador;
-  const modeloUsuario = modelos.usuario;
+  
 
   const sesion = await modeloCuidadores.startSession();
   sesion.startTransaction();
@@ -303,6 +348,17 @@ exports.postNewCliente = async (req, res, modelos) => {
     return;
   }
 
+  // Comprobamos que el email no existe
+  const modeloUsuario = modelos.usuario;
+  const emailEncontrado = await modeloUsuario.findOne({ email });
+
+  if (emailEncontrado !== null) {
+    res.writeHead(405, headerResponse);
+    res.write("Email existente");
+    res.end();
+    return;
+  }
+
   let codAvatar;
   if (avatarPreview.length > 0) {
     codAvatar = getRandomString(20);
@@ -356,6 +412,9 @@ exports.postNewCliente = async (req, res, modelos) => {
 exports.patchCuidador = async (req, res, modelos) => {
   const {
     nombre,
+    email,
+    contrasena,
+    idUsuario,
     apellido1,
     apellido2,
     fechaNacimiento,
@@ -390,6 +449,22 @@ exports.patchCuidador = async (req, res, modelos) => {
   ) {
     res.writeHead(500, headerResponse);
     res.write("Parametros incorrectos");
+    res.end();
+    return;
+  }
+
+  const modeloUsuarios = modelos.usuario;
+  const usuario = await modeloUsuarios.findById(idUsuario);
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if(usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
     res.end();
     return;
   }
@@ -432,12 +507,28 @@ exports.patchCuidador = async (req, res, modelos) => {
 };
 
 exports.patchCliente = async (req, res, modelos) => {
-  const { nombre, avatarPreview, telefono } = req.body;
+  const { nombre, avatarPreview, telefono, email, contrasena, idUsuario } = req.body;
   const { id } = req.params;
 
   if (typeof nombre == "undefined" || typeof telefono == "undefined") {
     res.writeHead(500, headerResponse);
     res.write("Parametros incorrectos");
+    res.end();
+    return;
+  }
+
+  const modeloUsuarios = modelos.usuario;
+  const usuario = await modeloUsuarios.findById(idUsuario);
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if(usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
     res.end();
     return;
   }
@@ -478,7 +569,9 @@ exports.postAnuncio = async (req, res, modelos) => {
     publico,
     imgAnuncio,
     idCliente,
-    horario
+    horario,
+    email,
+    contrasena
   } = req.body;
 
   if (
@@ -491,6 +584,23 @@ exports.postAnuncio = async (req, res, modelos) => {
   ) {
     res.writeHead(500, headerResponse);
     res.write("Parametros incorrectos");
+    res.end();
+    return;
+  }
+
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findOne({ idPerfil: idCliente });
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
     res.end();
     return;
   }
@@ -533,7 +643,9 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
     tituloAcuerdo,
     pueblo,
     descripcionAcuerdo,
-    origenAcuerdo
+    origenAcuerdo,
+    email,
+    contrasena
   } = req.body;
   // TODO estadoAcuerdo y dateAcuerdo se calcularan en el servidor
 
@@ -552,12 +664,43 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
     res.end();
     return;
   }
+  // Comprobamos que el que manda la peticion es un usuario autentico
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findById(idUsuario);
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if(usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  // Comprobamos que no existe un acuerdo ya
+  const modeloAcuerdos = modelos.acuerdo;
+  const acuerdo = await modeloAcuerdos.findOne({
+    idCuidador,
+    idCliente,
+    $or: [{ estadoAcuerdo: 1 }, { estadoAcuerdo: 0 }]
+  });
+
+  if(acuerdo !== null){
+    res.writeHead(405, headerResponse);
+    res.write("Ya existe un acuerdo");
+    res.end();
+    return;
+  }
+  
   //Estado acuerdo indica de que el acuerdo creado estará en pendiente
   const estadoAcuerdo = 0;
   const dateAcuerdo = getTodayDate();
   const objDate = new Date();
 
-  const modeloAcuerdos = modelos.acuerdo;
   const sesion = await modeloAcuerdos.startSession();
   const modeloUsuarios = modelos.usuario;
   const modeloNotificaciones = modelos.notificacion;
@@ -622,6 +765,16 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
 
 exports.patchPredLang = async (req, res, modelos) => {
   const { id } = req.params;
+  const { email, contrasena } = req.body;
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findById(id);
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+  }
+
   const modeloAjustes = modelos.ajuste;
 
   const ajusteExistente = await modeloAjustes.find({ idUsuario: id });
@@ -674,4 +827,378 @@ exports.confirmarEmail = async (req, res, modelos) => {
     res.write("No email");
     res.end();
   }
+}
+
+exports.getEmailWithIdPerfil = async (req, res, modelos) => {
+  const { idPerfil } = req.params;
+  const modeloUsuario = modelos.usuario;
+
+  const usuarioFound = await modeloUsuario.findOne({ idPerfil }, "email");
+  res.writeHead(200, {"Content-Type": "text/plain"});
+  const response = usuarioFound !== null ? usuarioFound.email : "Vacio";
+  res.write(response);
+  res.end();
+}
+
+exports.getNotificationsWithIdUsuario = async (req, res, modelos) => {
+  const { idUsuario } = req.params;
+  const { email, contrasena } = req.body;
+  const modeloUsuario = modelos.usuario;
+  const modeloNotificacion = modelos.notificacion;
+  const validUser = await modeloUsuario.findById(idUsuario);
+  if (validUser.email === email && validUser.contrasena === contrasena) {
+    const notificaciones = await modeloNotificacion.find({ idUsuario, visto: false});
+    res.writeHead(200, headerResponse);
+    res.write(JSON.stringify(notificaciones));
+    res.end();
+  } else {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+  }
+}
+
+exports.getIdUsuarioConIdPerfil = async (req, res, modelos) => {
+  const { idPerfil } = req.params;
+
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findOne({ idPerfil });
+  if (usuario === null) {
+    res.writeHead(404, headerResponse);
+    res.write("Usuario no encontrado");
+    res.end();
+    return;
+  }
+  let id = usuario._id.toString();
+  res.writeHead(200, {"Content-Type": "text/plain"});
+  res.write(id);
+  res.end();
+}
+
+exports.patchPassword = async (req, res, modelos) => {
+  const { idUsuario } = req.params;
+  const { contrasena, newPassword, email } = req.body;
+  const modeloUsuarios = modelos.usuario;
+  const modeloEncontrado = await modeloUsuarios.findById(idUsuario);
+
+  if (modeloEncontrado.email === email && modeloEncontrado.contrasena === contrasena){
+    modeloUsuarios
+      .findByIdAndUpdate(idUsuario, { contrasena: newPassword })
+      .then(doc => {
+        res.writeHead(200, headerResponse);
+        res.write(JSON.stringify(doc));
+      })
+      .catch(err => {
+        console.log(err);
+        res.writeHead(500, headerResponse);
+        res.write(JSON.stringify(err));
+      })
+      .finally(() => {
+        res.end();
+      });
+  } else {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+  }
+}
+
+exports.checkIfEmailExists = async (req, res, modelos) => {
+  const { email } = req.params;
+  const modeloUsuarios = modelos.usuario;
+
+  const emailEncontrado = await modeloUsuarios.findOne({ email });
+
+  const response = emailEncontrado !== null ? "True" : "Vacio";
+  res.writeHead(200, headerResponse);
+  res.write(response)
+  res.end();
+}
+
+exports.newNotification = async (req, res, modelos) => {
+  const {
+    idUsuario,
+    idRemitente,
+    tipoNotificacion,
+    valorGestion,
+    email,
+    contrasena,
+    acuerdo
+  } = req.body;
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findById(idRemitente);
+  
+  if(usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+  const objetivo = await modeloUsuario.findById(idUsuario);
+
+  if(objetivo === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  const modeloNotificacion = modelos.notificacion;
+  const objToday = new Date();
+  const notificacion = new modeloNotificacion({
+    idUsuario,
+    idRemitente,
+    tipoNotificacion,
+    acuerdo,
+    valorGestion,
+    visto: false,
+    show: true,
+    dateEnvioNotificacion: `${getTodayDate()} ${objToday.getHours()}:${objToday.getMinutes()}`
+  });
+  notificacion
+    .save()
+    .then(doc => {
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(doc));
+    })
+    .catch(err => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+    })
+    .finally(() => {
+      res.end()
+    });
+}
+
+exports.getAcuerdoStatus = async (req, res, modelos) => {
+  const { idAcuerdo } = req.params;
+  const { whoAmI, email, contrasena } = req.body;
+
+  const modeloAcuerdo = modelos.acuerdo;
+  const acuerdo = await modeloAcuerdo.findById(idAcuerdo);
+  const columna = whoAmI === "Cliente" ? "idCliente" : "idCuidador";
+  const idUsuario = acuerdo[columna];
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findOne({ idPerfil: idUsuario });
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  res.writeHead(200, headerResponse);
+  res.write(JSON.stringify(acuerdo.estadoAcuerdo));
+  res.end();
+}
+
+exports.terminarAcuerdo = async (req, res, modelos) => {
+  const { idAcuerdo } = req.params;
+  const { whoAmI, email, contrasena } = req.body;
+
+  const modeloAcuerdo = modelos.acuerdo;
+  const acuerdo = await modeloAcuerdo.findById(idAcuerdo);
+  const columna = whoAmI === "Cliente" ? "idCliente" : "idCuidador";
+  const idPerfil = acuerdo[columna];
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findOne({ idPerfil });
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  modeloAcuerdo
+    .findByIdAndUpdate(idAcuerdo, {
+      estadoAcuerdo: 2,
+      dateFinAcuerdo: getTodayDate() 
+    })
+    .then(doc => {
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(doc));
+    })
+    .catch(err => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+    })
+    .finally(() => {
+      res.end()
+    });  
+}
+
+exports.gestionarAcuerdo = async (req, res, modelos) => {
+  const { idAcuerdo } = req.params;
+  const { estadoAcuerdo, email, contrasena, whoAmI } = req.body;
+
+  const modeloAcuerdo = modelos.acuerdo;
+  const acuerdo = await modeloAcuerdo.findById(idAcuerdo);
+  const columna = whoAmI === "Cliente" ? "idCliente" : "idCuidador";
+  const idPerfil = acuerdo[columna];
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findOne({ idPerfil });
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  modeloAcuerdo
+    .findByIdAndUpdate(idAcuerdo, {
+      estadoAcuerdo
+    })
+    .then(doc => {
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(doc));
+    })
+    .catch(err => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+    })
+    .finally(() => {
+      res.end()
+    });    
+}
+
+exports.checkIfAcuerdoExists = async (req, res, modelos) => {
+  const { idCliente, idCuidador, email, contrasena, whoAmI } = req.body;
+
+  const modeloUsuario = modelos.usuario;
+  const idPerfil = whoAmI === "Cliente" ? idCliente : idCuidador;
+  const usuario = await modeloUsuario.findOne({ idPerfil });
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  const modeloAcuerdos = modelos.acuerdo;
+  const acuerdo = await modeloAcuerdos.findOne({
+    idCliente,
+    idCuidador,
+    $or: [{ estadoAcuerdo: 1 }, { estadoAcuerdo: 0 }]
+  });
+  
+  const response = acuerdo !== null ? "Exists" : "Vacio";
+
+  res.writeHead(200, {"Content-Type": "text/plain"});
+  res.write(response);
+  res.end();
+}
+
+exports.newAcuerdo = async (req, res, modelos) => {
+  const {
+    whoAmI, idCuidador, idCliente, email, contrasena,
+    diasAcordados, tituloAcuerdo, pueblo, descripcionAcuerdo,
+    origenAcuerdo
+  } = req.body;
+
+  const modeloUsuario = modelos.usuario;
+  const idPerfil = whoAmI === "Cliente" ? idCliente : idCuidador;
+  const usuario = await modeloUsuario.findOne({ idPerfil });
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  //Ahora se comprobara si el otro usuario existe por integridad de datos
+  const elOtroModeloNombre = whoAmI === "Cliente" ? "cuidador" : "cliente";
+  const elOtroId = whoAmI === "Cliente" ? idCuidador : idCliente;
+  const elOtroModelo = modelos[elOtroModeloNombre];
+  const elOtro = await elOtroModelo.findById(elOtroId);
+
+  if (elOtro === null) {
+    res.writeHead(405, headerResponse);
+    res.write("No existe el otro usuario");
+    res.end();
+    return;
+  }
+
+  // Ahora se comprueba si ya existe un acuerdo
+  const modeloAcuerdos = modelos.acuerdo;
+  const acuerdo = await modeloAcuerdos.findOne({
+    idCliente,
+    idCuidador,
+    $or: [{ estadoAcuerdo: 1 }, { estadoAcuerdo: 0 }]
+  });
+
+  if (acuerdo !== null) {
+    res.writeHead(405, headerResponse);
+    res.write("El acuerdo ya existe");
+    res.end();
+    return;
+  }
+
+  // Insertamos el acuerdo porque es v?lido
+  const modeloConfigurado = new modeloAcuerdos({
+    idCuidador,
+    idCliente,
+    diasAcordados,
+    tituloAcuerdo,
+    pueblo,
+    descripcionAcuerdo,
+    origenAcuerdo,
+    estadoAcuerdo: 0,
+    dateAcuerdo: getTodayDate()
+  });
+  modeloConfigurado
+    .save()
+    .then(doc => {
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(doc));
+    })
+    .catch(err => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+    })
+    .finally(() => {
+      res.end()
+    });
 }

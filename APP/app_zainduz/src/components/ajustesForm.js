@@ -27,12 +27,14 @@ class AjustesForm extends React.Component {
 
   handleSaveLanguage = () => {
     const { langChosen } = this.state;
-    const { idUsuario } = this.props;
+    const { idUsuario, email, contrasena } = this.props;
 
     Axios.post(
       "http://" + ipMaquina + ":3001/api/procedures/patchPredLang/" + idUsuario,
       {
-        idLangPred: langChosen
+        idLangPred: langChosen,
+        email,
+        contrasena
       }
     )
       .then(() => {
@@ -70,7 +72,7 @@ class AjustesForm extends React.Component {
       txtRepeatNewPassword,
       txtActualPassword
     } = this.state;
-    const { contrasena, idUsuario, saveUserSession } = this.props;
+    const { contrasena, idUsuario, saveUserSession, email } = this.props;
 
     if (contrasena !== txtActualPassword) {
       cogoToast.error(<h5>La contraseña actual no coincide</h5>);
@@ -82,16 +84,17 @@ class AjustesForm extends React.Component {
       return;
     }
 
-    const formData = {
-      contrasena: txtNewPassword
-    };
-
     Axios.patch(
-      "http://" + ipMaquina + ":3001/api/usuario/" + idUsuario,
-      formData
+      "http://" + ipMaquina + ":3001/api/procedures/patchPassword/" + idUsuario, {
+        email,
+        contrasena: txtActualPassword,
+        newPassword: txtNewPassword
+      }
     )
       .then(() => {
-        saveUserSession(formData);
+        saveUserSession({
+          contrasena: txtNewPassword
+        });
         cogoToast.success(<h5>{trans("perfilCliente.datosActualizados")}</h5>);
         this.setState({
           txtActualPassword: "",
@@ -271,7 +274,9 @@ class AjustesForm extends React.Component {
 const mapStateToProps = state => ({
   contrasena: state.user.contrasena,
   idUsuario: state.user._idUsuario,
-  idLangPred: state.user.idLangPred
+  idLangPred: state.user.idLangPred,
+  email: state.user.email,
+  contrasena: state.user.contrasena
 });
 
 const mapDispatchToProps = dispatch => ({

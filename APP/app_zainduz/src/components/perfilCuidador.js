@@ -55,7 +55,9 @@ const mapStateToProps = state => {
     diasDisponible: typeof state.user.diasDisponible.slice != "undefined" ? state.user.diasDisponible.slice(0) : [],
     ubicaciones: typeof state.user.ubicaciones.slice != "undefined" ? state.user.ubicaciones.slice(0) : [],
     publicoDisponible: Object.assign({}, state.user.publicoDisponible),
-    precioPorPublico: Object.assign({}, state.user.precioPorPublico)
+    precioPorPublico: Object.assign({}, state.user.precioPorPublico),
+    email: state.user.email,
+    contrasena: state.user.contrasena
   };
 };
 
@@ -409,6 +411,7 @@ class PerfilCuidador extends React.Component {
     {
       /* TODO Guardar los cambios en la base de datos y atualizar el estado de Redux */
     }
+    const { email, contrasena, _idUsuario } = this.props;
     for (var clave in this.state) {
       if (
         (this.state[clave].length == 0 || !this.state[clave]) &&
@@ -487,7 +490,10 @@ class PerfilCuidador extends React.Component {
       },
       isPublic: this.state.isPublic,
       precioPorPublico: this.state.precioPorPublico,
-      diasDisponible: this.state.diasDisponible
+      diasDisponible: this.state.diasDisponible,
+      email,
+      contrasena,
+      idUsuario: _idUsuario
     };
 
     Axios.patch(
