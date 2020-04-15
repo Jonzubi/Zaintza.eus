@@ -19,6 +19,7 @@ exports.getAcuerdosConUsuarios = async (req, res, modelos) => {
   }
   const modeloUsuario = modelos.usuario;
   const usuario = await modeloUsuario.findOne({ idPerfil });
+
   if (usuario === null) {
     res.writeHead(405, headerResponse);
     res.write("Operacion denegada");
@@ -26,7 +27,7 @@ exports.getAcuerdosConUsuarios = async (req, res, modelos) => {
     return;
   }
 
-  if (usuario.email !== email || usuario.contrasena === contrasena) {
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
     res.writeHead(405, headerResponse);
     res.write("Operacion denegada");
     res.end();
@@ -588,7 +589,7 @@ exports.postAnuncio = async (req, res, modelos) => {
   }
 
   const modeloUsuario = modelos.usuario;
-  const usuario = modeloUsuario.findOne({ idPerfil: idCliente });
+  const usuario = await modeloUsuario.findOne({ idPerfil: idCliente });
 
   if (usuario === null) {
     res.writeHead(405, headerResponse);
@@ -996,7 +997,7 @@ exports.terminarAcuerdo = async (req, res, modelos) => {
     return;
   }
 
-  if (usuario.email !== email || usuario.contrasena === contrasena) {
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
     res.writeHead(405, headerResponse);
     res.write("Operacion denegada");
     res.end();
@@ -1040,7 +1041,7 @@ exports.gestionarAcuerdo = async (req, res, modelos) => {
     return;
   }
 
-  if (usuario.email !== email || usuario.contrasena === contrasena) {
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
     res.writeHead(405, headerResponse);
     res.write("Operacion denegada");
     res.end();
@@ -1079,7 +1080,7 @@ exports.checkIfAcuerdoExists = async (req, res, modelos) => {
     return;
   }
 
-  if (usuario.email !== email || usuario.contrasena === contrasena) {
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
     res.writeHead(405, headerResponse);
     res.write("Operacion denegada");
     res.end();
@@ -1087,7 +1088,7 @@ exports.checkIfAcuerdoExists = async (req, res, modelos) => {
   }
 
   const modeloAcuerdos = modelos.acuerdo;
-  const acuerdo = modeloAcuerdos.findOne({
+  const acuerdo = await modeloAcuerdos.findOne({
     idCliente,
     idCuidador,
     $or: [{ estadoAcuerdo: 1 }, { estadoAcuerdo: 0 }]
@@ -1118,7 +1119,7 @@ exports.newAcuerdo = async (req, res, modelos) => {
     return;
   }
 
-  if (usuario.email !== email || usuario.contrasena === contrasena) {
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
     res.writeHead(405, headerResponse);
     res.write("Operacion denegada");
     res.end();
