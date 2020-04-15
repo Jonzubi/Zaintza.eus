@@ -53,10 +53,13 @@ class NotificacionesForm extends React.Component {
     );
   }
 
-  async handleToogleCollapseNotificacion(index) {
+  async handleToogleCollapseNotificacion(index, notificacion) {
     const { setCountNotify, countNotifies, email, contrasena } = this.props;
     let aux = this.state.notificacionesCollapseState;
-    aux[index] = !aux[index];
+    // Esta condicion es para que no se abra un collapse vacio en caso de ser una gestion de acuerdo
+    if (notificacion.tipoNotificacion !== "AcuerdoGestionado") {
+      aux[index] = !aux[index];
+    }    
 
     let auxJsonNotif = this.state.jsonNotificaciones;
     if (!auxJsonNotif[index].visto) {
@@ -296,7 +299,7 @@ class NotificacionesForm extends React.Component {
                             icon={faEye}
                             className=""
                             onClick={() =>
-                              this.handleToogleCollapseNotificacion(indice)
+                              this.handleToogleCollapseNotificacion(indice, notificacion)
                             }
                           />
                         </div>
