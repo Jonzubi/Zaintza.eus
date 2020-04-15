@@ -1110,7 +1110,7 @@ exports.newAcuerdo = async (req, res, modelos) => {
 
   const modeloUsuario = modelos.usuario;
   const idPerfil = whoAmI === "Cliente" ? idCliente : idCuidador;
-  const usuario = await modeloUsuario.find({ idPerfil });
+  const usuario = await modeloUsuario.findOne({ idPerfil });
 
   if (usuario === null) {
     res.writeHead(405, headerResponse);
@@ -1127,10 +1127,10 @@ exports.newAcuerdo = async (req, res, modelos) => {
   }
 
   //Ahora se comprobara si el otro usuario existe por integridad de datos
-  const elOtroModeloNombre = whoAmI === "Cliente" ? "cliente" : "cuidador";
+  const elOtroModeloNombre = whoAmI === "Cliente" ? "cuidador" : "cliente";
   const elOtroId = whoAmI === "Cliente" ? idCuidador : idCliente;
   const elOtroModelo = modelos[elOtroModeloNombre];
-  const elOtro = elOtroModelo.findById(elOtroId);
+  const elOtro = await elOtroModelo.findById(elOtroId);
 
   if (elOtro === null) {
     res.writeHead(405, headerResponse);
@@ -1141,7 +1141,7 @@ exports.newAcuerdo = async (req, res, modelos) => {
 
   // Ahora se comprueba si ya existe un acuerdo
   const modeloAcuerdos = modelos.acuerdo;
-  const acuerdo = modeloAcuerdos.findOne({
+  const acuerdo = await modeloAcuerdos.findOne({
     idCliente,
     idCuidador,
     $or: [{ estadoAcuerdo: 1 }, { estadoAcuerdo: 0 }]
