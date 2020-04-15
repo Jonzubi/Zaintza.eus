@@ -9,7 +9,7 @@ const headerResponse = require("../../util/headerResponse");
 const ipMaquina = require("../../util/ipMaquina");
 const handlebars = require("handlebars");
 
-exports.getAcuerdosConUsuarios = (req, res, modelos) => {
+exports.getAcuerdosConUsuarios = async (req, res, modelos) => {
   const { email, contrasena, tipoUsuario, idPerfil, estadoAcuerdo } = req.body;
   if (typeof tipoUsuario == "undefined" || typeof idPerfil == "undefined") {
     res.writeHead(500, headerResponse);
