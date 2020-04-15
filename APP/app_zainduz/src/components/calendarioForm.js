@@ -10,23 +10,25 @@ const mapStateToProps = state => {
   return {
     idPerfil: state.user._id,
     idUsuario: state.user._idUsuario,
-    tipoUsuario: state.user.tipoUsuario
+    tipoUsuario: state.user.tipoUsuario,
+    email: state.user.email,
+    contrasena: state.user.contrasena
   };
 };
 
 class CalendarioForm extends React.Component {
   componentDidMount() {
-    const { idPerfil, tipoUsuario } = this.props;
+    const { idPerfil, tipoUsuario, email, contrasena } = this.props;
 
     axios
-      .get(
+      .post(
         "http://" + ipMaquina + ":3001/api/procedures/getAcuerdosConUsuarios",
         {
-          params: {
-            idPerfil: idPerfil,
-            tipoUsuario: tipoUsuario,
-            estadoAcuerdo: 1
-          }
+          idPerfil: idPerfil,
+          tipoUsuario: tipoUsuario,
+          estadoAcuerdo: 1,
+          email,
+          contrasena
         }
       )
       .then(acuerdos => {
