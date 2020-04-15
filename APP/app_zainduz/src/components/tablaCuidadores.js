@@ -510,7 +510,7 @@ class Tabla extends React.Component {
             });
 
             gSocket.emit("notify", {
-              idUsuario: usuario.data[0]._id
+              idUsuario: usuario.data
             });
 
             cogoToast.success(
