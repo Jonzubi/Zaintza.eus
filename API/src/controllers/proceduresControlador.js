@@ -104,7 +104,7 @@ exports.getNotificacionesConUsuarios = async (req, res, modelos) => {
     .find({ idUsuario: idUsuario, show: true })
     .populate({
       path: "idRemitente",
-      select: "-contrasena -email -validado -tipoUsuario -validationToken",
+      select: "-contrasena -email -validado -validationToken",
       populate: { path: "idPerfil" }
     })
     .then(respuesta => {
