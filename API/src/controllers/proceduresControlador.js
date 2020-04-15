@@ -680,12 +680,27 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
     res.end();
     return;
   }
+
+  // Comprobamos que no existe un acuerdo ya
+  const modeloAcuerdos = modelos.acuerdo;
+  const acuerdo = await modeloAcuerdos.findOne({
+    idCuidador,
+    idCliente,
+    $or: [{ estadoAcuerdo: 1 }, { estadoAcuerdo: 0 }]
+  });
+
+  if(acuerdo !== null){
+    res.writeHead(405, headerResponse);
+    res.write("Ya existe un acuerdo");
+    res.end();
+    return;
+  }
+  
   //Estado acuerdo indica de que el acuerdo creado estará en pendiente
   const estadoAcuerdo = 0;
   const dateAcuerdo = getTodayDate();
   const objDate = new Date();
 
-  const modeloAcuerdos = modelos.acuerdo;
   const sesion = await modeloAcuerdos.startSession();
   const modeloUsuarios = modelos.usuario;
   const modeloNotificaciones = modelos.notificacion;
