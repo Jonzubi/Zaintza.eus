@@ -111,7 +111,7 @@ class NotificacionesForm extends React.Component {
     //Squi estoy pillando el estado actual del acuerdo para comprobar que el acuerdo no se ha cancelado ya por el usuario.
     //Por ejemplo sui ha hecho una propuesta erronea
     let estadoAcuerdo = await axios.post(
-      "http://" + ipMaquina + ":3001/api/procedure/getAcuerdoStatus/" + notificacion.acuerdo._id,
+      "http://" + ipMaquina + ":3001/api/procedures/getAcuerdoStatus/" + notificacion.acuerdo._id,
       {
         whoAmI: tipoUsuario,
         email,
