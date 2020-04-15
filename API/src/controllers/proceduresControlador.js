@@ -18,8 +18,7 @@ exports.getAcuerdosConUsuarios = (req, res, modelos) => {
     return;
   }
   const modeloUsuario = modelos.usuario;
-  const usuario = modeloUsuario.findOne({ idPerfil });
-
+  const usuario = await modeloUsuario.findOne({ idPerfil });
   if (usuario === null) {
     res.writeHead(405, headerResponse);
     res.write("Operacion denegada");
