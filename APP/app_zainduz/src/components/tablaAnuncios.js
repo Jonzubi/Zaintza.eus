@@ -155,6 +155,21 @@ class TablaAnuncios extends React.Component {
       return;
     }
 
+    let comprobAcuerdoUnico = await axios.post(
+      "http://" + ipMaquina + ":3001/api/procedures/checkIfAcuerdoExists",
+      {
+        idCliente: anuncio.idCliente,
+        idCuidador: idPerfil,
+        whoAmI: tipoUsuario,
+        email,
+        contrasena
+      }
+    );
+    if (comprobAcuerdoUnico.data != "Vacio") {
+      cogoToast.error(<h5>{trans("tablaCuidadores.acuerdoExistente")}</h5>);
+      return;
+    }
+
     let formData = {
       idCuidador: idPerfil,
       idCliente: anuncio.idCliente,
