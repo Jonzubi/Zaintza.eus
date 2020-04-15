@@ -208,6 +208,17 @@ exports.postNewCuidador = async (req, res, modelos) => {
     res.end();
     return;
   }
+
+  // Comprobamos que el email no existe
+  const modeloUsuario = modelos.usuario;
+  const emailEncontrado = await modeloUsuario.finOne({ email });
+
+  if (emailEncontrado !== null) {
+    res.writeHead(405, headerResponse);
+    res.write("Email existente");
+    res.end();
+    return;
+  }
   //Aqui los datos son validos y hay que insertarlos
   //Empezaremos con las fotos, comporbando que el campo opcional avatar se haya enviado o no
   //Pongo el codAvatar aqui ya que hay que insertarlo en la base de datos por si se ha definido
@@ -222,7 +233,7 @@ exports.postNewCuidador = async (req, res, modelos) => {
   writeImage(codContactImg, imgContactB64);
 
   const modeloCuidadores = modelos.cuidador;
-  const modeloUsuario = modelos.usuario;
+  
 
   const sesion = await modeloCuidadores.startSession();
   sesion.startTransaction();
