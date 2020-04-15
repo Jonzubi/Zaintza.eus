@@ -863,6 +863,12 @@ exports.getIdUsuarioConIdPerfil = async (req, res, modelos) => {
 
   const modeloUsuario = modelos.usuario;
   const usuario = await modeloUsuario.findOne({ idPerfil });
+  if (usuario === null) {
+    res.writeHead(404, headerResponse);
+    res.write("Usuario no encontrado");
+    res.end();
+    return;
+  }
   let id = usuario._id.toString();
   res.writeHead(200, {"Content-Type": "text/plain"});
   res.write(id);

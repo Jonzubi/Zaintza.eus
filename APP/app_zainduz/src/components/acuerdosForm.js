@@ -116,7 +116,7 @@ class AcuerdosForm extends React.Component {
     //Ahora se quiere notificar a la otra parte del acuerdo de la finalizacion del acuerdo
     let buscarUsuOrCuid =
       this.props.tipoUsuario == "Cliente" ? "idCuidador" : "idCliente";
-    const idElOtro = acuerdo[buscarUsuOrCuid];
+    const idElOtro = acuerdo[buscarUsuOrCuid]._id;
     let elOtroUsu = await axios.get(`http://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${idElOtro}`);
     const notificacionData = {
       idUsuario: elOtroUsu.data,
