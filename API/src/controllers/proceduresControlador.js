@@ -348,6 +348,17 @@ exports.postNewCliente = async (req, res, modelos) => {
     return;
   }
 
+  // Comprobamos que el email no existe
+  const modeloUsuario = modelos.usuario;
+  const emailEncontrado = await modeloUsuario.finOne({ email });
+
+  if (emailEncontrado !== null) {
+    res.writeHead(405, headerResponse);
+    res.write("Email existente");
+    res.end();
+    return;
+  }
+
   let codAvatar;
   if (avatarPreview.length > 0) {
     codAvatar = getRandomString(20);
