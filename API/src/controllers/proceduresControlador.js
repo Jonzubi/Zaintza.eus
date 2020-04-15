@@ -1071,7 +1071,7 @@ exports.checkIfAcuerdoExists = async (req, res, modelos) => {
 
   const modeloUsuario = modelos.usuario;
   const idPerfil = whoAmI === "Cliente" ? idCliente : idCuidador;
-  const usuario = await modeloUsuario.find({ idPerfil });
+  const usuario = await modeloUsuario.findOne({ idPerfil });
 
   if (usuario === null) {
     res.writeHead(405, headerResponse);
