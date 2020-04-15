@@ -444,6 +444,13 @@ exports.patchCuidador = async (req, res, modelos) => {
 
   const modeloUsuarios = modelos.usuario;
   const usuario = await modeloUsuarios.findById(idUsuario);
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
   if(usuario.email !== email || usuario.contrasena !== contrasena) {
     res.writeHead(405, headerResponse);
     res.write("Operacion denegada");
@@ -489,12 +496,28 @@ exports.patchCuidador = async (req, res, modelos) => {
 };
 
 exports.patchCliente = async (req, res, modelos) => {
-  const { nombre, avatarPreview, telefono } = req.body;
+  const { nombre, avatarPreview, telefono, email, contrasena, idUsuario } = req.body;
   const { id } = req.params;
 
   if (typeof nombre == "undefined" || typeof telefono == "undefined") {
     res.writeHead(500, headerResponse);
     res.write("Parametros incorrectos");
+    res.end();
+    return;
+  }
+
+  const modeloUsuarios = modelos.usuario;
+  const usuario = await modeloUsuarios.findById(idUsuario);
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if(usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
     res.end();
     return;
   }
