@@ -245,7 +245,7 @@ exports.postNewCuidador = async (req, res, modelos) => {
 
   // Comprobamos que el email no existe
   const modeloUsuario = modelos.usuario;
-  const emailEncontrado = await modeloUsuario.finOne({ email });
+  const emailEncontrado = await modeloUsuario.findOne({ email });
 
   if (emailEncontrado !== null) {
     res.writeHead(405, headerResponse);
@@ -350,7 +350,7 @@ exports.postNewCliente = async (req, res, modelos) => {
 
   // Comprobamos que el email no existe
   const modeloUsuario = modelos.usuario;
-  const emailEncontrado = await modeloUsuario.finOne({ email });
+  const emailEncontrado = await modeloUsuario.findOne({ email });
 
   if (emailEncontrado !== null) {
     res.writeHead(405, headerResponse);
