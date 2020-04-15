@@ -72,11 +72,28 @@ exports.getAcuerdosConUsuarios = (req, res, modelos) => {
     });
 };
 
-exports.getNotificacionesConUsuarios = (req, res, modelos) => {
-  const idUsuario = req.query.idUsuario;
+exports.getNotificacionesConUsuarios = async (req, res, modelos) => {
+  const { email, contrasena, idUsuario } = req.body;
   if (typeof idUsuario == "undefined") {
     res.writeHead(500, headerResponse);
     res.write("Parametros incorrectos");
+    res.end();
+    return;
+  }
+
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findById(idUsuario);
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
     res.end();
     return;
   }
@@ -87,6 +104,7 @@ exports.getNotificacionesConUsuarios = (req, res, modelos) => {
     .find({ idUsuario: idUsuario, show: true })
     .populate({
       path: "idRemitente",
+      select: 'idPerfil',
       populate: { path: "idPerfil" }
     })
     .then(respuesta => {

@@ -17,17 +17,17 @@ import SocketContext from "../socketio/socket-context";
 
 class NotificacionesForm extends React.Component {
   componentDidMount() {
-    const { idUsuario } = this.props;
+    const { idUsuario, email, contrasena } = this.props;
 
     axios
-      .get(
+      .post(
         "http://" +
           ipMaquina +
           ":3001/api/procedures/getNotificacionesConUsuarios",
-        {
-          params: {
-            idUsuario: idUsuario
-          }
+        {          
+          idUsuario: idUsuario,
+          email,
+          contrasena          
         }
       )
       .then(notificaciones => {

@@ -10,7 +10,7 @@ module.exports = (app, modelos) => {
 
   app.route("/api/procedures/getAcuerdosConUsuarios").post((req, res) => proceduresControlador.getAcuerdosConUsuarios(req, res, modelos));
 
-  app.route("/api/procedures/getNotificacionesConUsuarios").get((req, res) => proceduresControlador.getNotificacionesConUsuarios(req, res, modelos));
+  app.route("/api/procedures/getNotificacionesConUsuarios").post((req, res) => proceduresControlador.getNotificacionesConUsuarios(req, res, modelos));
 
   app.route("/api/procedures/getUsuarioConPerfil").get((req, res) => proceduresControlador.getUsuarioConPerfil(req, res, modelos));
 
