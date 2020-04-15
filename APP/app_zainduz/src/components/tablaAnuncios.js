@@ -28,7 +28,9 @@ const mapStateToProps = state => {
   return {
     tipoUsuario: state.user.tipoUsuario,
     idPerfil: state.user._id,
-    idUsuario: state.user._idUsuario
+    idUsuario: state.user._idUsuario,
+    email: state.user.email,
+    contrasena: state.user.contrasena
   };
 };
 
@@ -141,7 +143,7 @@ class TablaAnuncios extends React.Component {
   }
 
   handleEnviarPropuesta = async anuncio => {
-    const { tipoUsuario, toogleMenuPerfil, idPerfil, idUsuario } = this.props;
+    const { tipoUsuario, toogleMenuPerfil, idPerfil, idUsuario, email, contrasena } = this.props;
     if (!tipoUsuario) {
       cogoToast.error(<h5>{trans("tablaCuidadores.errorNoLogueado")}</h5>);
       toogleMenuPerfil(true);
@@ -161,7 +163,9 @@ class TablaAnuncios extends React.Component {
       tituloAcuerdo: anuncio.titulo,
       pueblo: anuncio.pueblo,
       descripcionAcuerdo: anuncio.descripcion,
-      origenAcuerdo: "Cuidador"
+      origenAcuerdo: "Cuidador",
+      email,
+      contrasena
     };
 
     await axios

@@ -643,7 +643,9 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
     tituloAcuerdo,
     pueblo,
     descripcionAcuerdo,
-    origenAcuerdo
+    origenAcuerdo,
+    email,
+    contrasena
   } = req.body;
   // TODO estadoAcuerdo y dateAcuerdo se calcularan en el servidor
 
@@ -659,6 +661,22 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
   ) {
     res.writeHead(500, headerResponse);
     res.write("Parametros incorrectos");
+    res.end();
+    return;
+  }
+  // Comprobamos que el que manda la peticion es un usuario autentico
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findById(idUsuario);
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if(usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
     res.end();
     return;
   }
