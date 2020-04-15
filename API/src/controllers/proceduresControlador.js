@@ -10,10 +10,19 @@ const ipMaquina = require("../../util/ipMaquina");
 const handlebars = require("handlebars");
 
 exports.getAcuerdosConUsuarios = (req, res, modelos) => {
-  const { tipoUsuario, idPerfil, estadoAcuerdo } = req.query;
+  const { email, contrasena, tipoUsuario, idPerfil, estadoAcuerdo } = req.body;
   if (typeof tipoUsuario == "undefined" || typeof idPerfil == "undefined") {
     res.writeHead(500, headerResponse);
     res.write("Parametros incorrectos");
+    res.end();
+    return;
+  }
+  const modeloUsuario = modelos.usuario;
+  const usuario = modeloUsuario.findOne({ idPerfil });
+
+  if (usuario.email !== email || usuario.contrasena === contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
     res.end();
     return;
   }
@@ -35,7 +44,7 @@ exports.getAcuerdosConUsuarios = (req, res, modelos) => {
   }
 
   let filtrosConsulta = { [columna]: idPerfil };
-  //El parametro estadoAcuerdo es opcional para el procedure, si se le pasa lo va a aplicar
+  //El parametro estadoAcuerdo es opcional para el procedure, si se le pasa lo va a aplicar en los FILTROS
   if (typeof estadoAcuerdo != "undefined") {
     filtrosConsulta.estadoAcuerdo = estadoAcuerdo;
   }
@@ -991,7 +1000,7 @@ exports.checkIfAcuerdoExists = async (req, res, modelos) => {
   
   const response = acuerdo !== null ? "Exists" : "Vacio";
 
-  req.writeHead(200, {"Content-Type": "text/plain"});
+  res.writeHead(200, {"Content-Type": "text/plain"});
   res.write(response);
   res.end();
 }

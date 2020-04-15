@@ -31,16 +31,16 @@ class AcuerdosForm extends React.Component {
   componentDidMount() {
     //buscarUsuOrCuid =>> En esta variable guardo si el usuario iniciado es cliente o cuidador para asi si es cuidador
     //buscar cliente en el acuerdo y viceversa, ESTO ME DARA LA INFORMACION DE LA OTRA PARTE DEL ACUERDO
-    const { idPerfil, tipoUsuario } = this.props;
+    const { idPerfil, tipoUsuario, email, contrasena } = this.props;
 
     axios
-      .get(
+      .post(
         "http://" + ipMaquina + ":3001/api/procedures/getAcuerdosConUsuarios",
         {
-          params: {
-            tipoUsuario: tipoUsuario,
-            idPerfil: idPerfil
-          }
+          tipoUsuario: tipoUsuario,
+          idPerfil: idPerfil,
+          email,
+          contrasena
         }
       )
       .then(resultado => {
