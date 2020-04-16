@@ -841,13 +841,12 @@ class Tabla extends React.Component {
                   })
                 ) : typeof this.state.jsonCuidadores.map == "undefined" &&
                   !this.state.buscado ? (
-                  <div className="w-100 text-center">
-                    <img
-                      style={{ marginTop: "300px" }}
-                      src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
-                      height={100}
-                      width={100}
-                    />
+                  <div style={{
+                    marginTop: 300
+                  }} className="w-100 text-center">
+                    <div class="spinner-border text-success" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
                   </div>
                 ) : (
                   <small
