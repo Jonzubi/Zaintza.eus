@@ -17,6 +17,8 @@ import {
   faPenSquare,
   faClock,
   faEuroSign,
+  faComments,
+  faFileSignature,
 } from "@fortawesome/free-solid-svg-icons";
 import Axios from "axios";
 import Modal from "react-bootstrap/Modal";
@@ -1133,31 +1135,37 @@ class Tabla extends React.Component {
                         </div>
                       </div>
                     </div>
-                    <div className="row h-100">
+                    <div className={!this.state.showPropuestaModal ? "d-none" : null}>
                       <Collapse
-                        className="w-100"
-                        in={this.state.showPropuestaModal}
+                        className="mt-3"
                       >
-                        <div>
-                          <h5 className="display-4 mb-2">
-                            {trans("tablaCuidadores.tuPropuesta")}
-                          </h5>
-                          <div className="row mr-0 ml-0 mb-2 p-2 text-center">
-                            <label
-                              className="w-100 text-center"
-                              htmlFor="txtTituloPropuesta"
-                            >
-                              {trans("tablaCuidadores.tituloPropuesta")}
-                            </label>
+                        <div className="d-flex flex-column justify-content-between">
+                          <div className="d-flex flex-row align-items-center justify-content-center">
+                              <FontAwesomeIcon size="2x" icon={faComments} className="mr-2"/>
+                              <span className="font-weight-bold" style={{
+                                fontSize: 20
+                              }}>{trans("tablaCuidadores.tuPropuesta")}</span>
+                          </div>
+                          <div className="mt-3 d-flex flex-column">
+                            <div className="d-flex flex-row align-items-center justify-content-center">
+                              <FontAwesomeIcon icon={faFileSignature} className="mr-1" />
+                              <span className="font-weight-bold">{trans("tablaCuidadores.tituloPropuesta")}</span>
+                            </div>
                             <input
                               onChange={this.handleInputChange}
                               type="text"
-                              className="form-control"
+                              className="mt-1"
                               id="txtTituloPropuesta"
                               aria-describedby="txtNombreHelp"
                               placeholder="Idatzi proposamen izenburua..."
                               value={this.state.txtTituloPropuesta}
                             />
+                          </div>
+                          <div className="mt-3 d-flex flex-column">
+                            <div className="d-flex flex-row align-items-center justify-content-center">
+                              <FontAwesomeIcon icon={faClock} className="mr-1" />
+                              <span className="font-weight-bold">{trans("tablaCuidadores.horasPropuesta")}</span>
+                            </div>
                           </div>
                           <div className="row ml-0 mr-0 mb-2">
                             <div className="col-6">
