@@ -29,6 +29,7 @@ import { saveUserSession } from "../redux/actions/user";
 import municipios from "../util/municipos";
 import { trans } from "../util/funciones";
 import SocketContext from "../socketio/socket-context";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -1173,10 +1174,8 @@ class RegisterForm extends React.Component {
 
               <div id="loaderOrButton" className="w-100 mt-5 text-center">
                 {this.state.isLoading ? (
-                  <img
-                    src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
-                    height={50}
-                    width={50}
+                  <ClipLoader
+                    color="#28a745"
                   />
                 ) : (
                   <button
