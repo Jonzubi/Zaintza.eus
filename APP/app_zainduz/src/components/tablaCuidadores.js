@@ -32,6 +32,8 @@ import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import municipios from "../util/municipos";
 import SocketContext from "../socketio/socket-context";
 import BottomScrollListener from "react-bottom-scroll-listener";
+import ClipLoader from "react-spinners/ClipLoader";
+
 
 const mapStateToProps = state => {
   return {
@@ -844,9 +846,9 @@ class Tabla extends React.Component {
                   <div style={{
                     marginTop: 300
                   }} className="w-100 text-center">
-                    <div class="spinner-border text-success" role="status">
-                      <span class="sr-only">Loading...</span>
-                    </div>
+                    <ClipLoader
+                      color="#28a745"
+                    />
                   </div>
                 ) : (
                   <small
