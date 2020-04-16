@@ -11,6 +11,7 @@ import { trans } from "../util/funciones";
 import i18n from "i18next";
 import {translate} from "react-i18next";
 import SocketContext from "../socketio/socket-context";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -177,9 +178,9 @@ class LogInForm extends React.Component {
           </label>
         </div>
         {this.state.isLoading ? (
-          <div className="row mt-3 justify-content-center">
-            <img src={"http://" + ipMaquina + ":3001/api/image/loadGif"} height={50} width={50} />
-          </div>
+          <ClipLoader
+            color="#28a745"
+          />
         ) : (
           <div className="row mt-3">
             <button
