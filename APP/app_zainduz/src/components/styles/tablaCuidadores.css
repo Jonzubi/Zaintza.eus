@@ -20,7 +20,5 @@
   }
 
   .modalCustomClass{
-    width: 90%;
-    height: 90vh;
-    margin: 2.5% auto;
+    max-width: 500px;
   }
