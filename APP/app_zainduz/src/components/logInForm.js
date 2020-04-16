@@ -139,7 +139,7 @@ class LogInForm extends React.Component {
   render() {
     return (
       <SocketContext.Consumer>
-        {socket => (<form className="mt-5">
+        {socket => (<form className="">
         <div>
           <label htmlFor="txtEmail">{trans("loginForm.email")}</label>
           
@@ -182,12 +182,12 @@ class LogInForm extends React.Component {
             color="#28a745"
           />
         ) : (
-          <div className="row mt-3">
+          <div className="d-flex align-items-center justify-content-between mt-3">
             <button
               onClick={() => this.handleLogIn(socket)}
               name="btnLogIn"
               type="button"
-              className="btn btn-light col-5"
+              className="btn btn-light flex-fill"
             >
               {trans("loginForm.iniciarSesion")}
             </button>
@@ -199,7 +199,7 @@ class LogInForm extends React.Component {
               }}
               name="btnRegistrar"
               type="button"
-              className="btn btn-success col-5"
+              className="btn btn-success flex-fill"
             >
               {trans("loginForm.registrarse")}
             </button>

@@ -243,9 +243,13 @@ class MenuPerfil extends React.Component {
         right
         styles={{ background: "#343a40" }}
       >
-        <IconAvatar />
-        <MenuContent />
-        <ChangeLang />
+        <div style={{
+          outline: "none"
+        }} className="d-flex flex-column justify-content-between h-100">
+          <IconAvatar />
+          <MenuContent />
+          <ChangeLang />
+        </div>
       </BurgerMenu>
     );
   }
