@@ -64,7 +64,8 @@
     "diasDisponible": "Ordu libreak",
     "ubicaciones": "Herriak",
     "exitoEnviarPropuesta": "Proposamena behar bezala bidali da",
-    "acuerdoExistente": "Zaintzaile honekin akordio bat duzu jada"
+    "acuerdoExistente": "Zaintzaile honekin akordio bat duzu jada",
+    "filtrar": "Filtratu"
   },
   "registerFormCuidadores": {
     "nombre": "Izena",

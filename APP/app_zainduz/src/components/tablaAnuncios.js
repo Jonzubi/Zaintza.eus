@@ -12,7 +12,7 @@ import {
   faMobileAlt,
   faHome,
   faUser,
-  faFilter
+  faSearch
 } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/Modal";
 import ModalHeader from "react-bootstrap/ModalHeader";
@@ -329,7 +329,7 @@ class TablaAnuncios extends React.Component {
     } = this.state;
     return (
       <BottomScrollListener onBottom={this.onScreenBottom}>
-        <div className="p-5">
+        <div className="">
           {this.botonAddAnuncio()}
           <div
             onClick={() => {
@@ -337,26 +337,28 @@ class TablaAnuncios extends React.Component {
             }}
             style={{ cursor: "pointer" }}
             key="divFilter"
-            className={
-              hoverFilter
-                ? "d-flex mb-3 align-items-center bg-success text-white p-1 justify-content-between"
-                : "d-flex mb-3 align-items-center p-1 justify-content-between"
-            }
+            className="d-flex align-items-center justify-content-start mb-3 mt-3 ml-5 mr-5 p-1"
             onMouseEnter={() => this.handleHoverFilter(true)}
             onMouseLeave={() => this.handleHoverFilter(false)}
           >
-            <span
-              className="pl-1"
-              style={{ fontSize: 40, color: hoverFilter ? "white" : "black" }}
-            >
-              Filtros aplicados:
-            </span>
-            <FontAwesomeIcon
-              className={hoverFilter ? "text-white" : "text-success"}
-              key="iconFilter"
-              size={"2x"}
-              icon={faFilter}
-            />
+            <div
+              style={{
+                borderRadius: 50
+              }}
+              className="bg-success text-white rounded-pill p-2">
+              <span
+                className="pl-1"
+                style={{ fontSize: 20 }}
+              >
+                {trans('tablaCuidadores.filtrar')}
+              </span>
+              <FontAwesomeIcon
+                className="ml-2"
+                key="iconFilter"
+                size={"1x"}
+                icon={faSearch}
+              />
+            </div>
           </div>
           {buscado ? (
             jsonAnuncios.map((anuncio, indice) => {
