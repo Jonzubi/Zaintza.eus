@@ -46,7 +46,7 @@ class ChangeLang extends React.Component {
   render() {
     const { nowLang } = this.state;
     return (
-      <div className="dropdown w-100 d-flex mt-5">
+      <div className="dropdown pb-1">
         <button
           className="btn btn-light dropdown-toggle w-100"
           type="button"

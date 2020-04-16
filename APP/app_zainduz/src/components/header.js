@@ -36,15 +36,14 @@ class Header extends React.Component {
     return (
       this.props.direcFoto == "" ?
       <FontAwesomeIcon
-        size="7x"
+        size="3x"
         style={{ cursor: "pointer", color: "white" }}
         onClick={() => this.props.toogleMenuPerfil(true)}
-        className="float-right mt-1 align-middle headerAvatar"
         icon={faUserCircle}
       />
       :
-      <Avatar name={this.props.nombre + " " + this.props.apellido1} src={"http://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto} 
-              className="float-right mt-1 align-middle"
+      <Avatar name={this.props.nombre + " " + this.props.apellido1} src={"http://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto}
+              size={50}
               round={true}
               onClick={() => this.props.toogleMenuPerfil(true)}
               style={{ cursor: "pointer", color: "white" }} 
@@ -55,10 +54,10 @@ class Header extends React.Component {
   render() {
     const IconAvatar = this.getAvatar.bind(this);
     return (
-      <Headroom
+      <div
         style={{ background: "#343a40" }}
         id="headRoom"
-        className="text-center w-100"
+        className="d-flex flex-row align-items-center p-1 justify-content-between fixed-top"
       >
         <a
           href="#"
@@ -67,10 +66,10 @@ class Header extends React.Component {
           }}
           style={{ textDecoration: "none" }}
         >
-          <h1 className="w-100 d-inline display-1 text-light headerTitle">Zaintza</h1>
+          <h1 className="w-100 d-inline text-light">Zaintza</h1>
         </a>
         <IconAvatar />
-      </Headroom>
+      </div>
     );
   }
 }

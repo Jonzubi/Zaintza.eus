@@ -4,8 +4,7 @@ import {
   faEye,
   faCheck,
   faTimes,
-  faUser,
-  faCalendarAlt,
+  faSearch,
   faPlusCircle,
   faMinusCircle,
   faFilter,
@@ -33,6 +32,8 @@ import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import municipios from "../util/municipos";
 import SocketContext from "../socketio/socket-context";
 import BottomScrollListener from "react-bottom-scroll-listener";
+import ClipLoader from "react-spinners/ClipLoader";
+
 
 const mapStateToProps = state => {
   return {
@@ -688,26 +689,28 @@ class Tabla extends React.Component {
           }}
           style={{ cursor: "pointer" }}
           key="divFilter"
-          className={
-            hoverFilter
-              ? "d-flex mb-3 align-items-center bg-success text-white mt-5 ml-5 mr-5 p-1 justify-content-between"
-              : "d-flex mb-3 align-items-center mt-5 ml-5 mr-5 p-1 justify-content-between"
-          }
+          className="d-flex align-items-center justify-content-start mb-3 mt-3 ml-5 mr-5 p-1"
           onMouseEnter={() => this.handleHoverFilter(true)}
           onMouseLeave={() => this.handleHoverFilter(false)}
         >
-          <span
-            className="pl-1"
-            style={{ fontSize: 40, color: hoverFilter ? "white" : "black" }}
-          >
-            Filtros aplicados:
-          </span>
-          <FontAwesomeIcon
-            className={hoverFilter ? "text-white" : "text-success"}
-            key="iconFilter"
-            size={"2x"}
-            icon={faFilter}
-          />
+          <div
+            style={{
+              borderRadius: 50
+            }}
+            className="bg-success text-white rounded-pill p-2">
+            <span
+              className="pl-1"
+              style={{ fontSize: 20 }}
+            >
+              {trans('tablaCuidadores.filtrar')}
+            </span>
+            <FontAwesomeIcon
+              className="ml-2"
+              key="iconFilter"
+              size={"1x"}
+              icon={faSearch}
+            />
+          </div>
         </div>
         <SocketContext.Consumer>
           {socket => {
@@ -840,12 +843,11 @@ class Tabla extends React.Component {
                   })
                 ) : typeof this.state.jsonCuidadores.map == "undefined" &&
                   !this.state.buscado ? (
-                  <div className="w-100 text-center">
-                    <img
-                      style={{ marginTop: "300px" }}
-                      src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
-                      height={100}
-                      width={100}
+                  <div style={{
+                    marginTop: 300
+                  }} className="w-100 text-center">
+                    <ClipLoader
+                      color="#28a745"
                     />
                   </div>
                 ) : (

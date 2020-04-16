@@ -11,6 +11,7 @@ import { trans } from "../util/funciones";
 import i18n from "i18next";
 import {translate} from "react-i18next";
 import SocketContext from "../socketio/socket-context";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -138,7 +139,7 @@ class LogInForm extends React.Component {
   render() {
     return (
       <SocketContext.Consumer>
-        {socket => (<form className="mt-5">
+        {socket => (<form className="">
         <div>
           <label htmlFor="txtEmail">{trans("loginForm.email")}</label>
           
@@ -177,16 +178,16 @@ class LogInForm extends React.Component {
           </label>
         </div>
         {this.state.isLoading ? (
-          <div className="row mt-3 justify-content-center">
-            <img src={"http://" + ipMaquina + ":3001/api/image/loadGif"} height={50} width={50} />
-          </div>
+          <ClipLoader
+            color="#28a745"
+          />
         ) : (
-          <div className="row mt-3">
+          <div className="d-flex align-items-center justify-content-between mt-3">
             <button
               onClick={() => this.handleLogIn(socket)}
               name="btnLogIn"
               type="button"
-              className="btn btn-light col-5"
+              className="btn btn-light flex-fill"
             >
               {trans("loginForm.iniciarSesion")}
             </button>
@@ -198,7 +199,7 @@ class LogInForm extends React.Component {
               }}
               name="btnRegistrar"
               type="button"
-              className="btn btn-success col-5"
+              className="btn btn-success flex-fill"
             >
               {trans("loginForm.registrarse")}
             </button>

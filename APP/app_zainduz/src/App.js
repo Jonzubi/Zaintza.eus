@@ -23,13 +23,23 @@ const mapStateToProps = state => {
 
 const socket = io(`http://${ipMaquina}:3002`);
 
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isOpenMenuPerfil: false,
-      formContent: "tabla"
+      formContent: "tabla",
+      cabeceraHeight: 0
     };
+  }
+
+  componentDidMount() {
+    const altura = document.getElementById("headRoom").clientHeight;
+    console.log(altura);
+    this.setState({
+      cabeceraHeight: altura
+    });
   }
 
   //Abre o cierra el menu segun el estado actual
@@ -62,13 +72,16 @@ class App extends React.Component {
 
   render() {
     const AppContent = this.getContent.bind(this);
-
+    const { cabeceraHeight } = this.state;
     return (
       <SocketContext.Provider value={socket}>
         <div>
           <MenuPerfil />
           <div id="outer-container" className="w-100">
             <Cabecera />
+            <div style={{
+              height: cabeceraHeight
+            }} />
             <AppContent />
             <ModalRegistrarse />
           </div>
