@@ -412,6 +412,7 @@ class Tabla extends React.Component {
       this.setState({
         showPropuestaModal: true,
         diasDisponible: JSON.parse(JSON.stringify(selectedCuidador.diasDisponible)),
+        ubicaciones: JSON.parse(JSON.stringify(selectedCuidador.ubicaciones))
       });
       return;
     }
@@ -480,7 +481,7 @@ class Tabla extends React.Component {
       idCliente: this.props.idCliente,
       diasAcordados: this.state.diasDisponible,
       tituloAcuerdo: this.state.txtTituloPropuesta,
-      pueblo: this.state.ubicaciones[0],
+      pueblo: this.state.ubicaciones,
       descripcionAcuerdo: this.state.txtDescripcion,
       origenAcuerdo: this.props.tipoUsuario,
       whoAmI: tipoUsuario,
