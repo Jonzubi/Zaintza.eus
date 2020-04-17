@@ -32,7 +32,7 @@ import Button from "react-bootstrap/Button";
 import ipMaquina from "../util/ipMaquinaAPI";
 import cogoToast from "cogo-toast";
 import "./styles/tablaCuidadores.css";
-import TimeInput from "react-time-input";
+import TimeInput from "./customTimeInput";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { connect } from "react-redux";
@@ -303,7 +303,7 @@ class Tabla extends React.Component {
       let atributo = indice.substr(0, indice.length - 1);
       indice = indice.substr(indice.length - 1);
 
-      let auxDiasDisponible = this.state.diasDisponible;
+      let auxDiasDisponible = [...this.state.diasDisponible];
       auxDiasDisponible[indice][atributo] = e;
 
       this.setState({
@@ -411,7 +411,7 @@ class Tabla extends React.Component {
     if (!this.state.showPropuestaModal) {
       this.setState({
         showPropuestaModal: true,
-        diasDisponible: [...selectedCuidador.diasDisponible],
+        diasDisponible: JSON.parse(JSON.stringify(selectedCuidador.diasDisponible)),
       });
       return;
     }
@@ -641,6 +641,7 @@ class Tabla extends React.Component {
       auxFilterPueblo,
       isFiltering,
       diasDisponible,
+      showPropuestaModal,
     } = this.state;
     const vSelectedCuidador = this.state.selectedCuidador;
     const fechaNacCuidador = new Date(vSelectedCuidador.fechaNacimiento);
@@ -1136,201 +1137,196 @@ class Tabla extends React.Component {
                         </div>
                       </div>
                     </div>
-                    <div
-                      className={
-                        !this.state.showPropuestaModal ? "d-none" : null
-                      }
-                    >
-                      <Collapse className="mt-3">
-                        <div className="d-flex flex-column justify-content-between align-items-center">
-                          <div className="d-flex flex-row align-items-center justify-content-center">
-                            <FontAwesomeIcon
-                              size="2x"
-                              icon={faComments}
-                              className="mr-2"
-                            />
-                            <span
-                              className="font-weight-bold"
-                              style={{
-                                fontSize: 20,
-                              }}
-                            >
-                              {trans("tablaCuidadores.tuPropuesta")}
-                            </span>
-                          </div>
-                          <div
-                            style={{
-                              width: 300,
-                            }}
-                            className="mt-3 d-flex flex-column"
-                          >
+                    <div>
+                      {showPropuestaModal ? (
+                        <Collapse className="mt-5">
+                          <div className="d-flex flex-column justify-content-between align-items-center">
                             <div className="d-flex flex-row align-items-center justify-content-center">
                               <FontAwesomeIcon
-                                icon={faFileSignature}
-                                className="mr-1"
+                                size="2x"
+                                icon={faComments}
+                                className="mr-2"
                               />
-                              <span className="font-weight-bold">
-                                {trans("tablaCuidadores.tituloPropuesta")}
+                              <span
+                                className="font-weight-bold"
+                                style={{
+                                  fontSize: 20,
+                                }}
+                              >
+                                {trans("tablaCuidadores.tuPropuesta")}
                               </span>
                             </div>
-                            <input
-                              onChange={this.handleInputChange}
-                              type="text"
-                              className="mt-1"
-                              id="txtTituloPropuesta"
-                              aria-describedby="txtNombreHelp"
-                              placeholder="Idatzi proposamen izenburua..."
-                              value={this.state.txtTituloPropuesta}
-                            />
-                          </div>
-                          <div
-                            style={{
-                              width: 300,
-                            }}
-                            className="mt-3 d-flex flex-column"
-                          >
-                            <div className="d-flex flex-row align-items-center justify-content-between">
-                              <FontAwesomeIcon
-                                style={{ cursor: "pointer" }}
-                                onClick={this.removeDiasDisponible}
-                                className="text-danger"
-                                icon={faMinusCircle}
-                              />
-                              <div>
+                            <div
+                              style={{
+                                width: 300,
+                              }}
+                              className="mt-3 d-flex flex-column"
+                            >
+                              <div className="d-flex flex-row align-items-center justify-content-center">
                                 <FontAwesomeIcon
-                                  icon={faClock}
+                                  icon={faFileSignature}
                                   className="mr-1"
                                 />
                                 <span className="font-weight-bold">
-                                  {trans("tablaCuidadores.horasPropuesta")}
+                                  {trans("tablaCuidadores.tituloPropuesta")}
                                 </span>
                               </div>
-                              <FontAwesomeIcon
-                                style={{ cursor: "pointer" }}
-                                onClick={this.addDiasDisponible}
-                                className="text-success"
-                                icon={faPlusCircle}
+                              <input
+                                onChange={this.handleInputChange}
+                                type="text"
+                                className="mt-1"
+                                id="txtTituloPropuesta"
+                                aria-describedby="txtNombreHelp"
+                                placeholder="Idatzi proposamen izenburua..."
+                                value={this.state.txtTituloPropuesta}
                               />
                             </div>
-                            {diasDisponible.map((dia, indice) => (
+                            <div
+                              style={{
+                                width: 300,
+                              }}
+                              className="mt-3 d-flex flex-column"
+                            >
                               <div className="d-flex flex-row align-items-center justify-content-between">
-                                <select
-                                  value={this.state.diasDisponible[indice].dia}
-                                  onChange={this.handleDiasDisponibleChange}
-                                  className="d-inline"
-                                  id={"dia" + indice}
-                                >
-                                  <option>Aukeratu eguna</option>
-                                  <option value="1">Astelehena</option>
-                                  <option value="2">Asteartea</option>
-                                  <option value="3">Asteazkena</option>
-                                  <option value="4">Osteguna</option>
-                                  <option value="5">Ostirala</option>
-                                  <option value="6">Larunbata</option>
-                                  <option value="7">Igandea</option>
-                                </select>
-                                <div className="d-flex flex-row align-items-center">
-                                  <TimeInput
-                                    onTimeChange={(valor) => {
-                                      this.handleDiasDisponibleChange(
-                                        valor,
-                                        "horaInicio" + indice
-                                      );
-                                    }}
-                                    id={"horaInicio" + indice}
-                                    initTime={
-                                      this.state.diasDisponible[indice]
-                                        .horaInicio != "00:00"
-                                        ? this.state.diasDisponible[indice]
-                                            .horaInicio
-                                        : "00:00"
-                                    }
-                                    className="form-control"
-                                  />
-                                  -
-                                  <TimeInput
-                                    onTimeChange={(valor) => {
-                                      this.handleDiasDisponibleChange(
-                                        valor,
-                                        "horaFin" + indice
-                                      );
-                                    }}
-                                    id={"horaFin" + indice}
-                                    initTime={
-                                      this.state.diasDisponible[indice]
-                                        .horaFin != "00:00"
-                                        ? this.state.diasDisponible[indice]
-                                            .horaFin
-                                        : "00:00"
-                                    }
-                                    className="form-control"
-                                  />
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                          <div
-                            style={{
-                              width: 300,
-                            }}
-                            className="mt-3 d-flex flex-column"
-                          >
-                            <div className="text-center">
-                              <FontAwesomeIcon icon={faHome} className="mr-1" />
-                              <span className="font-weight-bold text-center">
-                                {trans("tablaCuidadores.pueblos")}
-                              </span>
-                            </div>
-                            <PuebloAutosuggest
-                              onSuggestionSelected={this.handleAddPueblo}
-                            />
-                            {this.state.ubicaciones.map((pueblo) => {
-                              return (
-                                <div className="mt-1 d-flex flex-row justify-content-between">
-                                  <span>{pueblo}</span>
+                                <FontAwesomeIcon
+                                  style={{ cursor: "pointer" }}
+                                  onClick={this.removeDiasDisponible}
+                                  className="text-danger"
+                                  icon={faMinusCircle}
+                                />
+                                <div>
                                   <FontAwesomeIcon
-                                    style={{ cursor: "pointer" }}
-                                    onClick={() =>
-                                      this.handleRemovePueblo(pueblo)
-                                    }
-                                    className="text-danger"
-                                    icon={faMinusCircle}
+                                    icon={faClock}
+                                    className="mr-1"
                                   />
+                                  <span className="font-weight-bold">
+                                    {trans("tablaCuidadores.horasPropuesta")}
+                                  </span>
                                 </div>
-                              );
-                            })}
-                          </div>
-                          <div
-                            style={{
-                              width: 300,
-                            }}
-                            className="mt-3 d-flex flex-column"
-                          >
-                            <div className="d-flex flex-row justify-content-center align-items-center">
-                              <FontAwesomeIcon
-                                icon={faPenSquare}
-                                flip="horizontal"
-                                className="mr-1"
-                              />
-                              <span className="font-weight-bold">
-                                {trans("tablaCuidadores.descripcion")}
-                              </span>
+                                <FontAwesomeIcon
+                                  style={{ cursor: "pointer" }}
+                                  onClick={this.addDiasDisponible}
+                                  className="text-success"
+                                  icon={faPlusCircle}
+                                />
+                              </div>
+                              {diasDisponible.map((dia, indice) => (
+                                <div className="mt-1 d-flex flex-row align-items-center justify-content-between">
+                                  <select
+                                    value={dia.dia}
+                                    onChange={this.handleDiasDisponibleChange}
+                                    className="d-inline"
+                                    id={"dia" + indice}
+                                  >
+                                    <option>Aukeratu eguna</option>
+                                    <option value="1">Astelehena</option>
+                                    <option value="2">Asteartea</option>
+                                    <option value="3">Asteazkena</option>
+                                    <option value="4">Osteguna</option>
+                                    <option value="5">Ostirala</option>
+                                    <option value="6">Larunbata</option>
+                                    <option value="7">Igandea</option>
+                                  </select>
+                                  <div className="d-flex flex-row align-items-center">
+                                    <TimeInput
+                                      onTimeChange={(valor) => {
+                                        this.handleDiasDisponibleChange(
+                                          valor,
+                                          "horaInicio" + indice
+                                        );
+                                      }}
+                                      id={"horaInicio" + indice}
+                                      initTime={diasDisponible[indice].horaInicio}
+                                      style={{
+                                        width: 50,
+                                      }}
+                                      className="text-center"
+                                    />
+                                    -
+                                    <TimeInput
+                                      onTimeChange={(valor) => {
+                                        this.handleDiasDisponibleChange(
+                                          valor,
+                                          "horaFin" + indice
+                                        );
+                                      }}
+                                      id={"horaFin" + indice}
+                                      initTime={diasDisponible[indice].horaFin}
+                                      style={{
+                                        width: 50,
+                                      }}
+                                      className="text-center"
+                                    />
+                                  </div>
+                                </div>
+                              ))}
                             </div>
-                            <textarea
-                              onChange={this.handleInputChange}
-                              className={
-                                this.state.error.txtNombre
-                                  ? "border border-danger form-control"
-                                  : "form-control"
-                              }
-                              rows="5"
-                              id="txtDescripcion"
-                              placeholder="Idatzi zure proposamenaren deskribapen zehatza..."
-                              value={this.state.txtDescripcion}
-                            ></textarea>
+                            <div
+                              style={{
+                                width: 300,
+                              }}
+                              className="mt-3 d-flex flex-column"
+                            >
+                              <div className="text-center mb-1">
+                                <FontAwesomeIcon
+                                  icon={faHome}
+                                  className="mr-1"
+                                />
+                                <span className="font-weight-bold text-center">
+                                  {trans("tablaCuidadores.pueblos")}
+                                </span>
+                              </div>
+                              <PuebloAutosuggest
+                                onSuggestionSelected={this.handleAddPueblo}
+                              />
+                              {this.state.ubicaciones.map((pueblo) => {
+                                return (
+                                  <div className="mt-1 d-flex flex-row justify-content-between">
+                                    <span>{pueblo}</span>
+                                    <FontAwesomeIcon
+                                      style={{ cursor: "pointer" }}
+                                      onClick={() =>
+                                        this.handleRemovePueblo(pueblo)
+                                      }
+                                      className="text-danger"
+                                      icon={faMinusCircle}
+                                    />
+                                  </div>
+                                );
+                              })}
+                            </div>
+                            <div
+                              style={{
+                                width: 300,
+                              }}
+                              className="mt-3 d-flex flex-column"
+                            >
+                              <div className="d-flex flex-row justify-content-center align-items-center">
+                                <FontAwesomeIcon
+                                  icon={faPenSquare}
+                                  flip="horizontal"
+                                  className="mr-1"
+                                />
+                                <span className="font-weight-bold">
+                                  {trans("tablaCuidadores.descripcion")}
+                                </span>
+                              </div>
+                              <textarea
+                                onChange={this.handleInputChange}
+                                className={
+                                  this.state.error.txtNombre
+                                    ? "border border-danger form-control mt-1"
+                                    : "form-control mt-1"
+                                }
+                                rows="5"
+                                id="txtDescripcion"
+                                placeholder="Idatzi zure proposamenaren deskribapen zehatza..."
+                                value={this.state.txtDescripcion}
+                              ></textarea>
+                            </div>
                           </div>
-                        </div>
-                      </Collapse>
+                        </Collapse>
+                      ) : null}
                     </div>
                   </ModalBody>
                   <ModalFooter>
