@@ -79,7 +79,7 @@ class Header extends React.Component {
               style={{
                 cursor: "pointer",
               }}
-              className="mr-5"
+              className="mr-5 d-none d-sm-inline"
             >
               <FontAwesomeIcon icon={faBell} className="text-white" />
               {countNotifies > 0 ? (
