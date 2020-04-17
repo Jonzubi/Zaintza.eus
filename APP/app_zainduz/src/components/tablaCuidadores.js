@@ -721,30 +721,35 @@ class Tabla extends React.Component {
     return (
       <BottomScrollListener onBottom={this.onScreenBottom}>
         <div
-          onClick={() => {
-            this.setState({ showModalFilter: true });
-          }}
-          style={{ cursor: "pointer" }}
           key="divFilter"
           className="d-flex align-items-center justify-content-start mb-3 mt-3 ml-5 mr-5 p-1"
-          onMouseEnter={() => this.handleHoverFilter(true)}
-          onMouseLeave={() => this.handleHoverFilter(false)}
         >
           <div
             style={{
-              borderRadius: 50,
+              cursor: "pointer",
             }}
-            className="bg-success text-white rounded-pill p-2"
           >
-            <span className="pl-1" style={{ fontSize: 20 }}>
-              {trans("tablaCuidadores.filtrar")}
-            </span>
-            <FontAwesomeIcon
-              className="ml-2"
-              key="iconFilter"
-              size={"1x"}
-              icon={faSearch}
-            />
+            <div
+              style={{
+                borderRadius: 50,
+              }}
+              onClick={() => {
+                this.setState({ showModalFilter: true });
+              }}
+              className="bg-success text-white p-2"
+              onMouseEnter={() => this.handleHoverFilter(true)}
+              onMouseLeave={() => this.handleHoverFilter(false)}
+            >
+              <span className="pl-1" style={{ fontSize: 20 }}>
+                {trans("tablaCuidadores.filtrar")}
+              </span>
+              <FontAwesomeIcon
+                className="ml-2"
+                key="iconFilter"
+                size={"1x"}
+                icon={faSearch}
+              />
+            </div>
           </div>
         </div>
         <SocketContext.Consumer>
