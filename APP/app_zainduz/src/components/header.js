@@ -1,18 +1,16 @@
 import React from "react";
-import Headroom from "react-headroom";
 import Avatar from "react-avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUserCircle,
-  faGlobe,
   faBell,
 } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import { changeFormContent } from "../redux/actions/app";
+import HeaderChangeLang from './headerChangeLang';
 import "./styles/header.css";
 import ipMaquina from "../util/ipMaquinaAPI";
-import i18n from "i18next";
 
 const MapDispachToProps = (dispatch) => {
   return {
@@ -31,13 +29,6 @@ const MapStateToProps = (state) => {
 };
 
 class Header extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hoverLang: "",
-    };
-  }
-
   getAvatar() {
     return this.props.direcFoto == "" ? (
       <FontAwesomeIcon
@@ -58,16 +49,6 @@ class Header extends React.Component {
     );
   }
 
-  handleLangHover = (lang) => {
-    this.setState({
-      hoverLang: lang,
-    });
-  };
-
-  handleLangChange = (lang) => {
-    i18n.changeLanguage(lang);
-  };
-
   handleBellClick = () => {
     const { changeFormContent } = this.props;
     changeFormContent("notificaciones");
@@ -75,7 +56,6 @@ class Header extends React.Component {
 
   render() {
     const IconAvatar = this.getAvatar.bind(this);
-    const { hoverLang } = this.state;
     const { countNotifies, direcFoto } = this.props;
     return (
       <div
@@ -99,7 +79,7 @@ class Header extends React.Component {
               style={{
                 cursor: "pointer",
               }}
-              className="mr-5"
+              className="mr-5 d-none d-sm-inline"
             >
               <FontAwesomeIcon icon={faBell} className="text-white" />
               {countNotifies > 0 ? (
@@ -111,32 +91,7 @@ class Header extends React.Component {
           ) : null}
 
           <div className="mr-5">
-            <FontAwesomeIcon className="text-white mr-2" icon={faGlobe} />
-            <span
-              style={{
-                cursor: "pointer",
-                textDecoration: hoverLang === "eus" ? "underline" : "",
-              }}
-              onMouseEnter={() => this.handleLangHover("eus")}
-              onMouseLeave={() => this.handleLangHover("")}
-              onClick={() => this.handleLangChange("eus")}
-              className="text-white mr-2"
-            >
-              EUS
-            </span>
-            <span className="text-white mr-2">|</span>
-            <span
-              style={{
-                cursor: "pointer",
-                textDecoration: hoverLang === "es" ? "underline" : "",
-              }}
-              onMouseEnter={() => this.handleLangHover("es")}
-              onMouseLeave={() => this.handleLangHover("")}
-              onClick={() => this.handleLangChange("es")}
-              className="text-white"
-            >
-              ES
-            </span>
+            <HeaderChangeLang />
           </div>
           <IconAvatar />
         </div>

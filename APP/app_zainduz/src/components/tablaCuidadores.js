@@ -7,10 +7,19 @@ import {
   faSearch,
   faPlusCircle,
   faMinusCircle,
-  faFilter,
-  faHome
+  faMobileAlt,
+  faHome,
+  faUser,
+  faAt,
+  faCalendarAlt,
+  faVenusMars,
+  faPhoneSquareAlt,
+  faPenSquare,
+  faClock,
+  faEuroSign,
+  faComments,
+  faFileSignature,
 } from "@fortawesome/free-solid-svg-icons";
-import loadGif from "../util/gifs/loadGif.gif";
 import Axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import Collapse from "react-bootstrap/Collapse";
@@ -23,7 +32,7 @@ import Button from "react-bootstrap/Button";
 import ipMaquina from "../util/ipMaquinaAPI";
 import cogoToast from "cogo-toast";
 import "./styles/tablaCuidadores.css";
-import TimeInput from "react-time-input";
+import TimeInput from "./customTimeInput";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { connect } from "react-redux";
@@ -34,20 +43,19 @@ import SocketContext from "../socketio/socket-context";
 import BottomScrollListener from "react-bottom-scroll-listener";
 import ClipLoader from "react-spinners/ClipLoader";
 
-
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     tipoUsuario: state.user.tipoUsuario,
     idCliente: state.user._id,
     idUsuario: state.user._idUsuario,
     email: state.user.email,
-    contrasena: state.user.contrasena
+    contrasena: state.user.contrasena,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    toogleMenuPerfil: payload => dispatch(toogleMenuPerfil(payload))
+    toogleMenuPerfil: (payload) => dispatch(toogleMenuPerfil(payload)),
   };
 };
 
@@ -59,22 +67,22 @@ class Tabla extends React.Component {
     Axios.get("http://" + ipMaquina + ":3001/api/cuidador", {
       params: {
         filtros: {
-          isPublic: true
+          isPublic: true,
         },
         options: {
-          limit: requiredCards
-        }
-      }
+          limit: requiredCards,
+        },
+      },
     })
-      .then(data => {
+      .then((data) => {
         this.setState({
           jsonCuidadores: data.data,
-          buscado: true
+          buscado: true,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         this.setState({
-          buscado: true
+          buscado: true,
         });
         cogoToast.error(
           <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
@@ -97,32 +105,32 @@ class Tabla extends React.Component {
       auxAddPueblo: "",
       ubicaciones: [],
       error: {
-        txtNombre: false
+        txtNombre: false,
       },
       txtTituloPropuesta: "",
       diasDisponible: [
         {
           dia: 0,
           horaInicio: "00:00",
-          horaFin: "00:00"
-        }
+          horaFin: "00:00",
+        },
       ],
       txtDescripcion: "",
       auxFilterPueblo: "",
-      isFiltering: false
+      isFiltering: false,
     };
 
     this.requiredStates = [
       "txtTituloPropuesta",
       "diasDisponible",
       "ubicaciones",
-      "txtDescripcion"
+      "txtDescripcion",
     ];
     this.requiredStatesTraduc = {
       txtTituloPropuesta: "tablaCuidadores.tituloPropuesta",
       diasDisponible: "tablaCuidadores.diasDisponible",
       ubicaciones: "tablaCuidadores.ubicaciones",
-      txtDescripcion: "tablaCuidadores.descripcion"
+      txtDescripcion: "tablaCuidadores.descripcion",
     };
 
     this.handleShowModalChange = this.handleShowModalChange.bind(this);
@@ -155,20 +163,20 @@ class Tabla extends React.Component {
       Axios.get("http://" + ipMaquina + ":3001/api/cuidador", {
         params: {
           filtros: {
-            isPublic: true
+            isPublic: true,
           },
           options: {
-            limit: requiredCards + 100
-          }
-        }
+            limit: requiredCards + 100,
+          },
+        },
       })
-        .then(data => {
+        .then((data) => {
           this.setState({
             jsonCuidadores: data.data,
-            requiredCards: requiredCards + 100
+            requiredCards: requiredCards + 100,
           });
         })
-        .catch(err => {
+        .catch((err) => {
           cogoToast.error(
             <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
           );
@@ -189,7 +197,7 @@ class Tabla extends React.Component {
 
     const regex = new RegExp("^" + escapedValue, "i");
 
-    return municipios.filter(pueblo => regex.test(pueblo));
+    return municipios.filter((pueblo) => regex.test(pueblo));
   }
 
   getSuggestionValue(suggestion) {
@@ -202,19 +210,19 @@ class Tabla extends React.Component {
 
   onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
-      suggestionsPueblos: this.getSuggestions(value)
+      suggestionsPueblos: this.getSuggestions(value),
     });
   };
 
   onSuggestionsClearRequested = () => {
     this.setState({
-      suggestionsPueblos: []
+      suggestionsPueblos: [],
     });
   };
 
   handleAddPueblo(c, { suggestion }) {
     this.setState({}, () => {
-      let pueblo = this.state.auxAddPueblo;
+      let pueblo = suggestion;
       if (pueblo == "") return;
 
       if (!municipios.includes(pueblo)) {
@@ -239,23 +247,22 @@ class Tabla extends React.Component {
       this.state.ubicaciones.push(pueblo);
       this.setState({
         ubicaciones: this.state.ubicaciones,
-        auxAddPueblo: ""
+        auxAddPueblo: "",
       });
     });
   }
 
   handleFilterPuebloSelected = (c, { suggestion }) => {
     this.setState({
-      auxFilterPueblo: suggestion
+      auxFilterPueblo: suggestion,
     });
   };
 
-  handleRemovePueblo() {
+  handleRemovePueblo(pueblo) {
+    const { ubicaciones } = this.state;
+    const ubicacionesFiltrado = ubicaciones.filter((p) => p !== pueblo);
     this.setState({
-      ubicaciones:
-        typeof this.state.ubicaciones.pop() != "undefined"
-          ? this.state.ubicaciones
-          : []
+      ubicaciones: ubicacionesFiltrado,
     });
   }
 
@@ -264,17 +271,17 @@ class Tabla extends React.Component {
     auxDiasDisponible.push({
       dia: 0,
       horaInicio: "00:00",
-      horaFin: "00:00"
+      horaFin: "00:00",
     });
 
     this.setState({
-      diasDisponible: auxDiasDisponible
+      diasDisponible: auxDiasDisponible,
     });
   }
 
-  handleHoverFilter = isHover => {
+  handleHoverFilter = (isHover) => {
     this.setState({
-      hoverFilter: isHover
+      hoverFilter: isHover,
     });
   };
 
@@ -289,18 +296,18 @@ class Tabla extends React.Component {
       auxDiasDisponible[indice]["dia"] = valor;
 
       this.setState({
-        diasDisponible: auxDiasDisponible
+        diasDisponible: auxDiasDisponible,
       });
     } else {
       //Significa que ha cambiado la hora, no se sabe si inicio o fin, eso esta en "indice"
       let atributo = indice.substr(0, indice.length - 1);
       indice = indice.substr(indice.length - 1);
 
-      let auxDiasDisponible = this.state.diasDisponible;
+      let auxDiasDisponible = [...this.state.diasDisponible];
       auxDiasDisponible[indice][atributo] = e;
 
       this.setState({
-        diasDisponible: auxDiasDisponible
+        diasDisponible: auxDiasDisponible,
       });
     }
   }
@@ -310,21 +317,21 @@ class Tabla extends React.Component {
       diasDisponible:
         typeof this.state.diasDisponible.pop() != "undefined"
           ? this.state.diasDisponible
-          : []
+          : [],
     });
   }
 
   handleInputChange(e) {
     var stateId = e.target.id;
     this.setState({
-      [stateId]: e.target.value
+      [stateId]: e.target.value,
     });
   }
 
   async handleShowModalChange(state) {
     await this.setState({
       showModal: state,
-      showPropuestaModal: false
+      showPropuestaModal: false,
     });
     //El await lo hago porque si no aparece la inicializacion de horas en la pagina y no da un buen efecto
     this.setState({
@@ -332,38 +339,39 @@ class Tabla extends React.Component {
         {
           dia: 0,
           horaInicio: "00:00",
-          horaFin: "00:00"
-        }
+          horaFin: "00:00",
+        },
       ],
       ubicaciones: [],
       txtTituloPropuesta: "",
-      txtDescripcion: ""
+      txtDescripcion: "",
     });
   }
 
   handleShowPropuestaModalChange(state) {
     this.setState({
-      showPropuestaModal: state
+      showPropuestaModal: state,
     });
   }
 
   handleViewCuidador(cuidador) {
     let idPerfil = cuidador._id;
     const objFiltros = {
-      idPerfil: idPerfil
+      idPerfil: idPerfil,
     };
-    Axios
-      .get(`http://${ipMaquina}:3001/api/procedures/getEmailWithIdPerfil/${idPerfil}`)
-      .then(email => {
+    Axios.get(
+      `http://${ipMaquina}:3001/api/procedures/getEmailWithIdPerfil/${idPerfil}`
+    )
+      .then((email) => {
         const response = email.data;
         this.setState({
           showModal: true,
           selectedCuidador: Object.assign({}, cuidador, {
-            email: response !== 'Vacio' ? response : 'ERROR'
-          })
+            email: response !== "Vacio" ? response : "ERROR",
+          }),
         });
       })
-      .catch(err => {
+      .catch((err) => {
         cogoToast.error(<h5>{trans("registerFormClientes.errorGeneral")}</h5>);
       });
   }
@@ -376,12 +384,18 @@ class Tabla extends React.Component {
       cogoToast.error(<h5>{trans("tablaCuidadores.errorNoLogueado")}</h5>);
       this.handleShowModalChange(false);
       this.props.toogleMenuPerfil(true);
+      this.setState({
+        propuestaIsLoading: false,
+      });
       return;
     } else if (this.props.tipoUsuario != "Cliente") {
       cogoToast.error(
         <h5>{trans("tablaCuidadores.errorClienteObligatorio")}</h5>
       );
       this.handleShowModalChange(false);
+      this.setState({
+        propuestaIsLoading: false,
+      });
       return;
     }
 
@@ -392,17 +406,25 @@ class Tabla extends React.Component {
         idCuidador: selectedCuidador._id,
         whoAmI: tipoUsuario,
         email,
-        contrasena
+        contrasena,
       }
     );
     if (comprobAcuerdoUnico.data != "Vacio") {
       cogoToast.error(<h5>{trans("tablaCuidadores.acuerdoExistente")}</h5>);
+      this.setState({
+        propuestaIsLoading: false,
+      });
       return;
     }
 
     if (!this.state.showPropuestaModal) {
       this.setState({
-        showPropuestaModal: true
+        showPropuestaModal: true,
+        diasDisponible: JSON.parse(
+          JSON.stringify(selectedCuidador.diasDisponible)
+        ),
+        ubicaciones: JSON.parse(JSON.stringify(selectedCuidador.ubicaciones)),
+        propuestaIsLoading: false,
       });
       return;
     }
@@ -422,14 +444,15 @@ class Tabla extends React.Component {
         let auxError = this.state.error;
         auxError[clave] = true;
         this.setState({
-          error: auxError
+          error: auxError,
+          propuestaIsLoading: false,
         });
         return;
       }
       //Hago una comporbacion diferente para los dias, para que haya elegido un dia en el combo
       if (clave == "diasDisponible") {
         let error = false;
-        this.state[clave].map(confDia => {
+        this.state[clave].map((confDia) => {
           if (confDia.dia == 0 || isNaN(confDia.dia)) {
             cogoToast.error(
               <h5>{trans("registerFormCuidadores.errorDiaNoElegido")}</h5>
@@ -438,7 +461,12 @@ class Tabla extends React.Component {
             return;
           }
         });
-        if (error) return;
+        if (error) {
+          this.setState({
+            propuestaIsLoading: false,
+          });
+          return;
+        }
       }
     }
 
@@ -447,7 +475,7 @@ class Tabla extends React.Component {
 
   handleAuxAddPuebloChange(e, { newValue }) {
     this.setState({
-      auxAddPueblo: newValue
+      auxAddPueblo: newValue,
     });
   }
 
@@ -455,7 +483,7 @@ class Tabla extends React.Component {
     const { email, tipoUsuario, contrasena } = this.props;
 
     this.setState({
-      propuestaIsLoading: true
+      propuestaIsLoading: true,
     });
 
     var today = getTodayDate();
@@ -471,30 +499,37 @@ class Tabla extends React.Component {
       idCliente: this.props.idCliente,
       diasAcordados: this.state.diasDisponible,
       tituloAcuerdo: this.state.txtTituloPropuesta,
-      pueblo: this.state.ubicaciones[0],
+      pueblo: this.state.ubicaciones,
       descripcionAcuerdo: this.state.txtDescripcion,
       origenAcuerdo: this.props.tipoUsuario,
       whoAmI: tipoUsuario,
       email,
-      contrasena
+      contrasena,
     };
 
-    Axios.post("http://" + ipMaquina + ":3001/api/procedures/newAcuerdo", formData)
-      .then(resultado => {
-        Axios.get("http://" + ipMaquina + ":3001/api/procedures/getIdUsuarioConIdPerfil/" + this.state.selectedCuidador._id)
-        .then(usuario => {
+    Axios.post(
+      "http://" + ipMaquina + ":3001/api/procedures/newAcuerdo",
+      formData
+    )
+      .then((resultado) => {
+        Axios.get(
+          "http://" +
+            ipMaquina +
+            ":3001/api/procedures/getIdUsuarioConIdPerfil/" +
+            this.state.selectedCuidador._id
+        ).then((usuario) => {
           let notificacionData = {
             idUsuario: usuario.data,
             idRemitente: this.props.idUsuario,
             tipoNotificacion: "Acuerdo",
             acuerdo: resultado.data,
             email,
-            contrasena
+            contrasena,
           };
           Axios.post(
             "http://" + ipMaquina + ":3001/api/procedures/newNotification",
             notificacionData
-          ).then(notif => {
+          ).then((notif) => {
             this.setState({
               showModal: false,
               showPropuestaModal: false,
@@ -502,16 +537,16 @@ class Tabla extends React.Component {
                 {
                   dia: 0,
                   horaInicio: "00:00",
-                  horaFin: "00:00"
-                }
+                  horaFin: "00:00",
+                },
               ],
               ubicaciones: [],
               txtTituloPropuesta: "",
-              txtDescripcion: ""
+              txtDescripcion: "",
             });
 
             gSocket.emit("notify", {
-              idUsuario: usuario.data
+              idUsuario: usuario.data,
             });
 
             cogoToast.success(
@@ -519,15 +554,15 @@ class Tabla extends React.Component {
             );
 
             this.setState({
-              propuestaIsLoading: false
+              propuestaIsLoading: false,
             });
           });
         });
       })
-      .catch(err => {
+      .catch((err) => {
         cogoToast.error(<h5>{trans("tablaCuidadores.errorGeneral")}</h5>);
         this.setState({
-          propuestaIsLoading: false
+          propuestaIsLoading: false,
         });
       });
   }
@@ -536,39 +571,39 @@ class Tabla extends React.Component {
     const { auxFilterPueblo, requiredCards } = this.state;
 
     let objFiltros = {
-      isPublic: true
+      isPublic: true,
     };
 
-    if (auxFilterPueblo !== ""){
+    if (auxFilterPueblo !== "") {
       objFiltros.ubicaciones = auxFilterPueblo;
     }
 
     this.setState(
       {
         jsonCuidadores: {},
-        buscado: false
+        buscado: false,
       },
       () => {
         Axios.get("http://" + ipMaquina + ":3001/api/cuidador", {
           params: {
             filtros: objFiltros,
             options: {
-              limit: requiredCards
-            }
-          }
+              limit: requiredCards,
+            },
+          },
         })
-          .then(data => {
+          .then((data) => {
             this.setState({
               jsonCuidadores: data.data,
               buscado: true,
               showModalFilter: false,
-              isFiltering: true
+              isFiltering: true,
             });
           })
-          .catch(err => {
+          .catch((err) => {
             this.setState({
               buscado: true,
-              showModalFilter: false
+              showModalFilter: false,
             });
             cogoToast.error(
               <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
@@ -584,31 +619,31 @@ class Tabla extends React.Component {
       {
         jsonCuidadores: {},
         buscado: false,
-        auxFilterPueblo: ""
+        auxFilterPueblo: "",
       },
       () => {
         Axios.get("http://" + ipMaquina + ":3001/api/cuidador", {
           params: {
             filtros: {
-              isPublic: true
+              isPublic: true,
             },
             options: {
-              limit: requiredCards
-            }
-          }
+              limit: requiredCards,
+            },
+          },
         })
-          .then(data => {
+          .then((data) => {
             this.setState({
               jsonCuidadores: data.data,
               buscado: true,
               isFiltering: false,
-              showModalFilter: false
+              showModalFilter: false,
             });
           })
-          .catch(err => {
+          .catch((err) => {
             this.setState({
               buscado: true,
-              showModalFilter: false
+              showModalFilter: false,
             });
             cogoToast.error(
               <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
@@ -620,10 +655,12 @@ class Tabla extends React.Component {
 
   render() {
     const {
-      hoverFilter,
       showModalFilter,
       auxFilterPueblo,
-      isFiltering
+      isFiltering,
+      diasDisponible,
+      showPropuestaModal,
+      propuestaIsLoading,
     } = this.state;
     const vSelectedCuidador = this.state.selectedCuidador;
     const fechaNacCuidador = new Date(vSelectedCuidador.fechaNacimiento);
@@ -650,7 +687,7 @@ class Tabla extends React.Component {
       "Osteguna",
       "Ostirala",
       "Larunbata",
-      "Igandea"
+      "Igandea",
     ];
     const classSuggestion = this.state.error.txtNombre
       ? "border border-danger form-control d-inline w-75"
@@ -661,7 +698,7 @@ class Tabla extends React.Component {
       onChange: onChangeSuggestion,
       placeholder: "Introduce el pueblo...",
       value: auxAddPuebloValue,
-      className: classSuggestion
+      className: classSuggestion,
     };
     const suggestionTheme = {
       container: "react-autosuggest__container",
@@ -678,42 +715,45 @@ class Tabla extends React.Component {
       suggestionHighlighted: "bg-success text-light list-group-item",
       sectionContainer: "react-autosuggest__section-container",
       sectionContainerFirst: "react-autosuggest__section-container--first",
-      sectionTitle: "react-autosuggest__section-title"
+      sectionTitle: "react-autosuggest__section-title",
     };
 
     return (
       <BottomScrollListener onBottom={this.onScreenBottom}>
         <div
-          onClick={() => {
-            this.setState({ showModalFilter: true });
-          }}
-          style={{ cursor: "pointer" }}
           key="divFilter"
           className="d-flex align-items-center justify-content-start mb-3 mt-3 ml-5 mr-5 p-1"
-          onMouseEnter={() => this.handleHoverFilter(true)}
-          onMouseLeave={() => this.handleHoverFilter(false)}
         >
           <div
             style={{
-              borderRadius: 50
+              cursor: "pointer",
             }}
-            className="bg-success text-white rounded-pill p-2">
-            <span
-              className="pl-1"
-              style={{ fontSize: 20 }}
+          >
+            <div
+              style={{
+                borderRadius: 50,
+              }}
+              onClick={() => {
+                this.setState({ showModalFilter: true });
+              }}
+              className="bg-success text-white p-2"
+              onMouseEnter={() => this.handleHoverFilter(true)}
+              onMouseLeave={() => this.handleHoverFilter(false)}
             >
-              {trans('tablaCuidadores.filtrar')}
-            </span>
-            <FontAwesomeIcon
-              className="ml-2"
-              key="iconFilter"
-              size={"1x"}
-              icon={faSearch}
-            />
+              <span className="pl-1" style={{ fontSize: 20 }}>
+                {trans("tablaCuidadores.filtrar")}
+              </span>
+              <FontAwesomeIcon
+                className="ml-2"
+                key="iconFilter"
+                size={"1x"}
+                icon={faSearch}
+              />
+            </div>
           </div>
         </div>
         <SocketContext.Consumer>
-          {socket => {
+          {(socket) => {
             gSocket = socket;
             return (
               <div className="d-flex flex-wrap justify-content-center">
@@ -734,7 +774,7 @@ class Tabla extends React.Component {
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            overflow: "hidden"
+                            overflow: "hidden",
                           }}
                           className="card-img-top"
                           alt="Imagen no disponible"
@@ -843,12 +883,13 @@ class Tabla extends React.Component {
                   })
                 ) : typeof this.state.jsonCuidadores.map == "undefined" &&
                   !this.state.buscado ? (
-                  <div style={{
-                    marginTop: 300
-                  }} className="w-100 text-center">
-                    <ClipLoader
-                      color="#28a745"
-                    />
+                  <div
+                    style={{
+                      marginTop: 300,
+                    }}
+                    className="w-100 text-center"
+                  >
+                    <ClipLoader color="#28a745" />
                   </div>
                 ) : (
                   <small
@@ -865,10 +906,7 @@ class Tabla extends React.Component {
                   onHide={() => this.handleShowModalChange(false)}
                 >
                   <ModalHeader closeLabel="Itxi" closeButton></ModalHeader>
-                  <ModalBody className="container-fluid">
-                    <h5 style={{ marginBottom: "20px" }} className="display-4">
-                      {trans("tablaCuidadores.datosPersonales")}
-                    </h5>
+                  <ModalBody className="d-flex flex-column justify-content-between align-items-center">
                     <div
                       style={{
                         width: "calc(100% - 20px)",
@@ -877,16 +915,16 @@ class Tabla extends React.Component {
                         backgroundRepeat: "no-repeat",
                         margin: "10px",
                         display: "flex",
-                        overflow: "hidden"
+                        overflow: "hidden",
                       }}
-                      className=""
+                      className="flex-row align-items-center justify-content-center"
                       alt="Imagen no disponible"
                     >
                       <img
                         style={{
                           minHeight: "300px",
                           maxHeight: "300px",
-                          height: "auto"
+                          height: "auto",
                         }}
                         src={
                           "http://" +
@@ -895,455 +933,452 @@ class Tabla extends React.Component {
                           vSelectedCuidador.direcFotoContacto
                         }
                       />
-                      <div className="table mb-0">
-                        {/* Aqui van los datos personales en forma de tabla */}
-                        <div className="row h-100">
-                          <div className="col-5 h-100 border-right border-top">
-                            <div className="row ml-0 h-25 border-bottom">
-                              <span className="col-3 text-center my-auto font-weight-bold">
-                                {trans("tablaCuidadores.nombre")}:
-                              </span>
-                              <span className="col-9 text-center my-auto">
-                                {vSelectedCuidador.nombre}
-                              </span>
-                            </div>
+                    </div>
+                    <div
+                      style={{
+                        width: 300,
+                      }}
+                      className="d-flex flex-row align-items-center justify-content-between"
+                    >
+                      <FontAwesomeIcon className="mr-5" icon={faUser} />
+                      <div>
+                        <span>{vSelectedCuidador.nombre}</span>
+                        <span>
+                          {vSelectedCuidador.apellido1 +
+                            " " +
+                            vSelectedCuidador.apellido2}
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        width: 300,
+                      }}
+                      className="d-flex flex-row align-items-center justify-content-between"
+                    >
+                      <FontAwesomeIcon className="mr-5" icon={faCalendarAlt} />
+                      <span>
+                        {fechaNacCuidador.getFullYear() +
+                          "/" +
+                          (fechaNacCuidador.getMonth() + 1) +
+                          "/" +
+                          fechaNacCuidador.getDate()}
+                      </span>
+                    </div>
+                    <div
+                      style={{
+                        width: 300,
+                      }}
+                      className="d-flex flex-row align-items-center justify-content-between"
+                    >
+                      <FontAwesomeIcon className="mr-5" icon={faVenusMars} />
+                      <div>
+                        <span>
+                          {vSelectedCuidador.sexo == "M"
+                            ? "Gizonezkoa"
+                            : "Emakumezkoa"}
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        width: 300,
+                      }}
+                      className="d-flex flex-row align-items-center justify-content-between"
+                    >
+                      <FontAwesomeIcon className="mr-5" icon={faAt} />
+                      <div>
+                        <span>{vSelectedCuidador.email}</span>
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        width: 300,
+                      }}
+                      className="d-flex flex-row align-items-center justify-content-between"
+                    >
+                      <FontAwesomeIcon className="mr-5" icon={faMobileAlt} />
+                      <div>
+                        <span>{telefonoMovilCuidador}</span>
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        width: 300,
+                      }}
+                      className="d-flex flex-row align-items-center justify-content-between"
+                    >
+                      <FontAwesomeIcon
+                        className="mr-5"
+                        icon={faPhoneSquareAlt}
+                      />
+                      <div>
+                        <span>{telefonoFijoCuidador}</span>
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        width: 300,
+                      }}
+                      className="mt-3 d-flex flex-column align-items-center"
+                    >
+                      <div>
+                        <FontAwesomeIcon
+                          icon={faPenSquare}
+                          flip="horizontal"
+                          className="mr-1"
+                        />
+                        <span className="font-weight-bold">
+                          {trans("tablaCuidadores.descripcion")}
+                        </span>
+                      </div>
 
-                            <div className="row ml-0 h-25 border-bottom">
-                              <span className="col-3 text-center my-auto font-weight-bold">
-                                {trans("tablaCuidadores.apellidos")}:
-                              </span>
-                              <span className="col-9 text-center my-auto">
-                                {(
-                                  vSelectedCuidador.apellido1 +
-                                  " " +
-                                  vSelectedCuidador.apellido2
-                                ).length > 1 ? (
-                                  vSelectedCuidador.apellido1 +
-                                  " " +
-                                  vSelectedCuidador.apellido2
-                                ) : (
-                                  <em>{trans("tablaCuidadores.sinDefinir")}</em>
-                                )}
-                              </span>
-                            </div>
+                      <span className="">{vSelectedCuidador.descripcion}</span>
+                    </div>
+                    <div
+                      style={{
+                        width: 300,
+                      }}
+                      className="mt-3 d-flex flex-column"
+                    >
+                      <div className="text-center">
+                        <FontAwesomeIcon icon={faHome} className="mr-1" />
+                        <span className="font-weight-bold text-center">
+                          {trans("tablaCuidadores.pueblos")}
+                        </span>
+                      </div>
+                      <span className="">
+                        {typeof vSelectedCuidador.ubicaciones != "undefined"
+                          ? vSelectedCuidador.ubicaciones.map(
+                              (ubicacion, index) => {
+                                return (
+                                  <div>
+                                    <span>{ubicacion}</span>
+                                    <br />
+                                  </div>
+                                );
+                              }
+                            )
+                          : null}
+                      </span>
+                    </div>
+                    <div
+                      style={{
+                        width: 300,
+                      }}
+                      className="mt-3 d-flex flex-column"
+                    >
+                      <div className="text-center">
+                        <FontAwesomeIcon icon={faClock} className="mr-1" />
+                        <span className="font-weight-bold text-center">
+                          {trans("tablaCuidadores.horasLibres")}
+                        </span>
+                      </div>
+                      <span className="">
+                        {typeof vSelectedCuidador.diasDisponible !=
+                          "undefined" &&
+                        vSelectedCuidador.diasDisponible.length > 0 ? (
+                          vSelectedCuidador.diasDisponible.map((dia) => {
+                            return (
+                              <div className="d-flex flex-row justify-content-between">
+                                <span>{traducDias[dia.dia - 1]}</span>
+                                <span>
+                                  {dia.horaInicio + " - " + dia.horaFin}
+                                </span>
+                              </div>
+                            );
+                          })
+                        ) : (
+                          <div className="list-group">
+                            <em className="text-center list-group-item">
+                              {trans("tablaCuidadores.sinDefinir")}
+                            </em>
+                          </div>
+                        )}
+                      </span>
+                    </div>
+                    <div
+                      style={{
+                        width: 300,
+                      }}
+                      className="mt-3 d-flex flex-column"
+                    >
+                      <div className="text-center">
+                        <FontAwesomeIcon icon={faEuroSign} className="mr-1" />
+                        <span className="font-weight-bold text-center">
+                          {trans("tablaCuidadores.precios")}
+                        </span>
+                      </div>
+                      <div className="">
+                        <div className="d-flex flex-row justify-content-between">
+                          <span>{trans("tablaCuidadores.ninos")}</span>
 
-                            <div className="row ml-0 h-25 border-bottom">
-                              <span className="col-3 text-center my-auto font-weight-bold">
-                                {trans("tablaCuidadores.fechaNac")}:
-                              </span>
-                              <span className="col-9 text-center my-auto">
-                                {fechaNacCuidador.getFullYear() +
-                                  "/" +
-                                  (fechaNacCuidador.getMonth() + 1) +
-                                  "/" +
-                                  fechaNacCuidador.getDate()}
-                              </span>
-                            </div>
-                            <div className="row ml-0 h-25 border-bottom">
-                              <span className="col-3 text-center my-auto font-weight-bold">
-                                {trans("tablaCuidadores.sexo")}:
-                              </span>
-                              <span className="col-9 text-center my-auto">
-                                {vSelectedCuidador.sexo == "M"
-                                  ? "Gizonezkoa"
-                                  : "Emakumezkoa"}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="col-3 h-100 border-right p-0 border-top">
-                            <div
-                              className="row ml-0 mr-0 border-bottom"
-                              style={{ height: "34%" }}
-                            >
-                              <span className="col-3 text-center my-auto font-weight-bold">
-                                {trans("tablaCuidadores.email")}:
-                              </span>
-                              <span className="col-9 text-center my-auto">
-                                {vSelectedCuidador.email}
-                              </span>
-                            </div>
-                            <div
-                              className="row ml-0 mr-0 border-bottom"
-                              style={{ height: "33%" }}
-                            >
-                              <span className="col-3 text-center my-auto font-weight-bold">
-                                {trans("tablaCuidadores.movil")}:
-                              </span>
-                              <span className="col-9 text-center my-auto">
-                                {telefonoMovilCuidador}
-                              </span>
-                            </div>
-                            <div
-                              className="row ml-0 mr-0 border-bottom"
-                              style={{ height: "33%" }}
-                            >
-                              <span className="col-3 text-center my-auto font-weight-bold">
-                                {trans("tablaCuidadores.telefFijo")}:
-                              </span>
-                              <span className="col-9 text-center my-auto">
-                                {telefonoFijoCuidador}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="col-4 h-100 p-0 border-bottom border-top border-right">
-                            <div className="panel panel-default">
-                              <div className="panel-header text-center mb-5 font-weight-bold">
-                                {trans("tablaCuidadores.descripcion")}
-                              </div>
-                              <div className="panel-body p-2">
-                                {vSelectedCuidador.descripcion}
-                              </div>
-                            </div>
-                          </div>
+                          <span>
+                            {typeof vSelectedCuidador.precioPorPublico !=
+                            "undefined" ? (
+                              vSelectedCuidador.precioPorPublico.nino != "" ? (
+                                vSelectedCuidador.precioPorPublico.nino +
+                                "€ /orduko"
+                              ) : (
+                                <em>Definitu gabe</em>
+                              )
+                            ) : null}
+                          </span>
+                        </div>
+                        <div className="d-flex flex-row justify-content-between">
+                          <span>{trans("tablaCuidadores.terceraEdad")}</span>
+
+                          <span>
+                            {typeof vSelectedCuidador.precioPorPublico !=
+                            "undefined" ? (
+                              vSelectedCuidador.precioPorPublico.terceraEdad !=
+                              "" ? (
+                                vSelectedCuidador.precioPorPublico.terceraEdad +
+                                "€ /orduko"
+                              ) : (
+                                <em>Definitu gabe</em>
+                              )
+                            ) : null}
+                          </span>
+                        </div>
+                        <div className="d-flex flex-row justify-content-between">
+                          <span>
+                            {trans("tablaCuidadores.necesidadEspecial")}
+                          </span>
+
+                          <span>
+                            {typeof vSelectedCuidador.precioPorPublico !=
+                            "undefined" ? (
+                              vSelectedCuidador.precioPorPublico
+                                .necesidadEspecial != "" ? (
+                                vSelectedCuidador.precioPorPublico
+                                  .necesidadEspecial + "€ /orduko"
+                              ) : (
+                                <em>Definitu gabe</em>
+                              )
+                            ) : null}
+                          </span>
                         </div>
                       </div>
                     </div>
-
-                    <h5 style={{ margin: "20px 0px" }} className="display-4">
-                      {trans("tablaCuidadores.condiciones")}
-                    </h5>
-                    <hr />
-                    <div className="row h-100">
-                      <div className="col-4 h-100 panel panel-default">
-                        <h5 className="panel-header text-center">
-                          {trans("tablaCuidadores.pueblos")}
-                        </h5>
-                        <div className="panel-body list-group">
-                          {typeof vSelectedCuidador.ubicaciones != "undefined"
-                            ? vSelectedCuidador.ubicaciones.map(
-                                (ubicacion, index) => {
-                                  return (
-                                    <span className="list-group-item">
-                                      {ubicacion}
-                                    </span>
-                                  );
-                                }
-                              )
-                            : null}
-                        </div>
-                      </div>
-                      <div className="col-4 h-100">
-                        <h5 className="panel-header text-center">
-                          {trans("tablaCuidadores.horasLibres")}
-                        </h5>
-                        <div className="list-group">
-                          {typeof vSelectedCuidador.diasDisponible !=
-                            "undefined" &&
-                          vSelectedCuidador.diasDisponible.length > 0 ? (
-                            vSelectedCuidador.diasDisponible.map(dia => {
-                              return (
-                                <div className="list-group-item">
-                                  <span className="list-group-item border-right font-weight-bold text-center">
-                                    {traducDias[dia.dia - 1]}
-                                  </span>
-                                  <span className="list-group-item text-center">
-                                    {dia.horaInicio + " - " + dia.horaFin}
-                                  </span>
-                                </div>
-                              );
-                            })
-                          ) : (
-                            <div className="list-group">
-                              <em className="text-center list-group-item">
-                                {trans("tablaCuidadores.sinDefinir")}
-                              </em>
+                    <div>
+                      {showPropuestaModal ? (
+                        <Collapse className="mt-5">
+                          <div className="d-flex flex-column justify-content-between align-items-center">
+                            <div className="d-flex flex-row align-items-center justify-content-center">
+                              <FontAwesomeIcon
+                                size="2x"
+                                icon={faComments}
+                                className="mr-2"
+                              />
+                              <span
+                                className="font-weight-bold"
+                                style={{
+                                  fontSize: 20,
+                                }}
+                              >
+                                {trans("tablaCuidadores.tuPropuesta")}
+                              </span>
                             </div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="col-4 h-100">
-                        <h5 className="panel-header text-center">
-                          {trans("tablaCuidadores.precios")}
-                        </h5>
-                        <div className="list-group">
-                          <div className="list-group-item">
-                            <span className="list-group-item font-weight-bold">
-                              {trans("tablaCuidadores.ninos")}
-                            </span>
-                            <span className="list-group-item">
-                              {typeof vSelectedCuidador.precioPorPublico !=
-                              "undefined" ? (
-                                vSelectedCuidador.precioPorPublico.nino !=
-                                "" ? (
-                                  vSelectedCuidador.precioPorPublico.nino +
-                                  "€ /orduko"
-                                ) : (
-                                  <em>Definitu gabe</em>
-                                )
-                              ) : null}
-                            </span>
-                          </div>
-                          <div className="list-group-item">
-                            <span className="list-group-item font-weight-bold">
-                              {trans("tablaCuidadores.terceraEdad")}
-                            </span>
-                            <span className="list-group-item">
-                              {typeof vSelectedCuidador.precioPorPublico !=
-                              "undefined" ? (
-                                vSelectedCuidador.precioPorPublico
-                                  .terceraEdad != "" ? (
-                                  vSelectedCuidador.precioPorPublico
-                                    .terceraEdad + "€ /orduko"
-                                ) : (
-                                  <em>Definitu gabe</em>
-                                )
-                              ) : null}
-                            </span>
-                          </div>
-                          <div className="list-group-item">
-                            <span className="list-group-item font-weight-bold">
-                              {trans("tablaCuidadores.necesidadEspecial")}
-                            </span>
-                            <span className="list-group-item">
-                              {typeof vSelectedCuidador.precioPorPublico !=
-                              "undefined" ? (
-                                vSelectedCuidador.precioPorPublico
-                                  .necesidadEspecial != "" ? (
-                                  vSelectedCuidador.precioPorPublico
-                                    .necesidadEspecial + "€ /orduko"
-                                ) : (
-                                  <em>Definitu gabe</em>
-                                )
-                              ) : null}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <Collapse
-                        className="w-100"
-                        in={this.state.showPropuestaModal}
-                      >
-                        <div>
-                          <h5 className="display-4 mb-2">
-                            {trans("tablaCuidadores.tuPropuesta")}
-                          </h5>
-                          <div className="row mr-0 ml-0 mb-2 p-2 text-center">
-                            <label
-                              className="w-100 text-center"
-                              htmlFor="txtTituloPropuesta"
+                            <div
+                              style={{
+                                width: 300,
+                              }}
+                              className="mt-3 d-flex flex-column"
                             >
-                              {trans("tablaCuidadores.tituloPropuesta")}
-                            </label>
-                            <input
-                              onChange={this.handleInputChange}
-                              type="text"
-                              className="form-control"
-                              id="txtTituloPropuesta"
-                              aria-describedby="txtNombreHelp"
-                              placeholder="Idatzi proposamen izenburua..."
-                              value={this.state.txtTituloPropuesta}
-                            />
-                          </div>
-                          <div className="row ml-0 mr-0 mb-2">
-                            <div className="col-6">
-                              <label className="w-100 text-center">
-                                {trans("tablaCuidadores.horasPropuesta")}:
-                              </label>
-                              <div className="w-100 mt-2" id="diasDisponible">
-                                {/* Aqui iran los dias dinamicamente */}
-                                {this.state.diasDisponible.map(
-                                  (objDia, indice) => {
-                                    return (
-                                      <div
-                                        className="col-6 mx-auto text-center"
-                                        id={"diaDisponible" + indice}
-                                      >
-                                        <div className="form-control mt-4 w-100">
-                                          <select
-                                            value={
-                                              this.state.diasDisponible[indice]
-                                                .dia
-                                            }
-                                            onChange={
-                                              this.handleDiasDisponibleChange
-                                            }
-                                            className="d-inline"
-                                            id={"dia" + indice}
-                                          >
-                                            <option>Aukeratu eguna</option>
-                                            <option value="1">
-                                              Astelehena
-                                            </option>
-                                            <option value="2">Asteartea</option>
-                                            <option value="3">
-                                              Asteazkena
-                                            </option>
-                                            <option value="4">Osteguna</option>
-                                            <option value="5">Ostirala</option>
-                                            <option value="6">Larunbata</option>
-                                            <option value="7">Igandea</option>
-                                          </select>
-                                          <br />
-                                          <br />
-                                          <b>
-                                            {trans(
-                                              "registerFormCuidadores.horaInicio"
-                                            )}{" "}
-                                            :
-                                          </b>
-                                          <TimeInput
-                                            onTimeChange={valor => {
-                                              this.handleDiasDisponibleChange(
-                                                valor,
-                                                "horaInicio" + indice
-                                              );
-                                            }}
-                                            id={"horaInicio" + indice}
-                                            initTime={
-                                              this.state.diasDisponible[indice]
-                                                .horaInicio != "00:00"
-                                                ? this.state.diasDisponible[
-                                                    indice
-                                                  ].horaInicio
-                                                : "00:00"
-                                            }
-                                            className="mt-1 text-center d-inline form-control"
-                                          />
-                                          <br />
-                                          <b>
-                                            {trans(
-                                              "registerFormCuidadores.horaFin"
-                                            )}{" "}
-                                            :
-                                          </b>
-                                          <TimeInput
-                                            onTimeChange={valor => {
-                                              this.handleDiasDisponibleChange(
-                                                valor,
-                                                "horaFin" + indice
-                                              );
-                                            }}
-                                            id={"horaFin" + indice}
-                                            initTime={
-                                              this.state.diasDisponible[indice]
-                                                .horaFin != "00:00"
-                                                ? this.state.diasDisponible[
-                                                    indice
-                                                  ].horaFin
-                                                : "00:00"
-                                            }
-                                            className="mt-1 text-center d-inline form-control"
-                                          />
-                                          <br />
-                                          <br />
-                                        </div>
-                                      </div>
-                                    );
-                                  }
-                                )}
-                                <div
-                                  id="botonesDiasDisponible"
-                                  className="w-100 mt-2"
-                                >
-                                  {this.state.diasDisponible.length > 0 ? (
-                                    <a
-                                      onClick={this.removeDiasDisponible}
-                                      className="btn btn-danger float-left text-light"
-                                    >
-                                      {trans(
-                                        "registerFormCuidadores.eliminarDia"
-                                      )}{" "}
-                                      <FontAwesomeIcon icon={faMinusCircle} />
-                                    </a>
-                                  ) : (
-                                    ""
-                                  )}
-                                  <a
-                                    onClick={this.addDiasDisponible}
-                                    className="btn btn-success float-right text-light"
-                                  >
-                                    {trans("registerFormCuidadores.anadir")}{" "}
-                                    <FontAwesomeIcon icon={faPlusCircle} />
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-6">
-                              <label className="w-100 text-center">
-                                {trans("tablaCuidadores.pueblos")}:
-                              </label>
-                              <div className="form-group mt-2">
-                                <AutoSuggest
-                                  suggestions={this.state.suggestionsPueblos}
-                                  onSuggestionsFetchRequested={
-                                    this.onSuggestionsFetchRequested
-                                  }
-                                  onSuggestionsClearRequested={
-                                    this.onSuggestionsClearRequested
-                                  }
-                                  onSuggestionSelected={this.handleAddPueblo}
-                                  getSuggestionValue={this.getSuggestionValue}
-                                  renderSuggestion={this.renderSuggestion}
-                                  inputProps={autoSuggestProps}
-                                  theme={suggestionTheme}
-                                  id="txtAddPueblos"
+                              <div className="d-flex flex-row align-items-center justify-content-center">
+                                <FontAwesomeIcon
+                                  icon={faFileSignature}
+                                  className="mr-1"
                                 />
-                                {this.state.ubicaciones.length > 0 ? (
-                                  <h5 className="mt-2 lead">
-                                    {trans(
-                                      "registerFormCuidadores.pueblosSeleccionados"
-                                    )}
-                                    :
-                                  </h5>
-                                ) : (
-                                  ""
-                                )}
-
-                                <ul className="list-group">
-                                  {this.state.ubicaciones.map(pueblo => {
-                                    return (
-                                      <li className="list-group-item">
-                                        {pueblo}
-                                      </li>
-                                    );
-                                  })}
-                                </ul>
-                                {this.state.ubicaciones.length > 0 ? (
-                                  <a
-                                    onClick={this.handleRemovePueblo}
-                                    className="mt-4 btn btn-danger float-right text-light"
-                                  >
-                                    {trans(
-                                      "registerFormCuidadores.eliminarPueblo"
-                                    )}{" "}
-                                    <FontAwesomeIcon icon={faMinusCircle} />
-                                  </a>
-                                ) : (
-                                  ""
-                                )}
+                                <span className="font-weight-bold">
+                                  {trans("tablaCuidadores.tituloPropuesta")}
+                                </span>
                               </div>
+                              <input
+                                onChange={this.handleInputChange}
+                                type="text"
+                                className="mt-1"
+                                id="txtTituloPropuesta"
+                                aria-describedby="txtNombreHelp"
+                                placeholder="Idatzi proposamen izenburua..."
+                                value={this.state.txtTituloPropuesta}
+                              />
+                            </div>
+                            <div
+                              style={{
+                                width: 300,
+                              }}
+                              className="mt-3 d-flex flex-column"
+                            >
+                              <div className="d-flex flex-row align-items-center justify-content-between">
+                                <FontAwesomeIcon
+                                  style={{ cursor: "pointer" }}
+                                  onClick={this.removeDiasDisponible}
+                                  className="text-danger"
+                                  icon={faMinusCircle}
+                                />
+                                <div>
+                                  <FontAwesomeIcon
+                                    icon={faClock}
+                                    className="mr-1"
+                                  />
+                                  <span className="font-weight-bold">
+                                    {trans("tablaCuidadores.horasPropuesta")}
+                                  </span>
+                                </div>
+                                <FontAwesomeIcon
+                                  style={{ cursor: "pointer" }}
+                                  onClick={this.addDiasDisponible}
+                                  className="text-success"
+                                  icon={faPlusCircle}
+                                />
+                              </div>
+                              {diasDisponible.map((dia, indice) => (
+                                <div className="mt-1 d-flex flex-row align-items-center justify-content-between">
+                                  <select
+                                    value={dia.dia}
+                                    onChange={this.handleDiasDisponibleChange}
+                                    className="d-inline"
+                                    id={"dia" + indice}
+                                  >
+                                    <option>Aukeratu eguna</option>
+                                    <option value="1">Astelehena</option>
+                                    <option value="2">Asteartea</option>
+                                    <option value="3">Asteazkena</option>
+                                    <option value="4">Osteguna</option>
+                                    <option value="5">Ostirala</option>
+                                    <option value="6">Larunbata</option>
+                                    <option value="7">Igandea</option>
+                                  </select>
+                                  <div className="d-flex flex-row align-items-center">
+                                    <TimeInput
+                                      onTimeChange={(valor) => {
+                                        this.handleDiasDisponibleChange(
+                                          valor,
+                                          "horaInicio" + indice
+                                        );
+                                      }}
+                                      id={"horaInicio" + indice}
+                                      initTime={
+                                        diasDisponible[indice].horaInicio
+                                      }
+                                      style={{
+                                        width: 50,
+                                      }}
+                                      className="text-center"
+                                    />
+                                    -
+                                    <TimeInput
+                                      onTimeChange={(valor) => {
+                                        this.handleDiasDisponibleChange(
+                                          valor,
+                                          "horaFin" + indice
+                                        );
+                                      }}
+                                      id={"horaFin" + indice}
+                                      initTime={diasDisponible[indice].horaFin}
+                                      style={{
+                                        width: 50,
+                                      }}
+                                      className="text-center"
+                                    />
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                            <div
+                              style={{
+                                width: 300,
+                              }}
+                              className="mt-3 d-flex flex-column"
+                            >
+                              <div className="text-center mb-1">
+                                <FontAwesomeIcon
+                                  icon={faHome}
+                                  className="mr-1"
+                                />
+                                <span className="font-weight-bold text-center">
+                                  {trans("tablaCuidadores.pueblos")}
+                                </span>
+                              </div>
+                              <PuebloAutosuggest
+                                onSuggestionSelected={this.handleAddPueblo}
+                              />
+                              {this.state.ubicaciones.map((pueblo) => {
+                                return (
+                                  <div className="mt-1 d-flex flex-row justify-content-between">
+                                    <span>{pueblo}</span>
+                                    <FontAwesomeIcon
+                                      style={{ cursor: "pointer" }}
+                                      onClick={() =>
+                                        this.handleRemovePueblo(pueblo)
+                                      }
+                                      className="text-danger"
+                                      icon={faMinusCircle}
+                                    />
+                                  </div>
+                                );
+                              })}
+                            </div>
+                            <div
+                              style={{
+                                width: 300,
+                              }}
+                              className="mt-3 d-flex flex-column"
+                            >
+                              <div className="d-flex flex-row justify-content-center align-items-center">
+                                <FontAwesomeIcon
+                                  icon={faPenSquare}
+                                  flip="horizontal"
+                                  className="mr-1"
+                                />
+                                <span className="font-weight-bold">
+                                  {trans("tablaCuidadores.descripcion")}
+                                </span>
+                              </div>
+                              <textarea
+                                onChange={this.handleInputChange}
+                                className={
+                                  this.state.error.txtNombre
+                                    ? "border border-danger form-control mt-1"
+                                    : "form-control mt-1"
+                                }
+                                rows="5"
+                                id="txtDescripcion"
+                                placeholder="Idatzi zure proposamenaren deskribapen zehatza..."
+                                value={this.state.txtDescripcion}
+                              ></textarea>
                             </div>
                           </div>
-                          <div className="row ml-0 mr-0 p-2">
-                            <label htmlFor="txtDescripcion">
-                              {trans("tablaCuidadores.descripcion")}
-                            </label>
-                            <textarea
-                              onChange={this.handleInputChange}
-                              className={
-                                this.state.error.txtNombre
-                                  ? "border border-danger form-control"
-                                  : "form-control"
-                              }
-                              rows="5"
-                              id="txtDescripcion"
-                              placeholder="Idatzi zure proposamenaren deskribapen zehatza..."
-                              value={this.state.txtDescripcion}
-                            ></textarea>
-                          </div>
-                        </div>
-                      </Collapse>
+                        </Collapse>
+                      ) : null}
                     </div>
                   </ModalBody>
-                  <ModalFooter>
-                    <Button
-                      className="w-100 btn-success"
-                      onClick={() => this.handlePedirCuidado()}
-                    >
-                      {this.state.showPropuestaModal
-                        ? trans("tablaCuidadores.enviarAcuerdo")
-                        : trans("tablaCuidadores.acordar")}
-                    </Button>
+                  <ModalFooter className="d-flex flex-column">
+                    {!propuestaIsLoading ? (
+                      <Button
+                        className="w-100 btn-success"
+                        onClick={() => {
+                          this.setState(
+                            {
+                              propuestaIsLoading: true,
+                            },
+                            () => {
+                              this.handlePedirCuidado();
+                            }
+                          );
+                        }}
+                      >
+                        {this.state.showPropuestaModal
+                          ? trans("tablaCuidadores.enviarAcuerdo")
+                          : trans("tablaCuidadores.acordar")}
+                      </Button>
+                    ) : (
+                      <div className="d-flex flex-row justify-content-center">
+                        <ClipLoader color="#28a745" />
+                      </div>
+                    )}
                   </ModalFooter>
                 </Modal>
                 <Modal
@@ -1370,19 +1405,19 @@ class Tabla extends React.Component {
                       ) : null}
                     </div>
                     <div className="d-flex flex-row justify-content-between">
-                    <Button
-                      onClick={this.handleApplyFilters}
-                      className="btn btn-success"
-                    >
-                      Aplicar filtro
-                    </Button>
-                    <Button
-                      onClick={this.handleResetFilters}
-                      disabled={!isFiltering}
-                      className="btn btn-danger"
-                    >
-                      Restablecer filtros
-                    </Button>
+                      <Button
+                        onClick={this.handleApplyFilters}
+                        className="btn btn-success"
+                      >
+                        Aplicar filtro
+                      </Button>
+                      <Button
+                        onClick={this.handleResetFilters}
+                        disabled={!isFiltering}
+                        className="btn btn-danger"
+                      >
+                        Restablecer filtros
+                      </Button>
                     </div>
                   </ModalBody>
                 </Modal>

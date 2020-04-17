@@ -248,7 +248,9 @@ class MenuPerfil extends React.Component {
         }} className="d-flex flex-column justify-content-between h-100">
           <IconAvatar />
           <MenuContent />
-          <ChangeLang />
+          <div className="d-none d-sm-inline">
+            <ChangeLang />
+          </div>          
         </div>
       </BurgerMenu>
     );
