@@ -384,12 +384,18 @@ class Tabla extends React.Component {
       cogoToast.error(<h5>{trans("tablaCuidadores.errorNoLogueado")}</h5>);
       this.handleShowModalChange(false);
       this.props.toogleMenuPerfil(true);
+      this.setState({
+        propuestaIsLoading: false,
+      });
       return;
     } else if (this.props.tipoUsuario != "Cliente") {
       cogoToast.error(
         <h5>{trans("tablaCuidadores.errorClienteObligatorio")}</h5>
       );
       this.handleShowModalChange(false);
+      this.setState({
+        propuestaIsLoading: false,
+      });
       return;
     }
 
@@ -405,14 +411,20 @@ class Tabla extends React.Component {
     );
     if (comprobAcuerdoUnico.data != "Vacio") {
       cogoToast.error(<h5>{trans("tablaCuidadores.acuerdoExistente")}</h5>);
+      this.setState({
+        propuestaIsLoading: false,
+      });
       return;
     }
 
     if (!this.state.showPropuestaModal) {
       this.setState({
         showPropuestaModal: true,
-        diasDisponible: JSON.parse(JSON.stringify(selectedCuidador.diasDisponible)),
-        ubicaciones: JSON.parse(JSON.stringify(selectedCuidador.ubicaciones))
+        diasDisponible: JSON.parse(
+          JSON.stringify(selectedCuidador.diasDisponible)
+        ),
+        ubicaciones: JSON.parse(JSON.stringify(selectedCuidador.ubicaciones)),
+        propuestaIsLoading: false,
       });
       return;
     }
@@ -433,6 +445,7 @@ class Tabla extends React.Component {
         auxError[clave] = true;
         this.setState({
           error: auxError,
+          propuestaIsLoading: false,
         });
         return;
       }
@@ -448,7 +461,12 @@ class Tabla extends React.Component {
             return;
           }
         });
-        if (error) return;
+        if (error) {
+          this.setState({
+            propuestaIsLoading: false,
+          });
+          return;
+        }
       }
     }
 
@@ -637,12 +655,12 @@ class Tabla extends React.Component {
 
   render() {
     const {
-      hoverFilter,
       showModalFilter,
       auxFilterPueblo,
       isFiltering,
       diasDisponible,
       showPropuestaModal,
+      propuestaIsLoading,
     } = this.state;
     const vSelectedCuidador = this.state.selectedCuidador;
     const fechaNacCuidador = new Date(vSelectedCuidador.fechaNacimiento);
@@ -1237,7 +1255,9 @@ class Tabla extends React.Component {
                                         );
                                       }}
                                       id={"horaInicio" + indice}
-                                      initTime={diasDisponible[indice].horaInicio}
+                                      initTime={
+                                        diasDisponible[indice].horaInicio
+                                      }
                                       style={{
                                         width: 50,
                                       }}
@@ -1330,15 +1350,30 @@ class Tabla extends React.Component {
                       ) : null}
                     </div>
                   </ModalBody>
-                  <ModalFooter>
-                    <Button
-                      className="w-100 btn-success"
-                      onClick={() => this.handlePedirCuidado()}
-                    >
-                      {this.state.showPropuestaModal
-                        ? trans("tablaCuidadores.enviarAcuerdo")
-                        : trans("tablaCuidadores.acordar")}
-                    </Button>
+                  <ModalFooter className="d-flex flex-column">
+                    {!propuestaIsLoading ? (
+                      <Button
+                        className="w-100 btn-success"
+                        onClick={() => {
+                          this.setState(
+                            {
+                              propuestaIsLoading: true,
+                            },
+                            () => {
+                              this.handlePedirCuidado();
+                            }
+                          );
+                        }}
+                      >
+                        {this.state.showPropuestaModal
+                          ? trans("tablaCuidadores.enviarAcuerdo")
+                          : trans("tablaCuidadores.acordar")}
+                      </Button>
+                    ) : (
+                      <div className="d-flex flex-row justify-content-center">
+                        <ClipLoader color="#28a745" />
+                      </div>
+                    )}
                   </ModalFooter>
                 </Modal>
                 <Modal
