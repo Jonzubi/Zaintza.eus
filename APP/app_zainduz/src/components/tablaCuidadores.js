@@ -222,7 +222,7 @@ class Tabla extends React.Component {
 
   handleAddPueblo(c, { suggestion }) {
     this.setState({}, () => {
-      let pueblo = this.state.auxAddPueblo;
+      let pueblo = suggestion;
       if (pueblo == "") return;
 
       if (!municipios.includes(pueblo)) {
@@ -258,12 +258,11 @@ class Tabla extends React.Component {
     });
   };
 
-  handleRemovePueblo() {
+  handleRemovePueblo(pueblo) {
+    const { ubicaciones } = this.state;
+    const ubicacionesFiltrado = ubicaciones.filter((p) => p !== pueblo);
     this.setState({
-      ubicaciones:
-        typeof this.state.ubicaciones.pop() != "undefined"
-          ? this.state.ubicaciones
-          : [],
+      ubicaciones: ubicacionesFiltrado,
     });
   }
 
@@ -412,6 +411,7 @@ class Tabla extends React.Component {
     if (!this.state.showPropuestaModal) {
       this.setState({
         showPropuestaModal: true,
+        diasDisponible: [...selectedCuidador.diasDisponible],
       });
       return;
     }
@@ -640,6 +640,7 @@ class Tabla extends React.Component {
       showModalFilter,
       auxFilterPueblo,
       isFiltering,
+      diasDisponible,
     } = this.state;
     const vSelectedCuidador = this.state.selectedCuidador;
     const fechaNacCuidador = new Date(vSelectedCuidador.fechaNacimiento);
@@ -1135,21 +1136,42 @@ class Tabla extends React.Component {
                         </div>
                       </div>
                     </div>
-                    <div className={!this.state.showPropuestaModal ? "d-none" : null}>
-                      <Collapse
-                        className="mt-3"
-                      >
-                        <div className="d-flex flex-column justify-content-between">
+                    <div
+                      className={
+                        !this.state.showPropuestaModal ? "d-none" : null
+                      }
+                    >
+                      <Collapse className="mt-3">
+                        <div className="d-flex flex-column justify-content-between align-items-center">
                           <div className="d-flex flex-row align-items-center justify-content-center">
-                              <FontAwesomeIcon size="2x" icon={faComments} className="mr-2"/>
-                              <span className="font-weight-bold" style={{
-                                fontSize: 20
-                              }}>{trans("tablaCuidadores.tuPropuesta")}</span>
+                            <FontAwesomeIcon
+                              size="2x"
+                              icon={faComments}
+                              className="mr-2"
+                            />
+                            <span
+                              className="font-weight-bold"
+                              style={{
+                                fontSize: 20,
+                              }}
+                            >
+                              {trans("tablaCuidadores.tuPropuesta")}
+                            </span>
                           </div>
-                          <div className="mt-3 d-flex flex-column">
+                          <div
+                            style={{
+                              width: 300,
+                            }}
+                            className="mt-3 d-flex flex-column"
+                          >
                             <div className="d-flex flex-row align-items-center justify-content-center">
-                              <FontAwesomeIcon icon={faFileSignature} className="mr-1" />
-                              <span className="font-weight-bold">{trans("tablaCuidadores.tituloPropuesta")}</span>
+                              <FontAwesomeIcon
+                                icon={faFileSignature}
+                                className="mr-1"
+                              />
+                              <span className="font-weight-bold">
+                                {trans("tablaCuidadores.tituloPropuesta")}
+                              </span>
                             </div>
                             <input
                               onChange={this.handleInputChange}
@@ -1161,196 +1183,139 @@ class Tabla extends React.Component {
                               value={this.state.txtTituloPropuesta}
                             />
                           </div>
-                          <div className="mt-3 d-flex flex-column">
-                            <div className="d-flex flex-row align-items-center justify-content-center">
-                              <FontAwesomeIcon icon={faClock} className="mr-1" />
-                              <span className="font-weight-bold">{trans("tablaCuidadores.horasPropuesta")}</span>
+                          <div
+                            style={{
+                              width: 300,
+                            }}
+                            className="mt-3 d-flex flex-column"
+                          >
+                            <div className="d-flex flex-row align-items-center justify-content-between">
+                              <FontAwesomeIcon
+                                style={{ cursor: "pointer" }}
+                                onClick={this.removeDiasDisponible}
+                                className="text-danger"
+                                icon={faMinusCircle}
+                              />
+                              <div>
+                                <FontAwesomeIcon
+                                  icon={faClock}
+                                  className="mr-1"
+                                />
+                                <span className="font-weight-bold">
+                                  {trans("tablaCuidadores.horasPropuesta")}
+                                </span>
+                              </div>
+                              <FontAwesomeIcon
+                                style={{ cursor: "pointer" }}
+                                onClick={this.addDiasDisponible}
+                                className="text-success"
+                                icon={faPlusCircle}
+                              />
                             </div>
-                          </div>
-                          <div className="row ml-0 mr-0 mb-2">
-                            <div className="col-6">
-                              <label className="w-100 text-center">
-                                {trans("tablaCuidadores.horasPropuesta")}:
-                              </label>
-                              <div className="w-100 mt-2" id="diasDisponible">
-                                {/* Aqui iran los dias dinamicamente */}
-                                {this.state.diasDisponible.map(
-                                  (objDia, indice) => {
-                                    return (
-                                      <div
-                                        className="col-6 mx-auto text-center"
-                                        id={"diaDisponible" + indice}
-                                      >
-                                        <div className="form-control mt-4 w-100">
-                                          <select
-                                            value={
-                                              this.state.diasDisponible[indice]
-                                                .dia
-                                            }
-                                            onChange={
-                                              this.handleDiasDisponibleChange
-                                            }
-                                            className="d-inline"
-                                            id={"dia" + indice}
-                                          >
-                                            <option>Aukeratu eguna</option>
-                                            <option value="1">
-                                              Astelehena
-                                            </option>
-                                            <option value="2">Asteartea</option>
-                                            <option value="3">
-                                              Asteazkena
-                                            </option>
-                                            <option value="4">Osteguna</option>
-                                            <option value="5">Ostirala</option>
-                                            <option value="6">Larunbata</option>
-                                            <option value="7">Igandea</option>
-                                          </select>
-                                          <br />
-                                          <br />
-                                          <b>
-                                            {trans(
-                                              "registerFormCuidadores.horaInicio"
-                                            )}{" "}
-                                            :
-                                          </b>
-                                          <TimeInput
-                                            onTimeChange={(valor) => {
-                                              this.handleDiasDisponibleChange(
-                                                valor,
-                                                "horaInicio" + indice
-                                              );
-                                            }}
-                                            id={"horaInicio" + indice}
-                                            initTime={
-                                              this.state.diasDisponible[indice]
-                                                .horaInicio != "00:00"
-                                                ? this.state.diasDisponible[
-                                                    indice
-                                                  ].horaInicio
-                                                : "00:00"
-                                            }
-                                            className="mt-1 text-center d-inline form-control"
-                                          />
-                                          <br />
-                                          <b>
-                                            {trans(
-                                              "registerFormCuidadores.horaFin"
-                                            )}{" "}
-                                            :
-                                          </b>
-                                          <TimeInput
-                                            onTimeChange={(valor) => {
-                                              this.handleDiasDisponibleChange(
-                                                valor,
-                                                "horaFin" + indice
-                                              );
-                                            }}
-                                            id={"horaFin" + indice}
-                                            initTime={
-                                              this.state.diasDisponible[indice]
-                                                .horaFin != "00:00"
-                                                ? this.state.diasDisponible[
-                                                    indice
-                                                  ].horaFin
-                                                : "00:00"
-                                            }
-                                            className="mt-1 text-center d-inline form-control"
-                                          />
-                                          <br />
-                                          <br />
-                                        </div>
-                                      </div>
-                                    );
-                                  }
-                                )}
-                                <div
-                                  id="botonesDiasDisponible"
-                                  className="w-100 mt-2"
+                            {diasDisponible.map((dia, indice) => (
+                              <div className="d-flex flex-row align-items-center justify-content-between">
+                                <select
+                                  value={this.state.diasDisponible[indice].dia}
+                                  onChange={this.handleDiasDisponibleChange}
+                                  className="d-inline"
+                                  id={"dia" + indice}
                                 >
-                                  {this.state.diasDisponible.length > 0 ? (
-                                    <a
-                                      onClick={this.removeDiasDisponible}
-                                      className="btn btn-danger float-left text-light"
-                                    >
-                                      {trans(
-                                        "registerFormCuidadores.eliminarDia"
-                                      )}{" "}
-                                      <FontAwesomeIcon icon={faMinusCircle} />
-                                    </a>
-                                  ) : (
-                                    ""
-                                  )}
-                                  <a
-                                    onClick={this.addDiasDisponible}
-                                    className="btn btn-success float-right text-light"
-                                  >
-                                    {trans("registerFormCuidadores.anadir")}{" "}
-                                    <FontAwesomeIcon icon={faPlusCircle} />
-                                  </a>
+                                  <option>Aukeratu eguna</option>
+                                  <option value="1">Astelehena</option>
+                                  <option value="2">Asteartea</option>
+                                  <option value="3">Asteazkena</option>
+                                  <option value="4">Osteguna</option>
+                                  <option value="5">Ostirala</option>
+                                  <option value="6">Larunbata</option>
+                                  <option value="7">Igandea</option>
+                                </select>
+                                <div className="d-flex flex-row align-items-center">
+                                  <TimeInput
+                                    onTimeChange={(valor) => {
+                                      this.handleDiasDisponibleChange(
+                                        valor,
+                                        "horaInicio" + indice
+                                      );
+                                    }}
+                                    id={"horaInicio" + indice}
+                                    initTime={
+                                      this.state.diasDisponible[indice]
+                                        .horaInicio != "00:00"
+                                        ? this.state.diasDisponible[indice]
+                                            .horaInicio
+                                        : "00:00"
+                                    }
+                                    className="form-control"
+                                  />
+                                  -
+                                  <TimeInput
+                                    onTimeChange={(valor) => {
+                                      this.handleDiasDisponibleChange(
+                                        valor,
+                                        "horaFin" + indice
+                                      );
+                                    }}
+                                    id={"horaFin" + indice}
+                                    initTime={
+                                      this.state.diasDisponible[indice]
+                                        .horaFin != "00:00"
+                                        ? this.state.diasDisponible[indice]
+                                            .horaFin
+                                        : "00:00"
+                                    }
+                                    className="form-control"
+                                  />
                                 </div>
                               </div>
-                            </div>
-                            <div className="col-6">
-                              <label className="w-100 text-center">
-                                {trans("tablaCuidadores.pueblos")}:
-                              </label>
-                              <div className="form-group mt-2">
-                                <AutoSuggest
-                                  suggestions={this.state.suggestionsPueblos}
-                                  onSuggestionsFetchRequested={
-                                    this.onSuggestionsFetchRequested
-                                  }
-                                  onSuggestionsClearRequested={
-                                    this.onSuggestionsClearRequested
-                                  }
-                                  onSuggestionSelected={this.handleAddPueblo}
-                                  getSuggestionValue={this.getSuggestionValue}
-                                  renderSuggestion={this.renderSuggestion}
-                                  inputProps={autoSuggestProps}
-                                  theme={suggestionTheme}
-                                  id="txtAddPueblos"
-                                />
-                                {this.state.ubicaciones.length > 0 ? (
-                                  <h5 className="mt-2 lead">
-                                    {trans(
-                                      "registerFormCuidadores.pueblosSeleccionados"
-                                    )}
-                                    :
-                                  </h5>
-                                ) : (
-                                  ""
-                                )}
-
-                                <ul className="list-group">
-                                  {this.state.ubicaciones.map((pueblo) => {
-                                    return (
-                                      <li className="list-group-item">
-                                        {pueblo}
-                                      </li>
-                                    );
-                                  })}
-                                </ul>
-                                {this.state.ubicaciones.length > 0 ? (
-                                  <a
-                                    onClick={this.handleRemovePueblo}
-                                    className="mt-4 btn btn-danger float-right text-light"
-                                  >
-                                    {trans(
-                                      "registerFormCuidadores.eliminarPueblo"
-                                    )}{" "}
-                                    <FontAwesomeIcon icon={faMinusCircle} />
-                                  </a>
-                                ) : (
-                                  ""
-                                )}
-                              </div>
-                            </div>
+                            ))}
                           </div>
-                          <div className="row ml-0 mr-0 p-2">
-                            <label htmlFor="txtDescripcion">
-                              {trans("tablaCuidadores.descripcion")}
-                            </label>
+                          <div
+                            style={{
+                              width: 300,
+                            }}
+                            className="mt-3 d-flex flex-column"
+                          >
+                            <div className="text-center">
+                              <FontAwesomeIcon icon={faHome} className="mr-1" />
+                              <span className="font-weight-bold text-center">
+                                {trans("tablaCuidadores.pueblos")}
+                              </span>
+                            </div>
+                            <PuebloAutosuggest
+                              onSuggestionSelected={this.handleAddPueblo}
+                            />
+                            {this.state.ubicaciones.map((pueblo) => {
+                              return (
+                                <div className="mt-1 d-flex flex-row justify-content-between">
+                                  <span>{pueblo}</span>
+                                  <FontAwesomeIcon
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() =>
+                                      this.handleRemovePueblo(pueblo)
+                                    }
+                                    className="text-danger"
+                                    icon={faMinusCircle}
+                                  />
+                                </div>
+                              );
+                            })}
+                          </div>
+                          <div
+                            style={{
+                              width: 300,
+                            }}
+                            className="mt-3 d-flex flex-column"
+                          >
+                            <div className="d-flex flex-row justify-content-center align-items-center">
+                              <FontAwesomeIcon
+                                icon={faPenSquare}
+                                flip="horizontal"
+                                className="mr-1"
+                              />
+                              <span className="font-weight-bold">
+                                {trans("tablaCuidadores.descripcion")}
+                              </span>
+                            </div>
                             <textarea
                               onChange={this.handleInputChange}
                               className={
