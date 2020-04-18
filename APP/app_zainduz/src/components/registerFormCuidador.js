@@ -4,10 +4,8 @@ import {
   faMale,
   faFemale,
   faPlusCircle,
-  faMinusCircle,
-  faPlusSquare
+  faMinusCircle
 } from "@fortawesome/free-solid-svg-icons";
-import AddDiasDisponible from "../util/iconos/addDiasDisponible.svg";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import Avatar, { Avatar as AvatarUpload } from "react-avatar-edit";
@@ -16,9 +14,8 @@ import cogoToast from "cogo-toast";
 import { ReactDatez as Calendario } from "react-datez";
 import Switch from "react-switch";
 import TimeInput from "react-time-input";
-import AutoSuggest from "react-autosuggest";
+import PuebloAutosuggest from "./pueblosAutosuggest";
 import "react-datez/dist/css/react-datez.css";
-import loadGif from "../util/gifs/loadGif.gif";
 import imgNino from "../util/images/nino.png";
 import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
 import imgTerceraEdad from "../util/images/terceraEdad.png";
@@ -489,36 +486,6 @@ class RegisterForm extends React.Component {
   }
 
   render() {
-    const onChangeSuggestion = this.handleAuxAddPuebloChange;
-    const auxAddPuebloValue = this.state.auxAddPueblo;
-    const classSuggestion = this.state.error.txtNombre
-      ? "border border-danger form-control d-inline w-75"
-      : "form-control d-inline w-100";
-    const autoSuggestProps = {
-      onChange: onChangeSuggestion,
-      placeholder: "Introduce el pueblo...",
-      value: auxAddPuebloValue,
-      className: classSuggestion
-    };
-
-    const suggestionTheme = {
-      container: "react-autosuggest__container",
-      containerOpen: "react-autosuggest__container--open",
-      input: "react-autosuggest__input",
-      inputOpen: "react-autosuggest__input--open",
-      inputFocused: "react-autosuggest__input--focused",
-      suggestionsContainer: "list-group",
-      suggestionsContainerOpen:
-        "react-autosuggest__suggestions-container--open",
-      suggestionsList: "list-group",
-      suggestion: "list-group-item",
-      suggestionFirst: "list-group-item",
-      suggestionHighlighted: "bg-success text-light list-group-item",
-      sectionContainer: "react-autosuggest__section-container",
-      sectionContainerFirst: "react-autosuggest__section-container--first",
-      sectionTitle: "react-autosuggest__section-title"
-    };
-
     return (
       <SocketContext.Consumer>
         {socket => (
@@ -893,20 +860,8 @@ class RegisterForm extends React.Component {
                   </label>{" "}
                   (<span className="text-danger font-weight-bold">*</span>)
                   <div class="form-group mt-2">
-                    <AutoSuggest
-                      suggestions={this.state.suggestionsPueblos}
-                      onSuggestionsFetchRequested={
-                        this.onSuggestionsFetchRequested
-                      }
-                      onSuggestionsClearRequested={
-                        this.onSuggestionsClearRequested
-                      }
+                    <PuebloAutosuggest
                       onSuggestionSelected={this.handleAddPueblo}
-                      getSuggestionValue={this.getSuggestionValue}
-                      renderSuggestion={this.renderSuggestion}
-                      inputProps={autoSuggestProps}
-                      theme={suggestionTheme}
-                      id="txtAddPueblos"
                     />
                     {this.state.ubicaciones.length > 0 ? (
                       <h5 className="mt-2 lead">
