@@ -15,7 +15,8 @@ import {
   faHome,
   faUserFriends,
   faEuroSign,
-  faPenSquare
+  faPenSquare,
+  faVenusMars
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
@@ -642,6 +643,12 @@ class RegisterForm extends React.Component {
                     handleChange={this.handleCalendarChange}
                     value={this.state.txtFechaNacimiento}
                   />
+                </div>
+                <div className="d-lg-none d-inline col-12">
+                  <FontAwesomeIcon icon={faVenusMars} className="mr-1" />
+                  <span>{trans('registerFormCuidadores.sexo')}</span>
+                  {" "}
+                  (<span className="text-danger">*</span>)
                 </div>
                 <div
                   className={
