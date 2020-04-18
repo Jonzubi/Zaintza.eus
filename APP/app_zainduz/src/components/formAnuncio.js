@@ -5,7 +5,7 @@ import { trans, toBase64 } from "../util/funciones";
 import ImageUploader from "react-images-upload";
 import i18next from "i18next";
 import TimeInput from "react-time-input";
-import AutoSuggest from "react-autosuggest";
+import PuebloAutosuggest from "./pueblosAutosuggest";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMale,
@@ -205,7 +205,7 @@ class FormAnuncio extends React.Component {
         }
       }
       let auxUbicaciones = this.state.ubicaciones
-      auxUbicaciones[0]= pueblo;
+      auxUbicaciones.push(pueblo);
       this.setState({
         ubicaciones: auxUbicaciones,
         auxAddPueblo: ""
@@ -363,7 +363,7 @@ class FormAnuncio extends React.Component {
         titulo: txtTitulo,
         descripcion: txtDescripcion,
         horario: diasDisponible,
-        pueblo: ubicaciones[0],
+        pueblo: ubicaciones,
         publico: publicoCuidado,
         precio: precioCuidado,
         email,
@@ -388,35 +388,7 @@ class FormAnuncio extends React.Component {
   }
 
   render() {
-    const { auxAddPueblo, error, suggestionsPueblos } = this.state;
-    const onChangeSuggestion = this.handleAuxAddPuebloChange;
-    const classSuggestion = error
-      ? "border border-danger form-control d-inline w-75"
-      : "form-control d-inline w-100";
-    const autoSuggestProps = {
-      onChange: onChangeSuggestion,
-      placeholder: "Introduce el pueblo...",
-      value: auxAddPueblo,
-      className: classSuggestion
-    };
-
-    const suggestionTheme = {
-      container: "react-autosuggest__container",
-      containerOpen: "react-autosuggest__container--open",
-      input: "react-autosuggest__input",
-      inputOpen: "react-autosuggest__input--open",
-      inputFocused: "react-autosuggest__input--focused",
-      suggestionsContainer: "list-group",
-      suggestionsContainerOpen:
-        "react-autosuggest__suggestions-container--open",
-      suggestionsList: "list-group",
-      suggestion: "list-group-item",
-      suggestionFirst: "list-group-item",
-      suggestionHighlighted: "bg-success text-light list-group-item",
-      sectionContainer: "react-autosuggest__section-container",
-      sectionContainerFirst: "react-autosuggest__section-container--first",
-      sectionTitle: "react-autosuggest__section-title"
-    };
+    const { error } = this.state;
     return (
       <div className="p-5">
         <div className="form-group d-flex justify-content-center position-relative">
@@ -593,16 +565,8 @@ class FormAnuncio extends React.Component {
             </label>{" "}
             (<span className="text-danger font-weight-bold">*</span>)
             <div class="form-group mt-2">
-              <AutoSuggest
-                suggestions={suggestionsPueblos}
-                onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+              <PuebloAutosuggest
                 onSuggestionSelected={this.handleAddPueblo}
-                getSuggestionValue={this.getSuggestionValue}
-                renderSuggestion={this.renderSuggestion}
-                inputProps={autoSuggestProps}
-                theme={suggestionTheme}
-                id="txtAddPueblos"
               />
               {this.state.ubicaciones.length > 0 ? (
                 <h5 className="mt-2 lead">
