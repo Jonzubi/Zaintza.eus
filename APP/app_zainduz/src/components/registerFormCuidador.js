@@ -620,7 +620,7 @@ class RegisterForm extends React.Component {
                 </div>
               </div>
               <div class="form-group row">
-                <div className="form-group col-6">
+                <div className="form-group col-lg-6 col-12">
                   <FontAwesomeIcon icon={faCalendarAlt} className="mr-1" />
                   <label htmlFor="txtFechaNacimiento">
                     {trans("registerFormCuidadores.fechaNac")}
@@ -646,8 +646,8 @@ class RegisterForm extends React.Component {
                 <div
                   className={
                     this.state.error.txtNombre
-                      ? "form-group col-3 text-center p-1 border border-danger"
-                      : "form-group col-3 text-center p-1"
+                      ? "form-group col-lg-3 col-6 text-center p-1 border border-danger"
+                      : "form-group col-lg-3 col-6 text-center p-1"
                   }
                   onClick={() => this.handleSexChange("M")}
                   onMouseEnter={() => this.handleSexHover("hoverSexoM")}
@@ -674,8 +674,8 @@ class RegisterForm extends React.Component {
                 <div
                   className={
                     this.state.error.txtNombre
-                      ? "form-group col-3 text-center p-1 border border-danger"
-                      : "form-group col-3 text-center p-1"
+                      ? "form-group col-lg-3 col-6 text-center p-1 border border-danger"
+                      : "form-group col-lg-3 col-6 text-center p-1"
                   }
                   id="txtSexF"
                   onClick={() => this.handleSexChange("F")}
@@ -702,7 +702,7 @@ class RegisterForm extends React.Component {
               </div>
 
               <div className="form-group row">
-                <div class="form-group col">
+                <div class="form-group col-lg-6 col-12">
                   <FontAwesomeIcon icon={faAt} className="mr-1"  />
                   <label htmlFor="txtEmail">
                     {trans("registerFormCuidadores.email")}
