@@ -900,7 +900,7 @@ class Tabla extends React.Component {
                     >
                       <FontAwesomeIcon className="mr-5" icon={faUser} />
                       <div>
-                        <span>{vSelectedCuidador.nombre}</span>
+                        <span>{vSelectedCuidador.nombre} </span>
                         <span>
                           {vSelectedCuidador.apellido1 +
                             " " +
