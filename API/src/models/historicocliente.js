@@ -6,10 +6,11 @@ module.exports = conexion => {
         type: String,
         required: true
       },
-      telefono: {
-        type: Map,
+      telefonoMovil: {
+        type: String,
         required: true
       },
+      telefonoFijo: String,
       apellido1: String,
       apellido2: String
     });

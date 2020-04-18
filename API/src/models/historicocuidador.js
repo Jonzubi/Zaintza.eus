@@ -30,10 +30,11 @@ module.exports = conexion => {
         required: true
       },
       publicoDisponible: Map,
-      telefono: {
-        type: Map,
+      telefonoMovil: {
+        type: String,
         required: true
       },
+      telefonoFijo: String,
       isPublic: Boolean,
       precioPorPublico: Map,
       diasDisponible: [Map],

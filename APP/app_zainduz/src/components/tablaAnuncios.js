@@ -484,7 +484,7 @@ class TablaAnuncios extends React.Component {
                 />
                 {selectedAnuncio !== null ? (
                   <span className="font-weight-bold col-9 text-center">
-                    {selectedAnuncio.idCliente.telefono.movil.numero ||
+                    {selectedAnuncio.idCliente.telefonoMovil !== "" ? selectedAnuncio.idCliente.telefonoMovil :
                       trans("tablaAnuncios.noDefinido")}
                   </span>
                 ) : null}
@@ -496,7 +496,7 @@ class TablaAnuncios extends React.Component {
                 />
                 {selectedAnuncio !== null ? (
                   <span className="font-weight-bold col-9 text-center">
-                    {selectedAnuncio.idCliente.telefono.fijo.numero ||
+                    {selectedAnuncio.idCliente.telefonoFijo !== "" ? selectedAnuncio.idCliente.telefonoFijo :
                       trans("tablaAnuncios.noDefinido")}
                   </span>
                 ) : null}
