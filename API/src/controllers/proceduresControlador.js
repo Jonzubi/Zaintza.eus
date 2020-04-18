@@ -220,7 +220,8 @@ exports.postNewCuidador = async (req, res, modelos) => {
     precioPorPublico,
     diasDisponible,
     ubicaciones,
-    telefono,
+    telefonoMovil,
+    telefonoFijo,
     imgContactB64,
     avatarPreview,
     validationToken
@@ -232,7 +233,7 @@ exports.postNewCuidador = async (req, res, modelos) => {
     typeof sexo == "undefined" ||
     typeof descripcion == "undefined" ||
     typeof ubicaciones == "undefined" ||
-    typeof telefono == "undefined" ||
+    typeof telefonoMovil === "" ||
     typeof imgContactB64 == "undefined" ||
     typeof email == "undefined" ||
     typeof contrasena == "undefined"
@@ -282,7 +283,8 @@ exports.postNewCuidador = async (req, res, modelos) => {
       direcFoto: codAvatar,
       direcFotoContacto: codContactImg,
       descripcion: descripcion || "",
-      telefono: telefono,
+      telefonoMovil,
+      telefonoFijo,
       isPublic: isPublic,
       diasDisponible: diasDisponible,
       fechaNacimiento: fechaNacimiento,
@@ -330,7 +332,8 @@ exports.postNewCliente = async (req, res, modelos) => {
     apellido1,
     apellido2,
     avatarPreview,
-    telefono,
+    telefonoMovil,
+    telefonoFijo,
     email,
     contrasena,
     validationToken
@@ -338,7 +341,7 @@ exports.postNewCliente = async (req, res, modelos) => {
 
   if (
     typeof nombre == "undefined" ||
-    typeof telefono == "undefined" ||
+    typeof telefonoMovil === "" ||
     typeof email == "undefined" ||
     typeof contrasena == "undefined"
   ) {
@@ -377,7 +380,8 @@ exports.postNewCliente = async (req, res, modelos) => {
       nombre: nombre,
       apellido1: apellido1,
       apellido2: apellido2,
-      telefono: telefono,
+      telefonoMovil,
+      telefonoFijo,
       direcFoto: codAvatar
     }).save(opts);
     const insertedUsuario = await modeluUsuarios({
@@ -415,17 +419,11 @@ exports.patchCuidador = async (req, res, modelos) => {
     email,
     contrasena,
     idUsuario,
-    apellido1,
-    apellido2,
     fechaNacimiento,
     sexo,
     descripcion,
-    publicoDisponible,
-    isPublic,
-    precioPorPublico,
-    diasDisponible,
     ubicaciones,
-    telefono,
+    telefonoMovil,
     imgContactB64,
     avatarPreview
   } = req.body;
@@ -442,8 +440,7 @@ exports.patchCuidador = async (req, res, modelos) => {
     typeof descripcion == "undefined" ||
     typeof ubicaciones == "" ||
     typeof ubicaciones == "undefined" ||
-    typeof telefono == "" ||
-    typeof telefono == "undefined" ||
+    typeof telefonoMovil === "" ||
     typeof imgContactB64 == "undefined" ||
     typeof id == "undefined"
   ) {
@@ -507,10 +504,10 @@ exports.patchCuidador = async (req, res, modelos) => {
 };
 
 exports.patchCliente = async (req, res, modelos) => {
-  const { nombre, avatarPreview, telefono, email, contrasena, idUsuario } = req.body;
+  const { nombre, avatarPreview, telefonoMovil, telefonoFijo, email, contrasena, idUsuario } = req.body;
   const { id } = req.params;
 
-  if (typeof nombre == "undefined" || typeof telefono == "undefined") {
+  if (typeof nombre == "undefined" || typeof telefonoMovil === "") {
     res.writeHead(500, headerResponse);
     res.write("Parametros incorrectos");
     res.end();

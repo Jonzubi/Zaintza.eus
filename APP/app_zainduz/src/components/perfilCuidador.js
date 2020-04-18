@@ -28,16 +28,6 @@ import Axios from "axios";
 import {saveUserSession} from "../redux/actions/user";
 
 const mapStateToProps = state => {
-  //Aqui van los especialitos de los undefined
-  const movil =
-    typeof state.user.telefono.movil == "undefined"
-      ? undefined
-      : state.user.telefono.movil.numero;
-  const telefFijo =
-    typeof state.user.telefono.fijo == "undefined"
-      ? undefined
-      : state.user.telefono.fijo.numero;
-
   return {
     _id: state.user._id,
     _idUsuario: state.user._idUsuario,
@@ -48,8 +38,8 @@ const mapStateToProps = state => {
     fechaNacimiento: state.user.fechaNacimiento,
     direcFoto: state.user.direcFoto,
     direcFotoContacto: state.user.direcFotoContacto,
-    movil: movil,
-    telefFijo: telefFijo,
+    movil: state.user.telefonoMovil,
+    telefFijo: state.user.telefonoFijo,
     descripcion: state.user.descripcion,
     isPublic: state.user.isPublic,
     diasDisponible: typeof state.user.diasDisponible.slice != "undefined" ? state.user.diasDisponible.slice(0) : [],
@@ -478,16 +468,8 @@ class PerfilCuidador extends React.Component {
       descripcion: this.state.txtDescripcion,
       ubicaciones: this.state.ubicaciones,
       publicoDisponible: this.state.publicoDisponible,
-      telefono: {
-        movil: {
-          etiqueta: "Movil",
-          numero: this.state.txtMovil
-        },
-        fijo: {
-          etiqueta: "Fijo",
-          numero: this.state.txtTelefono
-        }
-      },
+      telefonoMovil: this.state.txtMovil,
+      telefonoFijo: this.state.txtTelefono,
       isPublic: this.state.isPublic,
       precioPorPublico: this.state.precioPorPublico,
       diasDisponible: this.state.diasDisponible,

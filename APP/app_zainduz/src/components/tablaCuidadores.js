@@ -664,22 +664,8 @@ class Tabla extends React.Component {
     } = this.state;
     const vSelectedCuidador = this.state.selectedCuidador;
     const fechaNacCuidador = new Date(vSelectedCuidador.fechaNacimiento);
-    const telefonoFijoCuidador =
-      typeof vSelectedCuidador.telefono == "undefined" ? (
-        <em>Definitu gabe</em>
-      ) : typeof vSelectedCuidador.telefono.fijo == "undefined" ? (
-        <em>Definitu gabe</em>
-      ) : (
-        vSelectedCuidador.telefono.fijo.numero || <em>Definitu gabe</em>
-      );
-    const telefonoMovilCuidador =
-      typeof vSelectedCuidador.telefono == "undefined" ? (
-        <em>Definitu gabe</em>
-      ) : typeof vSelectedCuidador.telefono.movil == "undefined" ? (
-        <em>Definitu gabe</em>
-      ) : (
-        vSelectedCuidador.telefono.movil.numero || <em>Definitu gabe</em>
-      );
+    const telefonoFijoCuidador = vSelectedCuidador.telefonoFijo !== "" ? vSelectedCuidador.telefonoFijo : <em>Definitu gabe</em>;
+    const telefonoMovilCuidador = vSelectedCuidador.telefonoMovil !== "" ? vSelectedCuidador.telefonoMovil : <em>Definitu gabe</em>;
     const traducDias = [
       "Astelehena",
       "Asteartea",

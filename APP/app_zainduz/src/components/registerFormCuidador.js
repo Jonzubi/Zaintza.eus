@@ -435,16 +435,8 @@ class RegisterForm extends React.Component {
       avatarPreview: this.state.avatarPreview,
       imgContactB64: imgContactB64,
       descripcion: this.state.txtDescripcion,
-      telefono: {
-        movil: {
-          etiqueta: "Movil",
-          numero: this.state.txtMovil
-        },
-        fijo: {
-          etiqueta: "Fijo",
-          numero: this.state.txtTelefono
-        }
-      },
+      telefonoMovil: this.state.txtMovil,
+      telefonoFijo: this.state.txtTelefono,
       isPublic: this.state.isPublic,
       diasDisponible: this.state.diasDisponible,
       fechaNacimiento: this.state.txtFechaNacimiento,

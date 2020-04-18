@@ -13,22 +13,14 @@ import cogoToast from "cogo-toast";
 
 const mapStateToProps = state => {
   //Aqui van los especialitos de los undefined
-  const movil =
-    typeof state.user.telefono == "undefined" && typeof state.user.telefono.movil == "undefined"
-      ? undefined
-      : state.user.telefono.movil.numero;
-  const telefFijo =
-    typeof state.user.telefono == "undefined" && typeof state.user.telefono.fijo == "undefined"
-      ? undefined
-      : state.user.telefono.fijo.numero;
   return {
     _id: state.user._id,
     nombre: state.user.nombre,
     apellido1: state.user.apellido1,
     apellido2: state.user.apellido2,
     direcFoto: state.user.direcFoto,
-    movil: movil,
-    telefFijo: telefFijo,
+    movil: state.user.telefonoMovil,
+    telefFijo: state.user.telefonoFijo,
     email: state.user.email,
     contrasena: state.user.contrasena,
     idUsuario: state.user._idUsuario
@@ -110,16 +102,8 @@ class PerfilCliente extends React.Component {
       nombre: this.state.txtNombre,
       apellido1: this.state.txtApellido1,
       apellido2: this.state.txtApellido2,
-      telefono: {
-        movil: {
-          etiqueta: "Movil",
-          numero: this.state.txtMovil
-        },
-        fijo: {
-          etiqueta: "Fijo",
-          numero: this.state.txtFijo
-        }
-      },
+      telefonoMovil: this.state.txtMovil,
+      telefonoFijo: this.state.txtFijo,
       avatarPreview : this.state.avatarPreview,
       email,
       contrasena,

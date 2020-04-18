@@ -122,16 +122,8 @@ class RegisterFormCliente extends React.Component {
       nombre: txtNombre,
       apellido1: txtApellido1,
       apellido2: txtApellido2,
-      telefono: {
-        movil: {
-          etiqueta: "Movil",
-          numero: txtMovil
-        },
-        fijo: {
-          etiqueta: "Fijo",
-          numero: txtFijo
-        }
-      },
+      telefonoMovil: txtMovil,
+      telefonoFijo: txtFijo,
       avatarPreview: avatarPreview,
       email: txtEmail,
       contrasena: txtContrasena,
