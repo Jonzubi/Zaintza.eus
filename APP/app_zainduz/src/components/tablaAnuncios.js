@@ -8,11 +8,11 @@ import ipMaquina from "../util/ipMaquinaAPI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPhoneAlt,
-  faCalendar,
+  faEye,
   faMobileAlt,
   faHome,
   faUser,
-  faSearch
+  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/Modal";
 import ModalHeader from "react-bootstrap/ModalHeader";
@@ -24,20 +24,20 @@ import BottomScrollListener from "react-bottom-scroll-listener";
 import PuebloAutosuggest from "./pueblosAutosuggest";
 import Button from "react-bootstrap/Button";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     tipoUsuario: state.user.tipoUsuario,
     idPerfil: state.user._id,
     idUsuario: state.user._idUsuario,
     email: state.user.email,
-    contrasena: state.user.contrasena
+    contrasena: state.user.contrasena,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    changeFormContent: form => dispatch(changeFormContent(form)),
-    toogleMenuPerfil: payload => dispatch(toogleMenuPerfil(payload))
+    changeFormContent: (form) => dispatch(changeFormContent(form)),
+    toogleMenuPerfil: (payload) => dispatch(toogleMenuPerfil(payload)),
   };
 };
 
@@ -48,13 +48,12 @@ class TablaAnuncios extends React.Component {
       jsonAnuncios: [],
       buscado: false,
       selectedAnuncio: null,
-      showModalTelefono: false,
-      showModalCalendar: false,
+      showModalAnuncio: false,
       showModalFilter: false,
       requiredCards: 100,
       hoverFilter: false,
       isFiltering: false,
-      auxFilterPueblo: ""
+      auxFilterPueblo: "",
     };
 
     this.renderHorarioModal = this.renderHorarioModal.bind(this);
@@ -69,18 +68,18 @@ class TablaAnuncios extends React.Component {
         {
           params: {
             options: {
-              limit: requiredCards
-            }
-          }
+              limit: requiredCards,
+            },
+          },
         }
       )
-      .then(res => {
+      .then((res) => {
         this.setState({
           jsonAnuncios: res.data,
-          buscado: true
+          buscado: true,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         cogoToast.error(
           <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
         );
@@ -97,18 +96,18 @@ class TablaAnuncios extends React.Component {
           {
             params: {
               options: {
-                limit: requiredCards + 100
-              }
-            }
+                limit: requiredCards + 100,
+              },
+            },
           }
         )
-        .then(data => {
+        .then((data) => {
           this.setState({
             jsonAnuncios: data.data,
-            requiredCards: requiredCards + 100
+            requiredCards: requiredCards + 100,
           });
         })
-        .catch(err => {
+        .catch((err) => {
           cogoToast.error(
             <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
           );
@@ -126,7 +125,7 @@ class TablaAnuncios extends React.Component {
         </span>
       );
     }
-    selectedAnuncio.horario.map(sesion => {
+    selectedAnuncio.horario.map((sesion) => {
       const auxDia = sesion.dia == 7 ? 0 : sesion.dia;
       resultado.push(
         <div className="list-group-item">
@@ -142,8 +141,15 @@ class TablaAnuncios extends React.Component {
     return resultado;
   }
 
-  handleEnviarPropuesta = async anuncio => {
-    const { tipoUsuario, toogleMenuPerfil, idPerfil, idUsuario, email, contrasena } = this.props;
+  handleEnviarPropuesta = async (anuncio) => {
+    const {
+      tipoUsuario,
+      toogleMenuPerfil,
+      idPerfil,
+      idUsuario,
+      email,
+      contrasena,
+    } = this.props;
     if (!tipoUsuario) {
       cogoToast.error(<h5>{trans("tablaCuidadores.errorNoLogueado")}</h5>);
       toogleMenuPerfil(true);
@@ -162,7 +168,7 @@ class TablaAnuncios extends React.Component {
         idCuidador: idPerfil,
         whoAmI: tipoUsuario,
         email,
-        contrasena
+        contrasena,
       }
     );
     if (comprobAcuerdoUnico.data != "Vacio") {
@@ -180,7 +186,7 @@ class TablaAnuncios extends React.Component {
       descripcionAcuerdo: anuncio.descripcion,
       origenAcuerdo: "Cuidador",
       email,
-      contrasena
+      contrasena,
     };
 
     await axios
@@ -188,7 +194,7 @@ class TablaAnuncios extends React.Component {
         "http://" + ipMaquina + ":3001/api/procedures/postPropuestaAcuerdo",
         formData
       )
-      .catch(err => {
+      .catch((err) => {
         cogoToast.error(
           <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
         );
@@ -214,31 +220,31 @@ class TablaAnuncios extends React.Component {
     return null;
   };
 
-  handleHoverFilter = isHover => {
+  handleHoverFilter = (isHover) => {
     this.setState({
-      hoverFilter: isHover
+      hoverFilter: isHover,
     });
   };
 
   handleFilterPuebloSelected = (c, { suggestion }) => {
     this.setState({
-      auxFilterPueblo: suggestion
+      auxFilterPueblo: suggestion,
     });
   };
 
   handleApplyFilters = () => {
     const { auxFilterPueblo, requiredCards } = this.state;
 
-    let objFiltros= {};
+    let objFiltros = {};
 
-    if (auxFilterPueblo !== ""){
+    if (auxFilterPueblo !== "") {
       objFiltros.pueblo = auxFilterPueblo;
     }
 
     this.setState(
       {
         jsonAnuncios: [],
-        buscado: false
+        buscado: false,
       },
       () => {
         axios
@@ -247,25 +253,25 @@ class TablaAnuncios extends React.Component {
             {
               params: {
                 options: {
-                  limit: requiredCards
+                  limit: requiredCards,
                 },
-                filtros: objFiltros
-              }
+                filtros: objFiltros,
+              },
             }
           )
-          .then(res => {
+          .then((res) => {
             this.setState({
               jsonAnuncios: res.data,
               buscado: true,
               showModalFilter: false,
-              isFiltering: true
+              isFiltering: true,
             });
           })
-          .catch(err => {
+          .catch((err) => {
             this.setState({
               buscado: true,
               showModalFilter: false,
-            })
+            });
             cogoToast.error(
               <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
             );
@@ -280,7 +286,7 @@ class TablaAnuncios extends React.Component {
       {
         jsonAnuncios: {},
         buscado: false,
-        auxFilterPueblo: ""
+        auxFilterPueblo: "",
       },
       () => {
         axios
@@ -289,24 +295,24 @@ class TablaAnuncios extends React.Component {
             {
               params: {
                 options: {
-                  limit: requiredCards
-                }
-              }
+                  limit: requiredCards,
+                },
+              },
             }
           )
-          .then(res => {
+          .then((res) => {
             this.setState({
               jsonAnuncios: res.data,
               buscado: true,
               showModalFilter: false,
-              isFiltering: false
+              isFiltering: false,
             });
           })
-          .catch(err => {
+          .catch((err) => {
             this.setState({
               buscado: true,
-              showModalFilter: false
-            })
+              showModalFilter: false,
+            });
             cogoToast.error(
               <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
             );
@@ -315,17 +321,22 @@ class TablaAnuncios extends React.Component {
     );
   };
 
+  handleViewAnuncio = (anuncio) => {
+    this.setState({
+      showModalAnuncio: true,
+      selectedAnuncio: anuncio
+    });
+  }
+
   render() {
     const {
       jsonAnuncios,
-      showModalTelefono,
-      showModalCalendar,
+      showModalAnuncio,
       showModalFilter,
       selectedAnuncio,
-      hoverFilter,
       auxFilterPueblo,
       isFiltering,
-      buscado
+      buscado,
     } = this.state;
     return (
       <BottomScrollListener onBottom={this.onScreenBottom}>
@@ -343,14 +354,12 @@ class TablaAnuncios extends React.Component {
           >
             <div
               style={{
-                borderRadius: 50
+                borderRadius: 50,
               }}
-              className="bg-success text-white rounded-pill p-2">
-              <span
-                className="pl-1"
-                style={{ fontSize: 20 }}
-              >
-                {trans('tablaCuidadores.filtrar')}
+              className="bg-success text-white rounded-pill p-2"
+            >
+              <span className="pl-1" style={{ fontSize: 20 }}>
+                {trans("tablaCuidadores.filtrar")}
               </span>
               <FontAwesomeIcon
                 className="ml-2"
@@ -360,104 +369,76 @@ class TablaAnuncios extends React.Component {
               />
             </div>
           </div>
-          {buscado ? (
-            jsonAnuncios.map((anuncio, indice) => {
-              return (
-                <div
-                  key={`contAnuncio${indice}`}
-                  className="row card-header mt-2 mb-2"
-                >
-                  <div key={`anuncio${indice}`} style={{ width: "300px" }}>
-                    <img
-                      key={`img${indice}`}
-                      className="img-responsive"
-                      src={
-                        "http://" +
-                        ipMaquina +
-                        ":3001/api/image/" +
-                        anuncio.direcFoto
-                      }
-                      style={{
-                        minHeight: "300px",
-                        maxHeight: "300px",
-                        height: "auto"
-                      }}
-                    />
+          <div className="d-flex flex-wrap justify-content-center">
+            {buscado ? (
+              jsonAnuncios.map((anuncio, indice) => {
+                return (
+                  <div className="card w-20 m-4" style={{ width: "18rem" }}>
                     <div
-                      key={`local${indice}`}
-                      className="align-center text-center"
+                      style={{
+                        //backgroundImage:"url(http://" + ipMaquina + ":3001/api/image/" + cuidador.direcFotoContacto + ")",
+                        height: "300px",
+                        width: "calc(100% - 20px)",
+                        backgroundSize: "cover",
+                        backgroundPosition: "top",
+                        backgroundRepeat: "no-repeat",
+                        margin: "10px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        overflow: "hidden",
+                      }}
+                      className="card-img-top"
+                      alt="Imagen no disponible"
                     >
-                      <FontAwesomeIcon
-                        key={`localizacion${indice}`}
-                        className="text-success"
-                        icon={faHome}
-                      />{" "}
-                      <span
-                        key={`nombreLocalizacion${indice}`}
-                        className="font-weight-bold"
-                      >
-                        {anuncio.pueblo}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div key={`info${indice}`} className="col">
-                    <h3 key={`titulo${indice}`}>{anuncio.titulo}</h3>
-                    <hr />
-                    <h5 key={`desc${indice}`}>{anuncio.descripcion}</h5>
-                    <div key={`fila${indice}`} className="row">
-                      <FontAwesomeIcon
-                        key={`iconTelefono${indice}`}
-                        style={{ cursor: "pointer" }}
-                        size={"2x"}
-                        className="col text-success"
-                        icon={faPhoneAlt}
-                        onClick={() =>
-                          this.setState({
-                            showModalTelefono: true,
-                            selectedAnuncio: anuncio
-                          })
+                      <img
+                        style={{ maxHeight: "250px", height: "auto" }}
+                        src={
+                          "http://" +
+                          ipMaquina +
+                          ":3001/api/image/" +
+                          anuncio.direcFoto
                         }
                       />
-                      <FontAwesomeIcon
-                        key={`iconCalendar${indice}`}
-                        style={{ cursor: "pointer" }}
-                        size={"2x"}
-                        className="col text-success"
-                        icon={faCalendar}
-                        onClick={() =>
-                          this.setState({
-                            showModalCalendar: true,
-                            selectedAnuncio: anuncio
-                          })
-                        }
-                      />
-                      <div
-                        className="col btn btn-success"
-                        key={`btnPropuesta${indice}`}
-                        onClick={() => this.handleEnviarPropuesta(anuncio)}
+                    </div>
+                    <div className="card-body">
+                      <h5 className="card-title mt-2">{anuncio.titulo}</h5>
+                      <p
+                        className="card-text"
+                        style={{ maxHeight: "75px", overflow: "hidden" }}
                       >
-                        {i18next.t("tablaAnuncios.enviarPropuesta")}
-                      </div>
+                        {anuncio.descripcion}
+                      </p>
+                    </div>
+                    <div className="card-body card-footer">
+                      <a
+                        className="mr-0 w-100 btn btn-success text-light"
+                        onClick={() => {
+                          this.handleViewAnuncio(anuncio)
+                        }}
+                      >
+                        {trans("tablaAnuncios.ver")}
+                        <FontAwesomeIcon className="ml-1" icon={faEye} />
+                      </a>
                     </div>
                   </div>
-                </div>
-              );
-            })
-          ) : (
-            <div className="w-100 text-center">
-              <img
-                style={{ marginTop: "300px" }}
-                src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
-                height={100}
-                width={100}
-              />
-            </div>
-          )}
+                );
+              })
+            ) : (
+              <div className="w-100 text-center">
+                <img
+                  style={{ marginTop: "300px" }}
+                  src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
+                  height={100}
+                  width={100}
+                />
+              </div>
+            )}
+          </div>
           <Modal
             className="modalAnuncio"
-            show={showModalTelefono}
-            onHide={() => this.setState({ showModalTelefono: false })}
+            show={showModalAnuncio}
+            onHide={() => this.setState({ showModalAnuncio: false })}
           >
             <ModalHeader closeButton>
               <h5>Kontaktua</h5>
@@ -484,8 +465,9 @@ class TablaAnuncios extends React.Component {
                 />
                 {selectedAnuncio !== null ? (
                   <span className="font-weight-bold col-9 text-center">
-                    {selectedAnuncio.idCliente.telefonoMovil !== "" ? selectedAnuncio.idCliente.telefonoMovil :
-                      trans("tablaAnuncios.noDefinido")}
+                    {selectedAnuncio.idCliente.telefonoMovil !== ""
+                      ? selectedAnuncio.idCliente.telefonoMovil
+                      : trans("tablaAnuncios.noDefinido")}
                   </span>
                 ) : null}
                 <br />
@@ -496,23 +478,12 @@ class TablaAnuncios extends React.Component {
                 />
                 {selectedAnuncio !== null ? (
                   <span className="font-weight-bold col-9 text-center">
-                    {selectedAnuncio.idCliente.telefonoFijo !== "" ? selectedAnuncio.idCliente.telefonoFijo :
-                      trans("tablaAnuncios.noDefinido")}
+                    {selectedAnuncio.idCliente.telefonoFijo !== ""
+                      ? selectedAnuncio.idCliente.telefonoFijo
+                      : trans("tablaAnuncios.noDefinido")}
                   </span>
                 ) : null}
               </div>
-            </ModalBody>
-          </Modal>
-          <Modal
-            className="modalAnuncio"
-            show={showModalCalendar}
-            onHide={() => this.setState({ showModalCalendar: false })}
-          >
-            <ModalHeader closeButton>
-              <h5>Ordutegia</h5>
-            </ModalHeader>
-            <ModalBody className="justify-content-center">
-              {selectedAnuncio !== null ? this.renderHorarioModal() : null}
             </ModalBody>
           </Modal>
           <Modal

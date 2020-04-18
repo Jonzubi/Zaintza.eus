@@ -192,7 +192,8 @@
     "addAnuncio": "Eskaera sortu",
     "noDefinido": "Ez definitua",
     "enviarPropuesta": "Bidali akordio proposamena",
-    "propuestaEnviada": "Akordio proposamena bidalia"
+    "propuestaEnviada": "Akordio proposamena bidalia",
+    "ver": "Ikusi eskaera"
   },
   "dropDownDias":{
     "eligeDia": "Aukeratu eguna",
