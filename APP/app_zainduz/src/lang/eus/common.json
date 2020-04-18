@@ -193,7 +193,14 @@
     "noDefinido": "Ez definitua",
     "enviarPropuesta": "Bidali akordio proposamena",
     "propuestaEnviada": "Akordio proposamena bidalia",
-    "ver": "Ikusi eskaera"
+    "ver": "Ikusi eskaera",
+    "tituloAnuncio": "Eskaera",
+    "descripcion": "Deskribapena",
+    "horario": "Zaintza ordutegia",
+    "terceraEdad": "Adinekoa",
+    "ninos": "Haurra",
+    "necesidadEspecial":"Behar berezia",
+    "contacto": "Kontaktuaren datuak"
   },
   "dropDownDias":{
     "eligeDia": "Aukeratu eguna",

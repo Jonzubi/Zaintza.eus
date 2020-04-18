@@ -10,9 +10,14 @@ import {
   faPhoneAlt,
   faEye,
   faMobileAlt,
+  faFileSignature,
   faHome,
   faUser,
   faSearch,
+  faClock,
+  faUsers,
+  faEuroSign,
+  faIdCard,
 } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/Modal";
 import ModalHeader from "react-bootstrap/ModalHeader";
@@ -47,7 +52,7 @@ class TablaAnuncios extends React.Component {
     this.state = {
       jsonAnuncios: [],
       buscado: false,
-      selectedAnuncio: null,
+      selectedAnuncio: {},
       showModalAnuncio: false,
       showModalFilter: false,
       requiredCards: 100,
@@ -321,12 +326,12 @@ class TablaAnuncios extends React.Component {
     );
   };
 
-  handleViewAnuncio = (anuncio) => {
+  handleViewAnuncio = async (anuncio) => {
     this.setState({
       showModalAnuncio: true,
-      selectedAnuncio: anuncio
+      selectedAnuncio: anuncio,
     });
-  }
+  };
 
   render() {
     const {
@@ -338,6 +343,16 @@ class TablaAnuncios extends React.Component {
       isFiltering,
       buscado,
     } = this.state;
+    const traducDias = [
+      "Astelehena",
+      "Asteartea",
+      "Asteazkena",
+      "Osteguna",
+      "Ostirala",
+      "Larunbata",
+      "Igandea",
+    ];
+    console.log(selectedAnuncio);
     return (
       <BottomScrollListener onBottom={this.onScreenBottom}>
         <div className="">
@@ -414,7 +429,7 @@ class TablaAnuncios extends React.Component {
                       <a
                         className="mr-0 w-100 btn btn-success text-light"
                         onClick={() => {
-                          this.handleViewAnuncio(anuncio)
+                          this.handleViewAnuncio(anuncio);
                         }}
                       >
                         {trans("tablaAnuncios.ver")}
@@ -435,57 +450,197 @@ class TablaAnuncios extends React.Component {
               </div>
             )}
           </div>
-          <Modal
-            className="modalAnuncio"
-            show={showModalAnuncio}
-            onHide={() => this.setState({ showModalAnuncio: false })}
-          >
-            <ModalHeader closeButton>
-              <h5>Kontaktua</h5>
-            </ModalHeader>
-            <ModalBody className="d-flex align-middle justify-content-center">
-              <div className="align-self-center row">
-                <FontAwesomeIcon
-                  className="col-3 mb-5 text-success"
-                  size="2x"
-                  icon={faUser}
-                />
-                {selectedAnuncio !== null ? (
-                  <span className="font-weight-bold col-9 text-center">
-                    {selectedAnuncio.idCliente.nombre +
-                      " " +
-                      selectedAnuncio.idCliente.apellido1}
-                  </span>
-                ) : null}
-                <br />
-                <FontAwesomeIcon
-                  className="col-3 mb-5 text-success"
-                  size="2x"
-                  icon={faMobileAlt}
-                />
-                {selectedAnuncio !== null ? (
-                  <span className="font-weight-bold col-9 text-center">
-                    {selectedAnuncio.idCliente.telefonoMovil !== ""
-                      ? selectedAnuncio.idCliente.telefonoMovil
-                      : trans("tablaAnuncios.noDefinido")}
-                  </span>
-                ) : null}
-                <br />
-                <FontAwesomeIcon
-                  className="col-3 text-success"
-                  size="2x"
-                  icon={faPhoneAlt}
-                />
-                {selectedAnuncio !== null ? (
-                  <span className="font-weight-bold col-9 text-center">
-                    {selectedAnuncio.idCliente.telefonoFijo !== ""
-                      ? selectedAnuncio.idCliente.telefonoFijo
-                      : trans("tablaAnuncios.noDefinido")}
-                  </span>
-                ) : null}
-              </div>
-            </ModalBody>
-          </Modal>
+          {selectedAnuncio.idCliente !== undefined ? (
+            <Modal
+              className="modalAnuncio"
+              show={showModalAnuncio}
+              onHide={() => this.setState({ showModalAnuncio: false })}
+            >
+              <ModalHeader closeButton>
+                <h5>Kontaktua</h5>
+              </ModalHeader>
+              <ModalBody className="d-flex flex-column justify-content-between align-items-center">
+                <div className="">
+                  <div
+                    style={{
+                      width: "calc(100% - 20px)",
+                      backgroundSize: "cover",
+                      backgroundPosition: "top",
+                      backgroundRepeat: "no-repeat",
+                      margin: "10px",
+                      display: "flex",
+                      overflow: "hidden",
+                    }}
+                    className="flex-row align-items-center justify-content-center"
+                    alt="Imagen no disponible"
+                  >
+                    <img
+                      style={{
+                        minHeight: "300px",
+                        maxHeight: "300px",
+                        height: "auto",
+                      }}
+                      src={
+                        "http://" +
+                        ipMaquina +
+                        ":3001/api/image/" +
+                        selectedAnuncio.direcFoto
+                      }
+                    />
+                  </div>
+                  <div
+                    style={{
+                      width: 300,
+                    }}
+                    className="d-flex flex-row align-items-center justify-content-between"
+                  >
+                    <FontAwesomeIcon className="mr-5" icon={faUsers} />
+                    <span>
+                      {trans(`tablaAnuncios.${selectedAnuncio.publico}`)}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      width: 300,
+                    }}
+                    className="d-flex flex-row align-items-center justify-content-between"
+                  >
+                    <FontAwesomeIcon className="mr-5" icon={faEuroSign} />
+                    <span>{`${selectedAnuncio.precio}€/h`}</span>
+                  </div>
+                  <div
+                    style={{
+                      width: 300,
+                    }}
+                    className="mt-3 d-flex flex-column"
+                  >
+                    <div className="text-center">
+                      <FontAwesomeIcon icon={faHome} className="mr-1" />
+                      <span className="font-weight-bold text-center">
+                        {trans("tablaCuidadores.pueblos")}
+                      </span>
+                    </div>
+                    <span className="">
+                      {typeof selectedAnuncio.pueblo != "undefined"
+                        ? selectedAnuncio.pueblo.map((ubicacion, index) => {
+                            return (
+                              <div>
+                                <span>{ubicacion}</span>
+                                <br />
+                              </div>
+                            );
+                          })
+                        : null}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      width: 300,
+                    }}
+                    className="mt-3 d-flex flex-column"
+                  >
+                    <div className="text-center">
+                      <FontAwesomeIcon icon={faClock} className="mr-1" />
+                      <span className="font-weight-bold text-center">
+                        {trans("tablaAnuncios.horario")}
+                      </span>
+                    </div>
+                    <span className="">
+                      {typeof selectedAnuncio.horario != "undefined" &&
+                      selectedAnuncio.horario.length > 0 ? (
+                        selectedAnuncio.horario.map((dia) => {
+                          return (
+                            <div className="d-flex flex-row justify-content-between">
+                              <span>{traducDias[dia.dia - 1]}</span>
+                              <span>
+                                {dia.horaInicio + " - " + dia.horaFin}
+                              </span>
+                            </div>
+                          );
+                        })
+                      ) : (
+                        <em className="mt-1">
+                          {trans("tablaCuidadores.sinDefinir")}
+                        </em>
+                      )}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      width: 300,
+                    }}
+                    className="mt-3 d-flex flex-column"
+                  >
+                    <div className="d-flex flex-row align-items-center justify-content-center">
+                      <FontAwesomeIcon
+                        icon={faFileSignature}
+                        className="mr-1"
+                      />
+                      <span className="font-weight-bold">
+                        {trans("tablaAnuncios.descripcion")}
+                      </span>
+                    </div>
+                    <span>{selectedAnuncio.descripcion}</span>
+                  </div>
+                  <div
+                    style={{
+                      width: 300,
+                    }}
+                    className="mt-3 d-flex flex-column"
+                  >
+                    <div className="d-flex flex-row align-items-center justify-content-center">
+                      <FontAwesomeIcon icon={faIdCard} className="mr-1" />
+                      <span className="font-weight-bold">
+                        {trans("tablaAnuncios.contacto")}
+                      </span>
+                    </div>
+                    <div
+                      style={{
+                        width: 300,
+                      }}
+                      className="d-flex flex-row align-items-center justify-content-between"
+                    >
+                      <FontAwesomeIcon className="mr-5" icon={faUser} />
+                      <div>
+                        <span>{selectedAnuncio.idCliente.nombre} </span>
+                        <span>
+                          {selectedAnuncio.idCliente.apellido1 +
+                            " " +
+                            selectedAnuncio.idCliente.apellido2}
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        width: 300,
+                      }}
+                      className="d-flex flex-row align-items-center justify-content-between"
+                    >
+                      <FontAwesomeIcon className="mr-5" icon={faMobileAlt} />
+                      <div>
+                        <span>{selectedAnuncio.idCliente.telefonoMovil} </span>
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        width: 300,
+                      }}
+                      className="d-flex flex-row align-items-center justify-content-between"
+                    >
+                      <FontAwesomeIcon className="mr-5" icon={faPhoneAlt} />
+                      <div>
+                        <span>
+                          {selectedAnuncio.idCliente.telefonoFijo || (
+                            <em>{trans("tablaAnuncios.noDefinido")}</em>
+                          )}{" "}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ModalBody>
+            </Modal>
+          ) : null}
           <Modal
             className="modalAnuncio"
             show={showModalFilter}
