@@ -675,34 +675,6 @@ class Tabla extends React.Component {
       "Larunbata",
       "Igandea",
     ];
-    const classSuggestion = this.state.error.txtNombre
-      ? "border border-danger form-control d-inline w-75"
-      : "form-control d-inline w-100";
-    const onChangeSuggestion = this.handleAuxAddPuebloChange;
-    const auxAddPuebloValue = this.state.auxAddPueblo;
-    const autoSuggestProps = {
-      onChange: onChangeSuggestion,
-      placeholder: "Introduce el pueblo...",
-      value: auxAddPuebloValue,
-      className: classSuggestion,
-    };
-    const suggestionTheme = {
-      container: "react-autosuggest__container",
-      containerOpen: "react-autosuggest__container--open",
-      input: "react-autosuggest__input",
-      inputOpen: "react-autosuggest__input--open",
-      inputFocused: "react-autosuggest__input--focused",
-      suggestionsContainer: "list-group",
-      suggestionsContainerOpen:
-        "react-autosuggest__suggestions-container--open",
-      suggestionsList: "list-group",
-      suggestion: "list-group-item",
-      suggestionFirst: "list-group-item",
-      suggestionHighlighted: "bg-success text-light list-group-item",
-      sectionContainer: "react-autosuggest__section-container",
-      sectionContainerFirst: "react-autosuggest__section-container--first",
-      sectionTitle: "react-autosuggest__section-title",
-    };
 
     return (
       <BottomScrollListener onBottom={this.onScreenBottom}>
