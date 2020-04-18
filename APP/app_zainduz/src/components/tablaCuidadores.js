@@ -1047,11 +1047,9 @@ class Tabla extends React.Component {
                             );
                           })
                         ) : (
-                          <div className="list-group">
-                            <em className="text-center list-group-item">
+                            <em className="mt-1">
                               {trans("tablaCuidadores.sinDefinir")}
                             </em>
-                          </div>
                         )}
                       </span>
                     </div>
