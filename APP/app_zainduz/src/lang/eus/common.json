@@ -200,7 +200,8 @@
     "terceraEdad": "Adinekoa",
     "ninos": "Haurra",
     "necesidadEspecial":"Behar berezia",
-    "contacto": "Kontaktuaren datuak"
+    "contacto": "Kontaktuaren datuak",
+    "ofrecerCuidado": "Zaintza eskeini"
   },
   "dropDownDias":{
     "eligeDia": "Aukeratu eguna",

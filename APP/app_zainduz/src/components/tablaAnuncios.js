@@ -23,11 +23,13 @@ import Modal from "react-bootstrap/Modal";
 import ModalHeader from "react-bootstrap/ModalHeader";
 import "./styles/tablaAnuncios.css";
 import ModalBody from "react-bootstrap/ModalBody";
+import ModalFooter from "react-bootstrap/ModalFooter";
 import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import i18next from "i18next";
 import BottomScrollListener from "react-bottom-scroll-listener";
 import PuebloAutosuggest from "./pueblosAutosuggest";
 import Button from "react-bootstrap/Button";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const mapStateToProps = (state) => {
   return {
@@ -55,6 +57,7 @@ class TablaAnuncios extends React.Component {
       selectedAnuncio: {},
       showModalAnuncio: false,
       showModalFilter: false,
+      propuestaIsLoading: false,
       requiredCards: 100,
       hoverFilter: false,
       isFiltering: false,
@@ -169,7 +172,7 @@ class TablaAnuncios extends React.Component {
     let comprobAcuerdoUnico = await axios.post(
       "http://" + ipMaquina + ":3001/api/procedures/checkIfAcuerdoExists",
       {
-        idCliente: anuncio.idCliente,
+        idCliente: anuncio.idCliente._id,
         idCuidador: idPerfil,
         whoAmI: tipoUsuario,
         email,
@@ -183,7 +186,7 @@ class TablaAnuncios extends React.Component {
 
     let formData = {
       idCuidador: idPerfil,
-      idCliente: anuncio.idCliente,
+      idCliente: anuncio.idCliente._id,
       idUsuario: idUsuario,
       diasAcordados: anuncio.horario,
       tituloAcuerdo: anuncio.titulo,
@@ -193,19 +196,35 @@ class TablaAnuncios extends React.Component {
       email,
       contrasena,
     };
-
-    await axios
-      .post(
-        "http://" + ipMaquina + ":3001/api/procedures/postPropuestaAcuerdo",
-        formData
-      )
-      .catch((err) => {
-        cogoToast.error(
-          <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
-        );
-        return;
-      });
-    cogoToast.success(<h5>{trans("tablaAnuncios.propuestaEnviada")}</h5>);
+    this.setState(
+      {
+        propuestaIsLoading: true,
+      },
+      () => {
+        axios
+          .post(
+            "http://" + ipMaquina + ":3001/api/procedures/postPropuestaAcuerdo",
+            formData
+          )
+          .then(() => {
+            this.setState({
+              propuestaIsLoading: false,
+            });
+            cogoToast.success(
+              <h5>{trans("tablaAnuncios.propuestaEnviada")}</h5>
+            );
+          })
+          .catch((err) => {
+            cogoToast.error(
+              <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
+            );
+            this.setState({
+              propuestaIsLoading: false,
+            });
+            return;
+          });
+      }
+    );
   };
 
   botonAddAnuncio = () => {
@@ -342,6 +361,7 @@ class TablaAnuncios extends React.Component {
       auxFilterPueblo,
       isFiltering,
       buscado,
+      propuestaIsLoading,
     } = this.state;
     const traducDias = [
       "Astelehena",
@@ -639,6 +659,22 @@ class TablaAnuncios extends React.Component {
                   </div>
                 </div>
               </ModalBody>
+              <ModalFooter className="d-flex flex-column">
+                {!propuestaIsLoading ? (
+                  <Button
+                    className="w-100 btn-success"
+                    onClick={() => {
+                      this.handleEnviarPropuesta(selectedAnuncio);
+                    }}
+                  >
+                    {trans("tablaAnuncios.ofrecerCuidado")}
+                  </Button>
+                ) : (
+                  <div className="d-flex flex-row justify-content-center">
+                    <ClipLoader color="#28a745" />
+                  </div>
+                )}
+              </ModalFooter>
             </Modal>
           ) : null}
           <Modal
