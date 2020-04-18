@@ -588,7 +588,7 @@ class RegisterForm extends React.Component {
                     />
                   </div>
                   <div class="form-group row">
-                    <div className="form-group col">
+                    <div className="form-group col-lg-6 col-12">
                       <label htmlFor="txtApellido1">
                         {trans("registerFormCuidadores.apellido1")}
                       </label>
@@ -602,7 +602,7 @@ class RegisterForm extends React.Component {
                         value={this.state.txtApellido1}
                       />
                     </div>
-                    <div className="form-group col">
+                    <div className="form-group col-lg-6 col-12">
                       <label htmlFor="txtApellido2">
                         {trans("registerFormCuidadores.apellido2")}
                       </label>
