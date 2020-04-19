@@ -6,7 +6,7 @@ import { saveUserSession } from "../redux/actions/user";
 import { trans } from "../util/funciones";
 import ipMaquina from "../util/ipMaquinaAPI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faSave } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faSave, faUser, faMobileAlt, faPhoneAlt } from "@fortawesome/free-solid-svg-icons";
 import { loadGif } from "../util/gifs/loadGif.gif";
 import Axios from "axios";
 import cogoToast from "cogo-toast";
@@ -166,8 +166,8 @@ class PerfilCliente extends React.Component {
 
   render() {
     return (
-      <div className="p-5">
-        <div className="form-group d-flex justify-content-center position-relative">
+      <div className="p-5 d-flex flex-column">
+        <div className="d-flex flex-row align-items-center justify-content-center">
           {!this.state.isEditing ? (
             <img
               height={200}
@@ -195,10 +195,14 @@ class PerfilCliente extends React.Component {
             />
           )}
         </div>
-        <div className="form-group row">
+        <div className="row">
           <div className="col-12">
-            <label htmlFor="txtNombre">{trans("perfilCliente.nombre")}</label> (
-            <span className="text-danger font-weight-bold">*</span>)
+            <div className="d-flex flex-row align-items-center">
+              <FontAwesomeIcon icon={faUser} className="mr-1" />
+              <span htmlFor="txtNombre">{trans("perfilCliente.nombre")}</span> (
+              <span className="text-danger font-weight-bold">*</span>)
+            </div>
+            
             <input
               onChange={this.handleInputChange}
               type="text"
@@ -215,8 +219,8 @@ class PerfilCliente extends React.Component {
             />
           </div>
         </div>
-        <div className="form-group row">
-          <div className="col-6">
+        <div className="mt-lg-2 row">
+          <div className="col-lg-6 col-12">
             <label htmlFor="txtApellido1">{trans("perfilCliente.apellido1")}</label>
             <input
               onChange={this.handleInputChange}
@@ -229,7 +233,7 @@ class PerfilCliente extends React.Component {
               value={this.state.txtApellido1}
             />
           </div>
-          <div className="col-6">
+          <div className="col-lg-6 col-12">
             <label htmlFor="txtApellido2">{trans("perfilCliente.apellido2")}</label>
             <input
               onChange={this.handleInputChange}
@@ -243,10 +247,14 @@ class PerfilCliente extends React.Component {
             />
           </div>
         </div>
-        <div className="form-group row">
-          <div className="col-6">
-            <label htmlFor="txtMovil">{trans("perfilCliente.movil")}</label> (
-            <span className="text-danger font-weight-bold">*</span>)
+        <div className="mt-lg-2 row">
+          <div className="col-lg-6 col-12">
+            <div className="d-flex flex-row align-items-center">
+              <FontAwesomeIcon icon={faMobileAlt} className="mr-1" />
+              <span htmlFor="txtMovil">{trans("perfilCliente.movil")}</span> (
+              <span className="text-danger font-weight-bold">*</span>)
+            </div>
+            
             <input
               onChange={this.handleInputChange}
               type="number"
@@ -261,8 +269,11 @@ class PerfilCliente extends React.Component {
               value={this.state.txtMovil}
             />
           </div>
-          <div className="col-6">
-            <label htmlFor="txtFijo">{trans("perfilCliente.telefFijo")}</label>{" "}
+          <div className="col-lg-6 col-12">
+            <div className="d-flex flex-row align-items-center">
+              <FontAwesomeIcon icon={faPhoneAlt} className="mr-1" />
+              <span htmlFor="txtFijo">{trans("perfilCliente.telefFijo")}</span>{" "}
+            </div>
             <input
               onChange={this.handleInputChange}
               type="number"
