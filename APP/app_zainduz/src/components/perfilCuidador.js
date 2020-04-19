@@ -11,9 +11,13 @@ import {
   faMinusCircle,
   faPlusCircle,
   faVenusMars,
-  faMobileAlt
+  faMobileAlt,
+  faClock,
+  faHome,
+  faUsers,
+  faEuroSign
 } from "@fortawesome/free-solid-svg-icons";
-import TimeInput from "react-time-input";
+import TimeInput from "./customTimeInput";
 import PuebloAutosuggest from "./pueblosAutosuggest";
 import { ReactDatez as Calendario } from "react-datez";
 import cogoToast from "cogo-toast";
@@ -231,6 +235,10 @@ class PerfilCuidador extends React.Component {
   }
 
   addDiasDisponible() {
+    const { isEditing } = this.state;
+    if (!isEditing){
+      return;
+    }
     let auxDiasDisponible = this.state.diasDisponible;
     auxDiasDisponible.push({
       dia: 0,
@@ -271,6 +279,9 @@ class PerfilCuidador extends React.Component {
   }
 
   removeDiasDisponible() {
+    const { isEditing } = this.state;
+    if (!isEditing)
+      return;
     this.setState({
       diasDisponible:
         typeof this.state.diasDisponible.pop() != "undefined"
@@ -500,7 +511,7 @@ class PerfilCuidador extends React.Component {
   }
 
   render() {
-    const { isEditing } =this.state;
+    const { isEditing, diasDisponible } =this.state;
     return (
       <div className="p-5 d-flex flex-column">
         <div className="form-group row">
@@ -796,117 +807,98 @@ class PerfilCuidador extends React.Component {
           </div>
         </div>
         <div className="form-group row">
-          <div className="form-group col-lg-6 col-12">
+          <div className="form-group d-flex flex-column col-lg-6 col-12">
             {/* Insertar dias disponibles aqui */}
-            <label className="w-100 text-center lead">
-              {trans("registerFormCuidadores.diasDisponible")}:
-            </label>
-            <br />
+            <span className="d-flex flex-row justify-content-between align-items-center">
+              <FontAwesomeIcon
+                style={{ cursor: "pointer" }}
+                onClick={this.removeDiasDisponible}
+                className={isEditing && diasDisponible.length > 0 ? "text-danger" : "text-secondary"}
+                icon={faMinusCircle}
+              />
+              <div>
+                <FontAwesomeIcon icon={faClock} className="mr-1" />
+                <span className="lead">
+                  {trans("registerFormCuidadores.diasDisponible")}:
+                </span>
+              </div>
+              <FontAwesomeIcon
+                style={{ cursor: "pointer" }}
+                onClick={this.addDiasDisponible}
+                className={isEditing ? "text-success" : "text-secondary"}
+                icon={faPlusCircle}
+              />                    
+            </span>
             <div className="w-100 mt-2" id="diasDisponible">
               {/* Aqui iran los dias dinamicamente */}
-              {this.state.diasDisponible.map((objDia, indice) => {
+              {this.state.diasDisponible.map((dia, indice) => {
                 return (
-                  <div
-                    className="col-6 mx-auto text-center"
-                    id={"diaDisponible" + indice}
-                  >
-                    <div className="form-control mt-4 w-100">
-                      <select
-                        disabled={this.state.isEditing ? null : "disabled"}
-                        value={this.state.diasDisponible[indice].dia}
-                        onChange={this.handleDiasDisponibleChange}
-                        className="d-inline"
-                        id={"dia" + indice}
-                      >
-                        <option>Aukeratu eguna</option>
-                        <option value="1">Astelehena</option>
-                        <option value="2">Asteartea</option>
-                        <option value="3">Asteazkena</option>
-                        <option value="4">Osteguna</option>
-                        <option value="5">Ostirala</option>
-                        <option value="6">Larunbata</option>
-                        <option value="7">Igandea</option>
-                      </select>
-                      <br />
-                      <br />
-                      <b>{trans("registerFormCuidadores.horaInicio")} :</b>
+                  <div className="mt-1 d-flex flex-row align-items-center justify-content-between">
+                    <select
+                      value={dia.dia}
+                      onChange={this.handleDiasDisponibleChange}
+                      className="d-inline"
+                      id={"dia" + indice}
+                    >
+                      <option>Aukeratu eguna</option>
+                      <option value="1">Astelehena</option>
+                      <option value="2">Asteartea</option>
+                      <option value="3">Asteazkena</option>
+                      <option value="4">Osteguna</option>
+                      <option value="5">Ostirala</option>
+                      <option value="6">Larunbata</option>
+                      <option value="7">Igandea</option>
+                    </select>
+                    <div className="d-flex flex-row align-items-center">
                       <TimeInput
-                        onTimeChange={valor => {
+                        onTimeChange={(valor) => {
                           this.handleDiasDisponibleChange(
                             valor,
                             "horaInicio" + indice
                           );
                         }}
                         id={"horaInicio" + indice}
-                        disabled={this.state.isEditing ? null : "disabled"}
                         initTime={
-                          this.state.diasDisponible[indice].horaInicio !=
-                          "00:00"
-                            ? this.state.diasDisponible[indice].horaInicio
-                            : "00:00"
+                          diasDisponible[indice].horaInicio
                         }
-                        className="mt-1 text-center d-inline form-control"
+                        style={{
+                          width: 50,
+                        }}
+                        className="text-center"
                       />
-                      <br />
-                      <b>{trans("registerFormCuidadores.horaFin")} :</b>
+                      -
                       <TimeInput
-                        onTimeChange={valor => {
+                        onTimeChange={(valor) => {
                           this.handleDiasDisponibleChange(
                             valor,
                             "horaFin" + indice
                           );
                         }}
                         id={"horaFin" + indice}
-                        disabled={this.state.isEditing ? null : "disabled"}
-                        initTime={
-                          this.state.diasDisponible[indice].horaFin != "00:00"
-                            ? this.state.diasDisponible[indice].horaFin
-                            : "00:00"
-                        }
-                        className="mt-1 text-center d-inline form-control"
+                        initTime={diasDisponible[indice].horaFin}
+                        style={{
+                          width: 50,
+                        }}
+                        className="text-center"
                       />
-                      <br />
-                      <br />
                     </div>
                   </div>
                 );
               })}
-              <div id="botonesDiasDisponible" className="w-100 mt-2">
-                {this.state.diasDisponible.length > 0 ? (
-                  <a
-                    onClick={this.removeDiasDisponible}
-                    className={
-                      this.state.isEditing
-                        ? "btn btn-danger float-left text-light"
-                        : "btn btn-danger float-left text-light disabled"
-                    }
-                  >
-                    {trans("registerFormCuidadores.eliminarDia")}{" "}
-                    <FontAwesomeIcon icon={faMinusCircle} />
-                  </a>
-                ) : (
-                  ""
-                )}
-                <a
-                  onClick={this.addDiasDisponible}
-                  className={
-                    this.state.isEditing
-                      ? "btn btn-success float-right text-light"
-                      : "btn btn-success float-right text-light disabled"
-                  }
-                >
-                  {trans("registerFormCuidadores.anadir")}{" "}
-                  <FontAwesomeIcon icon={faPlusCircle} />
-                </a>
-              </div>
             </div>
           </div>
           <div className="form-group col">
             {/* Insertar ubicaciones disponibles aqui */}
-            <label htmlFor="txtAddPueblos" className="w-100 text-center lead">
-              {trans("registerFormCuidadores.pueblosDisponible")}:
-            </label>{" "}
-            (<span className="text-danger font-weight-bold">*</span>)
+            <span className="d-flex flex-row justify-content-center align-items-center">
+              <FontAwesomeIcon icon={faHome} className="mr-1" />
+              <span
+                htmlFor="txtAddPueblos"
+                className="lead"
+              >
+                {trans("registerFormCuidadores.pueblosDisponible")}
+              </span>{" "}
+              (<span className="text-danger font-weight-bold">*</span>)
+            </span>
             <div class="form-group mt-2">
               <PuebloAutosuggest
                 onSuggestionSelected={this.handleAddPueblo}
@@ -945,11 +937,14 @@ class PerfilCuidador extends React.Component {
           </div>
         </div>
         <div className="form-group row">
-          <div className="form-group col">
+          <div className="form-group col-lg-6 col-12 d-flex flex-column">
             {/* Insertar publico disponibles aqui */}
-            <label className="w-100 text-center lead">
-              {trans("registerFormCuidadores.publicoDisponible")}:
-            </label>
+            <span className="d-flex flex-row justify-content-center align-items-center">
+              <FontAwesomeIcon icon={faUsers} className="mr-1" />
+              <span className="lead">
+                {trans("registerFormCuidadores.publicoDisponible")}:
+              </span>
+            </span>
             <div className="row md-2">
               <div
                 onClick={() =>
@@ -1044,11 +1039,12 @@ class PerfilCuidador extends React.Component {
               </div>
             </div>
           </div>
-          <div className="form-group col">
+          <div className="form-group col-lg-6 col-12 m-lg-0 mt-3">
             {/* Insertar precioPublico disponibles aqui */}
-            <label className="w-100 text-center lead">
-              {trans("registerFormCuidadores.precioPorPublico")}:
-            </label>
+            <span className="d-flex flex-row justify-content-center align-items-center">
+              <FontAwesomeIcon icon={faEuroSign} className="mr-1" />
+              <span className="lead">{trans("registerFormCuidadores.precioPorPublico")}:</span>
+            </span>
             <div className="list-group md-2">
               <div className="list-group-item form-group text-center p-1">
                 <small>

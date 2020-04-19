@@ -802,7 +802,6 @@ class RegisterForm extends React.Component {
                       icon={faPlusCircle}
                     />                    
                   </span>                  
-                  <br />
                   <div className="w-100 mt-2" id="diasDisponible">
                     {/* Aqui iran los dias dinamicamente */}
                     {this.state.diasDisponible.map((dia, indice) => {
