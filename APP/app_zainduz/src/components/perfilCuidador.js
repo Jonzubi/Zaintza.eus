@@ -514,8 +514,8 @@ class PerfilCuidador extends React.Component {
     const { isEditing, diasDisponible } =this.state;
     return (
       <div className="p-5 d-flex flex-column">
-        <div className="form-group row">
-          <div className="form-group col-lg-3 col-12 d-flex flex-row justify-content-center align-items-center">
+        <div className="row">
+          <div className="col-lg-3 col-12 d-flex flex-row justify-content-center align-items-center">
             {!this.state.isEditing && this.props.direcFoto.length > 0 ? (
               <img
                 height={200}
@@ -611,8 +611,8 @@ class PerfilCuidador extends React.Component {
             )}
           </div>
 
-          <div className="form-group col-lg-6 col-12">
-            <div class="form-group">
+          <div className="col-lg-6 col-12">
+            <div class="">
               <label htmlFor="txtNombre">
                 {trans("registerFormCuidadores.nombre")}
               </label>{" "}
@@ -632,8 +632,8 @@ class PerfilCuidador extends React.Component {
                 value={this.state.txtNombre}
               />
             </div>
-            <div class="form-group row">
-              <div className="form-group col-lg-6 col-12">
+            <div class="row">
+              <div className="col-lg-6 col-12 mt-3">
                 <label htmlFor="txtApellido1">
                   {trans("registerFormCuidadores.apellido1")}
                 </label>
@@ -648,7 +648,7 @@ class PerfilCuidador extends React.Component {
                   value={this.state.txtApellido1}
                 />
               </div>
-              <div className="form-group col-lg-6 col-12">
+              <div className="col-lg-6 col-12 mt-3">
                 <label htmlFor="txtApellido2">
                   {trans("registerFormCuidadores.apellido2")}
                 </label>
@@ -666,8 +666,8 @@ class PerfilCuidador extends React.Component {
             </div>
           </div>
         </div>
-        <div class="form-group row">
-          <div className="form-group col-lg-6 col-12">
+        <div class="row">
+          <div className="col-lg-6 col-12 mt-3">
             <label htmlFor="txtFechaNacimiento">
               {trans("registerFormCuidadores.fechaNac")}
             </label>{" "}
@@ -694,7 +694,7 @@ class PerfilCuidador extends React.Component {
               highlightWeekends={true}
             />
           </div>
-          <div className="d-lg-none d-inline col-12">
+          <div className="d-lg-none d-inline col-12 mt-3">
             <FontAwesomeIcon icon={faVenusMars} className="mr-1" />
             <span>{trans('registerFormCuidadores.sexo')}</span>
             {" "}
@@ -703,8 +703,8 @@ class PerfilCuidador extends React.Component {
           <div
             className={
               this.state.error.txtNombre
-                ? "form-group col-lg-3 col-6 text-center p-1 border border-danger"
-                : "form-group col-lg-3 col-6 text-center p-1"
+                ? "col-lg-3 col-6 text-center p-1 border border-danger mt-3"
+                : "col-lg-3 col-6 text-center p-1 mt-3"
             }
             onClick={() =>
               this.state.isEditing ? this.handleSexChange("M") : null
@@ -737,8 +737,8 @@ class PerfilCuidador extends React.Component {
           <div
             className={
               this.state.error.txtNombre
-                ? "form-group col-lg-3 col-6 text-center p-1 border border-danger"
-                : "form-group col-lg-3 col-6 text-center p-1"
+                ? "col-lg-3 col-6 text-center p-1 border border-danger mt-3"
+                : "col-lg-3 col-6 text-center p-1 mt-3"
             }
             id="txtSexF"
             onClick={() =>
@@ -769,8 +769,8 @@ class PerfilCuidador extends React.Component {
             <FontAwesomeIcon className="fa-5x" icon={faFemale} />
           </div>
         </div>
-        <div className="form-group row">
-          <div class="form-group col-lg-6 col-12">
+        <div className="row">
+          <div class="col-lg-6 col-12 mt-3">
             <FontAwesomeIcon icon={faMobileAlt} className="mr-1" />
             <label htmlFor="txtMovil">
               {trans("registerFormCuidadores.movil")}
@@ -791,7 +791,7 @@ class PerfilCuidador extends React.Component {
               value={this.state.txtMovil}
             />
           </div>
-          <div className="col-lg-6 col-12">
+          <div className="col-lg-6 col-12 mt-3">
             <label className="" htmlFor="txtTelefono">
               {trans("registerFormCuidadores.telefFijo")}
             </label>
@@ -806,8 +806,8 @@ class PerfilCuidador extends React.Component {
             />
           </div>
         </div>
-        <div className="form-group row">
-          <div className="form-group d-flex flex-column col-lg-6 col-12">
+        <div className="row">
+          <div className="d-flex flex-column col-lg-6 col-12 mt-3">
             {/* Insertar dias disponibles aqui */}
             <span className="d-flex flex-row justify-content-between align-items-center">
               <FontAwesomeIcon
@@ -887,9 +887,9 @@ class PerfilCuidador extends React.Component {
               })}
             </div>
           </div>
-          <div className="form-group col">
+          <div className="col">
             {/* Insertar ubicaciones disponibles aqui */}
-            <span className="d-flex flex-row justify-content-center align-items-center">
+            <span className="d-flex flex-row justify-content-center align-items-center mt-3">
               <FontAwesomeIcon icon={faHome} className="mr-1" />
               <span
                 htmlFor="txtAddPueblos"
@@ -899,7 +899,7 @@ class PerfilCuidador extends React.Component {
               </span>{" "}
               (<span className="text-danger font-weight-bold">*</span>)
             </span>
-            <div class="form-group mt-2">
+            <div class="mt-2">
               <PuebloAutosuggest
                 onSuggestionSelected={this.handleAddPueblo}
                 disabled={!isEditing}
@@ -936,8 +936,8 @@ class PerfilCuidador extends React.Component {
             <br />
           </div>
         </div>
-        <div className="form-group row">
-          <div className="form-group col-lg-6 col-12 d-flex flex-column">
+        <div className="row">
+          <div className="col-lg-6 col-12 d-flex flex-column mt-3">
             {/* Insertar publico disponibles aqui */}
             <span className="d-flex flex-row justify-content-center align-items-center">
               <FontAwesomeIcon icon={faUsers} className="mr-1" />
@@ -1039,14 +1039,14 @@ class PerfilCuidador extends React.Component {
               </div>
             </div>
           </div>
-          <div className="form-group col-lg-6 col-12 m-lg-0 mt-3">
+          <div className="col-lg-6 col-12 mt-3">
             {/* Insertar precioPublico disponibles aqui */}
             <span className="d-flex flex-row justify-content-center align-items-center">
               <FontAwesomeIcon icon={faEuroSign} className="mr-1" />
               <span className="lead">{trans("registerFormCuidadores.precioPorPublico")}:</span>
             </span>
             <div className="list-group md-2">
-              <div className="list-group-item form-group text-center p-1">
+              <div className="list-group-item text-center p-1">
                 <small>
                   <b>{trans("registerFormCuidadores.ninos")}</b>
                 </small>
@@ -1065,7 +1065,7 @@ class PerfilCuidador extends React.Component {
                   placeholder="Prezioa €/h"
                 />
               </div>
-              <div className="list-group-item form-group text-center p-1">
+              <div className="list-group-item text-center p-1">
                 <small>
                   <b>{trans("registerFormCuidadores.terceraEdad")}</b>
                 </small>
@@ -1084,7 +1084,7 @@ class PerfilCuidador extends React.Component {
                   placeholder="Prezioa €/h"
                 />
               </div>
-              <div className="list-group-item form-group text-center p-1">
+              <div className="list-group-item text-center p-1">
                 <small>
                   <b>{trans("registerFormCuidadores.necesidadEspecial")}</b>
                 </small>
@@ -1109,7 +1109,7 @@ class PerfilCuidador extends React.Component {
             </div>
           </div>
         </div>
-        <div class="form-group">
+        <div class="mt-3">
           <label htmlFor="txtDescripcion">
             {trans("registerFormCuidadores.descripcion")}
           </label>{" "}
