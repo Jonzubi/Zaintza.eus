@@ -469,7 +469,7 @@ class FormAnuncio extends React.Component {
           ></textarea>
         </div>
         <div className="form-group row">
-        <div className="form-group col-lg-6 col-12 d-flex flex-column justify-content-between">
+        <div className="form-group col-lg-6 col-12 d-flex flex-column">
                   {/* Insertar dias disponibles aqui */}
                   <span className="d-flex flex-row justify-content-between align-items-center">
                     <FontAwesomeIcon
@@ -491,8 +491,7 @@ class FormAnuncio extends React.Component {
                       className="text-success"
                       icon={faPlusCircle}
                     />                    
-                  </span>                  
-                  <br />
+                  </span>
                   <div className="w-100 mt-2" id="diasDisponible">
                     {/* Aqui iran los dias dinamicamente */}
                     {this.state.diasDisponible.map((dia, indice) => {
