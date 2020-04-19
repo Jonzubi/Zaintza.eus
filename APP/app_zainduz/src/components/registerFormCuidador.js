@@ -504,8 +504,8 @@ class RegisterForm extends React.Component {
       <SocketContext.Consumer>
         {socket => (
           <div className="p-5 d-flex flex-column">
-              <div className="form-group row">
-                <div className="form-group col-lg-3 col-12 d-flex flex-row justify-content-center align-items-center">
+              <div className="row">
+                <div className="col-lg-3 col-12 d-flex flex-row justify-content-center align-items-center">
                   <Avatar
                     label="Aukeratu avatarra"
                     labelStyle={{
@@ -567,8 +567,8 @@ class RegisterForm extends React.Component {
                   />
                 </div>
 
-                <div className="form-group col-lg-6 col-12">
-                  <div class="form-group">
+                <div className="col-lg-6 col-12">
+                  <div class="">
                     <FontAwesomeIcon icon={faUser} className="mr-1" />
                     <label htmlFor="txtNombre">
                       {trans("registerFormCuidadores.nombre")}
@@ -588,8 +588,8 @@ class RegisterForm extends React.Component {
                       value={this.state.txtNombre}
                     />
                   </div>
-                  <div class="form-group row">
-                    <div className="form-group col-lg-6 col-12">
+                  <div class="row">
+                    <div className="col-lg-6 col-12 mt-3">
                       <label htmlFor="txtApellido1">
                         {trans("registerFormCuidadores.apellido1")}
                       </label>
@@ -603,7 +603,7 @@ class RegisterForm extends React.Component {
                         value={this.state.txtApellido1}
                       />
                     </div>
-                    <div className="form-group col-lg-6 col-12">
+                    <div className="col-lg-6 col-12 mt-3">
                       <label htmlFor="txtApellido2">
                         {trans("registerFormCuidadores.apellido2")}
                       </label>
@@ -620,8 +620,8 @@ class RegisterForm extends React.Component {
                   </div>
                 </div>
               </div>
-              <div class="form-group row">
-                <div className="form-group col-lg-6 col-12">
+              <div class="row">
+                <div className="col-lg-6 col-12 mt-3">
                   <FontAwesomeIcon icon={faCalendarAlt} className="mr-1" />
                   <label htmlFor="txtFechaNacimiento">
                     {trans("registerFormCuidadores.fechaNac")}
@@ -644,7 +644,7 @@ class RegisterForm extends React.Component {
                     value={this.state.txtFechaNacimiento}
                   />
                 </div>
-                <div className="d-lg-none d-inline col-12">
+                <div className="d-lg-none d-inline col-12 mt-3">
                   <FontAwesomeIcon icon={faVenusMars} className="mr-1" />
                   <span>{trans('registerFormCuidadores.sexo')}</span>
                   {" "}
@@ -653,8 +653,8 @@ class RegisterForm extends React.Component {
                 <div
                   className={
                     this.state.error.txtNombre
-                      ? "form-group col-lg-3 col-6 text-center p-1 border border-danger"
-                      : "form-group col-lg-3 col-6 text-center p-1"
+                      ? "col-lg-3 col-6 text-center p-1 border border-danger mt-lg-0 mt-3"
+                      : "col-lg-3 col-6 text-center p-1 mt-lg-0 mt-3"
                   }
                   onClick={() => this.handleSexChange("M")}
                   onMouseEnter={() => this.handleSexHover("hoverSexoM")}
@@ -681,8 +681,8 @@ class RegisterForm extends React.Component {
                 <div
                   className={
                     this.state.error.txtNombre
-                      ? "form-group col-lg-3 col-6 text-center p-1 border border-danger"
-                      : "form-group col-lg-3 col-6 text-center p-1"
+                      ? "col-lg-3 col-6 text-center p-1 border border-danger mt-lg-0 mt-3"
+                      : "col-lg-3 col-6 text-center p-1 mt-lg-0 mt-3"
                   }
                   id="txtSexF"
                   onClick={() => this.handleSexChange("F")}
@@ -708,8 +708,8 @@ class RegisterForm extends React.Component {
                 </div>
               </div>
 
-              <div className="form-group row">
-                <div class="form-group col-lg-6 col-12">
+              <div className="row">
+                <div class="col-lg-6 col-12 mt-3">
                   <FontAwesomeIcon icon={faAt} className="mr-1"  />
                   <label htmlFor="txtEmail">
                     {trans("registerFormCuidadores.email")}
@@ -728,7 +728,7 @@ class RegisterForm extends React.Component {
                     placeholder="Introducir email..."
                     value={this.state.txtEmail}
                   />
-                  <FontAwesomeIcon icon={faKey} className="mr-1" />
+                  <FontAwesomeIcon icon={faKey} className="mr-1 mt-3" />
                   <label className="pt-2" htmlFor="txtContrasena">
                     {trans("registerFormCuidadores.contrasena")}
                   </label>{" "}
@@ -746,8 +746,8 @@ class RegisterForm extends React.Component {
                     value={this.state.txtContrasena}
                   />
                 </div>
-                <div class="form-group col">
-                  <FontAwesomeIcon icon={faMobileAlt} className="mr-1" />
+                <div class="col">
+                  <FontAwesomeIcon icon={faMobileAlt} className="mr-1 mt-3" />
                   <label htmlFor="txtMovil">
                     {trans("registerFormCuidadores.movil")}
                   </label>{" "}
@@ -765,7 +765,7 @@ class RegisterForm extends React.Component {
                     placeholder="Introducir movil..."
                     value={this.state.txtMovil}
                   />
-                  <FontAwesomeIcon icon={faPhoneSquareAlt} className="mr-1" />
+                  <FontAwesomeIcon icon={faPhoneSquareAlt} className="mr-1 mt-3" />
                   <label className="pt-2" htmlFor="txtTelefono">
                     {trans("registerFormCuidadores.telefFijo")}
                   </label>
@@ -779,8 +779,8 @@ class RegisterForm extends React.Component {
                   />
                 </div>
               </div>
-              <div className="form-group row">
-                <div className="form-group col-lg-6 col-12 d-flex flex-column justify-content-between">
+              <div className="row">
+                <div className="col-lg-6 col-12 d-flex flex-column justify-content-between mt-3">
                   {/* Insertar dias disponibles aqui */}
                   <span className="d-flex flex-row justify-content-between align-items-center">
                     <FontAwesomeIcon
@@ -860,7 +860,7 @@ class RegisterForm extends React.Component {
                     })}
                   </div>
                 </div>
-                <div className="form-group col-lg-6 col-12">
+                <div className="col-lg-6 col-12 mt-3">
                   {/* Insertar ubicaciones disponibles aqui */}
                   <span className="d-flex flex-row justify-content-center align-items-center">
                     <FontAwesomeIcon icon={faHome} className="mr-1" />
@@ -873,7 +873,7 @@ class RegisterForm extends React.Component {
                     (<span className="text-danger font-weight-bold">*</span>)
                   </span>
                   
-                  <div class="form-group mt-2">
+                  <div class="mt-2">
                     <PuebloAutosuggest
                       onSuggestionSelected={this.handleAddPueblo}
                     />
@@ -905,8 +905,8 @@ class RegisterForm extends React.Component {
                   <br />
                 </div>
               </div>
-              <div className="form-group row">
-                <div className="form-group col-lg-6 col-12 d-flex flex-column">
+              <div className="row">
+                <div className="col-lg-6 col-12 d-flex flex-column mt-3">
                   {/* Insertar publico disponibles aqui */}
                   <span className="d-flex flex-row justify-content-center align-items-center">
                     <FontAwesomeIcon icon={faUsers} className="mr-1" />
@@ -991,7 +991,7 @@ class RegisterForm extends React.Component {
                     </div>
                   </div>
                 </div>
-                <div className="form-group col-lg-6 col-12 m-lg-0 mt-3">
+                <div className="col-lg-6 col-12 mt-5">
                   {/* Insertar precioPublico disponibles aqui */}
                   <span className="d-flex flex-row justify-content-center align-items-center">
                     <FontAwesomeIcon icon={faEuroSign} className="mr-1" />
@@ -999,7 +999,7 @@ class RegisterForm extends React.Component {
                   </span>
                   <div className="list-group md-2">
                     {this.state.publicoDisponible.nino ? (
-                      <div className="list-group-item form-group text-center p-1">
+                      <div className="list-group-item text-center p-1">
                         <small>
                           <b>{trans("registerFormCuidadores.ninos")}</b>
                         </small>
@@ -1013,7 +1013,7 @@ class RegisterForm extends React.Component {
                         />
                       </div>
                     ) : (
-                      <div className="list-group-item form-group text-center p-1">
+                      <div className="list-group-item text-center p-1">
                         <small>
                           <b>{trans("registerFormCuidadores.ninos")}</b>
                         </small>
@@ -1030,7 +1030,7 @@ class RegisterForm extends React.Component {
                     )}
 
                     {this.state.publicoDisponible.terceraEdad ? (
-                      <div className="list-group-item form-group text-center p-1">
+                      <div className="list-group-item text-center p-1">
                         <small>
                           <b>{trans("registerFormCuidadores.terceraEdad")}</b>
                         </small>
@@ -1047,7 +1047,7 @@ class RegisterForm extends React.Component {
                         />
                       </div>
                     ) : (
-                      <div className="list-group-item form-group text-center p-1">
+                      <div className="list-group-item text-center p-1">
                         <small>
                           <b>{trans("registerFormCuidadores.terceraEdad")}</b>
                         </small>
@@ -1067,7 +1067,7 @@ class RegisterForm extends React.Component {
                     )}
 
                     {this.state.publicoDisponible.necesidadEspecial ? (
-                      <div className="list-group-item form-group text-center p-1">
+                      <div className="list-group-item text-center p-1">
                         <small>
                           <b>
                             {trans("registerFormCuidadores.necesidadEspecial")}
@@ -1086,7 +1086,7 @@ class RegisterForm extends React.Component {
                         />
                       </div>
                     ) : (
-                      <div className="list-group-item form-group text-center p-1">
+                      <div className="list-group-item text-center p-1">
                         <small>
                           <b>
                             {trans("registerFormCuidadores.necesidadEspecial")}
@@ -1109,7 +1109,7 @@ class RegisterForm extends React.Component {
                   </div>
                 </div>
               </div>
-              <div class="form-group">
+              <div class="mt-3">
                 <FontAwesomeIcon icon={faPenSquare} className="mr-1" />
                 <label htmlFor="txtDescripcion">
                   {trans("registerFormCuidadores.descripcion")}
@@ -1129,7 +1129,7 @@ class RegisterForm extends React.Component {
                 ></textarea>
               </div>
 
-              <div>
+              <div className="mt-3">
                 <Switch
                   onChange={this.handleIsPublicChange}
                   checked={this.state.isPublic}
