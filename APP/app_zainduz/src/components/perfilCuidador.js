@@ -9,10 +9,12 @@ import {
   faMale,
   faFemale,
   faMinusCircle,
-  faPlusCircle
+  faPlusCircle,
+  faVenusMars,
+  faMobileAlt
 } from "@fortawesome/free-solid-svg-icons";
 import TimeInput from "react-time-input";
-import AutoSuggest from "react-autosuggest";
+import PuebloAutosuggest from "./pueblosAutosuggest";
 import { ReactDatez as Calendario } from "react-datez";
 import cogoToast from "cogo-toast";
 import Switch from "react-switch";
@@ -498,42 +500,11 @@ class PerfilCuidador extends React.Component {
   }
 
   render() {
-    const onChangeSuggestion = this.handleAuxAddPuebloChange;
-    const auxAddPuebloValue = this.state.auxAddPueblo;
-    const classSuggestion = this.state.error.txtNombre
-      ? "border border-danger form-control d-inline w-75"
-      : "form-control d-inline w-100";
-
-    const autoSuggestProps = {
-      onChange: onChangeSuggestion,
-      placeholder: "Introduce el pueblo...",
-      value: auxAddPuebloValue,
-      className: classSuggestion,
-      disabled: !this.state.isEditing
-    };
-
-    const suggestionTheme = {
-      container: "react-autosuggest__container",
-      containerOpen: "react-autosuggest__container--open",
-      input: "react-autosuggest__input",
-      inputOpen: "react-autosuggest__input--open",
-      inputFocused: "react-autosuggest__input--focused",
-      suggestionsContainer: "list-group",
-      suggestionsContainerOpen:
-        "react-autosuggest__suggestions-container--open",
-      suggestionsList: "list-group",
-      suggestion: "list-group-item",
-      suggestionFirst: "list-group-item",
-      suggestionHighlighted: "bg-success text-light list-group-item",
-      sectionContainer: "react-autosuggest__section-container",
-      sectionContainerFirst: "react-autosuggest__section-container--first",
-      sectionTitle: "react-autosuggest__section-title"
-    };
-
+    const { isEditing } =this.state;
     return (
-      <div className="p-5">
+      <div className="p-5 d-flex flex-column">
         <div className="form-group row">
-          <div className="form-group col-3 text-center">
+          <div className="form-group col-lg-3 col-12 d-flex flex-row justify-content-center align-items-center">
             {!this.state.isEditing && this.props.direcFoto.length > 0 ? (
               <img
                 height={200}
@@ -561,7 +532,7 @@ class PerfilCuidador extends React.Component {
               />
             )}
           </div>
-          <div className="col-3 mx-auto text-center">
+          <div className="col-lg-3 col-12 d-flex flex-row justify-content-center align-items-center">
             {!this.state.isEditing ? (
               <div
                 style={{
@@ -629,7 +600,7 @@ class PerfilCuidador extends React.Component {
             )}
           </div>
 
-          <div className="form-group col-6">
+          <div className="form-group col-lg-6 col-12">
             <div class="form-group">
               <label htmlFor="txtNombre">
                 {trans("registerFormCuidadores.nombre")}
@@ -651,7 +622,7 @@ class PerfilCuidador extends React.Component {
               />
             </div>
             <div class="form-group row">
-              <div className="form-group col">
+              <div className="form-group col-lg-6 col-12">
                 <label htmlFor="txtApellido1">
                   {trans("registerFormCuidadores.apellido1")}
                 </label>
@@ -666,7 +637,7 @@ class PerfilCuidador extends React.Component {
                   value={this.state.txtApellido1}
                 />
               </div>
-              <div className="form-group col">
+              <div className="form-group col-lg-6 col-12">
                 <label htmlFor="txtApellido2">
                   {trans("registerFormCuidadores.apellido2")}
                 </label>
@@ -685,7 +656,7 @@ class PerfilCuidador extends React.Component {
           </div>
         </div>
         <div class="form-group row">
-          <div className="form-group col-6">
+          <div className="form-group col-lg-6 col-12">
             <label htmlFor="txtFechaNacimiento">
               {trans("registerFormCuidadores.fechaNac")}
             </label>{" "}
@@ -712,11 +683,17 @@ class PerfilCuidador extends React.Component {
               highlightWeekends={true}
             />
           </div>
+          <div className="d-lg-none d-inline col-12">
+            <FontAwesomeIcon icon={faVenusMars} className="mr-1" />
+            <span>{trans('registerFormCuidadores.sexo')}</span>
+            {" "}
+            (<span className="text-danger">*</span>)
+          </div>
           <div
             className={
               this.state.error.txtNombre
-                ? "form-group col-3 text-center p-1 border border-danger"
-                : "form-group col-3 text-center p-1"
+                ? "form-group col-lg-3 col-6 text-center p-1 border border-danger"
+                : "form-group col-lg-3 col-6 text-center p-1"
             }
             onClick={() =>
               this.state.isEditing ? this.handleSexChange("M") : null
@@ -731,6 +708,7 @@ class PerfilCuidador extends React.Component {
             style={{
               borderRadius: "8px",
               cursor: this.state.isEditing ? "pointer" : "no-drop",
+              boxShadow: "0 0.125rem 0.25rem rgba(0,0,0,.075)",
               background:
                 this.state.txtSexo == "M"
                   ? "#28a745"
@@ -748,8 +726,8 @@ class PerfilCuidador extends React.Component {
           <div
             className={
               this.state.error.txtNombre
-                ? "form-group col-3 text-center p-1 border border-danger"
-                : "form-group col-3 text-center p-1"
+                ? "form-group col-lg-3 col-6 text-center p-1 border border-danger"
+                : "form-group col-lg-3 col-6 text-center p-1"
             }
             id="txtSexF"
             onClick={() =>
@@ -764,6 +742,7 @@ class PerfilCuidador extends React.Component {
             style={{
               borderRadius: "8px",
               cursor: this.state.isEditing ? "pointer" : "no-drop",
+              boxShadow: "0 0.125rem 0.25rem rgba(0,0,0,.075)",
               background:
                 this.state.txtSexo == "F"
                   ? "#28a745"
@@ -780,7 +759,8 @@ class PerfilCuidador extends React.Component {
           </div>
         </div>
         <div className="form-group row">
-          <div class="form-group col">
+          <div class="form-group col-lg-6 col-12">
+            <FontAwesomeIcon icon={faMobileAlt} className="mr-1" />
             <label htmlFor="txtMovil">
               {trans("registerFormCuidadores.movil")}
             </label>{" "}
@@ -800,7 +780,7 @@ class PerfilCuidador extends React.Component {
               value={this.state.txtMovil}
             />
           </div>
-          <div className="col">
+          <div className="col-lg-6 col-12">
             <label className="" htmlFor="txtTelefono">
               {trans("registerFormCuidadores.telefFijo")}
             </label>
@@ -816,7 +796,7 @@ class PerfilCuidador extends React.Component {
           </div>
         </div>
         <div className="form-group row">
-          <div className="form-group col">
+          <div className="form-group col-lg-6 col-12">
             {/* Insertar dias disponibles aqui */}
             <label className="w-100 text-center lead">
               {trans("registerFormCuidadores.diasDisponible")}:
@@ -928,16 +908,9 @@ class PerfilCuidador extends React.Component {
             </label>{" "}
             (<span className="text-danger font-weight-bold">*</span>)
             <div class="form-group mt-2">
-              <AutoSuggest
-                suggestions={this.state.suggestionsPueblos}
-                onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+              <PuebloAutosuggest
                 onSuggestionSelected={this.handleAddPueblo}
-                getSuggestionValue={this.getSuggestionValue}
-                renderSuggestion={this.renderSuggestion}
-                inputProps={autoSuggestProps}
-                theme={suggestionTheme}
-                id="txtAddPueblos"
+                disabled={!isEditing}
               />
               {this.state.ubicaciones.length > 0 ? (
                 <h5 className="mt-2 lead">
