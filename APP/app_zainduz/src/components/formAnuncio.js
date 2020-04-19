@@ -15,7 +15,8 @@ import {
   faPlusSquare,
   faClock,
   faHome,
-  faUsers
+  faUsers,
+  faEuroSign
 } from "@fortawesome/free-solid-svg-icons";
 import municipios from "../util/municipos";
 import ipMaquina from "../util/ipMaquinaAPI";
@@ -677,9 +678,10 @@ class FormAnuncio extends React.Component {
             </div>
             <div className="form-group col">
               {/* Insertar precioPublico disponibles aqui */}
-              <label className="w-100 text-center lead">
-                {trans("formAnuncio.precioCuidado")}:
-              </label>
+              <div className="d-flex flex-row align-items-center justify-content-center">
+                  <FontAwesomeIcon icon={faEuroSign} className="mr-1" />
+                  <span className="lead">{trans("formAnuncio.precioCuidado")}</span>
+              </div>
               <div className="list-group md-2">
                 {this.state.publicoCuidado !== '' ? (
                   <div className="list-group-item form-group text-center p-1">
