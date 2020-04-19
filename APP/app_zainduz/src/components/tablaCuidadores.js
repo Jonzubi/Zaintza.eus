@@ -680,7 +680,7 @@ class Tabla extends React.Component {
       <BottomScrollListener onBottom={this.onScreenBottom}>
         <div
           key="divFilter"
-          className="d-flex align-items-center justify-content-start mb-3 mt-3 ml-5 mr-5 p-1"
+          className="d-flex align-items-center justify-content-between mb-3 mt-3 ml-5 mr-5 p-1"
         >
           <div
             style={{
@@ -694,15 +694,15 @@ class Tabla extends React.Component {
               onClick={() => {
                 this.setState({ showModalFilter: true });
               }}
-              className="bg-success text-white p-2"
+              className="d-flex flex-row justify-content-center align-items-center bg-success text-white p-2"
               onMouseEnter={() => this.handleHoverFilter(true)}
               onMouseLeave={() => this.handleHoverFilter(false)}
             >
-              <span className="pl-1" style={{ fontSize: 20 }}>
+              <span className="d-sm-inline d-none" style={{ fontSize: 20 }}>
                 {trans("tablaCuidadores.filtrar")}
               </span>
               <FontAwesomeIcon
-                className="ml-2"
+                className="ml-sm-2 ml-0"
                 key="iconFilter"
                 size={"1x"}
                 icon={faSearch}

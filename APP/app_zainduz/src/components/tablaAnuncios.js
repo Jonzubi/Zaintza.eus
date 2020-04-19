@@ -237,11 +237,11 @@ class TablaAnuncios extends React.Component {
           style={{
             borderRadius: 50
           }}
-          className="d-flex flex-row align-items-center btn btn-success"
+          className="d-flex flex-row align-items-center justify-content-center btn btn-success"
           onClick={() => changeFormContent("formAnuncio")}
         >
-          {trans("tablaAnuncios.addAnuncio")}
-          <FontAwesomeIcon icon={faUpload} className="ml-1"/>
+          <span className="d-sm-inline d-none" style={{ fontSize: 20 }}>{trans("tablaAnuncios.addAnuncio")}</span>
+          <FontAwesomeIcon icon={faUpload} className="ml-sm-2 ml-0"/>
         </div>
       );
     }
@@ -395,13 +395,13 @@ class TablaAnuncios extends React.Component {
               style={{
                 borderRadius: 50,
               }}
-              className="bg-success text-white rounded-pill p-2"
+              className="d-flex flex-row justify-content-between align-items-center bg-success text-white p-2"
             >
-              <span className="pl-1" style={{ fontSize: 20 }}>
+              <span className="d-sm-inline d-none" style={{ fontSize: 20 }}>
                 {trans("tablaCuidadores.filtrar")}
               </span>
               <FontAwesomeIcon
-                className="ml-2"
+                className="ml-sm-2 ml-0"
                 key="iconFilter"
                 size={"1x"}
                 icon={faSearch}
