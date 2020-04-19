@@ -18,6 +18,7 @@ import {
   faUsers,
   faEuroSign,
   faIdCard,
+  faUpload,
 } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/Modal";
 import ModalHeader from "react-bootstrap/ModalHeader";
@@ -233,10 +234,14 @@ class TablaAnuncios extends React.Component {
     if (tipoUsuario === "Cliente") {
       return (
         <div
-          className="d-flex justify-content-center btn btn-success"
+          style={{
+            borderRadius: 50
+          }}
+          className="d-flex flex-row align-items-center btn btn-success"
           onClick={() => changeFormContent("formAnuncio")}
         >
           {trans("tablaAnuncios.addAnuncio")}
+          <FontAwesomeIcon icon={faUpload} className="ml-1"/>
         </div>
       );
     }
@@ -376,14 +381,13 @@ class TablaAnuncios extends React.Component {
     return (
       <BottomScrollListener onBottom={this.onScreenBottom}>
         <div className="">
-          {this.botonAddAnuncio()}
           <div
             onClick={() => {
               this.setState({ showModalFilter: true });
             }}
             style={{ cursor: "pointer" }}
             key="divFilter"
-            className="d-flex align-items-center justify-content-start mb-3 mt-3 ml-5 mr-5 p-1"
+            className="d-flex align-items-center justify-content-between mb-3 mt-3 ml-5 mr-5 p-1"
             onMouseEnter={() => this.handleHoverFilter(true)}
             onMouseLeave={() => this.handleHoverFilter(false)}
           >
@@ -403,6 +407,7 @@ class TablaAnuncios extends React.Component {
                 icon={faSearch}
               />
             </div>
+            {this.botonAddAnuncio()}
           </div>
           <div className="d-flex flex-wrap justify-content-center">
             {buscado ? (
