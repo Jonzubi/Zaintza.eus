@@ -1039,7 +1039,7 @@ class PerfilCuidador extends React.Component {
               </div>
             </div>
           </div>
-          <div className="col-lg-6 col-12 mt-3">
+          <div className="col-lg-6 col-12 mt-5">
             {/* Insertar precioPublico disponibles aqui */}
             <span className="d-flex flex-row justify-content-center align-items-center">
               <FontAwesomeIcon icon={faEuroSign} className="mr-1" />
@@ -1129,7 +1129,7 @@ class PerfilCuidador extends React.Component {
           ></textarea>
         </div>
 
-        <div>
+        <div className="mt-3">
           <Switch
             onChange={this.handleIsPublicChange}
             checked={this.state.isPublic}
