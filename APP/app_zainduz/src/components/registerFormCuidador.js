@@ -13,10 +13,10 @@ import {
   faPhoneSquareAlt,
   faClock,
   faHome,
-  faUserFriends,
   faEuroSign,
   faPenSquare,
-  faVenusMars
+  faVenusMars,
+  faUsers
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
@@ -910,7 +910,7 @@ class RegisterForm extends React.Component {
                 <div className="form-group col-lg-6 col-12 d-flex flex-column">
                   {/* Insertar publico disponibles aqui */}
                   <span className="d-flex flex-row justify-content-center align-items-center">
-                    <FontAwesomeIcon icon={faUserFriends} className="mr-1" />
+                    <FontAwesomeIcon icon={faUsers} className="mr-1" />
                     <span className="lead">
                       {trans("registerFormCuidadores.publicoDisponible")}:
                     </span>
