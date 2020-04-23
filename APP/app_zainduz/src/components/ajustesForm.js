@@ -166,7 +166,7 @@ class AjustesForm extends React.Component {
           <div
             className={formChosen === "perfil" ? "col-lg-9 flex-column" : "d-none"}
           >
-            <h1>{trans("ajustesForm.perfil")}</h1>
+            <h3>{trans("ajustesForm.perfil")}</h3>
             <hr />
             <h5>{trans("ajustesForm.contrasena")}</h5>
             <hr />
@@ -229,12 +229,12 @@ class AjustesForm extends React.Component {
           <div
             className={formChosen === "app" ? "col-lg-9 flex-column" : "d-none"}
           >
-            <h1>{trans("ajustesForm.app")}</h1>
+            <h3>{trans("ajustesForm.app")}</h3>
             <hr />
             <h5>{trans("ajustesForm.idioma")}</h5>
             <hr />
             <span>{trans("ajustesForm.idiomaPredeterminado")}</span>
-            <div className="dropdown d-flex mt-2">
+            <div className="dropdown d-flex mt-3">
               <button
                 className="btn btn-light dropdown-toggle w-100"
                 type="button"
@@ -269,7 +269,6 @@ class AjustesForm extends React.Component {
                 {trans("ajustesForm.definirIdioma")}
               </div>
             </div>
-            <hr />
           </div>
         </div>
       </div>
