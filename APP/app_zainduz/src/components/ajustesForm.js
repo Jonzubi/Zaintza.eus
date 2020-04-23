@@ -129,13 +129,16 @@ class AjustesForm extends React.Component {
     } = this.state;
     const { idLangPred } = this.props;
     return (
-      <div className="p-5">
-        <div className="row">
-          <div className="col-3">
+      <div className="p-lg-5">
+        <div className="row-lg flex-lg-row d-flex flex-column">
+          <div className="col-lg-3 mb-lg-0 mb-5">
             <h5 className="d-flex align-items-stretch justify-content-center mb-5">
               {trans("ajustesForm.ajustes")}
             </h5>
             <div
+              style={{
+                boxShadow: "0 0.125rem 0.25rem rgba(0,0,0,.075)"
+              }}
               className={
                 formChosen !== "perfil"
                   ? "btn d-flex align-items-stretch"
@@ -147,9 +150,12 @@ class AjustesForm extends React.Component {
             </div>
             <br />
             <div
+              style={{
+                boxShadow: "0 0.125rem 0.25rem rgba(0,0,0,.075)"
+              }}
               className={
                 formChosen !== "app"
-                  ? "btn d-flex align-items-stretch"
+                  ? "btn d-flex align-items-stretch shadow-sm"
                   : "btn btn-success d-flex align-items-stretch"
               }
               onClick={() => this.handleChangeFormChosen("app")}
@@ -158,52 +164,52 @@ class AjustesForm extends React.Component {
             </div>
           </div>
           <div
-            className={formChosen === "perfil" ? "col-9 flex-column" : "d-none"}
+            className={formChosen === "perfil" ? "col-lg-9 flex-column" : "d-none"}
           >
             <h1>{trans("ajustesForm.perfil")}</h1>
             <hr />
             <h5>{trans("ajustesForm.contrasena")}</h5>
             <hr />
-            <div className="">
-              <div className="row">
-                <span className="col-3">
+            <div className="d-flex flex-column">
+              <div className="d-flex flex-column">
+                <span className="mb-2">
                   {trans("ajustesForm.actualContrasena")}
                 </span>
                 <input
                   placeholder="Contraseña actual"
                   id="txtActualPassword"
                   type="password"
-                  className="col-9"
+                  className=""
                   onChange={this.handleInputChange}
                   value={txtActualPassword}
                 />
               </div>
               <br />
               <br />
-              <div className="row">
-                <span className="col-3">
+              <div className="d-flex flex-column">
+                <span className="mb-2">
                   {trans("ajustesForm.nuevaContrasena")}
                 </span>
                 <input
                   placeholder="Nueva contraseña"
                   id="txtNewPassword"
                   type="password"
-                  className="col-9"
+                  className=""
                   onChange={this.handleInputChange}
                   value={txtNewPassword}
                 />
               </div>
               <br />
               <br />
-              <div className="row">
-                <span className="col-3">
+              <div className="d-flex flex-column">
+                <span className="mb-2">
                   {trans("ajustesForm.repetirNuevaContrasena")}
                 </span>
                 <input
                   placeholder="Repetir nueva contraseña"
                   id="txtRepeatNewPassword"
                   type="password"
-                  className="col-9"
+                  className=""
                   onChange={this.handleInputChange}
                   value={txtRepeatNewPassword}
                 />
@@ -221,7 +227,7 @@ class AjustesForm extends React.Component {
             </div>
           </div>
           <div
-            className={formChosen === "app" ? "col-9 flex-column" : "d-none"}
+            className={formChosen === "app" ? "col-lg-9 flex-column" : "d-none"}
           >
             <h1>{trans("ajustesForm.app")}</h1>
             <hr />
