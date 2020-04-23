@@ -77,7 +77,7 @@ class Tabla extends React.Component {
       .then((data) => {
         this.setState({
           jsonCuidadores: data.data,
-          buscado: false,
+          buscado: true,
         });
       })
       .catch((err) => {

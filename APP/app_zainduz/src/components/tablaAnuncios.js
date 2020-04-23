@@ -161,16 +161,19 @@ class TablaAnuncios extends React.Component {
     } = this.props;
     if (!tipoUsuario) {
       cogoToast.error(<h5>{trans("tablaCuidadores.errorNoLogueado")}</h5>);
-      this.setState({
-        showModalAnuncio: false
-      }, () => toogleMenuPerfil(true));
+      this.setState(
+        {
+          showModalAnuncio: false,
+        },
+        () => toogleMenuPerfil(true)
+      );
       return;
     }
 
     if (tipoUsuario != "Cuidador") {
       cogoToast.error(<h5>{trans("formAnuncio.cuidadorNecesario")}</h5>);
       this.setState({
-        showModalAnuncio: false
+        showModalAnuncio: false,
       });
       return;
     }
@@ -188,8 +191,8 @@ class TablaAnuncios extends React.Component {
     if (comprobAcuerdoUnico.data != "Vacio") {
       cogoToast.error(<h5>{trans("tablaCuidadores.acuerdoExistente")}</h5>);
       this.setState({
-        showModalAnuncio: false
-      })
+        showModalAnuncio: false,
+      });
       return;
     }
 
@@ -243,13 +246,15 @@ class TablaAnuncios extends React.Component {
       return (
         <div
           style={{
-            borderRadius: 50
+            borderRadius: 50,
           }}
           className="d-flex flex-row align-items-center justify-content-center btn btn-success"
           onClick={() => changeFormContent("formAnuncio")}
         >
-          <span className="d-sm-inline d-none" style={{ fontSize: 20 }}>{trans("tablaAnuncios.addAnuncio")}</span>
-          <FontAwesomeIcon icon={faUpload} className="ml-sm-2 ml-0"/>
+          <span className="d-sm-inline d-none" style={{ fontSize: 20 }}>
+            {trans("tablaAnuncios.addAnuncio")}
+          </span>
+          <FontAwesomeIcon icon={faUpload} className="ml-sm-2 ml-0" />
         </div>
       );
     }
@@ -385,7 +390,7 @@ class TablaAnuncios extends React.Component {
       "Larunbata",
       "Igandea",
     ];
-    console.log(selectedAnuncio);
+
     return (
       <BottomScrollListener onBottom={this.onScreenBottom}>
         <div className="">
@@ -419,67 +424,78 @@ class TablaAnuncios extends React.Component {
           </div>
           <div className="d-flex flex-wrap justify-content-center">
             {buscado ? (
-              jsonAnuncios.map((anuncio, indice) => {
-                return (
-                  <div className="card w-20 m-4" style={{ width: "18rem" }}>
-                    <div
-                      style={{
-                        //backgroundImage:"url(http://" + ipMaquina + ":3001/api/image/" + cuidador.direcFotoContacto + ")",
-                        height: "300px",
-                        width: "calc(100% - 20px)",
-                        backgroundSize: "cover",
-                        backgroundPosition: "top",
-                        backgroundRepeat: "no-repeat",
-                        margin: "10px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        overflow: "hidden",
-                      }}
-                      className="card-img-top"
-                      alt="Imagen no disponible"
-                    >
-                      <img
-                        style={{ maxHeight: "250px", height: "auto" }}
-                        src={
-                          "http://" +
-                          ipMaquina +
-                          ":3001/api/image/" +
-                          anuncio.direcFoto
-                        }
-                      />
-                    </div>
-                    <div className="card-body">
-                      <h5 className="card-title mt-2">{anuncio.titulo}</h5>
-                      <p
-                        className="card-text"
-                        style={{ maxHeight: "75px", overflow: "hidden" }}
-                      >
-                        {anuncio.descripcion}
-                      </p>
-                    </div>
-                    <div className="card-body card-footer">
-                      <a
-                        className="mr-0 w-100 btn btn-success text-light"
-                        onClick={() => {
-                          this.handleViewAnuncio(anuncio);
+              jsonAnuncios.length > 0 ? (
+                jsonAnuncios.map((anuncio, indice) => {
+                  return (
+                    <div className="card w-20 m-4" style={{ width: "18rem" }}>
+                      <div
+                        style={{
+                          //backgroundImage:"url(http://" + ipMaquina + ":3001/api/image/" + cuidador.direcFotoContacto + ")",
+                          height: "300px",
+                          width: "calc(100% - 20px)",
+                          backgroundSize: "cover",
+                          backgroundPosition: "top",
+                          backgroundRepeat: "no-repeat",
+                          margin: "10px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          overflow: "hidden",
                         }}
+                        className="card-img-top"
+                        alt="Imagen no disponible"
                       >
-                        {trans("tablaAnuncios.ver")}
-                        <FontAwesomeIcon className="ml-1" icon={faEye} />
-                      </a>
+                        <img
+                          style={{ maxHeight: "250px", height: "auto" }}
+                          src={
+                            "http://" +
+                            ipMaquina +
+                            ":3001/api/image/" +
+                            anuncio.direcFoto
+                          }
+                        />
+                      </div>
+                      <div className="card-body">
+                        <h5 className="card-title mt-2">{anuncio.titulo}</h5>
+                        <p
+                          className="card-text"
+                          style={{ maxHeight: "75px", overflow: "hidden" }}
+                        >
+                          {anuncio.descripcion}
+                        </p>
+                      </div>
+                      <div className="card-body card-footer">
+                        <a
+                          className="mr-0 w-100 btn btn-success text-light"
+                          onClick={() => {
+                            this.handleViewAnuncio(anuncio);
+                          }}
+                        >
+                          {trans("tablaAnuncios.ver")}
+                          <FontAwesomeIcon className="ml-1" icon={faEye} />
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                );
-              })
+                  );
+                })
+              ) : (
+                <small
+                  style={{
+                    height: "70vh",
+                  }}
+                  className="d-flex align-items-center justify-content-center text-danger"
+                >
+                  {trans("tablaCuidadores.noData")}
+                </small>
+              )
             ) : (
-              <div className="w-100 text-center">
-                <img
-                  style={{ marginTop: "300px" }}
-                  src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
-                  height={100}
-                  width={100}
-                />
+              <div
+                style={{
+                  height: "70vh",
+                }}
+                className="d-flex align-items-center justify-content-center"
+              >
+                <ClipLoader color="#28a745" />
               </div>
             )}
           </div>
