@@ -217,8 +217,8 @@ class NotificacionesForm extends React.Component {
     return (
       <SocketContext.Consumer>
         {socket => (
-          <div className="p-5">
-            {this.state.jsonNotificaciones.length != 0 ? (
+          <div className={this.state.jsonNotificaciones.length !== 0 ? "p-5" : "p-0"}>
+            {this.state.jsonNotificaciones.length !== 0 ? (
               this.state.jsonNotificaciones.map((notificacion, indice) => {
                 return (
                   <div className="w-100 card mt-2 mb-2">
@@ -417,8 +417,12 @@ class NotificacionesForm extends React.Component {
                 );
               })
             ) : (
-              <div className="d-flex justify-content-center">
-                <small className="text-danger my-auto">
+              <div
+                style={{
+                  height: "calc(100vh - 80px)"
+                }}
+                className="d-flex align-items-center justify-content-center">
+                <small className="text-danger">
                   {trans("notificacionesForm.noData")}
                 </small>
               </div>
