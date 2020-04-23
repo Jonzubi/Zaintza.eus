@@ -5,15 +5,15 @@ import { connect } from "react-redux";
 import { trans, arrayOfFalses, getTodayDate } from "../util/funciones";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCaretDown,
   faEye,
-  faTrashAlt
+  faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { Collapse } from "react-collapse";
 import Avatar from "react-avatar";
 import cogoToast from "cogo-toast";
 import { setCountNotify } from "../redux/actions/notifications";
 import SocketContext from "../socketio/socket-context";
+import ClipLoader from "react-spinners/ClipLoader";
 
 class NotificacionesForm extends React.Component {
   componentDidMount() {
@@ -24,19 +24,22 @@ class NotificacionesForm extends React.Component {
         "http://" +
           ipMaquina +
           ":3001/api/procedures/getNotificacionesConUsuarios",
-        {          
+        {
           idUsuario: idUsuario,
           email,
-          contrasena          
+          contrasena,
         }
       )
-      .then(notificaciones => {
+      .then((notificaciones) => {
         this.setState({
           jsonNotificaciones: notificaciones.data,
-          notificacionesCollapseState: arrayOfFalses(notificaciones.data.length)
+          notificacionesCollapseState: arrayOfFalses(
+            notificaciones.data.length
+          ),
+          isLoading: false,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         //TODO gestionar error
       });
   }
@@ -45,7 +48,8 @@ class NotificacionesForm extends React.Component {
 
     this.state = {
       jsonNotificaciones: [],
-      notificacionesCollapseState: []
+      notificacionesCollapseState: [],
+      isLoading: true,
     };
 
     this.handleToogleCollapseNotificacion = this.handleToogleCollapseNotificacion.bind(
@@ -59,7 +63,7 @@ class NotificacionesForm extends React.Component {
     // Esta condicion es para que no se abra un collapse vacio en caso de ser una gestion de acuerdo
     if (notificacion.tipoNotificacion !== "AcuerdoGestionado") {
       aux[index] = !aux[index];
-    }    
+    }
 
     let auxJsonNotif = this.state.jsonNotificaciones;
     if (!auxJsonNotif[index].visto) {
@@ -71,7 +75,7 @@ class NotificacionesForm extends React.Component {
         {
           visto: true,
           email,
-          contrasena
+          contrasena,
         }
       );
       auxJsonNotif[index].visto = true;
@@ -80,7 +84,7 @@ class NotificacionesForm extends React.Component {
 
     this.setState({
       notificacionesCollapseState: aux,
-      jsonNotificaciones: auxJsonNotif
+      jsonNotificaciones: auxJsonNotif,
     });
   }
 
@@ -114,11 +118,14 @@ class NotificacionesForm extends React.Component {
     //Squi estoy pillando el estado actual del acuerdo para comprobar que el acuerdo no se ha cancelado ya por el usuario.
     //Por ejemplo sui ha hecho una propuesta erronea
     let estadoAcuerdo = await axios.post(
-      "http://" + ipMaquina + ":3001/api/procedures/getAcuerdoStatus/" + notificacion.acuerdo._id,
+      "http://" +
+        ipMaquina +
+        ":3001/api/procedures/getAcuerdoStatus/" +
+        notificacion.acuerdo._id,
       {
         whoAmI: tipoUsuario,
         email,
-        contrasena
+        contrasena,
       }
     );
     estadoAcuerdo = estadoAcuerdo.data;
@@ -127,57 +134,65 @@ class NotificacionesForm extends React.Component {
         <h5>{trans("notificacionesForm.acuerdoYaRechazado")}</h5>
       );
       await axios.patch(
-        "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id, {
+        "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
+        {
           show: false,
           email,
-          contrasena
+          contrasena,
         }
       );
       delete auxJsonNotif[indice];
       this.setState({
-        jsonNotificaciones: auxJsonNotif
+        jsonNotificaciones: auxJsonNotif,
       });
       return;
     }
 
     await axios.patch(
-      "http://" + ipMaquina + ":3001/api/procedures/gestionarAcuerdo/" + acuerdo._id,
+      "http://" +
+        ipMaquina +
+        ":3001/api/procedures/gestionarAcuerdo/" +
+        acuerdo._id,
       {
         estadoAcuerdo: ifAccept ? 1 : 2, //Si Accept es true acepta el acuerdo mandando un 1 a la BD, si no un 2
         email,
         contrasena,
-        whoAmI: tipoUsuario
+        whoAmI: tipoUsuario,
       }
     );
     //Aqui se manda la notificacion con el usuario recogido anteriormente,
     //el acuerdo ha sido gestionado con un valor de aceptado o rechazado en el valorGestion
-    await axios.post("http://" + ipMaquina + ":3001/api/procedures/newNotification", {
-      idUsuario: notificacion.idRemitente._id,
-      idRemitente: notificacion.idUsuario,
-      tipoNotificacion: "AcuerdoGestionado",
-      valorGestion: ifAccept,
-      visto: false,
-      show: true,
-      dateEnvioNotificacion:
-        today + " " + objToday.getHours() + ":" + objToday.getMinutes(),
-      email,
-      contrasena
-    });
+    await axios.post(
+      "http://" + ipMaquina + ":3001/api/procedures/newNotification",
+      {
+        idUsuario: notificacion.idRemitente._id,
+        idRemitente: notificacion.idUsuario,
+        tipoNotificacion: "AcuerdoGestionado",
+        valorGestion: ifAccept,
+        visto: false,
+        show: true,
+        dateEnvioNotificacion:
+          today + " " + objToday.getHours() + ":" + objToday.getMinutes(),
+        email,
+        contrasena,
+      }
+    );
 
-    socket.emit('notify', {
-      idUsuario: notificacion.idRemitente._id
+    socket.emit("notify", {
+      idUsuario: notificacion.idRemitente._id,
     });
     await axios.patch(
-      "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id, {
+      "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
+      {
         show: false,
         email,
-        contrasena
+        contrasena,
       }
     );
     delete auxJsonNotif[indice];
     this.setState(
       {
-        jsonNotificaciones: auxJsonNotif
+        jsonNotificaciones: auxJsonNotif,
       },
       () => {
         ifAccept
@@ -196,29 +211,43 @@ class NotificacionesForm extends React.Component {
     let auxJsonNotif = this.state.jsonNotificaciones;
 
     await axios.patch(
-      "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id, {
+      "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
+      {
         show: false,
         email,
-        contrasena
+        contrasena,
       }
     );
     delete auxJsonNotif[indice];
-    
-    if(!notificacion.visto){
+
+    if (!notificacion.visto) {
       setCountNotify(countNotifies - 1);
     }
-    
+
     this.setState({
-      jsonNotificaciones: auxJsonNotif
+      jsonNotificaciones: auxJsonNotif,
     });
   }
 
   render() {
+    const { isLoading } = this.state;
     return (
       <SocketContext.Consumer>
-        {socket => (
-          <div className={this.state.jsonNotificaciones.length !== 0 ? "p-5" : "p-0"}>
-            {this.state.jsonNotificaciones.length !== 0 ? (
+        {(socket) => (
+          <div
+            className={
+              this.state.jsonNotificaciones.length !== 0 ? "p-5" : "p-0"
+            }
+          >
+            {isLoading ? (
+              <div
+                style={{
+                  height: "calc(100vh - 80px)"
+                }}
+                className="d-flex align-items-center justify-content-center">
+                <ClipLoader color="#28a745" />
+              </div>              
+            ) : this.state.jsonNotificaciones.length !== 0 ? (
               this.state.jsonNotificaciones.map((notificacion, indice) => {
                 return (
                   <div className="w-100 card mt-2 mb-2">
@@ -299,7 +328,10 @@ class NotificacionesForm extends React.Component {
                             icon={faEye}
                             className=""
                             onClick={() =>
-                              this.handleToogleCollapseNotificacion(indice, notificacion)
+                              this.handleToogleCollapseNotificacion(
+                                indice,
+                                notificacion
+                              )
                             }
                           />
                         </div>
@@ -343,7 +375,7 @@ class NotificacionesForm extends React.Component {
                                   {typeof notificacion.acuerdo.pueblo.map !=
                                   "undefined"
                                     ? notificacion.acuerdo.pueblo.map(
-                                        pueblo => {
+                                        (pueblo) => {
                                           return (
                                             <li className="list-group-item font-weight-bold">
                                               {pueblo}
@@ -361,7 +393,7 @@ class NotificacionesForm extends React.Component {
                                   {typeof notificacion.acuerdo.diasAcordados
                                     .map != "undefined"
                                     ? notificacion.acuerdo.diasAcordados.map(
-                                        dia => {
+                                        (dia) => {
                                           return (
                                             <li className="list-group-item">
                                               <span className="font-weight-bold">
@@ -419,9 +451,10 @@ class NotificacionesForm extends React.Component {
             ) : (
               <div
                 style={{
-                  height: "calc(100vh - 80px)"
+                  height: "calc(100vh - 80px)",
                 }}
-                className="d-flex align-items-center justify-content-center">
+                className="d-flex align-items-center justify-content-center"
+              >
                 <small className="text-danger">
                   {trans("notificacionesForm.noData")}
                 </small>
@@ -434,18 +467,18 @@ class NotificacionesForm extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     idUsuario: state.user._idUsuario,
     tipoUsuario: state.user.tipoUsuario,
     countNotifies: state.notification.countNotifies,
     email: state.user.email,
-    contrasena: state.user.contrasena
+    contrasena: state.user.contrasena,
   };
 };
 
-const mapDispatchToPros = dispatch => ({
-  setCountNotify: payload => dispatch(setCountNotify(payload))
+const mapDispatchToPros = (dispatch) => ({
+  setCountNotify: (payload) => dispatch(setCountNotify(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToPros)(NotificacionesForm);
