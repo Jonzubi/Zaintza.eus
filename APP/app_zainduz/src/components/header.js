@@ -75,9 +75,11 @@ class Header extends React.Component {
           onClick={() => {
             this.props.changeFormContent("tabla");
           }}
+          className="d-flex flex-column"
           style={{ textDecoration: "none" }}
         >
-          <h1 className="text-light">Zaintza</h1>
+          <h1 className="text-light mb-0">Zaintza</h1>
+          <span className="d-flex flex-row justify-content-end align-items-center font-weight-bold text-light">BETA</span>
         </a>
         <div className="d-flex flex-row align-items-center">
           {tipoUsuario === "Cliente" ? (
