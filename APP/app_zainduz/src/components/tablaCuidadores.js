@@ -77,7 +77,7 @@ class Tabla extends React.Component {
       .then((data) => {
         this.setState({
           jsonCuidadores: data.data,
-          buscado: true,
+          buscado: false,
         });
       })
       .catch((err) => {
@@ -843,16 +843,17 @@ class Tabla extends React.Component {
                   !this.state.buscado ? (
                   <div
                     style={{
-                      marginTop: 300,
+                      height: "70vh"
                     }}
-                    className="w-100 text-center"
-                  >
-                    <ClipLoader color="#28a745" />
+                    className="d-flex align-items-center justify-content-center">
+                      <ClipLoader color="#28a745" />
                   </div>
                 ) : (
                   <small
-                    style={{ marginTop: "300px" }}
-                    className="text-danger text-center w-100"
+                  style={{
+                    height: "70vh"
+                  }}
+                  className="d-flex align-items-center justify-content-center text-danger"
                   >
                     {trans("tablaCuidadores.noData")}
                   </small>
