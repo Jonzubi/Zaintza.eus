@@ -161,12 +161,17 @@ class TablaAnuncios extends React.Component {
     } = this.props;
     if (!tipoUsuario) {
       cogoToast.error(<h5>{trans("tablaCuidadores.errorNoLogueado")}</h5>);
-      toogleMenuPerfil(true);
+      this.setState({
+        showModalAnuncio: false
+      }, () => toogleMenuPerfil(true));
       return;
     }
 
     if (tipoUsuario != "Cuidador") {
       cogoToast.error(<h5>{trans("formAnuncio.cuidadorNecesario")}</h5>);
+      this.setState({
+        showModalAnuncio: false
+      });
       return;
     }
 
@@ -182,6 +187,9 @@ class TablaAnuncios extends React.Component {
     );
     if (comprobAcuerdoUnico.data != "Vacio") {
       cogoToast.error(<h5>{trans("tablaCuidadores.acuerdoExistente")}</h5>);
+      this.setState({
+        showModalAnuncio: false
+      })
       return;
     }
 
