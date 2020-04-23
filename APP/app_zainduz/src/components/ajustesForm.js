@@ -129,7 +129,7 @@ class AjustesForm extends React.Component {
     } = this.state;
     const { idLangPred } = this.props;
     return (
-      <div className="p-lg-5">
+      <div className="p-lg-5 mt-lg-0 mt-2">
         <div className="row-lg flex-lg-row d-flex flex-column">
           <div className="col-lg-3 mb-lg-0 mb-5">
             <h5 className="d-flex align-items-stretch justify-content-center mb-5">

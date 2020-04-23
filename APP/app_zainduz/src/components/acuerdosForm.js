@@ -156,43 +156,41 @@ class AcuerdosForm extends React.Component {
     return (
       <SocketContext.Consumer>
         {socket => (
-          <div className="p-5 h-100">
+          <div className="p-lg-5 p-2 h-100">
             {this.state.jsonAcuerdos.length != 0 ? (
               this.state.jsonAcuerdos.map((acuerdo, indice) => {
                 return (
                   <div className="w-100 card">
                     <div className="card-header">
-                      <div className="row">
-                        <div className="col-10 text-center">
-                          <div className="d-flex align-items-center">
-                            <Avatar
-                              size={50}
-                              className=""
-                              name={acuerdo[laOtraPersona].nombre}
-                              src={
-                                "http://" +
-                                ipMaquina +
-                                ":3001/api/image/" +
-                                acuerdo[laOtraPersona].direcFoto
-                              }
-                            />
-                            <div className="ml-3">
-                              <span className="font-weight-bold">
-                                {acuerdo[laOtraPersona].nombre +
-                                  " " +
-                                  acuerdo[laOtraPersona].apellido1}
-                              </span>{" "}
-                              <span>
-                                {acuerdo.estadoAcuerdo == 0
-                                  ? trans("acuerdosForm.esperandoAcuerdo")
-                                  : acuerdo.estadoAcuerdo == 1
-                                  ? trans("acuerdosForm.aceptadoAcuerdo")
-                                  : trans("acuerdosForm.rechazadoAcuerdo")}
-                              </span>
-                            </div>
+                      <div className="d-flex flex-row align-items-center justify-content-between">                
+                        <div className="d-flex align-items-center">
+                          <Avatar
+                            size={50}
+                            className=""
+                            name={acuerdo[laOtraPersona].nombre}
+                            src={
+                              "http://" +
+                              ipMaquina +
+                              ":3001/api/image/" +
+                              acuerdo[laOtraPersona].direcFoto
+                            }
+                          />
+                          <div className="ml-3">
+                            <span className="font-weight-bold">
+                              {acuerdo[laOtraPersona].nombre +
+                                " " +
+                                acuerdo[laOtraPersona].apellido1}
+                            </span>{" "}
+                            <span className="d-lg-inline d-none">
+                              {acuerdo.estadoAcuerdo == 0
+                                ? trans("acuerdosForm.esperandoAcuerdo")
+                                : acuerdo.estadoAcuerdo == 1
+                                ? trans("acuerdosForm.aceptadoAcuerdo")
+                                : trans("acuerdosForm.rechazadoAcuerdo")}
+                            </span>
                           </div>
                         </div>
-                        <div className="col-1 text-center my-auto">
+                        <div className="d-flex flex-row align-items-center">
                           {acuerdo.estadoAcuerdo == 0 ? (
                             <OverlayTrigger
                               key="top"
@@ -239,17 +237,17 @@ class AcuerdosForm extends React.Component {
                               />
                             </OverlayTrigger>
                           )}
+                          <div className="">
+                            <FontAwesomeIcon
+                              style={{ cursor: "pointer" }}
+                              size="2x"
+                              icon={faCaretDown}
+                              className="ml-5"
+                              onClick={() =>
+                                this.handleToogleCollapseAcuerdo(indice)
+                              }
+                            />
                         </div>
-                        <div className="col-1 text-center my-auto">
-                          <FontAwesomeIcon
-                            style={{ cursor: "pointer" }}
-                            size="2x"
-                            icon={faCaretDown}
-                            className=""
-                            onClick={() =>
-                              this.handleToogleCollapseAcuerdo(indice)
-                            }
-                          />
                         </div>
                       </div>
                     </div>
@@ -258,9 +256,9 @@ class AcuerdosForm extends React.Component {
                       isOpened={this.state.acuerdosCollapseState[indice]}
                     >
                       <div>
-                        <span className="display-4">
+                        <h3 className="">
                           {acuerdo.tituloAcuerdo}
-                        </span>
+                        </h3>
                         <hr />
                         <div className="p-5 font-weight-bold text-center">
                           {acuerdo.descripcionAcuerdo}
