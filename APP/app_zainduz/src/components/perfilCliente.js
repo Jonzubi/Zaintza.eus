@@ -7,9 +7,9 @@ import { trans } from "../util/funciones";
 import ipMaquina from "../util/ipMaquinaAPI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faSave, faUser, faMobileAlt, faPhoneAlt } from "@fortawesome/free-solid-svg-icons";
-import { loadGif } from "../util/gifs/loadGif.gif";
 import Axios from "axios";
 import cogoToast from "cogo-toast";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const mapStateToProps = state => {
   //Aqui van los especialitos de los undefined
@@ -301,7 +301,7 @@ class PerfilCliente extends React.Component {
                 <FontAwesomeIcon className="ml-1" icon={faEdit} />
               </button>
             ) : this.state.isLoading ? (
-              <img src={"http://" + ipMaquina + ":3001/api/image/loadGif"} height={50} width={50} />
+                <ClipLoader color="#28a745" />
             ) : (
               <button
                 onClick={() => this.handleGuardarCambios()}

@@ -24,11 +24,11 @@ import cogoToast from "cogo-toast";
 import Switch from "react-switch";
 import { trans } from "../util/funciones";
 import ipMaquina from "../util/ipMaquinaAPI";
-import loadGif from "../util/gifs/loadGif.gif";
 import municipios from "../util/municipos";
 import imgNino from "../util/images/nino.png";
 import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
 import imgTerceraEdad from "../util/images/terceraEdad.png";
+import ClipLoader from "react-spinners/ClipLoader";
 import { getRandomString, toBase64 } from "../util/funciones";
 import Axios from "axios";
 import {saveUserSession} from "../redux/actions/user";
@@ -1151,7 +1151,7 @@ class PerfilCuidador extends React.Component {
                 <FontAwesomeIcon className="ml-1" icon={faEdit} />
               </button>
             ) : this.state.isLoading ? (
-              <img src={"http://" + ipMaquina + ":3001/api/image/loadGif"} height={50} width={50} />
+                <ClipLoader color="#28a745" />
             ) : (
               <button
                 onClick={() => this.handleGuardarCambios()}
