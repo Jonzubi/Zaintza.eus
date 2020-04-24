@@ -30,12 +30,12 @@ class ModalRegistrarse extends React.Component {
         <ModalHeader closeButton>
           <ModalTitle>Izen ematea</ModalTitle>
         </ModalHeader>
-        <ModalBody className="my-auto mx-auto">Nola nahiko zenuke izena eman, guraso gisa ala zaintzaile gisa?</ModalBody>
-        <ModalFooter>
-          <Button className="w-50" variant="success" onClick={() => {this.props.toogleModal(false);this.props.changeFormContent("registrarCuidador")}}>
+        <ModalBody className="d-flex flex-row align-items-center justify-content-center">Nola nahiko zenuke izena eman, guraso gisa ala zaintzaile gisa?</ModalBody>
+        <ModalFooter className="d-flex flex-row align-items-center justify-content-between">
+          <Button className="" variant="success" onClick={() => {this.props.toogleModal(false);this.props.changeFormContent("registrarCuidador")}}>
             Zaintzaile gisa
           </Button>
-          <Button className="w-50" variant="success" onClick={() => {this.props.toogleModal(false);this.props.changeFormContent("registrarCliente");}}>
+          <Button className="" variant="success" onClick={() => {this.props.toogleModal(false);this.props.changeFormContent("registrarCliente");}}>
             Guraso gisa
           </Button>
         </ModalFooter>
