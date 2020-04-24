@@ -12,6 +12,9 @@ import { changeFormContent } from "../redux/actions/app";
 import HeaderChangeLang from "./headerChangeLang";
 import "./styles/header.css";
 import ipMaquina from "../util/ipMaquinaAPI";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+import { trans } from "../util/funciones";
 
 const MapDispachToProps = (dispatch) => {
   return {
@@ -83,14 +86,24 @@ class Header extends React.Component {
         </a>
         <div className="d-flex flex-row align-items-center">
           {tipoUsuario === "Cliente" ? (
-            <FontAwesomeIcon
-              style={{
-                cursor: 'pointer'
-              }}
-              className="mr-5 d-none d-sm-inline text-white"
-              icon={faUpload}
-              onClick={() => changeFormContent("formAnuncio")}
-            />
+            <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Tooltip>
+                  {trans("header.subirAnuncio")}
+                </Tooltip>
+              }
+            >
+              <FontAwesomeIcon
+                style={{
+                  cursor: 'pointer'
+                }}
+                className="mr-5 d-none d-sm-inline text-white"
+                icon={faUpload}
+                onClick={() => changeFormContent("formAnuncio")}
+              />
+            </OverlayTrigger>
+            
           ) : null}
           {direcFoto ? (
             <div
@@ -100,12 +113,25 @@ class Header extends React.Component {
               }}
               className="mr-5 d-none d-sm-inline"
             >
-              <FontAwesomeIcon icon={faBell} className="text-white" />
-              {countNotifies > 0 ? (
-                <span className="badge badge-primary rounded-circle ml-1">
-                  {countNotifies}
-                </span>
-              ) : null}
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip>
+                    {trans('header.notificaciones')}
+                  </Tooltip>
+                }
+              >
+                <div>
+                  <FontAwesomeIcon icon={faBell} className="text-white" />
+                  {countNotifies > 0 ? (
+                    <span className="badge badge-primary rounded-circle ml-1">
+                      {countNotifies}
+                    </span>
+                  ) : null}
+                </div>
+                
+              </OverlayTrigger>
+              
             </div>
           ) : null}
 

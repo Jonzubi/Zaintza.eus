@@ -9,6 +9,8 @@ import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import SocketContext from "../socketio/socket-context";
 import ClipLoader from "react-spinners/ClipLoader";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faAt, faKey, faMobileAlt, faPhoneAlt } from "@fortawesome/free-solid-svg-icons";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -171,8 +173,8 @@ class RegisterFormCliente extends React.Component {
     return (
       <SocketContext.Consumer>
         {socket => (
-          <div className="p-5">
-            <div className="form-group d-flex justify-content-center position-relative">
+          <div className="p-5 d-flex flex-column">
+            <div className="d-flex justify-content-center align-items-center mb-2">
               <Avatar
                 label="Aukeratu avatarra"
                 labelStyle={{
@@ -190,12 +192,16 @@ class RegisterFormCliente extends React.Component {
                 src={this.state.avatarPreview}
               />
             </div>
-            <div className="form-group row">
-              <div className="col-12">
-                <label htmlFor="txtNombre">
-                  {trans("registerFormClientes.nombre")}
-                </label>{" "}
-                (<span className="text-danger font-weight-bold">*</span>)
+            <div className="row">
+              <div className="col-12 mb-2">
+                <div>
+                  <FontAwesomeIcon icon={faUser} className="mr-1"/>
+                  <label htmlFor="txtNombre">
+                    {trans("registerFormClientes.nombre")}
+                  </label>{" "}
+                  (<span className="text-danger font-weight-bold">*</span>)
+                </div>
+                
                 <input
                   onChange={this.handleInputChange}
                   type="text"
@@ -211,8 +217,8 @@ class RegisterFormCliente extends React.Component {
                 />
               </div>
             </div>
-            <div className="form-group row">
-              <div className="col-6">
+            <div className="row">
+              <div className="col-lg-6 col-12 mb-2">
                 <label htmlFor="txtApellido1">
                   {trans("registerFormClientes.apellido1")}
                 </label>
@@ -226,7 +232,7 @@ class RegisterFormCliente extends React.Component {
                   value={this.state.txtApellido1}
                 />
               </div>
-              <div className="col-6">
+              <div className="col-lg-6 col-12 mb-2">
                 <label htmlFor="txtApellido2">
                   {trans("registerFormClientes.apellido2")}
                 </label>
@@ -241,12 +247,16 @@ class RegisterFormCliente extends React.Component {
                 />
               </div>
             </div>
-            <div className="form-group row">
-              <div className="col-6">
-                <label htmlFor="txtEmail">
-                  {trans("registerFormClientes.email")}
-                </label>{" "}
-                (<span className="text-danger font-weight-bold">*</span>)
+            <div className="row">
+              <div className="col-lg-6 col-12 mb-2">
+                <div>
+                  <FontAwesomeIcon icon={faAt} className="mr-1" />
+                  <label htmlFor="txtEmail">
+                    {trans("registerFormClientes.email")}
+                  </label>{" "}
+                  (<span className="text-danger font-weight-bold">*</span>)
+                </div>
+                
                 <input
                   onChange={this.handleInputChange}
                   type="email"
@@ -261,11 +271,15 @@ class RegisterFormCliente extends React.Component {
                   value={this.state.txtEmail}
                 />
               </div>
-              <div className="col-6">
-                <label htmlFor="txtContrasena">
-                  {trans("registerFormClientes.contrasena")}
-                </label>{" "}
-                (<span className="text-danger font-weight-bold">*</span>)
+              <div className="col-lg-6 col-12 mb-2">
+                <div>
+                  <FontAwesomeIcon icon={faKey} className="mr-1" />
+                  <label htmlFor="txtContrasena">
+                    {trans("registerFormClientes.contrasena")}
+                  </label>{" "}
+                  (<span className="text-danger font-weight-bold">*</span>)
+                </div>
+                
                 <input
                   onChange={this.handleInputChange}
                   type="password"
@@ -280,12 +294,16 @@ class RegisterFormCliente extends React.Component {
                 />
               </div>
             </div>
-            <div className="form-group row">
-              <div className="col-6">
-                <label htmlFor="txtMovil">
-                  {trans("registerFormClientes.movil")}
-                </label>{" "}
-                (<span className="text-danger font-weight-bold">*</span>)
+            <div className="row">
+              <div className="col-lg-6 col-12 mb-2">
+                <div>
+                  <FontAwesomeIcon icon={faMobileAlt} className="mr-1" />
+                  <label htmlFor="txtMovil">
+                   {trans("registerFormClientes.movil")}
+                  </label>{" "}
+                  (<span className="text-danger font-weight-bold">*</span>)
+                </div>
+                
                 <input
                   onChange={this.handleInputChange}
                   type="number"
@@ -299,10 +317,14 @@ class RegisterFormCliente extends React.Component {
                   value={this.state.txtMovil}
                 />
               </div>
-              <div className="col-6">
-                <label htmlFor="txtFijo">
-                  {trans("registerFormClientes.telefFijo")}
-                </label>{" "}
+              <div className="col-lg-6 col-12 mb-2">
+                <div>
+                  <FontAwesomeIcon icon={faPhoneAlt} className="mr-1" />
+                  <label htmlFor="txtFijo">
+                    {trans("registerFormClientes.telefFijo")}
+                  </label>{" "}
+                </div>
+                
                 <input
                   onChange={this.handleInputChange}
                   type="number"

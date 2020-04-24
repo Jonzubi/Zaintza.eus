@@ -167,7 +167,7 @@ class PerfilCliente extends React.Component {
   render() {
     return (
       <div className="p-5 d-flex flex-column">
-        <div className="d-flex flex-row align-items-center justify-content-center">
+        <div className="d-flex flex-row align-items-center justify-content-center mb-2">
           {!this.state.isEditing ? (
             <img
               height={200}
@@ -196,7 +196,7 @@ class PerfilCliente extends React.Component {
           )}
         </div>
         <div className="row">
-          <div className="col-12">
+          <div className="col-12 mb-2">
             <div className="d-flex flex-row align-items-center">
               <FontAwesomeIcon icon={faUser} className="mr-1" />
               <span htmlFor="txtNombre">{trans("perfilCliente.nombre")}</span> (
@@ -220,7 +220,7 @@ class PerfilCliente extends React.Component {
           </div>
         </div>
         <div className="mt-lg-2 row">
-          <div className="col-lg-6 col-12">
+          <div className="col-lg-6 col-12 mb-2">
             <label htmlFor="txtApellido1">{trans("perfilCliente.apellido1")}</label>
             <input
               onChange={this.handleInputChange}
@@ -233,7 +233,7 @@ class PerfilCliente extends React.Component {
               value={this.state.txtApellido1}
             />
           </div>
-          <div className="col-lg-6 col-12">
+          <div className="col-lg-6 col-12 mb-2">
             <label htmlFor="txtApellido2">{trans("perfilCliente.apellido2")}</label>
             <input
               onChange={this.handleInputChange}
@@ -248,7 +248,7 @@ class PerfilCliente extends React.Component {
           </div>
         </div>
         <div className="mt-lg-2 row">
-          <div className="col-lg-6 col-12">
+          <div className="col-lg-6 col-12 mb-2">
             <div className="d-flex flex-row align-items-center">
               <FontAwesomeIcon icon={faMobileAlt} className="mr-1" />
               <span htmlFor="txtMovil">{trans("perfilCliente.movil")}</span> (
@@ -269,7 +269,7 @@ class PerfilCliente extends React.Component {
               value={this.state.txtMovil}
             />
           </div>
-          <div className="col-lg-6 col-12">
+          <div className="col-lg-6 col-12 mb-2">
             <div className="d-flex flex-row align-items-center">
               <FontAwesomeIcon icon={faPhoneAlt} className="mr-1" />
               <span htmlFor="txtFijo">{trans("perfilCliente.telefFijo")}</span>{" "}
@@ -290,7 +290,7 @@ class PerfilCliente extends React.Component {
           </div>
         </div>
         <div id="loaderOrButton" className="row mt-5">
-          <div className="col-12">
+          <div className="col-12 mb-2">
             {!this.state.isEditing ? (
               <button
                 onClick={() => this.handleEdit()}
@@ -301,7 +301,9 @@ class PerfilCliente extends React.Component {
                 <FontAwesomeIcon className="ml-1" icon={faEdit} />
               </button>
             ) : this.state.isLoading ? (
+              <div className="d-flex align-items-center justify-content-center">
                 <ClipLoader color="#28a745" />
+              </div>
             ) : (
               <button
                 onClick={() => this.handleGuardarCambios()}

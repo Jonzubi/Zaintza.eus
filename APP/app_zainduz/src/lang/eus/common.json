@@ -7,7 +7,7 @@
     "calendario": "Egutegia",
     "contratos": "Akordioak",
     "salir": "Irten",
-    "notificaciones": "Abixuak",
+    "notificaciones": "Abisuak",
     "perfil": "Profila",
     "ajustes": "Ezarpenak",
     "notificacionRecibida": "Abisu berri bat duzu"
@@ -234,5 +234,9 @@
     "ajustes": "Ezarpenak",
     "idiomaPredeterminado": "Hasieratik ezarriko den hizkuntza",
     "definirIdioma": "Hizkuntza zehaztu"
+  },
+  "header": {
+    "subirAnuncio": "Zaintza eskaera igo",
+    "notificaciones": "Abisuak"
   }
 }

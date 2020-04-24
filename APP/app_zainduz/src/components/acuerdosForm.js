@@ -350,7 +350,7 @@ class AcuerdosForm extends React.Component {
                 className="d-flex align-items-center justify-content-center"
               >
                 <small className="text-danger">
-                  {trans("notificacionesForm.noData")}
+                  {trans("acuerdosForm.noData")}
                 </small>
               </div>
             )}
