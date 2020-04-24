@@ -992,7 +992,7 @@ class RegisterForm extends React.Component {
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-6 col-12 mt-5">
+                <div className="col-lg-6 col-12 mt-lg-3 mt-5">
                   {/* Insertar precioPublico disponibles aqui */}
                   <span className="d-flex flex-row justify-content-center align-items-center">
                     <FontAwesomeIcon icon={faEuroSign} className="mr-1" />
