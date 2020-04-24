@@ -65,7 +65,7 @@ class PueblosAutosuggest extends React.Component {
 
   render() {
     const { suggestionsPueblos } = this.state;
-    const { hasError } = this.props;
+    const { hasError, disabled } = this.props;
     const classSuggestion = hasError
       ? "border border-danger form-control d-inline w-75"
       : "form-control d-inline w-100";
@@ -75,7 +75,8 @@ class PueblosAutosuggest extends React.Component {
       onChange: onChangeSuggestion,
       placeholder: "Introduce el pueblo...",
       value: auxAddPuebloValue,
-      className: classSuggestion
+      className: classSuggestion,
+      disabled: disabled
     };
     const suggestionTheme = {
       container: "react-autosuggest__container",

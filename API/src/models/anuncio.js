@@ -21,7 +21,7 @@ module.exports = (conexion) => {
             required: true
         },
         pueblo: {
-            type: String,
+            type: [String],
             required: true
         },
         publico: {

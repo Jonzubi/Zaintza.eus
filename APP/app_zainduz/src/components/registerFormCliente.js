@@ -1,7 +1,6 @@
 import React from "react";
 import Avatar from "react-avatar-edit";
 import cogoToast from "cogo-toast";
-import loadGif from "../util/gifs/loadGif.gif";
 import { connect } from "react-redux";
 import { trans, getRandomString } from "../util/funciones";
 import { saveUserSession } from "../redux/actions/user";
@@ -9,6 +8,7 @@ import { changeFormContent } from "../redux/actions/app";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import SocketContext from "../socketio/socket-context";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -319,11 +319,7 @@ class RegisterFormCliente extends React.Component {
             </div>
             <div id="loaderOrButton" className="w-100 mt-5 text-center">
               {this.state.isLoading ? (
-                <img
-                  src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
-                  height={50}
-                  width={50}
-                />
+                <ClipLoader color="#28a745" />
               ) : (
                 <button
                   onClick={() => this.handleRegistrarse(socket)}

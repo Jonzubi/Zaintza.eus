@@ -3,8 +3,7 @@ import { slide as BurgerMenu } from "react-burger-menu";
 import Avatar from "react-avatar";
 import LogInForm from "./logInForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import imgPerfil from "../util/fotosPrueba/image.jpg";
+import { faTimes, faUserCircle, faUser, faCalendarAlt, faComments, faBell, faCogs, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import { initializeUserSession } from "../redux/actions/user";
@@ -166,30 +165,34 @@ class MenuPerfil extends React.Component {
                 >
                   <button
                     type="button"
-                    className="w-100 btn btn-secondary"
+                    className="btn btn-secondary"
                     onClick={() => this.handleClickPerfil()}
                   >
+                    <FontAwesomeIcon icon={faUser} className="float-left"/>
                     {trans("menuPerfil.perfil")}
                   </button>
                   <button
                     type="button"
-                    className="w-100 btn btn-secondary"
+                    className="btn btn-secondary"
                     onClick={() => this.handleClickCalendario()}
                   >
+                    <FontAwesomeIcon icon={faCalendarAlt} className="float-left"/>
                     {trans("menuPerfil.calendario")}
                   </button>
                   <button
                     type="button"
-                    className="w-100 btn btn-secondary"
+                    className="btn btn-secondary"
                     onClick={() => this.handleClickAcuerdos()}
                   >
+                    <FontAwesomeIcon icon={faComments} className="float-left"/>
                     {trans("menuPerfil.contratos")}
                   </button>
                   <button
                     type="button"
-                    className="w-100 btn btn-secondary"
+                    className="btn btn-secondary"
                     onClick={() => this.handleClickNotificaciones()}
                   >
+                    <FontAwesomeIcon icon={faBell} className="float-left"/>
                     {trans("menuPerfil.notificaciones")}
                     {countNotifies > 0 ? (
                       <span className="badge badge-light ml-2">
@@ -199,9 +202,10 @@ class MenuPerfil extends React.Component {
                   </button>
                   <button
                     type="button"
-                    className="w-100 btn btn-secondary"
+                    className="btn btn-secondary"
                     onClick={() => this.handleClickAjustes()}
                   >
+                    <FontAwesomeIcon icon={faCogs} className="float-left"/>
                     {trans("menuPerfil.ajustes")}
                   </button>
                 </div>
@@ -210,7 +214,7 @@ class MenuPerfil extends React.Component {
                   className="mt-5 w-100 btn btn-danger"
                   onClick={() => this.handleLogOut()}
                 >
-                  <FontAwesomeIcon className="mt-1 float-left" icon={faTimes} />
+                  <FontAwesomeIcon className="mt-1 float-left" icon={faSignOutAlt} />
                   {trans("menuPerfil.salir")}
                 </button>
               </div>

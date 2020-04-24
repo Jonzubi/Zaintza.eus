@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import ipMaquina from "../util/ipMaquinaAPI";
 import axios from "axios";
 import moment from "moment";
+import ClipLoader from "react-spinners/ClipLoader";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 const mapStateToProps = state => {
@@ -136,12 +137,12 @@ class CalendarioForm extends React.Component {
     const localizer = momentLocalizer(moment);
     const { isLoading, displayEventos } = this.state;
     return isLoading ? (
-      <div className="row mt-3 justify-content-center">
-        <img
-          src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
-          height={50}
-          width={50}
-        />
+      <div
+        style={{
+          height: "calc(100vh - 80px)"
+        }}
+        className="d-flex align-items-center justify-content-center">
+          <ClipLoader color="#28a745" />
       </div>
     ) : (
       <Calendar

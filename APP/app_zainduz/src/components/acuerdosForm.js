@@ -5,7 +5,7 @@ import {
   faCaretDown,
   faCircle,
   faUserMd,
-  faCity
+  faCity,
 } from "@fortawesome/free-solid-svg-icons";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
@@ -16,14 +16,15 @@ import { trans, arrayOfFalses, getTodayDate } from "../util/funciones";
 import Avatar from "react-avatar";
 import cogoToast from "cogo-toast";
 import SocketContext from "../socketio/socket-context";
+import ClipLoader from "react-spinners/ClipLoader";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     idPerfil: state.user._id,
     idUsuario: state.user._idUsuario,
     tipoUsuario: state.user.tipoUsuario,
     email: state.user.email,
-    contrasena: state.user.contrasena
+    contrasena: state.user.contrasena,
   };
 };
 
@@ -40,17 +41,21 @@ class AcuerdosForm extends React.Component {
           tipoUsuario: tipoUsuario,
           idPerfil: idPerfil,
           email,
-          contrasena
+          contrasena,
         }
       )
-      .then(resultado => {
+      .then((resultado) => {
         this.setState({
           jsonAcuerdos: resultado.data,
-          acuerdosCollapseState: arrayOfFalses(resultado.data.length)
+          acuerdosCollapseState: arrayOfFalses(resultado.data.length),
+          isLoading: false,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
+        this.setState({
+          isLoading: false,
+        });
       });
   }
 
@@ -59,7 +64,8 @@ class AcuerdosForm extends React.Component {
 
     this.state = {
       jsonAcuerdos: [],
-      acuerdosCollapseState: []
+      acuerdosCollapseState: [],
+      isLoading: true,
     };
 
     this.handleToogleCollapseAcuerdo = this.handleToogleCollapseAcuerdo.bind(
@@ -72,7 +78,7 @@ class AcuerdosForm extends React.Component {
     aux[index] = !aux[index];
 
     this.setState({
-      acuerdosCollapseState: aux
+      acuerdosCollapseState: aux,
     });
   }
 
@@ -106,18 +112,23 @@ class AcuerdosForm extends React.Component {
     const objToday = new Date();
 
     await axios.patch(
-      "http://" + ipMaquina + ":3001/api/procedures/terminarAcuerdo/" + acuerdo._id,
+      "http://" +
+        ipMaquina +
+        ":3001/api/procedures/terminarAcuerdo/" +
+        acuerdo._id,
       {
         whoAmI: tipoUsuario,
         email,
-        contrasena
+        contrasena,
       }
     );
     //Ahora se quiere notificar a la otra parte del acuerdo de la finalizacion del acuerdo
     let buscarUsuOrCuid =
       this.props.tipoUsuario == "Cliente" ? "idCuidador" : "idCliente";
     const idElOtro = acuerdo[buscarUsuOrCuid]._id;
-    let elOtroUsu = await axios.get(`http://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${idElOtro}`);
+    let elOtroUsu = await axios.get(
+      `http://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${idElOtro}`
+    );
     const notificacionData = {
       idUsuario: elOtroUsu.data,
       idRemitente: this.props.idUsuario,
@@ -127,22 +138,22 @@ class AcuerdosForm extends React.Component {
       dateEnvioNotificacion:
         today + " " + objToday.getHours() + ":" + objToday.getMinutes(),
       email,
-      contrasena
+      contrasena,
     };
     await axios.post(
       "http://" + ipMaquina + ":3001/api/procedures/newNotification",
       notificacionData
     );
 
-    socket.emit('notify', {
-      idUsuario: elOtroUsu.data
+    socket.emit("notify", {
+      idUsuario: elOtroUsu.data,
     });
 
     let auxJsonAcuerdos = this.state.jsonAcuerdos;
     auxJsonAcuerdos[indice].estadoAcuerdo = 2;
     this.setState(
       {
-        jsonAcuerdos: auxJsonAcuerdos
+        jsonAcuerdos: auxJsonAcuerdos,
       },
       () => {
         cogoToast.success(<h5>{trans("acuerdosForm.acuerdoTerminado")}</h5>);
@@ -151,48 +162,56 @@ class AcuerdosForm extends React.Component {
   }
 
   render() {
+    const { isLoading } = this.state;
     const laOtraPersona =
       this.props.tipoUsuario != "Cuidador" ? "idCuidador" : "idCliente";
     return (
       <SocketContext.Consumer>
-        {socket => (
-          <div className="p-5 h-100">
-            {this.state.jsonAcuerdos.length != 0 ? (
+        {(socket) => (
+          <div className="p-lg-5 p-2 h-100">
+            {isLoading ? (
+              <div
+                style={{
+                  height: "calc(100vh - 80px)",
+                }}
+                className="d-flex align-items-center justify-content-center"
+              >
+                <ClipLoader color="#28a745" />
+              </div>
+            ) : this.state.jsonAcuerdos.length != 0 ? (
               this.state.jsonAcuerdos.map((acuerdo, indice) => {
                 return (
                   <div className="w-100 card">
                     <div className="card-header">
-                      <div className="row">
-                        <div className="col-10 text-center">
-                          <div className="d-flex align-items-center">
-                            <Avatar
-                              size={50}
-                              className=""
-                              name={acuerdo[laOtraPersona].nombre}
-                              src={
-                                "http://" +
-                                ipMaquina +
-                                ":3001/api/image/" +
-                                acuerdo[laOtraPersona].direcFoto
-                              }
-                            />
-                            <div className="ml-3">
-                              <span className="font-weight-bold">
-                                {acuerdo[laOtraPersona].nombre +
-                                  " " +
-                                  acuerdo[laOtraPersona].apellido1}
-                              </span>{" "}
-                              <span>
-                                {acuerdo.estadoAcuerdo == 0
-                                  ? trans("acuerdosForm.esperandoAcuerdo")
-                                  : acuerdo.estadoAcuerdo == 1
-                                  ? trans("acuerdosForm.aceptadoAcuerdo")
-                                  : trans("acuerdosForm.rechazadoAcuerdo")}
-                              </span>
-                            </div>
+                      <div className="d-flex flex-row align-items-center justify-content-between">
+                        <div className="d-flex align-items-center">
+                          <Avatar
+                            size={50}
+                            className=""
+                            name={acuerdo[laOtraPersona].nombre}
+                            src={
+                              "http://" +
+                              ipMaquina +
+                              ":3001/api/image/" +
+                              acuerdo[laOtraPersona].direcFoto
+                            }
+                          />
+                          <div className="ml-3">
+                            <span className="font-weight-bold">
+                              {acuerdo[laOtraPersona].nombre +
+                                " " +
+                                acuerdo[laOtraPersona].apellido1}
+                            </span>{" "}
+                            <span className="d-lg-inline d-none">
+                              {acuerdo.estadoAcuerdo == 0
+                                ? trans("acuerdosForm.esperandoAcuerdo")
+                                : acuerdo.estadoAcuerdo == 1
+                                ? trans("acuerdosForm.aceptadoAcuerdo")
+                                : trans("acuerdosForm.rechazadoAcuerdo")}
+                            </span>
                           </div>
                         </div>
-                        <div className="col-1 text-center my-auto">
+                        <div className="d-flex flex-row align-items-center">
                           {acuerdo.estadoAcuerdo == 0 ? (
                             <OverlayTrigger
                               key="top"
@@ -239,17 +258,17 @@ class AcuerdosForm extends React.Component {
                               />
                             </OverlayTrigger>
                           )}
-                        </div>
-                        <div className="col-1 text-center my-auto">
-                          <FontAwesomeIcon
-                            style={{ cursor: "pointer" }}
-                            size="2x"
-                            icon={faCaretDown}
-                            className=""
-                            onClick={() =>
-                              this.handleToogleCollapseAcuerdo(indice)
-                            }
-                          />
+                          <div className="">
+                            <FontAwesomeIcon
+                              style={{ cursor: "pointer" }}
+                              size="2x"
+                              icon={faCaretDown}
+                              className="ml-5"
+                              onClick={() =>
+                                this.handleToogleCollapseAcuerdo(indice)
+                              }
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -258,9 +277,7 @@ class AcuerdosForm extends React.Component {
                       isOpened={this.state.acuerdosCollapseState[indice]}
                     >
                       <div>
-                        <span className="display-4">
-                          {acuerdo.tituloAcuerdo}
-                        </span>
+                        <h3 className="">{acuerdo.tituloAcuerdo}</h3>
                         <hr />
                         <div className="p-5 font-weight-bold text-center">
                           {acuerdo.descripcionAcuerdo}
@@ -271,7 +288,7 @@ class AcuerdosForm extends React.Component {
                             <hr />
                             <ul className="list-group">
                               {typeof acuerdo.pueblo.map != "undefined"
-                                ? acuerdo.pueblo.map(pueblo => {
+                                ? acuerdo.pueblo.map((pueblo) => {
                                     return (
                                       <li className="list-group-item font-weight-bold">
                                         {pueblo}
@@ -286,7 +303,7 @@ class AcuerdosForm extends React.Component {
                             <hr />
                             <ul className="list-group">
                               {typeof acuerdo.diasAcordados.map != "undefined"
-                                ? acuerdo.diasAcordados.map(dia => {
+                                ? acuerdo.diasAcordados.map((dia) => {
                                     return (
                                       <li className="list-group-item">
                                         <span className="font-weight-bold">
@@ -305,7 +322,11 @@ class AcuerdosForm extends React.Component {
                         <div className="row ml-0 mr-0 mt-5">
                           <button
                             onClick={() =>
-                              this.handleTerminarAcuerdo(acuerdo, indice, socket)
+                              this.handleTerminarAcuerdo(
+                                acuerdo,
+                                indice,
+                                socket
+                              )
                             }
                             className={
                               acuerdo.estadoAcuerdo != 2
@@ -322,9 +343,14 @@ class AcuerdosForm extends React.Component {
                 );
               })
             ) : (
-              <div className="d-flex justify-content-center">
-                <small className="text-danger my-auto">
-                  {trans("acuerdosForm.noData")}
+              <div
+                style={{
+                  height: "calc(100vh - 80px)",
+                }}
+                className="d-flex align-items-center justify-content-center"
+              >
+                <small className="text-danger">
+                  {trans("notificacionesForm.noData")}
                 </small>
               </div>
             )}

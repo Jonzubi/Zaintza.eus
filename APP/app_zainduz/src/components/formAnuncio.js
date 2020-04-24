@@ -4,15 +4,19 @@ import cogoToast from "cogo-toast";
 import { trans, toBase64 } from "../util/funciones";
 import ImageUploader from "react-images-upload";
 import i18next from "i18next";
-import TimeInput from "react-time-input";
-import AutoSuggest from "react-autosuggest";
+import TimeInput from "./customTimeInput";
+import PuebloAutosuggest from "./pueblosAutosuggest";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMale,
   faFemale,
   faPlusCircle,
   faMinusCircle,
-  faPlusSquare
+  faPlusSquare,
+  faClock,
+  faHome,
+  faUsers,
+  faEuroSign
 } from "@fortawesome/free-solid-svg-icons";
 import municipios from "../util/municipos";
 import ipMaquina from "../util/ipMaquinaAPI";
@@ -21,6 +25,7 @@ import imgTerceraEdad from "../util/images/terceraEdad.png";
 import imgNino from "../util/images/nino.png";
 import Axios from "axios";
 import { changeFormContent } from "../redux/actions/app";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const mapStateToProps = state => {
   return {
@@ -205,7 +210,7 @@ class FormAnuncio extends React.Component {
         }
       }
       let auxUbicaciones = this.state.ubicaciones
-      auxUbicaciones[0]= pueblo;
+      auxUbicaciones.push(pueblo);
       this.setState({
         ubicaciones: auxUbicaciones,
         auxAddPueblo: ""
@@ -363,7 +368,7 @@ class FormAnuncio extends React.Component {
         titulo: txtTitulo,
         descripcion: txtDescripcion,
         horario: diasDisponible,
-        pueblo: ubicaciones[0],
+        pueblo: ubicaciones,
         publico: publicoCuidado,
         precio: precioCuidado,
         email,
@@ -388,35 +393,7 @@ class FormAnuncio extends React.Component {
   }
 
   render() {
-    const { auxAddPueblo, error, suggestionsPueblos } = this.state;
-    const onChangeSuggestion = this.handleAuxAddPuebloChange;
-    const classSuggestion = error
-      ? "border border-danger form-control d-inline w-75"
-      : "form-control d-inline w-100";
-    const autoSuggestProps = {
-      onChange: onChangeSuggestion,
-      placeholder: "Introduce el pueblo...",
-      value: auxAddPueblo,
-      className: classSuggestion
-    };
-
-    const suggestionTheme = {
-      container: "react-autosuggest__container",
-      containerOpen: "react-autosuggest__container--open",
-      input: "react-autosuggest__input",
-      inputOpen: "react-autosuggest__input--open",
-      inputFocused: "react-autosuggest__input--focused",
-      suggestionsContainer: "list-group",
-      suggestionsContainerOpen:
-        "react-autosuggest__suggestions-container--open",
-      suggestionsList: "list-group",
-      suggestion: "list-group-item",
-      suggestionFirst: "list-group-item",
-      suggestionHighlighted: "bg-success text-light list-group-item",
-      sectionContainer: "react-autosuggest__section-container",
-      sectionContainerFirst: "react-autosuggest__section-container--first",
-      sectionTitle: "react-autosuggest__section-title"
-    };
+    const { error, diasDisponible } = this.state;
     return (
       <div className="p-5">
         <div className="form-group d-flex justify-content-center position-relative">
@@ -492,121 +469,104 @@ class FormAnuncio extends React.Component {
           ></textarea>
         </div>
         <div className="form-group row">
-          <div className="form-group col">
-            {/* Insertar dias disponibles aqui */}
-            <label className="w-100 text-center lead">
-              {trans("formAnuncio.horasCuidado")}:
-            </label>
-            <br />
-            <div className={error ? "w-100 mt-2 border border-danger" : "w100 mt-2"} id="diasDisponible">
-              {/* Aqui iran los dias dinamicamente */}
-              {this.state.diasDisponible.map((objDia, indice) => {
-                return (
-                  <div
-                    className="col-6 mx-auto text-center"
-                    id={"diaDisponible" + indice}
-                  >
-                    <div className="form-control mt-4 w-100">
-                      <select
-                        value={this.state.diasDisponible[indice].dia}
-                        onChange={this.handleDiasDisponibleChange}
-                        className="d-inline"
-                        id={"dia" + indice}
-                      >
-                        <option>{i18next.t('dropDownDias.eligeDia')}</option>
-                        <option value="1">{i18next.t('dropDownDias.lunes')}</option>
-                        <option value="2">{i18next.t('dropDownDias.martes')}</option>
-                        <option value="3">{i18next.t('dropDownDias.miercoles')}</option>
-                        <option value="4">{i18next.t('dropDownDias.jueves')}</option>
-                        <option value="5">{i18next.t('dropDownDias.viernes')}</option>
-                        <option value="6">{i18next.t('dropDownDias.sabado')}</option>
-                        <option value="7">{i18next.t('dropDownDias.domingo')}</option>
-                      </select>
-                      <br />
-                      <br />
-                      <b>{trans("registerFormCuidadores.horaInicio")} :</b>
-                      <TimeInput
-                        onTimeChange={valor => {
-                          this.handleDiasDisponibleChange(
-                            valor,
-                            "horaInicio" + indice
-                          );
-                        }}
-                        id={"horaInicio" + indice}
-                        initTime={
-                          this.state.diasDisponible[indice].horaInicio !=
-                          "00:00"
-                            ? this.state.diasDisponible[indice].horaInicio
-                            : "00:00"
-                        }
-                        className="mt-1 text-center d-inline form-control"
-                      />
-                      <br />
-                      <b>{trans("registerFormCuidadores.horaFin")} :</b>
-                      <TimeInput
-                        onTimeChange={valor => {
-                          this.handleDiasDisponibleChange(
-                            valor,
-                            "horaFin" + indice
-                          );
-                        }}
-                        id={"horaFin" + indice}
-                        initTime={
-                          this.state.diasDisponible[indice].horaFin != "00:00"
-                            ? this.state.diasDisponible[indice].horaFin
-                            : "00:00"
-                        }
-                        className="mt-1 text-center d-inline form-control"
-                      />
-                      <br />
-                      <br />
+        <div className="form-group col-lg-6 col-12 d-flex flex-column">
+                  {/* Insertar dias disponibles aqui */}
+                  <span className="d-flex flex-row justify-content-between align-items-center">
+                    <FontAwesomeIcon
+                      style={{ cursor: "pointer" }}
+                      onClick={this.removeDiasDisponible}
+                      className="text-danger"
+                      icon={faMinusCircle}
+                    />
+                    <div>
+                      <FontAwesomeIcon icon={faClock} className="mr-1" />
+                      <span className="lead">
+                        {trans("registerFormCuidadores.diasDisponible")}
+                      </span>
+                      (<span className="text-danger font-weight-bold">*</span>)
                     </div>
+                    <FontAwesomeIcon
+                      style={{ cursor: "pointer" }}
+                      onClick={this.addDiasDisponible}
+                      className="text-success"
+                      icon={faPlusCircle}
+                    />                    
+                  </span>
+                  <div className="w-100 mt-2" id="diasDisponible">
+                    {/* Aqui iran los dias dinamicamente */}
+                    {this.state.diasDisponible.map((dia, indice) => {
+                      return (
+                        <div className="mt-1 d-flex flex-row align-items-center justify-content-between">
+                          <select
+                            value={dia.dia}
+                            onChange={this.handleDiasDisponibleChange}
+                            className="d-inline"
+                            id={"dia" + indice}
+                          >
+                            <option>Aukeratu eguna</option>
+                            <option value="1">Astelehena</option>
+                            <option value="2">Asteartea</option>
+                            <option value="3">Asteazkena</option>
+                            <option value="4">Osteguna</option>
+                            <option value="5">Ostirala</option>
+                            <option value="6">Larunbata</option>
+                            <option value="7">Igandea</option>
+                          </select>
+                          <div className="d-flex flex-row align-items-center">
+                            <TimeInput
+                              onTimeChange={(valor) => {
+                                this.handleDiasDisponibleChange(
+                                  valor,
+                                  "horaInicio" + indice
+                                );
+                              }}
+                              id={"horaInicio" + indice}
+                              initTime={
+                                diasDisponible[indice].horaInicio
+                              }
+                              style={{
+                                width: 50,
+                              }}
+                              className="text-center"
+                            />
+                            -
+                            <TimeInput
+                              onTimeChange={(valor) => {
+                                this.handleDiasDisponibleChange(
+                                  valor,
+                                  "horaFin" + indice
+                                );
+                              }}
+                              id={"horaFin" + indice}
+                              initTime={diasDisponible[indice].horaFin}
+                              style={{
+                                width: 50,
+                              }}
+                              className="text-center"
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                );
-              })}
-              <div id="botonesDiasDisponible" className="w-100 mt-2">
-                {this.state.diasDisponible.length > 0 ? (
-                  <a
-                    onClick={this.removeDiasDisponible}
-                    className="btn btn-danger float-left text-light"
-                  >
-                    {trans("registerFormCuidadores.eliminarDia")}{" "}
-                    <FontAwesomeIcon icon={faMinusCircle} />
-                  </a>
-                ) : (
-                  ""
-                )}
-                <a
-                  onClick={this.addDiasDisponible}
-                  className="btn btn-success float-right text-light"
-                >
-                  {trans("registerFormCuidadores.anadir")}{" "}
-                  <FontAwesomeIcon icon={faPlusCircle} />
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="form-group col">
+                </div>
+          <div className="form-group col-lg-6 col-12 d-flex flex-column">
             {/* Insertar ubicaciones disponibles aqui */}
-            <label htmlFor="txtAddPueblos" className="w-100 text-center lead">
-              {trans("formAnuncio.puebloCuidado")}:
-            </label>{" "}
-            (<span className="text-danger font-weight-bold">*</span>)
+            <div className="d-flex flex-row justify-content-center align-items-center">
+              <FontAwesomeIcon icon={faHome} className="mr-1" />
+              <span htmlFor="txtAddPueblos" className="lead">
+              {trans("formAnuncio.puebloCuidado")}
+              </span>{" "}
+              (<span className="text-danger font-weight-bold">*</span>)
+            </div>
+            
             <div class="form-group mt-2">
-              <AutoSuggest
-                suggestions={suggestionsPueblos}
-                onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+              <PuebloAutosuggest
                 onSuggestionSelected={this.handleAddPueblo}
-                getSuggestionValue={this.getSuggestionValue}
-                renderSuggestion={this.renderSuggestion}
-                inputProps={autoSuggestProps}
-                theme={suggestionTheme}
-                id="txtAddPueblos"
               />
               {this.state.ubicaciones.length > 0 ? (
                 <h5 className="mt-2 lead">
-                  {trans("formAnuncio.puebloSeleccionado")}:
+                  {trans("formAnuncio.puebloSeleccionado")}
                 </h5>
               ) : (
                 ""
@@ -633,11 +593,13 @@ class FormAnuncio extends React.Component {
           </div>
         </div>
         <div className="form-group row">
-            <div className={this.state.error ? "form-group col border border-danger" : "form-group col"}>
+            <div className={this.state.error ? "form-group d-flex flex-column col-lg-6 col-12 border border-danger" : "form-group d-flex flex-column col-lg-6 col-12"}>
               {/* Insertar publico disponibles aqui */}
-              <label className="w-100 text-center lead">
-                {trans("formAnuncio.publicoCuidado")}
-              </label>
+              <div className="d-flex flex-row justify-content-center align-items-center">
+                <FontAwesomeIcon icon={faUsers} className="mr-1" />
+                <span className="lead">{trans("formAnuncio.publicoCuidado")}</span>
+                (<span className="text-danger font-weight-bold">*</span>)
+              </div>
               <div className="row md-2">
                 <div
                   onClick={() => {
@@ -715,9 +677,10 @@ class FormAnuncio extends React.Component {
             </div>
             <div className="form-group col">
               {/* Insertar precioPublico disponibles aqui */}
-              <label className="w-100 text-center lead">
-                {trans("formAnuncio.precioCuidado")}:
-              </label>
+              <div className="d-flex flex-row align-items-center justify-content-center">
+                  <FontAwesomeIcon icon={faEuroSign} className="mr-1" />
+                  <span className="lead">{trans("formAnuncio.precioCuidado")}</span>
+              </div>
               <div className="list-group md-2">
                 {this.state.publicoCuidado !== '' ? (
                   <div className="list-group-item form-group text-center p-1">
@@ -751,10 +714,8 @@ class FormAnuncio extends React.Component {
           </div>
         <div id="loaderOrButton" className="w-100 mt-5 text-center">
             {this.state.isLoading ? (
-              <img
-                src={"http://" + ipMaquina + ":3001/api/image/loadGif"}
-                height={50}
-                width={50}
+              <ClipLoader
+                color="#28a745"
               />
             ) : (
               <button

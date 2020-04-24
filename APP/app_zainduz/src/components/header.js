@@ -4,11 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUserCircle,
   faBell,
+  faUpload,
 } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import { changeFormContent } from "../redux/actions/app";
-import HeaderChangeLang from './headerChangeLang';
+import HeaderChangeLang from "./headerChangeLang";
 import "./styles/header.css";
 import ipMaquina from "../util/ipMaquinaAPI";
 
@@ -25,6 +26,7 @@ const MapStateToProps = (state) => {
     nombre: state.user.nombre,
     apellido1: state.user.apellido1,
     countNotifies: state.notification.countNotifies,
+    tipoUsuario: state.user.tipoUsuario,
   };
 };
 
@@ -56,7 +58,12 @@ class Header extends React.Component {
 
   render() {
     const IconAvatar = this.getAvatar.bind(this);
-    const { countNotifies, direcFoto } = this.props;
+    const {
+      countNotifies,
+      direcFoto,
+      tipoUsuario,
+      changeFormContent,
+    } = this.props;
     return (
       <div
         style={{ background: "#343a40" }}
@@ -68,11 +75,23 @@ class Header extends React.Component {
           onClick={() => {
             this.props.changeFormContent("tabla");
           }}
+          className="d-flex flex-column"
           style={{ textDecoration: "none" }}
         >
-          <h1 className="text-light">Zaintza</h1>
+          <h1 className="text-light mb-0">Zaintza</h1>
+          <span className="d-flex flex-row justify-content-end align-items-center font-weight-bold text-light">BETA</span>
         </a>
         <div className="d-flex flex-row align-items-center">
+          {tipoUsuario === "Cliente" ? (
+            <FontAwesomeIcon
+              style={{
+                cursor: 'pointer'
+              }}
+              className="mr-5 d-none d-sm-inline text-white"
+              icon={faUpload}
+              onClick={() => changeFormContent("formAnuncio")}
+            />
+          ) : null}
           {direcFoto ? (
             <div
               onClick={() => this.handleBellClick()}
