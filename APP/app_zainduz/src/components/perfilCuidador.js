@@ -1151,7 +1151,9 @@ class PerfilCuidador extends React.Component {
                 <FontAwesomeIcon className="ml-1" icon={faEdit} />
               </button>
             ) : this.state.isLoading ? (
-                <ClipLoader color="#28a745" />
+                <div className="d-flex align-items-center justify-content-center">
+                  <ClipLoader color="#28a745" />
+                </div>                
             ) : (
               <button
                 onClick={() => this.handleGuardarCambios()}
