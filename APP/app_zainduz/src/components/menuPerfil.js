@@ -3,7 +3,7 @@ import { slide as BurgerMenu } from "react-burger-menu";
 import Avatar from "react-avatar";
 import LogInForm from "./logInForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faUserCircle, faUser, faCalendarAlt, faComments, faBell, faCogs } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faUserCircle, faUser, faCalendarAlt, faComments, faBell, faCogs, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import { initializeUserSession } from "../redux/actions/user";
@@ -214,7 +214,7 @@ class MenuPerfil extends React.Component {
                   className="mt-5 w-100 btn btn-danger"
                   onClick={() => this.handleLogOut()}
                 >
-                  <FontAwesomeIcon className="mt-1 float-left" icon={faTimes} />
+                  <FontAwesomeIcon className="mt-1 float-left" icon={faSignOutAlt} />
                   {trans("menuPerfil.salir")}
                 </button>
               </div>
