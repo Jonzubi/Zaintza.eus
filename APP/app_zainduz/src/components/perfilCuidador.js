@@ -1153,7 +1153,7 @@ class PerfilCuidador extends React.Component {
             ) : this.state.isLoading ? (
                 <div className="d-flex align-items-center justify-content-center">
                   <ClipLoader color="#28a745" />
-                </div>                
+                </div>
             ) : (
               <button
                 onClick={() => this.handleGuardarCambios()}
