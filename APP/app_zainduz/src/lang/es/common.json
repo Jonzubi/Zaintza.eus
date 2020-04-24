@@ -158,17 +158,17 @@
       "acuerdoTerminado": "El acuerdo ha sido terminado"
     },
     "notificacionesForm":{
-      "propuestaAcuerdo": "-k akordio proposamena bidali dizu",
-      "otraPersonaAcuerdoAceptado": "-k akordioa onartu du",
-      "otraPersonaAcuerdoRechazado": "-k akordioa ezeztatu du",
-      "pueblos":"Herria/k",
-      "dias": "Eguna/k",
-      "aceptarAcuerdo": "Onartu akordioa",
-      "rechazarAcuerdo": "Akordio ezeztatu",
-      "acuerdoAceptado": "Akordioa onartu duzu",    
-      "acuerdoRechazado": "Akordioa ezeztatu duzu",    
-      "noData": "Ez daukazu abixurik",
-      "acuerdoYaRechazado": "Akordio jada ezeztatua izanda"
+      "propuestaAcuerdo": "Te ha enviado una propuesta de acuerdo",
+      "otraPersonaAcuerdoAceptado": "Ha aceptado el acuerdo",
+      "otraPersonaAcuerdoRechazado": "Ha rechazado el acuerdo",
+      "pueblos":"Pueblos",
+      "dias": "Días",
+      "aceptarAcuerdo": "Aceptar acuerdo",
+      "rechazarAcuerdo": "Rechazar acuerdo",
+      "acuerdoAceptado": "Has aceptado el acuerdo",    
+      "acuerdoRechazado": "Has rechazado el acuerdo",    
+      "noData": "No tienes notificaciones",
+      "acuerdoYaRechazado": "Este acuerdo ya ha sido terminado"
     },
     "formAnuncio":{
       "titulo": "Titulo",
