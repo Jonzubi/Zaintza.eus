@@ -172,9 +172,34 @@
     },
     "formAnuncio":{
       "titulo": "Titulo",
+      "imagen": "Imagen",
       "descripcion": "Descripcion",
       "eligeUnaFoto": "Elige una foto",
-      "eligeOtraFoto": "Cambiar la foto"
+      "eligeOtraFoto": "Cambiar la foto",
+      "horasCuidado": "Horario de cuidado",
+      "puebloCuidado": "Pueblos de cuidado",
+      "puebloSeleccionado": "Pueblos seleccionados",
+      "diasDisponible":"Horario",
+      "eliminarPueblo": "Quitar pueblo",
+      "publicoCuidado": "Que tipo de cuidado es?",
+      "precioCuidado": "Precio de cuidado",
+      "anuncioSubido": "Solicitud de cuidado subida",
+      "cuidadorNecesario": "Se necesita una cuenta de cuidador para esta solicitud"
+    },
+    "tablaAnuncios":{
+      "addAnuncio": "Crear solicitud",
+      "noDefinido": "Sin definir",
+      "enviarPropuesta": "Enviar propuesta de acuerdo",
+      "propuestaEnviada": "Propuesta de acuerdo enviada",
+      "ver": "Ver solicitud",
+      "tituloAnuncio": "Solicitud",
+      "descripcion": "Descripción",
+      "horario": "Horario de cuidado",
+      "terceraEdad": "Tercera edad",
+      "ninos": "Niño",
+      "necesidadEspecial":"Necesidad especial",
+      "contacto": "Datos del contacto",
+      "ofrecerCuidado": "Ofrecer cuidado"
     },
     "dropDownDias":{
       "eligeDia": "Elige el día",
@@ -186,6 +211,15 @@
       "sabado": "Sabado",
       "domingo": "Domingo"
     },
+    "dias": {
+      "dia_0": "Domingo",
+      "dia_1": "Lunes",
+      "dia_2": "Martes",
+      "dia_3": "Miércoles",
+      "dia_4": "Jueves",
+      "dia_5": "Viernes",
+      "dia_6": "Sábado"
+    },
     "ajustesForm": {
       "perfil": "Perfil",
       "idioma": "Idioma",
@@ -195,7 +229,13 @@
       "nuevaContrasena": "Nueva contraseña:",
       "repetirNuevaContrasena": "Repetir nueva contraseña:",
       "cambiarContrasena": "Cambiar contraseña",
-      "ajustes": "Ajustes"
+      "ajustes": "Ajustes",
+      "idiomaPredeterminado": "El idioma que se definirá al iniciar sesión",
+      "definirIdioma": "Definir idioma"
+    },
+    "header": {
+      "subirAnuncio": "Crear solicitud de cuidado",
+      "notificaciones": "Notificaciones"
     }
   }
   
