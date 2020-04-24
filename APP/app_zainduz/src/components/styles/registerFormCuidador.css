@@ -1,0 +1,16 @@
+@media screen and (max-width: 769px) {
+    .rdatez-header {
+        text-align: left;
+        position: fixed;
+        left: 0;
+        right: 0;
+        padding: 0 16px;
+        background: white;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+        z-index: 999;
+        margin-top: 80px;
+    }
+    .rdatez-calendar {
+        margin-top: 160px;
+    }
+}
