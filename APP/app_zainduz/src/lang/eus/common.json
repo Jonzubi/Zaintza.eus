@@ -6,7 +6,7 @@
   "menuPerfil": {
     "calendario": "Egutegia",
     "contratos": "Akordioak",
-    "salir": "Irten",
+    "salir": "Saioa itxi",
     "notificaciones": "Abisuak",
     "perfil": "Profila",
     "ajustes": "Ezarpenak",
@@ -111,7 +111,7 @@
     "errorDiaNoElegido": "Ez duzu eguna aukeratu",
     "errorImagen": "Irudiarekin arazorenbat dago",
     "registroCompletado": "Izena eman duzu",
-    "darGracias": "Eskerrik asko Euskal Zaintzaren partez",
+    "darGracias": "Eskerrik asko Zaintza.eus-en partez",
     "registrarse": "Izena eman",
     "emailExistente": "Sartutako emailak kontu bat du jada Zaintza.eus webgunean"
   },
@@ -129,7 +129,7 @@
     "errorAvatarUpload": "Irudia igotzen arazo bat egon da",
     "registroCompletado": "Izena eman duzu",
     "registrarse": "Izena eman",
-    "darGracias": "Eskerrik asko Euskal Zaintzaren partez"
+    "darGracias": "Eskerrik asko Zaintza.eus-en partez"
   },
   "perfilCliente": {
     "nombre": "Izena",
