@@ -1,9 +1,11 @@
 import React from "react";
+import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faGlobe,
   } from "@fortawesome/free-solid-svg-icons";
 import i18n from "i18next";
+import { changeLang } from "../redux/actions/app";
 
 class HeaderChangeLang extends React.Component {
   constructor(props){
@@ -20,7 +22,9 @@ class HeaderChangeLang extends React.Component {
   };
 
   handleLangChange = (lang) => {
+    const { changeLang } = this.props;
     i18n.changeLanguage(lang);
+    changeLang(lang);
   };
 
   render() {
@@ -58,4 +62,8 @@ class HeaderChangeLang extends React.Component {
   }
 }
 
-export default HeaderChangeLang;
+const mapDispatchToProps = dispatch => ({
+  changeLang: payload => dispatch(changeLang(payload))
+});
+
+export default connect(null, mapDispatchToProps)(HeaderChangeLang);

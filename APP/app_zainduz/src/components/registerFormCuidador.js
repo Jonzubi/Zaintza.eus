@@ -39,6 +39,7 @@ import municipios from "../util/municipos";
 import { trans } from "../util/funciones";
 import SocketContext from "../socketio/socket-context";
 import ClipLoader from "react-spinners/ClipLoader";
+import "./styles/registerFormCuidador.css";
 
 const mapDispatchToProps = dispatch => {
   return {

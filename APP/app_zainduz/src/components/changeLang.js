@@ -2,21 +2,13 @@ import React from "react";
 import i18n from "i18next";
 import { connect } from "react-redux";
 import ipMaquina from "../util/ipMaquinaAPI";
+import { changeLang } from "../redux/actions/app";
 
 class ChangeLang extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      nowLang: i18n.language
-    };
-  }
-
   componentDidUpdate(prevProps) {
-    const { idLangPred } = this.props;
+    const { idLangPred, changeLang } = this.props;
     if (idLangPred !== prevProps.idLangPred && idLangPred !== "") {
-      this.setState({
-        nowLang: idLangPred
-      })
+      changeLang(idLangPred);
     }
   }
 
@@ -36,15 +28,14 @@ class ChangeLang extends React.Component {
   };
 
   handleChangeLanguage = lang => {
+    const { changeLang } = this.props;
     i18n.changeLanguage(lang);
 
-    this.setState({
-      nowLang: lang
-    });
+    changeLang(lang);
   };
 
   render() {
-    const { nowLang } = this.state;
+    const { nowLang } = this.props;
     return (
       <div className="dropdown pb-1">
         <button
@@ -78,7 +69,12 @@ class ChangeLang extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  idLangPred: state.user.idLangPred
+  idLangPred: state.user.idLangPred,
+  nowLang: state.app.nowLang
 });
 
-export default connect(mapStateToProps, null)(ChangeLang);
+const mapDispatchToProps = dispatch => ({
+  changeLang: (payload) => dispatch(changeLang(payload))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChangeLang);
