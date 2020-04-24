@@ -3,7 +3,7 @@ import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import cogoToast from "cogo-toast";
 import { connect } from "react-redux";
-import { changeFormContent } from "../redux/actions/app";
+import { changeFormContent, changeLang } from "../redux/actions/app";
 import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import { saveUserSession } from "../redux/actions/user";
 import { toogleModal } from "../redux/actions/modalRegistrarse";
@@ -18,7 +18,8 @@ const mapDispatchToProps = dispatch => {
     changeFormContent: form => dispatch(changeFormContent(form)),
     toogleMenuPerfil: payload => dispatch(toogleMenuPerfil(payload)),
     saveUserSession: user => dispatch(saveUserSession(user)),
-    toogleModal: payload => dispatch(toogleModal(payload))
+    toogleModal: payload => dispatch(toogleModal(payload)),
+    changeLang: payload => dispatch(changeLang(payload))
   };
 };
 
@@ -39,6 +40,7 @@ class LogInForm extends React.Component {
   }
 
   async handleLogIn(socket) {
+    const { changeLang } = this.props;
     const vEmail = this.state.txtEmail;
     const vContrasena = this.state.txtContrasena;
     var objFiltros = {
@@ -89,8 +91,12 @@ class LogInForm extends React.Component {
                 window.localStorage.removeItem("nombreUsuario");
                 window.localStorage.removeItem("password");
               }
-
-              i18n.changeLanguage(resultado.data.idLangPred);
+              
+              if (resultado.data.idLangPred !== undefined) {
+                i18n.changeLanguage(resultado.data.idLangPred);
+                changeLang(resultado.data.idLangPred);
+              }
+              
 
               socket.emit('login', {
                 idUsuario: idUsuario
