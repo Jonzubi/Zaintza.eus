@@ -6,7 +6,7 @@
   "menuPerfil": {
     "calendario": "Egutegia",
     "contratos": "Akordioak",
-    "salir": "Irten",
+    "salir": "Saioa itxi",
     "notificaciones": "Abisuak",
     "perfil": "Profila",
     "ajustes": "Ezarpenak",
@@ -17,6 +17,7 @@
     "insertEmail": "Sartu zure emaila...",
     "insertContrasena": "Sartu zure pasahitza...",
     "contrasena": "Pasahitza",
+    "holderContrasena": "Pasahitza...",
     "recordarme": "Gogorarazi",
     "iniciarSesion": "Sartu",
     "registrarse": "Izena eman",
@@ -65,10 +66,12 @@
     "ubicaciones": "Herriak",
     "exitoEnviarPropuesta": "Proposamena behar bezala bidali da",
     "acuerdoExistente": "Zaintzaile honekin akordio bat duzu jada",
-    "filtrar": "Filtratu"
+    "filtrar": "Filtratu",
+    "descripcionPropuesta": "Idatzi zure proposamenaren deskribapen zehatza..."
   },
   "registerFormCuidadores": {
     "nombre": "Izena",
+    "insertNombre": "Sartu izena...",
     "apellido1": "Lehen abizena",
     "apellido2": "Bigarren abizena",
     "sexo": "Sexua",
@@ -99,6 +102,7 @@
     "terceraEdad": "Adinekoak",
     "necesidadEspecial": "Behar bereziak",
     "precioPorPublico": "Prezioak multzoka",
+    "holderPrecio": "Prezioa €/h",
     "descripcion": "Deskribapena",
     "publicarAuto": "Argitaratu zure profila izen ematea bukatu bezain pronto",
     "eligeAvatar": "Aukeratu zure avatarra",
@@ -111,7 +115,7 @@
     "errorDiaNoElegido": "Ez duzu eguna aukeratu",
     "errorImagen": "Irudiarekin arazorenbat dago",
     "registroCompletado": "Izena eman duzu",
-    "darGracias": "Eskerrik asko Euskal Zaintzaren partez",
+    "darGracias": "Eskerrik asko Zaintza.eus-en partez",
     "registrarse": "Izena eman",
     "emailExistente": "Sartutako emailak kontu bat du jada Zaintza.eus webgunean"
   },
@@ -129,12 +133,15 @@
     "errorAvatarUpload": "Irudia igotzen arazo bat egon da",
     "registroCompletado": "Izena eman duzu",
     "registrarse": "Izena eman",
-    "darGracias": "Eskerrik asko Euskal Zaintzaren partez"
+    "darGracias": "Eskerrik asko Zaintza.eus-en partez"
   },
   "perfilCliente": {
     "nombre": "Izena",
+    "holderNombre": "Izena...",
     "apellido1": "Lehen abizena",
+    "holderApellido1": "Lehen abizena...",
     "apellido2": "Bigarren abizena",
+    "holderApellido2": "Bigarren abizena...",
     "email": "Emaila",
     "contrasena": "Pasahitza",
     "movil": "Mugikorra",
@@ -174,8 +181,10 @@
   },
   "formAnuncio":{
     "titulo": "Izenburua",
+    "holderTitulo": "Izenburua...",
     "imagen": "Irudia",
     "descripcion": "Deskribapena",
+    "holderDescripcion": "Deskribapena...",
     "eligeUnaFoto": "Aukeratu irudi bat",
     "eligeOtraFoto": "Aldatu irudia",
     "horasCuidado": "Zaintza ordutegia",
@@ -185,6 +194,7 @@
     "eliminarPueblo": "Kendu herria",
     "publicoCuidado": "Ze eratako zaindua da?",
     "precioCuidado": "Zaintza prezioa",
+    "holderPrecio": "Prezioa €/h",
     "anuncioSubido": "Zaintza eskaera argitaratu duzu",
     "cuidadorNecesario": "Zaintzaile gisako kontua behar da eskaera honetarako"
   },
@@ -233,10 +243,16 @@
     "cambiarContrasena": "Aldatu pasahitza",
     "ajustes": "Ezarpenak",
     "idiomaPredeterminado": "Hasieratik ezarriko den hizkuntza",
-    "definirIdioma": "Hizkuntza zehaztu"
+    "definirIdioma": "Hizkuntza zehaztu",
+    "holderContrasenaActual": "Orain duzun pasahitza...",
+    "holderNuevaContrasena": "Pasahitz berria...",
+    "holderRepetirContrasena": "Sartu berriz zure pasahitz berria..."
   },
   "header": {
     "subirAnuncio": "Zaintza eskaera igo",
     "notificaciones": "Abisuak"
+  },
+  "pueblosAutosuggest": {
+    "holderPueblos": "Sartu herria..."
   }
 }

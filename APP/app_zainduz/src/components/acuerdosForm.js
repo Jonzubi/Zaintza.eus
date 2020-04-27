@@ -162,13 +162,13 @@ class AcuerdosForm extends React.Component {
   }
 
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, jsonAcuerdos } = this.state;
     const laOtraPersona =
       this.props.tipoUsuario != "Cuidador" ? "idCuidador" : "idCliente";
     return (
       <SocketContext.Consumer>
         {(socket) => (
-          <div className="p-lg-5 p-2 h-100">
+          <div className={jsonAcuerdos.length > 0 ? "p-lg-5 p-2" : "p-0"}>
             {isLoading ? (
               <div
                 style={{
@@ -178,8 +178,8 @@ class AcuerdosForm extends React.Component {
               >
                 <ClipLoader color="#28a745" />
               </div>
-            ) : this.state.jsonAcuerdos.length != 0 ? (
-              this.state.jsonAcuerdos.map((acuerdo, indice) => {
+            ) : jsonAcuerdos.length != 0 ? (
+              jsonAcuerdos.map((acuerdo, indice) => {
                 return (
                   <div className="w-100 card">
                     <div className="card-header">

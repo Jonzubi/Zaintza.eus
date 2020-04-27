@@ -10,6 +10,7 @@ import { faEdit, faSave, faUser, faMobileAlt, faPhoneAlt } from "@fortawesome/fr
 import Axios from "axios";
 import cogoToast from "cogo-toast";
 import ClipLoader from "react-spinners/ClipLoader";
+import i18next from "i18next";
 
 const mapStateToProps = state => {
   //Aqui van los especialitos de los undefined
@@ -23,7 +24,8 @@ const mapStateToProps = state => {
     telefFijo: state.user.telefonoFijo,
     email: state.user.email,
     contrasena: state.user.contrasena,
-    idUsuario: state.user._idUsuario
+    idUsuario: state.user._idUsuario,
+    nowLang: state.app.nowLang
   };
 };
 
@@ -214,7 +216,7 @@ class PerfilCliente extends React.Component {
               disabled={this.state.isEditing ? null : "disabled"}
               id="txtNombre"
               aria-describedby="txtNombreHelp"
-              placeholder="Izena..."
+              placeholder={i18next.t('prefilCliente.holderNombre')}
               value={this.state.txtNombre}
             />
           </div>
@@ -229,7 +231,7 @@ class PerfilCliente extends React.Component {
               disabled={this.state.isEditing ? null : "disabled"}
               id="txtApellido1"
               aria-describedby="txtNombreHelp"
-              placeholder="Lehen abizena..."
+              placeholder={i18next.t('perfilCliente.holderApellido1')}
               value={this.state.txtApellido1}
             />
           </div>
@@ -242,7 +244,7 @@ class PerfilCliente extends React.Component {
               disabled={this.state.isEditing ? null : "disabled"}
               id="txtApellido2"
               aria-describedby="txtNombreHelp"
-              placeholder="Bigarren abizena..."
+              placeholder={i18next.t('perfilCliente.holderApellido2')}
               value={this.state.txtApellido2}
             />
           </div>
@@ -265,7 +267,7 @@ class PerfilCliente extends React.Component {
               }
               disabled={this.state.isEditing ? null : "disabled"}
               id="txtMovil"
-              placeholder="Sartu mugikorra..."
+              placeholder={`${i18next.t('perfilCliente.movil')}...`}
               value={this.state.txtMovil}
             />
           </div>
@@ -284,7 +286,7 @@ class PerfilCliente extends React.Component {
               }
               disabled={this.state.isEditing ? null : "disabled"}
               id="txtFijo"
-              placeholder="Sartu telefono finkoa..."
+              placeholder={`${i18next.t('perfilCliente.telefFijo')}...`}
               value={this.state.txtFijo}
             />
           </div>
