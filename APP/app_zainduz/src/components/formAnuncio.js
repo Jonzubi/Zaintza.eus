@@ -31,7 +31,8 @@ const mapStateToProps = state => {
   return {
     _id: state.user._id,
     email: state.user.email,
-    contrasena: state.user.contrasena
+    contrasena: state.user.contrasena,
+    nowLang: state.app.nowLang
   }
 }
 
@@ -445,7 +446,7 @@ class FormAnuncio extends React.Component {
               }
               id="txtTitulo"
               aria-describedby="txtNombreHelp"
-              placeholder="Izenburua..."
+              placeholder={i18next.t('formAnuncio.holderTitulo')}
               value={this.state.txtTitulo}
             />
           </div>
@@ -464,7 +465,7 @@ class FormAnuncio extends React.Component {
             }
             rows="5"
             id="txtDescripcion"
-            placeholder="Tu descripcion..."
+            placeholder={i18next.t('formAnuncio.holderDescripcion')}
             value={this.state.txtDescripcion}
           ></textarea>
         </div>
@@ -693,7 +694,7 @@ class FormAnuncio extends React.Component {
                       }}
                       className="form-control"
                       type="number"
-                      placeholder="Prezioa €/h"
+                      placeholder={i18next.t('formAnuncio.holderPrecio')}
                     />
                   </div>
                 ) : (
@@ -705,7 +706,7 @@ class FormAnuncio extends React.Component {
                       className="form-control"
                       disabled
                       type="number"
-                      placeholder="Prezioa €/h"
+                      placeholder={i18next.t('formAnuncio.holderPrecio')}
                     />
                   </div>
                 )}

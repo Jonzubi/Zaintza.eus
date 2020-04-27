@@ -12,6 +12,7 @@ import i18n from "i18next";
 import {translate} from "react-i18next";
 import SocketContext from "../socketio/socket-context";
 import ClipLoader from "react-spinners/ClipLoader";
+import i18next from "i18next";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -155,7 +156,7 @@ class LogInForm extends React.Component {
             className="form-control"
             id="txtEmail"
             aria-describedby="emailHelp"
-            placeholder={i18n.t('loginForm.insertEmail')}
+            placeholder={i18next.t('loginForm.insertEmail')}
             value={this.state.txtEmail}
           />
           
@@ -167,7 +168,7 @@ class LogInForm extends React.Component {
             type="password"
             className="form-control"
             id="txtContrasena"
-            placeholder={"Pasahitza..."}
+            placeholder={i18next.t('loginForm.holderContrasena')}
             value={this.state.txtContrasena}
           />
         </div>
@@ -217,4 +218,8 @@ class LogInForm extends React.Component {
   }
 }
 
-export default connect(null, mapDispatchToProps)(LogInForm);
+const mapStateToProps = state => ({
+  nowLang: state.app.nowLang
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(LogInForm);

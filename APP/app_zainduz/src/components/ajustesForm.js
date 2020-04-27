@@ -6,6 +6,7 @@ import ipMaquina from "../util/ipMaquinaAPI";
 import { saveUserSession } from "../redux/actions/user";
 import { trans } from "../util/funciones";
 import i18n from "i18next";
+import i18next from "i18next";
 
 class AjustesForm extends React.Component {
   constructor(props) {
@@ -176,7 +177,7 @@ class AjustesForm extends React.Component {
                   {trans("ajustesForm.actualContrasena")}
                 </span>
                 <input
-                  placeholder="Contraseña actual"
+                  placeholder={i18next.t("ajustesForm.holderContrasenaActual")}
                   id="txtActualPassword"
                   type="password"
                   className=""
@@ -191,7 +192,7 @@ class AjustesForm extends React.Component {
                   {trans("ajustesForm.nuevaContrasena")}
                 </span>
                 <input
-                  placeholder="Nueva contraseña"
+                  placeholder={i18next.t("ajustesForm.holderNuevaContrasena")}
                   id="txtNewPassword"
                   type="password"
                   className=""
@@ -206,7 +207,7 @@ class AjustesForm extends React.Component {
                   {trans("ajustesForm.repetirNuevaContrasena")}
                 </span>
                 <input
-                  placeholder="Repetir nueva contraseña"
+                  placeholder={i18next.t('ajustesForm.holderRepetirContrasena')}
                   id="txtRepeatNewPassword"
                   type="password"
                   className=""
@@ -281,7 +282,8 @@ const mapStateToProps = state => ({
   idUsuario: state.user._idUsuario,
   idLangPred: state.user.idLangPred,
   email: state.user.email,
-  contrasena: state.user.contrasena
+  contrasena: state.user.contrasena,
+  nowLang: state.app.nowLang
 });
 
 const mapDispatchToProps = dispatch => ({

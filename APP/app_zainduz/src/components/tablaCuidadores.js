@@ -42,6 +42,7 @@ import municipios from "../util/municipos";
 import SocketContext from "../socketio/socket-context";
 import BottomScrollListener from "react-bottom-scroll-listener";
 import ClipLoader from "react-spinners/ClipLoader";
+import i18next from "i18next";
 
 const mapStateToProps = (state) => {
   return {
@@ -1158,7 +1159,7 @@ class Tabla extends React.Component {
                                 className="mt-1"
                                 id="txtTituloPropuesta"
                                 aria-describedby="txtNombreHelp"
-                                placeholder="Idatzi proposamen izenburua..."
+                                placeholder={`${i18next.t('tablaCuidadores.tituloPropuesta')}...`}
                                 value={this.state.txtTituloPropuesta}
                               />
                             </div>
@@ -1303,7 +1304,7 @@ class Tabla extends React.Component {
                                 }
                                 rows="5"
                                 id="txtDescripcion"
-                                placeholder="Idatzi zure proposamenaren deskribapen zehatza..."
+                                placeholder={`${i18next.t('tablaCuidadores.descripcionPropuesta')}...`}
                                 value={this.state.txtDescripcion}
                               ></textarea>
                             </div>

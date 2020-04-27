@@ -1,8 +1,8 @@
 import React from "react";
 import AutoSuggest from "react-autosuggest";
 import municipios from "../util/municipos";
-import { trans } from "../util/funciones";
-import cogoToast from "cogo-toast";
+import { connect } from "react-redux";
+import i18next from "i18next";
 
 class PueblosAutosuggest extends React.Component {
   constructor(props) {
@@ -73,7 +73,7 @@ class PueblosAutosuggest extends React.Component {
     const auxAddPuebloValue = this.state.auxAddPueblo;
     const autoSuggestProps = {
       onChange: onChangeSuggestion,
-      placeholder: "Introduce el pueblo...",
+      placeholder: i18next.t('pueblosAutosuggest.holderPueblos'),
       value: auxAddPuebloValue,
       className: classSuggestion,
       disabled: disabled
@@ -111,4 +111,8 @@ class PueblosAutosuggest extends React.Component {
   }
 }
 
-export default PueblosAutosuggest;
+const mapStateToProps = state => ({
+  nowLang: state.app.nowLang
+})
+
+export default connect(mapStateToProps)(PueblosAutosuggest);

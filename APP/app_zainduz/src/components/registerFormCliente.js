@@ -11,6 +11,7 @@ import SocketContext from "../socketio/socket-context";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faAt, faKey, faMobileAlt, faPhoneAlt } from "@fortawesome/free-solid-svg-icons";
+import i18next from "i18next";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -212,7 +213,7 @@ class RegisterFormCliente extends React.Component {
                   }
                   id="txtNombre"
                   aria-describedby="txtNombreHelp"
-                  placeholder="Izena..."
+                  placeholder={`${i18next.t('registerFormClientes.nombre')}...`}
                   value={this.state.txtNombre}
                 />
               </div>
@@ -228,7 +229,7 @@ class RegisterFormCliente extends React.Component {
                   className="form-control"
                   id="txtApellido1"
                   aria-describedby="txtNombreHelp"
-                  placeholder="Lehen abizena..."
+                  placeholder={`${i18next.t('registerFormClientes.apellido1')}...`}
                   value={this.state.txtApellido1}
                 />
               </div>
@@ -242,7 +243,7 @@ class RegisterFormCliente extends React.Component {
                   className="form-control"
                   id="txtApellido2"
                   aria-describedby="txtNombreHelp"
-                  placeholder="Bigarren abizena..."
+                  placeholder={`${i18next.t('registerFormClientes.apellido2')}...`}
                   value={this.state.txtApellido2}
                 />
               </div>
@@ -267,7 +268,7 @@ class RegisterFormCliente extends React.Component {
                   }
                   id="txtEmail"
                   aria-describedby="emailHelp"
-                  placeholder="Sartu emaila..."
+                  placeholder={`${i18next.t('registerFormClientes.email')}...`}
                   value={this.state.txtEmail}
                 />
               </div>
@@ -289,7 +290,7 @@ class RegisterFormCliente extends React.Component {
                       : "form-control"
                   }
                   id="txtContrasena"
-                  placeholder="Sartu pasahitza..."
+                  placeholder={`${i18next.t('registerFormClientes.contrasena')}...`}
                   value={this.state.txtContrasena}
                 />
               </div>
@@ -313,7 +314,7 @@ class RegisterFormCliente extends React.Component {
                       : "form-control"
                   }
                   id="txtMovil"
-                  placeholder="Sartu mugikorra..."
+                  placeholder={`${i18next.t('registerFormClientes.movil')}...`}
                   value={this.state.txtMovil}
                 />
               </div>
@@ -334,7 +335,7 @@ class RegisterFormCliente extends React.Component {
                       : "form-control"
                   }
                   id="txtFijo"
-                  placeholder="Sartu telefono finkoa..."
+                  placeholder={`${i18next.t('registerFormClientes.telefFijo')}...`}
                   value={this.state.txtFijo}
                 />
               </div>

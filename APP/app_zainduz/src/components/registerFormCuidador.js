@@ -40,6 +40,7 @@ import { trans } from "../util/funciones";
 import SocketContext from "../socketio/socket-context";
 import ClipLoader from "react-spinners/ClipLoader";
 import "./styles/registerFormCuidador.css";
+import i18next from "i18next";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -585,7 +586,7 @@ class RegisterForm extends React.Component {
                       }
                       id="txtNombre"
                       aria-describedby="txtNombreHelp"
-                      placeholder="Introducir nombre..."
+                      placeholder={i18next.t('registerFormCuidadores.insertNombre')}
                       value={this.state.txtNombre}
                     />
                   </div>
@@ -600,7 +601,7 @@ class RegisterForm extends React.Component {
                         class="form-control"
                         id="txtApellido1"
                         aria-describedby="txtNombreHelp"
-                        placeholder="Introducir apellido 1..."
+                        placeholder={`${i18next.t('registerFormCuidadores.apellido1')}...`}
                         value={this.state.txtApellido1}
                       />
                     </div>
@@ -614,7 +615,7 @@ class RegisterForm extends React.Component {
                         class="form-control"
                         id="txtApellido2"
                         aria-describedby="txtNombreHelp"
-                        placeholder="Introducir apellido 2..."
+                        placeholder={`${i18next.t('registerFormCuidadores.apellido2')}...`}
                         value={this.state.txtApellido2}
                       />
                     </div>
@@ -726,7 +727,7 @@ class RegisterForm extends React.Component {
                     }
                     id="txtEmail"
                     aria-describedby="emailHelp"
-                    placeholder="Introducir email..."
+                    placeholder={`${i18next.t('registerFormCuidadores.email')}...`}
                     value={this.state.txtEmail}
                   />
                   <FontAwesomeIcon icon={faKey} className="mr-1 mt-3" />
@@ -743,7 +744,7 @@ class RegisterForm extends React.Component {
                         : "form-control"
                     }
                     id="txtContrasena"
-                    placeholder="Introducir contraseña..."
+                    placeholder={`${i18next.t('registerFormCuidadores.contrasena')}...`}
                     value={this.state.txtContrasena}
                   />
                 </div>
@@ -763,7 +764,7 @@ class RegisterForm extends React.Component {
                     }
                     id="txtMovil"
                     aria-describedby="emailHelp"
-                    placeholder="Introducir movil..."
+                    placeholder={`${i18next.t('registerFormCuidadores.movil')}...`}
                     value={this.state.txtMovil}
                   />
                   <FontAwesomeIcon icon={faPhoneSquareAlt} className="mr-1 mt-3" />
@@ -775,7 +776,7 @@ class RegisterForm extends React.Component {
                     type="number"
                     class="form-control"
                     id="txtTelefono"
-                    placeholder="Introducir telefono fijo..."
+                    placeholder={`${i18next.t('registerFormCuidadores.telefFijo')}...`}
                     value={this.state.txtTelefono}
                   />
                 </div>
@@ -1010,7 +1011,7 @@ class RegisterForm extends React.Component {
                           }}
                           className="form-control"
                           type="number"
-                          placeholder="Prezioa €/h"
+                          placeholder={`${i18next.t('registerFormCuidadores.holderPrecio')}`}
                         />
                       </div>
                     ) : (
@@ -1025,7 +1026,7 @@ class RegisterForm extends React.Component {
                           className="form-control"
                           disabled
                           type="number"
-                          placeholder="Prezioa €/h"
+                          placeholder={`${i18next.t('registerFormCuidadores.holderPrecio')}`}
                         />
                       </div>
                     )}
@@ -1044,7 +1045,7 @@ class RegisterForm extends React.Component {
                           }}
                           className="form-control"
                           type="number"
-                          placeholder="Prezioa €/h"
+                          placeholder={`${i18next.t('registerFormCuidadores.holderPrecio')}`}
                         />
                       </div>
                     ) : (
@@ -1062,7 +1063,7 @@ class RegisterForm extends React.Component {
                           disabled
                           className="form-control"
                           type="number"
-                          placeholder="Prezioa €/h"
+                          placeholder={`${i18next.t('registerFormCuidadores.holderPrecio')}`}
                         />
                       </div>
                     )}
@@ -1083,7 +1084,7 @@ class RegisterForm extends React.Component {
                           }}
                           className="form-control"
                           type="number"
-                          placeholder="Prezioa €/h"
+                          placeholder={`${i18next.t('registerFormCuidadores.holderPrecio')}`}
                         />
                       </div>
                     ) : (
@@ -1103,7 +1104,7 @@ class RegisterForm extends React.Component {
                           disabled
                           className="form-control"
                           type="number"
-                          placeholder="Prezioa €/h"
+                          placeholder={`${i18next.t('registerFormCuidadores.holderPrecio')}`}
                         />
                       </div>
                     )}
@@ -1125,7 +1126,7 @@ class RegisterForm extends React.Component {
                   }
                   rows="5"
                   id="txtDescripcion"
-                  placeholder="Tu descripcion..."
+                  placeholder={`${i18next.t('registerFormCuidadores.descripcion')}...`}
                   value={this.state.txtDescripcion}
                 ></textarea>
               </div>
@@ -1162,4 +1163,8 @@ class RegisterForm extends React.Component {
   }
 }
 
-export default connect(null, mapDispatchToProps)(RegisterForm);
+const mapStateToProps = state => ({
+  nowLang: state.app.nowLang
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterForm);

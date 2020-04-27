@@ -17,6 +17,7 @@
       "insertEmail": "Inserta tu correo...",
       "insertContrasena": "Inserta tu contraseña...",
       "contrasena": "Contraseña",
+      "holderContrasena": "Contraseña...",
       "recordarme": "Recordarme",
       "iniciarSesion": "Entrar",
       "registrarse": "Registrarse",
@@ -65,10 +66,12 @@
       "ubicaciones": "Pueblos",
       "exitoEnviarPropuesta": "Propuesta enviada con éxito",
       "acuerdoExistente": "Tienes un acuerdo activo con este cuidador",
-      "filtrar": "Filtrar"
+      "filtrar": "Filtrar",
+      "descripcionPropuesta": "Escribe la descripción detallada de tu propuesta..."
     },
     "registerFormCuidadores": {
       "nombre": "Nombre",
+      "insertNombre": "Introducir nombre...",
       "apellido1": "Primer apellido",
       "apellido2": "Segundo apellido",
       "email": "Email",
@@ -98,6 +101,7 @@
       "terceraEdad": "Tercera edad",
       "necesidadEspecial": "Necesidades especiales",
       "precioPorPublico": "Precios por categoria",
+      "holderPrecio": "Precio €/h",
       "descripcion": "Descripción",
       "publicarAuto": "Publicar perfil instantaneamente",
       "eligeAvatar": "Elige tu avatar",
@@ -131,8 +135,11 @@
     },
     "perfilCliente": {
       "nombre": "Nombre",
+      "holderNombre": "Nombre...",
       "apellido1": "Primer apellido",
+      "holderApellido1": "Primer apellido...",
       "apellido2": "Segundo apellido",
+      "holderApellido2": "Segundo apellido...",
       "email": "Email",
       "contrasena": "Contraseña",
       "movil": "Móvil",
@@ -172,8 +179,10 @@
     },
     "formAnuncio":{
       "titulo": "Titulo",
+      "holderTitulo": "Titulo...",
       "imagen": "Imagen",
-      "descripcion": "Descripcion",
+      "descripcion": "Descripción",
+      "holderDescripcion": "Descripción...",
       "eligeUnaFoto": "Elige una foto",
       "eligeOtraFoto": "Cambiar la foto",
       "horasCuidado": "Horario de cuidado",
@@ -183,6 +192,7 @@
       "eliminarPueblo": "Quitar pueblo",
       "publicoCuidado": "Que tipo de cuidado es?",
       "precioCuidado": "Precio de cuidado",
+      "holderPrecio": "Precio €/h",
       "anuncioSubido": "Solicitud de cuidado subida",
       "cuidadorNecesario": "Se necesita una cuenta de cuidador para esta solicitud"
     },
@@ -231,11 +241,17 @@
       "cambiarContrasena": "Cambiar contraseña",
       "ajustes": "Ajustes",
       "idiomaPredeterminado": "El idioma que se definirá al iniciar sesión",
-      "definirIdioma": "Definir idioma"
+      "definirIdioma": "Definir idioma",
+      "holderContrasenaActual": "Contraseña actual...",
+      "holderNuevaContrasena": "Nueva contraseña...",
+      "holderRepetirContrasena": "Introduce la nueva contraseña otra vez..."
     },
     "header": {
       "subirAnuncio": "Crear solicitud de cuidado",
       "notificaciones": "Notificaciones"
+    },
+    "pueblosAutosuggest": {
+      "holderPueblos": "Introduce un pueblo..."
     }
   }
   
