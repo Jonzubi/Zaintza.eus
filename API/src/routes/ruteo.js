@@ -53,6 +53,8 @@ module.exports = (app, modelos) => {
   app.route("/api/procedures/checkIfAcuerdoExists").post((req, res) => proceduresControlador.checkIfAcuerdoExists(req, res, modelos));
 
   app.route("/api/procedures/newAcuerdo").post((req, res) => proceduresControlador.newAcuerdo(req, res, modelos));
+
+  app.route("/api/procedures/getMisAnuncios").post((req, res) => proceduresControlador.getMisAnuncios(req, res, modelos));
   
   app.route("/Inicio/").get(mainControlador.inicio);
 
