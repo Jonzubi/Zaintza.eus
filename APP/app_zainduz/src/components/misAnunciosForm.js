@@ -6,14 +6,26 @@ import cogoToast from "cogo-toast";
 import { trans } from "../util/funciones";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faTrashAlt, faSave, faUsers, faEuroSign } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPen,
+  faTrashAlt,
+  faSave,
+  faUsers,
+  faEuroSign,
+  faHome,
+  faMinusCircle,
+  faClock,
+  faPlusCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import Avatar from "react-avatar";
 import Modal from "react-bootstrap/Modal";
 import ModalBody from "react-bootstrap/ModalBody";
 import ModalFooter from "react-bootstrap/ModalFooter";
 import ImageUploader from "react-images-upload";
 import i18next from "i18next";
-import "../components/styles/modalRegistrarse.css"
+import PuebloAutosuggest from "./pueblosAutosuggest";
+import TimeInput from "./customTimeInput";
+import "../components/styles/modalRegistrarse.css";
 
 class MisAnuncios extends React.Component {
   constructor(props) {
@@ -26,7 +38,9 @@ class MisAnuncios extends React.Component {
       showModalDeleteAnuncio: false,
       imgAnuncio: null,
       publicoAnuncio: null,
-      precioAnuncio: null
+      precioAnuncio: null,
+      ubicaciones: [],
+      horario: [],
     };
   }
 
@@ -56,20 +70,25 @@ class MisAnuncios extends React.Component {
           isLoading: false,
         });
       });
-  }
+  };
 
   refrescarDatos = () => {
-    this.setState({
-      isLoading: true
-    }, () => {
-      this.getMisAnuncios();
-    })
-  }
+    this.setState(
+      {
+        isLoading: true,
+      },
+      () => {
+        this.getMisAnuncios();
+      }
+    );
+  };
 
   handleEditAnuncio = (anuncio) => {
     this.setState({
       selectedAnuncio: anuncio,
       showModalEditAnuncio: true,
+      ubicaciones: anuncio.pueblo.slice(),
+      horario: anuncio.horario.slice(),
     });
   };
 
@@ -80,22 +99,102 @@ class MisAnuncios extends React.Component {
       picture.shift();
     }
     this.setState({
-      imgAnuncio: picture
+      imgAnuncio: picture,
     });
-  }
+  };
 
   handlePublicoChange = (evento) => {
     const publico = evento.target.value;
     this.setState({
-      publicoAnuncio: publico
+      publicoAnuncio: publico,
     });
-  }
+  };
 
   handlePrecioChange = (evento) => {
     const precio = evento.target.value;
     this.setState({
-      precioAnuncio: precio
+      precioAnuncio: precio,
     });
+  };
+
+  handleAddPueblo = (c, { suggestion }) => {
+    const { ubicaciones } = this.state;
+    for (var clave in ubicaciones) {
+      if (this.state.ubicaciones[clave] == suggestion) {
+        cogoToast.error(
+          <h5>
+            {suggestion} {trans("registerFormCuidadores.errorPuebloRepetido")}
+          </h5>
+        );
+        return;
+      }
+    }
+    let auxUbicaciones = ubicaciones.slice();
+    auxUbicaciones.push(suggestion);
+
+    this.setState({
+      ubicaciones: auxUbicaciones,
+    });
+  };
+
+  handleRemovePueblo = () => {
+    const { ubicaciones } = this.state;
+    let auxUbicaciones = ubicaciones.slice();
+    auxUbicaciones.pop();
+
+    this.setState({
+      ubicaciones: auxUbicaciones,
+    });
+  };
+
+  addDiasDisponible = () => {
+    const { horario } = this.state;
+    let auxDiasDisponible = horario.slice();
+    auxDiasDisponible.push({
+      dia: 0,
+      horaInicio: "00:00",
+      horaFin: "00:00",
+    });
+
+    this.setState({
+      horario: auxDiasDisponible,
+    });
+  };
+
+  removeDiasDisponible = () => {
+    const { horario } = this.state;
+    let auxHorario = horario.slice();
+    auxHorario.pop();
+    this.setState({
+      horario: auxHorario,
+    });
+  };
+
+  handleDiasDisponibleChange = (e, indice) => {
+    const { horario } = this.state;
+    if (typeof indice == "undefined") {
+      //Significa que lo que se ha cambiado es el combo de los dias
+      var origen = e.target;
+      var indice = parseInt(origen.id.substr(origen.id.length - 1));
+      var valor = origen.value;
+      
+      let auxHorario = horario.slice();
+      auxHorario[indice]["dia"] = valor;
+
+      this.setState({
+        horario: auxHorario,
+      });
+    } else {
+      //Significa que ha cambiado la hora, no se sabe si inicio o fin, eso esta en "indice"
+      let atributo = indice.substr(0, indice.length - 1);
+      indice = indice.substr(indice.length - 1);
+      let auxHorario = horario.slice();
+      auxHorario[indice][atributo] = e;
+
+      this.setState({
+        horario: auxHorario,
+      });
+    }
   }
 
   render() {
@@ -106,7 +205,9 @@ class MisAnuncios extends React.Component {
       showModalEditAnuncio,
       selectedAnuncio,
       publicoAnuncio,
-      precioAnuncio
+      precioAnuncio,
+      ubicaciones,
+      horario,
     } = this.state;
     return (
       <div className={isLoading ? "p-0" : "p-lg-5 p-2"}>
@@ -180,9 +281,11 @@ class MisAnuncios extends React.Component {
             </button>
             <button
               className="btn btn-danger"
-              onClick={() => this.setState({
-                showModalDeleteAnuncio: false
-              })}
+              onClick={() =>
+                this.setState({
+                  showModalDeleteAnuncio: false,
+                })
+              }
             >
               {trans("misAnunciosForm.no")}
             </button>
@@ -191,7 +294,7 @@ class MisAnuncios extends React.Component {
         <Modal
           show={showModalEditAnuncio}
           style={{
-            maxWidth: "500px"
+            maxWidth: "500px",
           }}
           onHide={() => this.setState({ showModalEditAnuncio: false })}
         >
@@ -217,7 +320,9 @@ class MisAnuncios extends React.Component {
                   : "Gehienez: 5MB | Gomendaturiko dimentsioa (288x300)"
               }
               labelClass={
-                this.state.imgAnuncio != null ? "text-light font-weight-bold" : ""
+                this.state.imgAnuncio != null
+                  ? "text-light font-weight-bold"
+                  : ""
               }
               withIcon={true}
               buttonText={
@@ -229,41 +334,166 @@ class MisAnuncios extends React.Component {
               imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
               maxFileSize={5242880}
             />
-            <div
-              style={{
-                width: 300
-              }}
-              className="d-flex flex-row align-items-center justify-content-between"
-            >
-              <FontAwesomeIcon className="" icon={faUsers} />
-              <select
-                value={publicoAnuncio || selectedAnuncio.publico}
-                onChange={this.handlePublicoChange}
+            <div>
+              <div
+                style={{
+                  width: 300,
+                }}
+                className="mt-2 d-flex flex-row align-items-center justify-content-between"
               >
-                <option value="ninos">{i18next.t('tablaAnuncios.ninos')}</option>
-                <option value="terceraEdad">{i18next.t('tablaAnuncios.terceraEdad')}</option>
-                <option value="necesidadEspecial">{i18next.t('tablaAnuncios.necesidadEspecial')}</option>
-              </select>
+                <FontAwesomeIcon className="" icon={faUsers} />
+                <select
+                  value={publicoAnuncio || selectedAnuncio.publico}
+                  onChange={this.handlePublicoChange}
+                >
+                  <option value="ninos">
+                    {i18next.t("tablaAnuncios.ninos")}
+                  </option>
+                  <option value="terceraEdad">
+                    {i18next.t("tablaAnuncios.terceraEdad")}
+                  </option>
+                  <option value="necesidadEspecial">
+                    {i18next.t("tablaAnuncios.necesidadEspecial")}
+                  </option>
+                </select>
+              </div>
+              <div
+                style={{
+                  width: 300,
+                }}
+                className="mt-2 d-flex flex-row align-items-center justify-content-between"
+              >
+                <FontAwesomeIcon className="" icon={faEuroSign} />
+                <input
+                  value={precioAnuncio || selectedAnuncio.precio}
+                  onChange={this.handlePrecioChange}
+                />
+              </div>
             </div>
             <div
               style={{
-                width: 300
+                width: 300,
               }}
-              className="d-flex flex-row align-items-center justify-content-between"
+              className="mt-3 d-flex flex-column"
             >
-              <FontAwesomeIcon className="" icon={faEuroSign} />
-              <input
-                value={precioAnuncio || selectedAnuncio.precio}
-                onChange={this.handlePrecioChange}
-              />
+              <div className="text-center">
+                <FontAwesomeIcon icon={faHome} className="mr-1" />
+                <span className="font-weight-bold text-center">
+                  {trans("tablaCuidadores.pueblos")}
+                </span>
+              </div>
+              <PuebloAutosuggest onSuggestionSelected={this.handleAddPueblo} />
+              <span className="">
+                {typeof ubicaciones != "undefined"
+                  ? ubicaciones.map((ubicacion, index) => {
+                      return (
+                        <div>
+                          <span className="mt-2">{ubicacion}</span>
+                          <br />
+                        </div>
+                      );
+                    })
+                  : null}
+              </span>
+              {ubicaciones.length > 0 ? (
+                <div className="d-flex justify-content-end align-items-center">
+                  <a
+                    onClick={this.handleRemovePueblo}
+                    className="btn btn-danger text-light"
+                  >
+                    {trans("formAnuncio.eliminarPueblo")}{" "}
+                    <FontAwesomeIcon icon={faMinusCircle} />
+                  </a>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+            <div
+              style={{
+                width: 300,
+              }}
+              className="d-flex flex-column"
+            >
+              <span className="d-flex flex-row justify-content-between align-items-center">
+                <FontAwesomeIcon
+                  style={{ cursor: "pointer" }}
+                  onClick={this.removeDiasDisponible}
+                  className="text-danger"
+                  icon={faMinusCircle}
+                />
+                <div>
+                  <FontAwesomeIcon icon={faClock} className="mr-1" />
+                  <span className="lead">{trans("tablaAnuncios.horario")}</span>
+                  (<span className="text-danger font-weight-bold">*</span>)
+                </div>
+                <FontAwesomeIcon
+                  style={{ cursor: "pointer" }}
+                  onClick={this.addDiasDisponible}
+                  className="text-success"
+                  icon={faPlusCircle}
+                />
+              </span>
+              {horario.map((dia, indice) => {
+                return (
+                  <div className="mt-1 d-flex flex-row align-items-center justify-content-between">
+                    <select
+                      value={dia.dia}
+                      onChange={this.handleDiasDisponibleChange}
+                      className="d-inline"
+                      id={"dia" + indice}
+                    >
+                      <option>Aukeratu eguna</option>
+                      <option value="1">Astelehena</option>
+                      <option value="2">Asteartea</option>
+                      <option value="3">Asteazkena</option>
+                      <option value="4">Osteguna</option>
+                      <option value="5">Ostirala</option>
+                      <option value="6">Larunbata</option>
+                      <option value="7">Igandea</option>
+                    </select>
+                    <div className="d-flex flex-row align-items-center">
+                      <TimeInput
+                        onTimeChange={(valor) => {
+                          this.handleDiasDisponibleChange(
+                            valor,
+                            "horaInicio" + indice
+                          );
+                        }}
+                        id={"horaInicio" + indice}
+                        initTime={horario[indice].horaInicio}
+                        style={{
+                          width: 50,
+                        }}
+                        className="text-center"
+                      />
+                      -
+                      <TimeInput
+                        onTimeChange={(valor) => {
+                          this.handleDiasDisponibleChange(
+                            valor,
+                            "horaFin" + indice
+                          );
+                        }}
+                        id={"horaFin" + indice}
+                        initTime={horario[indice].horaFin}
+                        style={{
+                          width: 50,
+                        }}
+                        className="text-center"
+                      />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </ModalBody>
           <ModalFooter>
             <button
               className="w-100 btn btn-success"
-              onClick={() => console.log(selectedAnuncio)}
+              onClick={() => console.log(this.state)}
             >
-              {trans('misAnunciosForm.guardarCambios')}
+              {trans("misAnunciosForm.guardarCambios")}
               <FontAwesomeIcon icon={faSave} className="ml-2" />
             </button>
           </ModalFooter>
@@ -277,7 +507,7 @@ const mapStateToProps = (state) => ({
   idPerfil: state.user._id,
   email: state.user.email,
   contrasena: state.user.contrasena,
-  nowLang: state.app.nowLang
+  nowLang: state.app.nowLang,
 });
 
 export default connect(mapStateToProps)(MisAnuncios);
