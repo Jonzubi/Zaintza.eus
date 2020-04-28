@@ -29,6 +29,7 @@ class HeaderChangeLang extends React.Component {
 
   render() {
     const { hoverLang } = this.state;
+    const { nowLang } = this.props;
     return (
       <div>
         <FontAwesomeIcon className="text-white mr-2" icon={faGlobe} />
@@ -40,7 +41,7 @@ class HeaderChangeLang extends React.Component {
           onMouseEnter={() => this.handleLangHover("eus")}
           onMouseLeave={() => this.handleLangHover("")}
           onClick={() => this.handleLangChange("eus")}
-          className="text-white mr-2"
+          className={nowLang === "eus" ? "text-success mr-2" : "text-white mr-2"}
         >
           EUS
         </span>
@@ -53,7 +54,7 @@ class HeaderChangeLang extends React.Component {
           onMouseEnter={() => this.handleLangHover("es")}
           onMouseLeave={() => this.handleLangHover("")}
           onClick={() => this.handleLangChange("es")}
-          className="text-white"
+          className={nowLang === "es" ? "text-success" : "text-white"}
         >
           ES
         </span>
@@ -66,4 +67,8 @@ const mapDispatchToProps = dispatch => ({
   changeLang: payload => dispatch(changeLang(payload))
 });
 
-export default connect(null, mapDispatchToProps)(HeaderChangeLang);
+const mapStateToProps = state => ({
+  nowLang: state.app.nowLang
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderChangeLang);
