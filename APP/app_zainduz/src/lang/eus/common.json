@@ -255,5 +255,11 @@
   },
   "pueblosAutosuggest": {
     "holderPueblos": "Sartu herria..."
+  },
+  "misAnunciosForm": {
+    "askDeleteForm": "Ziur zaintza eskaera ezabatu nahi duzula?",
+    "si": "Bai",
+    "no": "Ez",
+    "guardarCambios": "Aldaketak gorde"
   }
 }
