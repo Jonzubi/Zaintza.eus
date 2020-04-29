@@ -440,6 +440,9 @@ class MisAnuncios extends React.Component {
                 }
               />
               <span
+                style={{
+                  width: 200
+                }}
                 className="font-weight-bold">
                 {anuncio.titulo.length > 20 ? anuncio.titulo.substring(0, 20) + ' ...' : anuncio.titulo}
               </span>
