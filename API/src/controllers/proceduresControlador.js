@@ -1394,3 +1394,48 @@ exports.patchAnuncio = async (req, res, modelos) => {
       res.end();
     });
 };
+
+exports.deleteAnuncio = async (req, res, modelos) => {
+  const { idAnuncio } = req.params;
+  const { email, contrasena } = req.body;
+
+  const modeloUsuario = modelos.usuario;
+  const modeloAnuncio = modelos.anuncio;
+
+  const anuncioBuscado = await modeloAnuncio.findById(idAnuncio);
+  const idCliente = anuncioBuscado.idCliente;
+  const usuarioBuscado = await modeloUsuario.findOne({
+    idPerfil: idCliente
+  });
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  modeloAnuncio
+    .findByIdAndUpdate(idAnuncio, {
+      show: false
+    })
+    .then((doc) => {
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(doc));
+    })
+    .catch((err) => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+    })
+    .finally((fin) => {
+      res.end();
+    });    
+}

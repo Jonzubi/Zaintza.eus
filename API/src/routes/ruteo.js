@@ -57,6 +57,8 @@ module.exports = (app, modelos) => {
   app.route("/api/procedures/getMisAnuncios").post((req, res) => proceduresControlador.getMisAnuncios(req, res, modelos));
 
   app.route("/api/procedures/patchAnuncio/:idAnuncio").patch((req, res) => proceduresControlador.patchAnuncio(req, res, modelos));
+
+  app.route("/api/procedures/deleteAnuncio/:idAnuncio").post((req, res) => proceduresControlador.deleteAnuncio(req, res, modelos))
   
   app.route("/Inicio/").get(mainControlador.inicio);
 
