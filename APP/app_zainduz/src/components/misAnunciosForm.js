@@ -216,6 +216,66 @@ class MisAnuncios extends React.Component {
     });
   }
 
+  handleValidarEnviar = () => {
+    if (this.handleValidarAnuncio()){
+      this.handleActualizarAnuncio();
+    }
+  }
+
+  handleValidarAnuncio = () => {
+    const { tituloAnuncio, descripcionAnuncio, precioAnuncio, ubicaciones, horario } = this.state;
+    if (tituloAnuncio === ""){
+      cogoToast.error(
+        <h5>{trans('misAnunciosForm.tituloNoVacio')}</h5>
+      )
+      return false;
+    }
+    if (descripcionAnuncio === ""){
+      cogoToast.error(
+        <h5>{trans('misAnunciosForm.descripcionNoVacio')}</h5>
+      )
+      return false;
+    }
+    if (precioAnuncio === ""){
+      cogoToast.error(
+        <h5>{trans('misAnunciosForm.precioNoVacio')}</h5>
+      )
+      return false;
+    }
+    if (ubicaciones.length === 0){
+      cogoToast.error(
+        <h5>{trans('misAnunciosForm.ubicacionesNoVacio')}</h5>
+      )
+      return false;
+    }
+    if (horario.length === 0){
+      cogoToast.error(
+        <h5>{trans('misAnunciosForm.horarioNoVacio')}</h5>
+      )
+      return false;
+    }
+
+    let horarioIsValid = true;
+    horario.map((dia) => {
+      if (!dia.dia){
+        horarioIsValid = false;
+        return;
+      }
+    });
+    if(!horarioIsValid){
+      cogoToast.error(
+        <h5>{trans('misAnunciosForm.unHorarioNoElegido')}</h5>
+      );
+      return false;
+    }
+
+    return true;
+  }
+
+  handleActualizarAnuncio = () => {
+
+  }
+
   render() {
     const {
       isLoading,
@@ -426,6 +486,7 @@ class MisAnuncios extends React.Component {
               >
                 <FontAwesomeIcon className="" icon={faEuroSign} />
                 <input
+                  type="number"
                   value={precioAnuncio}
                   onChange={this.handlePrecioChange}
                 />
@@ -546,7 +607,7 @@ class MisAnuncios extends React.Component {
           <ModalFooter>
             <button
               className="w-100 btn btn-success"
-              onClick={() => console.log(this.state)}
+              onClick={() => this.handleValidarEnviar()}
             >
               {trans("misAnunciosForm.guardarCambios")}
               <FontAwesomeIcon icon={faSave} className="ml-2" />
