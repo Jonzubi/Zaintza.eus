@@ -3,7 +3,7 @@ const {
   getRandomString,
   getTodayDate,
   caesarShift,
-  readHTMLFile
+  readHTMLFile,
 } = require("../../util/funciones");
 const headerResponse = require("../../util/headerResponse");
 const ipMaquina = require("../../util/ipMaquina");
@@ -59,12 +59,12 @@ exports.getAcuerdosConUsuarios = async (req, res, modelos) => {
   modeloAcuerdos
     .find(filtrosConsulta)
     .populate(columnaLaOtraPersona)
-    .then(respuesta => {
+    .then((respuesta) => {
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(respuesta));
       res.end();
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.writeHead(500, headerResponse);
       res.write(JSON.stringify(err));
@@ -105,14 +105,14 @@ exports.getNotificacionesConUsuarios = async (req, res, modelos) => {
     .populate({
       path: "idRemitente",
       select: "-contrasena -email -validado -validationToken",
-      populate: { path: "idPerfil" }
+      populate: { path: "idPerfil" },
     })
-    .then(respuesta => {
+    .then((respuesta) => {
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(respuesta));
       res.end();
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.writeHead(500, headerResponse);
       res.write(JSON.stringify(err));
@@ -134,7 +134,7 @@ exports.getUsuarioConPerfil = async (req, res, modelos) => {
   const modeloAjuste = modelos.ajuste;
   const filtros = {
     email: email,
-    contrasena: contrasena
+    contrasena: contrasena,
   };
 
   const usu = await modeloUsuario.findOne(filtros);
@@ -145,28 +145,29 @@ exports.getUsuarioConPerfil = async (req, res, modelos) => {
         .findOne({ idUsuario: usu._id })
         .populate({
           path: "idUsuario",
-          populate: "idPerfil"
+          populate: "idPerfil",
         })
-        .then(respuesta => {
+        .then((respuesta) => {
           res.writeHead(200, headerResponse);
           res.write(JSON.stringify(respuesta));
           res.end();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           res.writeHead(500, headerResponse);
           res.write(JSON.stringify(err));
           res.end();
         });
     } else {
-      modeloUsuario.findOne(filtros)
-        .populate('idPerfil')
-        .then(respuesta => {
+      modeloUsuario
+        .findOne(filtros)
+        .populate("idPerfil")
+        .then((respuesta) => {
           res.writeHead(200, headerResponse);
           res.write(JSON.stringify(respuesta));
           res.end();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           res.writeHead(500, headerResponse);
           res.write(JSON.stringify(err));
@@ -186,18 +187,18 @@ exports.getAnunciosConPerfil = (req, res, modelos) => {
   if (typeof req.query.filtros != "undefined") {
     objFiltros = JSON.parse(req.query.filtros);
   }
-  if (typeof req.query.options !== 'undefined') {
+  if (typeof req.query.options !== "undefined") {
     objOptions = JSON.parse(req.query.options);
   }
   modeloAnuncios
     .find(objFiltros, strColumnas, objOptions)
     .populate("idCliente")
-    .then(respuesta => {
+    .then((respuesta) => {
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(respuesta));
       res.end();
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.writeHead(500, headerResponse);
       res.write(JSON.stringify(err));
@@ -224,7 +225,7 @@ exports.postNewCuidador = async (req, res, modelos) => {
     telefonoFijo,
     imgContactB64,
     avatarPreview,
-    validationToken
+    validationToken,
   } = req.body;
   //Comprobamos que se han mandado los campos required del form cuidador
   if (
@@ -268,7 +269,6 @@ exports.postNewCuidador = async (req, res, modelos) => {
   writeImage(codContactImg, imgContactB64);
 
   const modeloCuidadores = modelos.cuidador;
-  
 
   const sesion = await modeloCuidadores.startSession();
   sesion.startTransaction();
@@ -290,7 +290,7 @@ exports.postNewCuidador = async (req, res, modelos) => {
       fechaNacimiento: fechaNacimiento,
       ubicaciones: ubicaciones,
       publicoDisponible: publicoDisponible,
-      precioPorPublico: precioPorPublico
+      precioPorPublico: precioPorPublico,
     }).save(opts);
     const usuarioInserted = await modeloUsuario({
       email: email,
@@ -298,7 +298,7 @@ exports.postNewCuidador = async (req, res, modelos) => {
       tipoUsuario: "Cuidador",
       idPerfil: cuidadorInserted._id,
       validado: false,
-      validationToken: caesarShift(validationToken, 10)
+      validationToken: caesarShift(validationToken, 10),
     }).save(opts);
 
     await sesion.commitTransaction();
@@ -310,7 +310,7 @@ exports.postNewCuidador = async (req, res, modelos) => {
         _id: cuidadorInserted._id,
         _idUsuario: usuarioInserted._id,
         direcFoto: codAvatar,
-        direcFotoContacto: codContactImg
+        direcFotoContacto: codContactImg,
       })
     );
     res.end();
@@ -336,7 +336,7 @@ exports.postNewCliente = async (req, res, modelos) => {
     telefonoFijo,
     email,
     contrasena,
-    validationToken
+    validationToken,
   } = req.body;
 
   if (
@@ -382,7 +382,7 @@ exports.postNewCliente = async (req, res, modelos) => {
       apellido2: apellido2,
       telefonoMovil,
       telefonoFijo,
-      direcFoto: codAvatar
+      direcFoto: codAvatar,
     }).save(opts);
     const insertedUsuario = await modeluUsuarios({
       email: email,
@@ -390,7 +390,7 @@ exports.postNewCliente = async (req, res, modelos) => {
       tipoUsuario: "Cliente",
       idPerfil: insertedCliente._id,
       validado: false,
-      validationToken: caesarShift(validationToken, 10)
+      validationToken: caesarShift(validationToken, 10),
     }).save(opts);
     await sesion.commitTransaction();
     sesion.endSession();
@@ -399,7 +399,7 @@ exports.postNewCliente = async (req, res, modelos) => {
       JSON.stringify({
         _id: insertedCliente._id,
         _idUsuario: insertedUsuario._id,
-        direcFoto: codAvatar
+        direcFoto: codAvatar,
       })
     );
     res.end();
@@ -425,7 +425,7 @@ exports.patchCuidador = async (req, res, modelos) => {
     ubicaciones,
     telefonoMovil,
     imgContactB64,
-    avatarPreview
+    avatarPreview,
   } = req.body;
   const { id } = req.params;
 
@@ -459,7 +459,7 @@ exports.patchCuidador = async (req, res, modelos) => {
     return;
   }
 
-  if(usuario.email !== email || usuario.contrasena !== contrasena) {
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
     res.writeHead(405, headerResponse);
     res.write("Operacion denegada");
     res.end();
@@ -483,7 +483,7 @@ exports.patchCuidador = async (req, res, modelos) => {
   const modeloCuidadores = modelos.cuidador;
   modeloCuidadores
     .findByIdAndUpdate(id, formData)
-    .then(doc => {
+    .then((doc) => {
       if (codAvatar != null) {
         doc.direcFoto = codAvatar;
       }
@@ -493,18 +493,26 @@ exports.patchCuidador = async (req, res, modelos) => {
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(doc));
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.writeHead(500, headerResponse);
       res.write(JSON.stringify(err));
     })
-    .finally(fin => {
+    .finally((fin) => {
       res.end();
     });
 };
 
 exports.patchCliente = async (req, res, modelos) => {
-  const { nombre, avatarPreview, telefonoMovil, telefonoFijo, email, contrasena, idUsuario } = req.body;
+  const {
+    nombre,
+    avatarPreview,
+    telefonoMovil,
+    telefonoFijo,
+    email,
+    contrasena,
+    idUsuario,
+  } = req.body;
   const { id } = req.params;
 
   if (typeof nombre == "undefined" || typeof telefonoMovil === "") {
@@ -523,7 +531,7 @@ exports.patchCliente = async (req, res, modelos) => {
     return;
   }
 
-  if(usuario.email !== email || usuario.contrasena !== contrasena) {
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
     res.writeHead(405, headerResponse);
     res.write("Operacion denegada");
     res.end();
@@ -541,19 +549,19 @@ exports.patchCliente = async (req, res, modelos) => {
   const modeloClientes = modelos.cliente;
   modeloClientes
     .findByIdAndUpdate(id, formData)
-    .then(doc => {
+    .then((doc) => {
       if (codAvatar != null) {
         doc.direcFoto = codAvatar;
       }
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(doc));
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.writeHead(500, headerResponse);
       res.write(JSON.stringify(err));
     })
-    .finally(fin => {
+    .finally((fin) => {
       res.end();
     });
 };
@@ -568,7 +576,7 @@ exports.postAnuncio = async (req, res, modelos) => {
     idCliente,
     horario,
     email,
-    contrasena
+    contrasena,
   } = req.body;
 
   if (
@@ -616,16 +624,16 @@ exports.postAnuncio = async (req, res, modelos) => {
   const modeloAnuncio = modelos.anuncio;
   modeloAnuncio(formData)
     .save()
-    .then(doc => {
+    .then((doc) => {
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(doc));
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.writeHead(500, headerResponse);
       res.write(JSON.stringify(err));
     })
-    .finally(fin => {
+    .finally((fin) => {
       res.end();
     });
 };
@@ -642,7 +650,7 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
     descripcionAcuerdo,
     origenAcuerdo,
     email,
-    contrasena
+    contrasena,
   } = req.body;
   // TODO estadoAcuerdo y dateAcuerdo se calcularan en el servidor
 
@@ -671,7 +679,7 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
     return;
   }
 
-  if(usuario.email !== email || usuario.contrasena !== contrasena) {
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
     res.writeHead(405, headerResponse);
     res.write("Operacion denegada");
     res.end();
@@ -683,16 +691,16 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
   const acuerdo = await modeloAcuerdos.findOne({
     idCuidador,
     idCliente,
-    $or: [{ estadoAcuerdo: 1 }, { estadoAcuerdo: 0 }]
+    $or: [{ estadoAcuerdo: 1 }, { estadoAcuerdo: 0 }],
   });
 
-  if(acuerdo !== null){
+  if (acuerdo !== null) {
     res.writeHead(405, headerResponse);
     res.write("Ya existe un acuerdo");
     res.end();
     return;
   }
-  
+
   //Estado acuerdo indica de que el acuerdo creado estará en pendiente
   const estadoAcuerdo = 0;
   const dateAcuerdo = getTodayDate();
@@ -715,14 +723,14 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
     estadoAcuerdo,
     dateAcuerdo,
     descripcionAcuerdo,
-    origenAcuerdo
+    origenAcuerdo,
   };
   sesion.startTransaction();
   try {
     const opts = { sesion };
     const acuerdoGuardado = await modeloAcuerdos(formData)
       .save(opts)
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         res.writeHead(500, headerResponse);
         res.write(JSON.stringify(err));
@@ -730,7 +738,7 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
       });
     const usuarioBuscado = await modeloUsuarios
       .findOne({ idPerfil: idUsuarioABuscar })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         res.writeHead(500, headerResponse);
         res.write(JSON.stringify(err));
@@ -742,7 +750,7 @@ exports.postPropuestaAcuerdo = async (req, res, modelos) => {
       tipoNotificacion: "Acuerdo",
       acuerdo: acuerdoGuardado,
       visto: false,
-      dateEnvioNotificacion: `${dateAcuerdo} ${objDate.getHours()}:${objDate.getMinutes()}`
+      dateEnvioNotificacion: `${dateAcuerdo} ${objDate.getHours()}:${objDate.getMinutes()}`,
     };
     await modeloNotificaciones(formData).save(opts);
 
@@ -778,10 +786,10 @@ exports.patchPredLang = async (req, res, modelos) => {
   if (ajusteExistente.length === 0) {
     const ajuste = await modeloAjustes({
       idUsuario: id,
-      idLangPred: req.body.idLangPred
+      idLangPred: req.body.idLangPred,
     })
       .save()
-      .catch(err => {
+      .catch((err) => {
         res.writeHead(500, headerResponse);
         res.write(JSON.stringify(err));
         res.end();
@@ -792,7 +800,7 @@ exports.patchPredLang = async (req, res, modelos) => {
   } else {
     const ajuste = await modeloAjustes
       .findOneAndUpdate({ idUsuario: id }, { idLangPred: req.body.idLangPred })
-      .catch(err => {
+      .catch((err) => {
         res.writeHead(500, headerResponse);
         res.write(JSON.stringify(err));
         res.end();
@@ -807,35 +815,37 @@ exports.confirmarEmail = async (req, res, modelos) => {
   const modeloUsuarios = modelos.usuario;
   const { validationToken } = req.query;
 
-  const usuarioBuscado = await modeloUsuarios.findOneAndUpdate({ validationToken }, { validado: true});
-  if(usuarioBuscado) {
-    res.writeHead(200, {"Content-Type": "text/html"});
+  const usuarioBuscado = await modeloUsuarios.findOneAndUpdate(
+    { validationToken },
+    { validado: true }
+  );
+  if (usuarioBuscado) {
+    res.writeHead(200, { "Content-Type": "text/html" });
     readHTMLFile("emailConfirmado", (err, html) => {
       const template = handlebars.compile(html);
       const htmlToSend = template({
-        ipMaquina
+        ipMaquina,
       });
       res.write(htmlToSend);
       res.end();
     });
-    
   } else {
     res.writeHead(204, headerResponse);
     res.write("No email");
     res.end();
   }
-}
+};
 
 exports.getEmailWithIdPerfil = async (req, res, modelos) => {
   const { idPerfil } = req.params;
   const modeloUsuario = modelos.usuario;
 
   const usuarioFound = await modeloUsuario.findOne({ idPerfil }, "email");
-  res.writeHead(200, {"Content-Type": "text/plain"});
+  res.writeHead(200, { "Content-Type": "text/plain" });
   const response = usuarioFound !== null ? usuarioFound.email : "Vacio";
   res.write(response);
   res.end();
-}
+};
 
 exports.getNotificationsWithIdUsuario = async (req, res, modelos) => {
   const { idUsuario } = req.params;
@@ -844,7 +854,10 @@ exports.getNotificationsWithIdUsuario = async (req, res, modelos) => {
   const modeloNotificacion = modelos.notificacion;
   const validUser = await modeloUsuario.findById(idUsuario);
   if (validUser.email === email && validUser.contrasena === contrasena) {
-    const notificaciones = await modeloNotificacion.find({ idUsuario, visto: false});
+    const notificaciones = await modeloNotificacion.find({
+      idUsuario,
+      visto: false,
+    });
     res.writeHead(200, headerResponse);
     res.write(JSON.stringify(notificaciones));
     res.end();
@@ -853,7 +866,7 @@ exports.getNotificationsWithIdUsuario = async (req, res, modelos) => {
     res.write("Operacion denegada");
     res.end();
   }
-}
+};
 
 exports.getIdUsuarioConIdPerfil = async (req, res, modelos) => {
   const { idPerfil } = req.params;
@@ -867,10 +880,10 @@ exports.getIdUsuarioConIdPerfil = async (req, res, modelos) => {
     return;
   }
   let id = usuario._id.toString();
-  res.writeHead(200, {"Content-Type": "text/plain"});
+  res.writeHead(200, { "Content-Type": "text/plain" });
   res.write(id);
   res.end();
-}
+};
 
 exports.patchPassword = async (req, res, modelos) => {
   const { idUsuario } = req.params;
@@ -878,14 +891,17 @@ exports.patchPassword = async (req, res, modelos) => {
   const modeloUsuarios = modelos.usuario;
   const modeloEncontrado = await modeloUsuarios.findById(idUsuario);
 
-  if (modeloEncontrado.email === email && modeloEncontrado.contrasena === contrasena){
+  if (
+    modeloEncontrado.email === email &&
+    modeloEncontrado.contrasena === contrasena
+  ) {
     modeloUsuarios
       .findByIdAndUpdate(idUsuario, { contrasena: newPassword })
-      .then(doc => {
+      .then((doc) => {
         res.writeHead(200, headerResponse);
         res.write(JSON.stringify(doc));
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         res.writeHead(500, headerResponse);
         res.write(JSON.stringify(err));
@@ -898,7 +914,7 @@ exports.patchPassword = async (req, res, modelos) => {
     res.write("Operacion denegada");
     res.end();
   }
-}
+};
 
 exports.checkIfEmailExists = async (req, res, modelos) => {
   const { email } = req.params;
@@ -908,9 +924,9 @@ exports.checkIfEmailExists = async (req, res, modelos) => {
 
   const response = emailEncontrado !== null ? "True" : "Vacio";
   res.writeHead(200, headerResponse);
-  res.write(response)
+  res.write(response);
   res.end();
-}
+};
 
 exports.newNotification = async (req, res, modelos) => {
   const {
@@ -920,12 +936,12 @@ exports.newNotification = async (req, res, modelos) => {
     valorGestion,
     email,
     contrasena,
-    acuerdo
+    acuerdo,
   } = req.body;
   const modeloUsuario = modelos.usuario;
   const usuario = await modeloUsuario.findById(idRemitente);
-  
-  if(usuario.email !== email || usuario.contrasena !== contrasena) {
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
     res.writeHead(405, headerResponse);
     res.write("Operacion denegada");
     res.end();
@@ -933,7 +949,7 @@ exports.newNotification = async (req, res, modelos) => {
   }
   const objetivo = await modeloUsuario.findById(idUsuario);
 
-  if(objetivo === null) {
+  if (objetivo === null) {
     res.writeHead(405, headerResponse);
     res.write("Operacion denegada");
     res.end();
@@ -950,23 +966,23 @@ exports.newNotification = async (req, res, modelos) => {
     valorGestion,
     visto: false,
     show: true,
-    dateEnvioNotificacion: `${getTodayDate()} ${objToday.getHours()}:${objToday.getMinutes()}`
+    dateEnvioNotificacion: `${getTodayDate()} ${objToday.getHours()}:${objToday.getMinutes()}`,
   });
   notificacion
     .save()
-    .then(doc => {
+    .then((doc) => {
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(doc));
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.writeHead(500, headerResponse);
       res.write(JSON.stringify(err));
     })
     .finally(() => {
-      res.end()
+      res.end();
     });
-}
+};
 
 exports.getAcuerdoStatus = async (req, res, modelos) => {
   const { idAcuerdo } = req.params;
@@ -995,7 +1011,7 @@ exports.getAcuerdoStatus = async (req, res, modelos) => {
   res.writeHead(200, headerResponse);
   res.write(JSON.stringify(acuerdo.estadoAcuerdo));
   res.end();
-}
+};
 
 exports.terminarAcuerdo = async (req, res, modelos) => {
   const { idAcuerdo } = req.params;
@@ -1025,21 +1041,21 @@ exports.terminarAcuerdo = async (req, res, modelos) => {
   modeloAcuerdo
     .findByIdAndUpdate(idAcuerdo, {
       estadoAcuerdo: 2,
-      dateFinAcuerdo: getTodayDate() 
+      dateFinAcuerdo: getTodayDate(),
     })
-    .then(doc => {
+    .then((doc) => {
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(doc));
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.writeHead(500, headerResponse);
       res.write(JSON.stringify(err));
     })
     .finally(() => {
-      res.end()
-    });  
-}
+      res.end();
+    });
+};
 
 exports.gestionarAcuerdo = async (req, res, modelos) => {
   const { idAcuerdo } = req.params;
@@ -1068,21 +1084,21 @@ exports.gestionarAcuerdo = async (req, res, modelos) => {
 
   modeloAcuerdo
     .findByIdAndUpdate(idAcuerdo, {
-      estadoAcuerdo
+      estadoAcuerdo,
     })
-    .then(doc => {
+    .then((doc) => {
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(doc));
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.writeHead(500, headerResponse);
       res.write(JSON.stringify(err));
     })
     .finally(() => {
-      res.end()
-    });    
-}
+      res.end();
+    });
+};
 
 exports.checkIfAcuerdoExists = async (req, res, modelos) => {
   const { idCliente, idCuidador, email, contrasena, whoAmI } = req.body;
@@ -1109,21 +1125,28 @@ exports.checkIfAcuerdoExists = async (req, res, modelos) => {
   const acuerdo = await modeloAcuerdos.findOne({
     idCliente,
     idCuidador,
-    $or: [{ estadoAcuerdo: 1 }, { estadoAcuerdo: 0 }]
+    $or: [{ estadoAcuerdo: 1 }, { estadoAcuerdo: 0 }],
   });
-  
+
   const response = acuerdo !== null ? "Exists" : "Vacio";
 
-  res.writeHead(200, {"Content-Type": "text/plain"});
+  res.writeHead(200, { "Content-Type": "text/plain" });
   res.write(response);
   res.end();
-}
+};
 
 exports.newAcuerdo = async (req, res, modelos) => {
   const {
-    whoAmI, idCuidador, idCliente, email, contrasena,
-    diasAcordados, tituloAcuerdo, pueblo, descripcionAcuerdo,
-    origenAcuerdo
+    whoAmI,
+    idCuidador,
+    idCliente,
+    email,
+    contrasena,
+    diasAcordados,
+    tituloAcuerdo,
+    pueblo,
+    descripcionAcuerdo,
+    origenAcuerdo,
   } = req.body;
 
   const modeloUsuario = modelos.usuario;
@@ -1162,7 +1185,7 @@ exports.newAcuerdo = async (req, res, modelos) => {
   const acuerdo = await modeloAcuerdos.findOne({
     idCliente,
     idCuidador,
-    $or: [{ estadoAcuerdo: 1 }, { estadoAcuerdo: 0 }]
+    $or: [{ estadoAcuerdo: 1 }, { estadoAcuerdo: 0 }],
   });
 
   if (acuerdo !== null) {
@@ -1182,23 +1205,23 @@ exports.newAcuerdo = async (req, res, modelos) => {
     descripcionAcuerdo,
     origenAcuerdo,
     estadoAcuerdo: 0,
-    dateAcuerdo: getTodayDate()
+    dateAcuerdo: getTodayDate(),
   });
   modeloConfigurado
     .save()
-    .then(doc => {
+    .then((doc) => {
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(doc));
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.writeHead(500, headerResponse);
       res.write(JSON.stringify(err));
     })
     .finally(() => {
-      res.end()
+      res.end();
     });
-}
+};
 
 exports.getMisAnuncios = async (req, res, modelos) => {
   // Por ahora este procedure no tiene sentido ya que el modelo anuncio es publica y no hace falt autentificacion
@@ -1226,18 +1249,136 @@ exports.getMisAnuncios = async (req, res, modelos) => {
   const modeloAnuncios = modelos.anuncio;
   modeloAnuncios
     .find({
-      idCliente
+      idCliente,
     })
-    .then(doc => {
+    .then((doc) => {
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(doc));
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.writeHead(500, headerResponse);
       res.write(JSON.stringify(err));
     })
     .finally(() => {
-      res.end()
+      res.end();
     });
-}
+};
+
+exports.patchAnuncio = async (req, res, modelos) => {
+  const { idAnuncio } = req.params;
+  const {
+    titulo,
+    descripcion,
+    horario,
+    pueblo,
+    publico,
+    precio,
+    email,
+    contrasena,
+    imgAnuncio,
+  } = req.body;
+  const publicoShouldBe = ["ninos", "terceraEdad", "necesidadEspecial"];
+  if (titulo === "") {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+  if (descripcion === "") {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+  if (precio === "") {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+  if (pueblo.length === 0) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+  if (horario.length === 0) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  let horarioIsValid = true;
+  horario.map((dia) => {
+    if (!dia.dia) {
+      horarioIsValid = false;
+      return;
+    }
+  });
+  if (!horarioIsValid) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+  if (!publicoShouldBe.includes(publico)) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  const modeloAnuncios = modelos.anuncio;
+  const modeloUsuario = modelos.usuario;
+  const modeloBuscado = modeloAnuncios.findById(idAnuncio);
+  const idCliente = modeloBuscado.idCliente;
+  const usuario = modeloUsuario.findOne({
+    idPerfil: idCliente,
+  });
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  let formData = {
+    titulo,
+    descripcion,
+    horario,
+    pueblo,
+    publico,
+    precio,
+  };
+
+  if (imgAnuncio !== null) {
+    const direcFoto = getRandomString(20);
+    writeImage(direcFoto, imgAnuncio);
+    formData.direcFoto = direcFoto;
+  }
+
+  modeloAnuncios(formData)
+    .save()
+    .then((doc) => {
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(doc));
+    })
+    .catch((err) => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+    })
+    .finally((fin) => {
+      res.end();
+    });
+};
