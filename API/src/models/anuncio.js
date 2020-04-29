@@ -27,7 +27,7 @@ module.exports = (conexion) => {
         publico: {
             type: String,
             required: true,
-            enum: ['ninos, terceraEdad, necesidadEspecial']
+            enum: ['ninos', 'terceraEdad', 'necesidadEspecial']
         },
         precio: String
     });

@@ -1281,35 +1281,47 @@ exports.patchAnuncio = async (req, res, modelos) => {
   const publicoShouldBe = ["ninos", "terceraEdad", "necesidadEspecial"];
   if (titulo === "") {
     res.writeHead(405, headerResponse);
-    res.write("Operacion denegada");
+    res.write("Falta el titulo");
     res.end();
     return;
   }
   if (descripcion === "") {
     res.writeHead(405, headerResponse);
-    res.write("Operacion denegada");
+    res.write("Falta la descripcion");
     res.end();
     return;
   }
   if (precio === "") {
     res.writeHead(405, headerResponse);
-    res.write("Operacion denegada");
+    res.write("Falta el precio");
     res.end();
     return;
   }
   if (pueblo.length === 0) {
     res.writeHead(405, headerResponse);
-    res.write("Operacion denegada");
+    res.write("Faltan las ubicaciones");
     res.end();
     return;
   }
   if (horario.length === 0) {
     res.writeHead(405, headerResponse);
-    res.write("Operacion denegada");
+    res.write("Falta el horario");
     res.end();
     return;
   }
 
+  let puebloIsValid = true;
+  pueblo.map((pueblo) => {
+    if (typeof pueblo !== "string"){
+      puebloIsValid = false;
+    }
+  });
+  if (!puebloIsValid){
+    res.writeHead(405, headerResponse);
+    res.write("Ubicaciones incorrecto");
+    res.end();
+    return;
+  }
   let horarioIsValid = true;
   horario.map((dia) => {
     if (!dia.dia) {
@@ -1319,22 +1331,22 @@ exports.patchAnuncio = async (req, res, modelos) => {
   });
   if (!horarioIsValid) {
     res.writeHead(405, headerResponse);
-    res.write("Operacion denegada");
+    res.write("Horario incorrecto");
     res.end();
     return;
   }
   if (!publicoShouldBe.includes(publico)) {
     res.writeHead(405, headerResponse);
-    res.write("Operacion denegada");
+    res.write("Publico incorrecto");
     res.end();
     return;
   }
 
   const modeloAnuncios = modelos.anuncio;
   const modeloUsuario = modelos.usuario;
-  const modeloBuscado = modeloAnuncios.findById(idAnuncio);
+  const modeloBuscado = await modeloAnuncios.findById(idAnuncio);
   const idCliente = modeloBuscado.idCliente;
-  const usuario = modeloUsuario.findOne({
+  const usuario = await modeloUsuario.findOne({
     idPerfil: idCliente,
   });
 
@@ -1367,8 +1379,8 @@ exports.patchAnuncio = async (req, res, modelos) => {
     formData.direcFoto = direcFoto;
   }
 
-  modeloAnuncios(formData)
-    .save()
+  modeloAnuncios
+    .findByIdAndUpdate(idAnuncio,formData)
     .then((doc) => {
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(doc));

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import cogoToast from "cogo-toast";
-import { trans } from "../util/funciones";
+import { trans, toBase64 } from "../util/funciones";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -147,7 +147,7 @@ class MisAnuncios extends React.Component {
   handleRemovePueblo = (index) => {
     const { ubicaciones } = this.state;
     let auxUbicaciones = ubicaciones.slice();
-    delete auxUbicaciones[index];
+    auxUbicaciones = auxUbicaciones.filter((pueblo) => pueblo !== ubicaciones[index]);
 
     this.setState({
       ubicaciones: auxUbicaciones,
@@ -266,7 +266,56 @@ class MisAnuncios extends React.Component {
     return true;
   };
 
-  handleActualizarAnuncio = () => {};
+  handleActualizarAnuncio = async () => {
+    const {
+      tituloAnuncio,
+      descripcionAnuncio,
+      horario,
+      ubicaciones,
+      publicoAnuncio,
+      precioAnuncio,
+      imgAnuncio,
+      selectedAnuncio,
+    } = this.state;
+    const { email, contrasena } = this.props;
+
+    let imgAnuncioB64;
+    if (imgAnuncio !== null){
+      imgAnuncioB64 = await toBase64(imgAnuncio[0]);
+    }
+
+    const formData = {
+      titulo: tituloAnuncio,
+      descripcion: descripcionAnuncio,
+      horario,
+      pueblo: ubicaciones,
+      publico: publicoAnuncio,
+      precio: precioAnuncio,
+      imgAnuncio: imgAnuncio !== null ? imgAnuncioB64 : null,
+      email,
+      contrasena,
+    };
+
+    axios
+      .patch(
+        `http://${ipMaquina}:3001/api/procedures/patchAnuncio/${selectedAnuncio._id}`,
+        formData
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          cogoToast.success(
+            <h5>{trans("misAnunciosForm.anuncioActualizado")}</h5>
+          );
+          this.refrescarDatos();
+          this.handleCerrarModalVaciarEditData();
+        } else {
+          cogoToast.error(<h5>{trans("misAnunciosForm.error")}</h5>);
+        }
+      })
+      .catch(() => {
+        cogoToast.error(<h5>{trans("misAnunciosForm.error")}</h5>);
+      });
+  };
 
   handleCerrarModalVaciarEditData = () => {
     this.setState({
@@ -276,7 +325,7 @@ class MisAnuncios extends React.Component {
       precioAnuncio: "",
       ubicaciones: [],
       horario: [],
-      imgAnuncio: null
+      imgAnuncio: null,
     });
   };
 
