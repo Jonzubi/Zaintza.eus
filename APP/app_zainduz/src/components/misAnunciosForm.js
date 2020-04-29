@@ -42,8 +42,8 @@ class MisAnuncios extends React.Component {
       precioAnuncio: null,
       ubicaciones: [],
       horario: [],
-      descripcionAnuncio:"",
-      tituloAnuncio: ""
+      descripcionAnuncio: "",
+      tituloAnuncio: "",
     };
   }
 
@@ -95,7 +95,7 @@ class MisAnuncios extends React.Component {
       publicoAnuncio: anuncio.publico,
       precioAnuncio: anuncio.precio,
       descripcionAnuncio: anuncio.descripcion,
-      tituloAnuncio: anuncio.titulo
+      tituloAnuncio: anuncio.titulo,
     });
   };
 
@@ -184,7 +184,7 @@ class MisAnuncios extends React.Component {
       var origen = e.target;
       var indice = parseInt(origen.id.substr(origen.id.length - 1));
       var valor = origen.value;
-      
+
       let auxHorario = horario.slice();
       auxHorario[indice]["dia"] = valor;
 
@@ -202,79 +202,83 @@ class MisAnuncios extends React.Component {
         horario: auxHorario,
       });
     }
-  }
+  };
 
   handleTituloChange = (event) => {
     this.setState({
-      tituloAnuncio: event.target.value
-    })
-  }
+      tituloAnuncio: event.target.value,
+    });
+  };
 
   handleDescripcionChange = (event) => {
     this.setState({
-      descripcionAnuncio: event.target.value
+      descripcionAnuncio: event.target.value,
     });
-  }
+  };
 
   handleValidarEnviar = () => {
-    if (this.handleValidarAnuncio()){
+    if (this.handleValidarAnuncio()) {
       this.handleActualizarAnuncio();
     }
-  }
+  };
 
   handleValidarAnuncio = () => {
-    const { tituloAnuncio, descripcionAnuncio, precioAnuncio, ubicaciones, horario } = this.state;
-    if (tituloAnuncio === ""){
-      cogoToast.error(
-        <h5>{trans('misAnunciosForm.tituloNoVacio')}</h5>
-      )
+    const {
+      tituloAnuncio,
+      descripcionAnuncio,
+      precioAnuncio,
+      ubicaciones,
+      horario,
+    } = this.state;
+    if (tituloAnuncio === "") {
+      cogoToast.error(<h5>{trans("misAnunciosForm.tituloNoVacio")}</h5>);
       return false;
     }
-    if (descripcionAnuncio === ""){
-      cogoToast.error(
-        <h5>{trans('misAnunciosForm.descripcionNoVacio')}</h5>
-      )
+    if (descripcionAnuncio === "") {
+      cogoToast.error(<h5>{trans("misAnunciosForm.descripcionNoVacio")}</h5>);
       return false;
     }
-    if (precioAnuncio === ""){
-      cogoToast.error(
-        <h5>{trans('misAnunciosForm.precioNoVacio')}</h5>
-      )
+    if (precioAnuncio === "") {
+      cogoToast.error(<h5>{trans("misAnunciosForm.precioNoVacio")}</h5>);
       return false;
     }
-    if (ubicaciones.length === 0){
-      cogoToast.error(
-        <h5>{trans('misAnunciosForm.ubicacionesNoVacio')}</h5>
-      )
+    if (ubicaciones.length === 0) {
+      cogoToast.error(<h5>{trans("misAnunciosForm.ubicacionesNoVacio")}</h5>);
       return false;
     }
-    if (horario.length === 0){
-      cogoToast.error(
-        <h5>{trans('misAnunciosForm.horarioNoVacio')}</h5>
-      )
+    if (horario.length === 0) {
+      cogoToast.error(<h5>{trans("misAnunciosForm.horarioNoVacio")}</h5>);
       return false;
     }
 
     let horarioIsValid = true;
     horario.map((dia) => {
-      if (!dia.dia){
+      if (!dia.dia) {
         horarioIsValid = false;
         return;
       }
     });
-    if(!horarioIsValid){
-      cogoToast.error(
-        <h5>{trans('misAnunciosForm.unHorarioNoElegido')}</h5>
-      );
+    if (!horarioIsValid) {
+      cogoToast.error(<h5>{trans("misAnunciosForm.unHorarioNoElegido")}</h5>);
       return false;
     }
 
     return true;
-  }
+  };
 
-  handleActualizarAnuncio = () => {
+  handleActualizarAnuncio = () => {};
 
-  }
+  handleCerrarModalVaciarEditData = () => {
+    this.setState({
+      showModalEditAnuncio: false,
+      tituloAnuncio: "",
+      descripcionAnuncio: "",
+      precioAnuncio: "",
+      ubicaciones: [],
+      horario: [],
+      imgAnuncio: null
+    });
+  };
 
   render() {
     const {
@@ -288,7 +292,7 @@ class MisAnuncios extends React.Component {
       ubicaciones,
       horario,
       tituloAnuncio,
-      descripcionAnuncio
+      descripcionAnuncio,
     } = this.state;
     return (
       <div className={isLoading ? "p-0" : "p-lg-5 p-2"}>
@@ -377,7 +381,7 @@ class MisAnuncios extends React.Component {
           style={{
             maxWidth: "500px",
           }}
-          onHide={() => this.setState({ showModalEditAnuncio: false })}
+          onHide={() => this.handleCerrarModalVaciarEditData()}
         >
           <ModalBody className="d-flex flex-column justify-content-between align-items-center">
             <ImageUploader
@@ -422,18 +426,12 @@ class MisAnuncios extends React.Component {
               className="mt-2 d-flex flex-column"
             >
               <div className="d-flex flex-row align-items-center justify-content-center">
-                <FontAwesomeIcon
-                  icon={faFileSignature}
-                  className="mr-1"
-                />
+                <FontAwesomeIcon icon={faFileSignature} className="mr-1" />
                 <span className="font-weight-bold">
                   {trans("misAnunciosForm.titulo")}
                 </span>
               </div>
-              <input
-                value={tituloAnuncio}
-                onChange={this.handleTituloChange}
-              />
+              <input value={tituloAnuncio} onChange={this.handleTituloChange} />
             </div>
             <div
               style={{
@@ -442,10 +440,7 @@ class MisAnuncios extends React.Component {
               className="mt-2 d-flex flex-column"
             >
               <div className="d-flex flex-row align-items-center justify-content-center">
-                <FontAwesomeIcon
-                  icon={faFileSignature}
-                  className="mr-1"
-                />
+                <FontAwesomeIcon icon={faFileSignature} className="mr-1" />
                 <span className="font-weight-bold">
                   {trans("misAnunciosForm.descripcion")}
                 </span>
@@ -516,7 +511,7 @@ class MisAnuncios extends React.Component {
                             icon={faMinusCircle}
                             onClick={() => this.handleRemovePueblo(index)}
                             style={{
-                              cursor: 'pointer'
+                              cursor: "pointer",
                             }}
                           />
                         </div>
@@ -559,14 +554,28 @@ class MisAnuncios extends React.Component {
                       className="d-inline"
                       id={"dia" + indice}
                     >
-                      <option>{i18next.t('dropDownDias.eligeDia')}</option>
-                      <option value="1">{i18next.t('dropDownDias.lunes')}</option>
-                      <option value="2">{i18next.t('dropDownDias.martes')}</option>
-                      <option value="3">{i18next.t('dropDownDias.miercoles')}</option>
-                      <option value="4">{i18next.t('dropDownDias.jueves')}</option>
-                      <option value="5">{i18next.t('dropDownDias.viernes')}</option>
-                      <option value="6">{i18next.t('dropDownDias.sabado')}</option>
-                      <option value="7">{i18next.t('dropDownDias.domingo')}</option>
+                      <option>{i18next.t("dropDownDias.eligeDia")}</option>
+                      <option value="1">
+                        {i18next.t("dropDownDias.lunes")}
+                      </option>
+                      <option value="2">
+                        {i18next.t("dropDownDias.martes")}
+                      </option>
+                      <option value="3">
+                        {i18next.t("dropDownDias.miercoles")}
+                      </option>
+                      <option value="4">
+                        {i18next.t("dropDownDias.jueves")}
+                      </option>
+                      <option value="5">
+                        {i18next.t("dropDownDias.viernes")}
+                      </option>
+                      <option value="6">
+                        {i18next.t("dropDownDias.sabado")}
+                      </option>
+                      <option value="7">
+                        {i18next.t("dropDownDias.domingo")}
+                      </option>
                     </select>
                     <div className="d-flex flex-row align-items-center">
                       <TimeInput
