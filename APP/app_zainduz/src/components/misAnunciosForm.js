@@ -144,10 +144,10 @@ class MisAnuncios extends React.Component {
     });
   };
 
-  handleRemovePueblo = () => {
+  handleRemovePueblo = (index) => {
     const { ubicaciones } = this.state;
     let auxUbicaciones = ubicaciones.slice();
-    auxUbicaciones.pop();
+    delete auxUbicaciones[index];
 
     this.setState({
       ubicaciones: auxUbicaciones,
@@ -444,31 +444,25 @@ class MisAnuncios extends React.Component {
                 </span>
               </div>
               <PuebloAutosuggest onSuggestionSelected={this.handleAddPueblo} />
-              <span className="">
+              <span className="d-flex flex-column">
                 {typeof ubicaciones != "undefined"
                   ? ubicaciones.map((ubicacion, index) => {
                       return (
-                        <div>
+                        <div className="d-flex flex-row align-items-center justify-content-between">
                           <span className="mt-2">{ubicacion}</span>
-                          <br />
+                          <FontAwesomeIcon
+                            className="text-danger mt-2"
+                            icon={faMinusCircle}
+                            onClick={() => this.handleRemovePueblo(index)}
+                            style={{
+                              cursor: 'pointer'
+                            }}
+                          />
                         </div>
                       );
                     })
                   : null}
               </span>
-              {ubicaciones.length > 0 ? (
-                <div className="d-flex justify-content-end align-items-center">
-                  <a
-                    onClick={this.handleRemovePueblo}
-                    className="btn btn-danger text-light"
-                  >
-                    {trans("formAnuncio.eliminarPueblo")}{" "}
-                    <FontAwesomeIcon icon={faMinusCircle} />
-                  </a>
-                </div>
-              ) : (
-                ""
-              )}
             </div>
             <div
               style={{
