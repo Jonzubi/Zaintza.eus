@@ -16,6 +16,7 @@ import {
   faMinusCircle,
   faClock,
   faPlusCircle,
+  faFileSignature,
 } from "@fortawesome/free-solid-svg-icons";
 import Avatar from "react-avatar";
 import Modal from "react-bootstrap/Modal";
@@ -41,6 +42,8 @@ class MisAnuncios extends React.Component {
       precioAnuncio: null,
       ubicaciones: [],
       horario: [],
+      descripcionAnuncio:"",
+      tituloAnuncio: ""
     };
   }
 
@@ -91,6 +94,8 @@ class MisAnuncios extends React.Component {
       horario: JSON.parse(JSON.stringify(anuncio.horario)),
       publicoAnuncio: anuncio.publico,
       precioAnuncio: anuncio.precio,
+      descripcionAnuncio: anuncio.descripcion,
+      tituloAnuncio: anuncio.titulo
     });
   };
 
@@ -199,6 +204,18 @@ class MisAnuncios extends React.Component {
     }
   }
 
+  handleTituloChange = (event) => {
+    this.setState({
+      tituloAnuncio: event.target.value
+    })
+  }
+
+  handleDescripcionChange = (event) => {
+    this.setState({
+      descripcionAnuncio: event.target.value
+    });
+  }
+
   render() {
     const {
       isLoading,
@@ -210,6 +227,8 @@ class MisAnuncios extends React.Component {
       precioAnuncio,
       ubicaciones,
       horario,
+      tituloAnuncio,
+      descripcionAnuncio
     } = this.state;
     return (
       <div className={isLoading ? "p-0" : "p-lg-5 p-2"}>
@@ -336,6 +355,46 @@ class MisAnuncios extends React.Component {
               imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
               maxFileSize={5242880}
             />
+            <div
+              style={{
+                width: 300,
+              }}
+              className="mt-2 d-flex flex-column"
+            >
+              <div className="d-flex flex-row align-items-center justify-content-center">
+                <FontAwesomeIcon
+                  icon={faFileSignature}
+                  className="mr-1"
+                />
+                <span className="font-weight-bold">
+                  {trans("misAnunciosForm.titulo")}
+                </span>
+              </div>
+              <input
+                value={tituloAnuncio}
+                onChange={this.handleTituloChange}
+              />
+            </div>
+            <div
+              style={{
+                width: 300,
+              }}
+              className="mt-2 d-flex flex-column"
+            >
+              <div className="d-flex flex-row align-items-center justify-content-center">
+                <FontAwesomeIcon
+                  icon={faFileSignature}
+                  className="mr-1"
+                />
+                <span className="font-weight-bold">
+                  {trans("misAnunciosForm.descripcion")}
+                </span>
+              </div>
+              <textarea
+                value={descripcionAnuncio}
+                onChange={this.handleDescripcionChange}
+              />
+            </div>
             <div>
               <div
                 style={{

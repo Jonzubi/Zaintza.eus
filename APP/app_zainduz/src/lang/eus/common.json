@@ -260,6 +260,8 @@
     "askDeleteForm": "Ziur zaintza eskaera ezabatu nahi duzula?",
     "si": "Bai",
     "no": "Ez",
-    "guardarCambios": "Aldaketak gorde"
+    "guardarCambios": "Aldaketak gorde",
+    "titulo": "Izenburua",
+    "descripcion": "Deskribapena"
   }
 }
