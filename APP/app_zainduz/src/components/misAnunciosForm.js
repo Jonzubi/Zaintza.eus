@@ -27,6 +27,7 @@ import i18next from "i18next";
 import PuebloAutosuggest from "./pueblosAutosuggest";
 import TimeInput from "./customTimeInput";
 import "../components/styles/modalRegistrarse.css";
+import ModalHeader from "react-bootstrap/ModalHeader";
 
 class MisAnuncios extends React.Component {
   constructor(props) {
@@ -501,6 +502,9 @@ class MisAnuncios extends React.Component {
           }}
           onHide={() => this.handleCerrarModalVaciarEditData()}
         >
+          <ModalHeader closeButton>
+            <h5>{trans('misAnunciosForm.anuncio')}</h5>
+          </ModalHeader>
           <ModalBody className="d-flex flex-column justify-content-between align-items-center">
             <ImageUploader
               fileContainerStyle={

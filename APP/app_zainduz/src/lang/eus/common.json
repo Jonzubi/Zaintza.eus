@@ -263,6 +263,7 @@
     "guardarCambios": "Aldaketak gorde",
     "titulo": "Izenburua",
     "descripcion": "Deskribapena",
-    "noData": "Ez daukazu zaintza eskaera aktiborik"
+    "noData": "Ez daukazu zaintza eskaera aktiborik",
+    "anuncio": "Zaintza eskaera"
   }
 }
