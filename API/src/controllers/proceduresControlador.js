@@ -1250,6 +1250,7 @@ exports.getMisAnuncios = async (req, res, modelos) => {
   modeloAnuncios
     .find({
       idCliente,
+      show: true
     })
     .then((doc) => {
       res.writeHead(200, headerResponse);
