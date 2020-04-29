@@ -3,7 +3,7 @@ import { slide as BurgerMenu } from "react-burger-menu";
 import Avatar from "react-avatar";
 import LogInForm from "./logInForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faUserCircle, faUser, faCalendarAlt, faComments, faBell, faCogs, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faUserCircle, faUser, faCalendarAlt, faComments, faBell, faCogs, faSignOutAlt, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import { initializeUserSession } from "../redux/actions/user";
@@ -143,6 +143,12 @@ class MenuPerfil extends React.Component {
     this.props.toogleMenuPerfil(false);
   }
 
+  handleClickAnuncios = () => {
+    const { changeFormContent, toogleMenuPerfil } = this.props;
+    changeFormContent("misanuncios");
+    toogleMenuPerfil(false);
+  }
+
   getMenuContent() {
     if (!this.props.tipoUsuario) {
       return <LogInForm />;
@@ -155,7 +161,7 @@ class MenuPerfil extends React.Component {
               socket.on("notifyReceived", this.handleNotifyReceived);
               notifyReceiving = true;
             }
-            const { countNotifies } = this.props;
+            const { countNotifies, tipoUsuario } = this.props;
 
             return (
               <div id="menu-perfil-content" className="w-100">
@@ -187,6 +193,17 @@ class MenuPerfil extends React.Component {
                     <FontAwesomeIcon icon={faComments} className="float-left"/>
                     {trans("menuPerfil.contratos")}
                   </button>
+                  {tipoUsuario === "Cliente" ? (
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={() => this.handleClickAnuncios()}
+                    >
+                      <FontAwesomeIcon icon={faUpload} className="float-left"/>
+                      {trans("menuPerfil.misAnuncios")}
+                    </button>
+                  ) : null}
+                  
                   <button
                     type="button"
                     className="btn btn-secondary"

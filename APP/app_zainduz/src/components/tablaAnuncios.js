@@ -79,6 +79,9 @@ class TablaAnuncios extends React.Component {
             options: {
               limit: requiredCards,
             },
+            filtros: {
+              show: true
+            }
           },
         }
       )

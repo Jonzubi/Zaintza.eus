@@ -10,7 +10,8 @@
     "notificaciones": "Abisuak",
     "perfil": "Profila",
     "ajustes": "Ezarpenak",
-    "notificacionRecibida": "Abisu berri bat duzu"
+    "notificacionRecibida": "Abisu berri bat duzu",
+    "misAnuncios": "Nire eskaerak"
   },
   "loginForm": {
     "email": "Emaila",
@@ -254,5 +255,15 @@
   },
   "pueblosAutosuggest": {
     "holderPueblos": "Sartu herria..."
+  },
+  "misAnunciosForm": {
+    "askDeleteForm": "Ziur zaintza eskaera ezabatu nahi duzula?",
+    "si": "Bai",
+    "no": "Ez",
+    "guardarCambios": "Aldaketak gorde",
+    "titulo": "Izenburua",
+    "descripcion": "Deskribapena",
+    "noData": "Ez daukazu zaintza eskaera aktiborik",
+    "anuncio": "Zaintza eskaera"
   }
 }

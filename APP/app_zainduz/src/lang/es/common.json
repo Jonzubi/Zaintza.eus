@@ -10,7 +10,8 @@
       "notificaciones": "Notificaciones",
       "perfil": "Perfil",
       "ajustes": "Ajustes",
-      "notificacionRecibida": "Tienes una nueva notificacion"
+      "notificacionRecibida": "Tienes una nueva notificacion",
+      "misAnuncios": "Mis anuncios"
     },
     "loginForm": {
       "email": "Correo",
