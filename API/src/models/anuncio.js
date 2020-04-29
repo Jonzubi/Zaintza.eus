@@ -29,7 +29,12 @@ module.exports = (conexion) => {
             required: true,
             enum: ['ninos', 'terceraEdad', 'necesidadEspecial']
         },
-        precio: String
+        precio: String,
+        show: {
+            type: Boolean,
+            required: true,
+            default: true
+        }
     });
 
     return conexion.model("Anuncio", anuncio, "Anuncios");
