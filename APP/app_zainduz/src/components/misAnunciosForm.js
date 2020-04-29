@@ -34,6 +34,7 @@ class MisAnuncios extends React.Component {
     this.state = {
       jsonAnuncios: [],
       isLoading: true,
+      isUploading: false,
       selectedAnuncio: {},
       showModalEditAnuncio: false,
       showModalDeleteAnuncio: false,
@@ -147,7 +148,9 @@ class MisAnuncios extends React.Component {
   handleRemovePueblo = (index) => {
     const { ubicaciones } = this.state;
     let auxUbicaciones = ubicaciones.slice();
-    auxUbicaciones = auxUbicaciones.filter((pueblo) => pueblo !== ubicaciones[index]);
+    auxUbicaciones = auxUbicaciones.filter(
+      (pueblo) => pueblo !== ubicaciones[index]
+    );
 
     this.setState({
       ubicaciones: auxUbicaciones,
@@ -217,9 +220,18 @@ class MisAnuncios extends React.Component {
   };
 
   handleValidarEnviar = () => {
-    if (this.handleValidarAnuncio()) {
-      this.handleActualizarAnuncio();
-    }
+    this.setState({
+      isUploading: true
+    }, () => {
+      if (this.handleValidarAnuncio()) {
+        this.handleActualizarAnuncio();
+      } else {
+        this.setState({
+          isUploading: false
+        });
+      }
+    });
+    
   };
 
   handleValidarAnuncio = () => {
@@ -230,6 +242,7 @@ class MisAnuncios extends React.Component {
       ubicaciones,
       horario,
     } = this.state;
+
     if (tituloAnuncio === "") {
       cogoToast.error(<h5>{trans("misAnunciosForm.tituloNoVacio")}</h5>);
       return false;
@@ -280,7 +293,7 @@ class MisAnuncios extends React.Component {
     const { email, contrasena } = this.props;
 
     let imgAnuncioB64;
-    if (imgAnuncio !== null){
+    if (imgAnuncio !== null) {
       imgAnuncioB64 = await toBase64(imgAnuncio[0]);
     }
 
@@ -306,13 +319,22 @@ class MisAnuncios extends React.Component {
           cogoToast.success(
             <h5>{trans("misAnunciosForm.anuncioActualizado")}</h5>
           );
+          this.setState({
+            isUploading: false
+          });
           this.refrescarDatos();
           this.handleCerrarModalVaciarEditData();
         } else {
+          this.setState({
+            isUploading: false
+          });
           cogoToast.error(<h5>{trans("misAnunciosForm.error")}</h5>);
         }
       })
       .catch(() => {
+        this.setState({
+          isUploading: false
+        });
         cogoToast.error(<h5>{trans("misAnunciosForm.error")}</h5>);
       });
   };
@@ -342,6 +364,7 @@ class MisAnuncios extends React.Component {
       horario,
       tituloAnuncio,
       descripcionAnuncio,
+      isUploading,
     } = this.state;
     return (
       <div className={isLoading ? "p-0" : "p-lg-5 p-2"}>
@@ -662,14 +685,18 @@ class MisAnuncios extends React.Component {
               })}
             </div>
           </ModalBody>
-          <ModalFooter>
-            <button
-              className="w-100 btn btn-success"
-              onClick={() => this.handleValidarEnviar()}
-            >
-              {trans("misAnunciosForm.guardarCambios")}
-              <FontAwesomeIcon icon={faSave} className="ml-2" />
-            </button>
+          <ModalFooter className="d-flex flex-row align-items-center justify-content-center">
+            {isUploading ? (
+              <ClipLoader color="#28a745" />
+            ) : (
+              <button
+                className="w-100 btn btn-success"
+                onClick={() => this.handleValidarEnviar()}
+              >
+                {trans("misAnunciosForm.guardarCambios")}
+                <FontAwesomeIcon icon={faSave} className="ml-2" />
+              </button>
+            )}
           </ModalFooter>
         </Modal>
       </div>
