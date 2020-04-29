@@ -412,6 +412,17 @@ class MisAnuncios extends React.Component {
           >
             <ClipLoader color="#28a745" />
           </div>
+        ) : jsonAnuncios.length === 0 ? (
+          <div
+            style={{
+              height: "calc(100vh - 80px)",
+            }}
+            className="d-flex align-items-center justify-content-center"
+          >
+            <small className="text-danger">
+              {trans("misAnunciosForm.noData")}
+            </small>
+          </div>
         ) : (
           jsonAnuncios.map((anuncio) => (
             <div
