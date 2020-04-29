@@ -439,32 +439,41 @@ class MisAnuncios extends React.Component {
                   "http://" + ipMaquina + ":3001/api/image/" + anuncio.direcFoto
                 }
               />
-              <span className="font-weight-bold">{anuncio.titulo}</span>
-              <span className="d-lg-inline d-none">{anuncio.descripcion}</span>
-
-              <FontAwesomeIcon
+              <span
+                className="font-weight-bold">
+                {anuncio.titulo.length > 20 ? anuncio.titulo.substring(0, 20) + ' ...' : anuncio.titulo}
+              </span>
+              <span
                 style={{
-                  cursor: "pointer",
+                  width: 400
                 }}
-                onClick={() => this.handleEditAnuncio(anuncio)}
-                size={"2x"}
-                icon={faPen}
-                className="text-success"
-              />
-              <FontAwesomeIcon
-                style={{
-                  cursor: "pointer",
-                }}
-                size={"2x"}
-                icon={faTrashAlt}
-                className="text-danger"
-                onClick={() =>
-                  this.setState({
-                    showModalDeleteAnuncio: true,
-                    selectedAnuncio: anuncio,
-                  })
-                }
-              />
+                className="d-lg-inline d-none">
+                {anuncio.descripcion.length > 50 ? anuncio.descripcion.substring(0, 50) + ' ...' : anuncio.descripcion}</span>
+              <div>
+                <FontAwesomeIcon
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  onClick={() => this.handleEditAnuncio(anuncio)}
+                  size={"2x"}
+                  icon={faPen}
+                  className="text-success mr-5"
+                />
+                <FontAwesomeIcon
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  size={"2x"}
+                  icon={faTrashAlt}
+                  className="text-danger"
+                  onClick={() =>
+                    this.setState({
+                      showModalDeleteAnuncio: true,
+                      selectedAnuncio: anuncio,
+                    })
+                  }
+                />
+              </div>
             </div>
           ))
         )}
@@ -503,7 +512,7 @@ class MisAnuncios extends React.Component {
           onHide={() => this.handleCerrarModalVaciarEditData()}
         >
           <ModalHeader closeButton>
-            <h5>{trans('misAnunciosForm.anuncio')}</h5>
+            <h5>{trans("misAnunciosForm.anuncio")}</h5>
           </ModalHeader>
           <ModalBody className="d-flex flex-column justify-content-between align-items-center">
             <ImageUploader
@@ -568,6 +577,7 @@ class MisAnuncios extends React.Component {
                 </span>
               </div>
               <textarea
+                rows={5}
                 value={descripcionAnuncio}
                 onChange={this.handleDescripcionChange}
               />
