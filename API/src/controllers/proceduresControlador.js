@@ -1405,7 +1405,7 @@ exports.deleteAnuncio = async (req, res, modelos) => {
 
   const anuncioBuscado = await modeloAnuncio.findById(idAnuncio);
   const idCliente = anuncioBuscado.idCliente;
-  const usuarioBuscado = await modeloUsuario.findOne({
+  const usuario = await modeloUsuario.findOne({
     idPerfil: idCliente
   });
 

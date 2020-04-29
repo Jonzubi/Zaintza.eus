@@ -100,7 +100,40 @@ class MisAnuncios extends React.Component {
     });
   };
 
-  handleDeleteAnuncio = (anuncio) => {};
+  handleDeleteAnuncio = () => {
+    const { selectedAnuncio } = this.state;
+    const { email, contrasena } = this.props;
+    axios
+      .post(
+        `http://${ipMaquina}:3001/api/procedures/deleteAnuncio/${selectedAnuncio._id}`,
+        {
+          email,
+          contrasena,
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          cogoToast.success(
+            <h5>{trans("misAnunciosForm.anuncioEliminado")}</h5>
+          );
+          this.setState({
+            showModalDeleteAnuncio: false,
+          });
+          this.refrescarDatos();
+        } else {
+          cogoToast.error(<h5>{trans("misAnunciosForm.error")}</h5>);
+          this.setState({
+            showModalDeleteAnuncio: false,
+          });
+        }
+      })
+      .catch(() => {
+        cogoToast.error(<h5>{trans("misAnunciosForm.error")}</h5>);
+        this.setState({
+          showModalDeleteAnuncio: false,
+        });
+      });
+  };
 
   onChangeAnuncioImg = (picture) => {
     if (picture.length > 1) {
@@ -220,18 +253,20 @@ class MisAnuncios extends React.Component {
   };
 
   handleValidarEnviar = () => {
-    this.setState({
-      isUploading: true
-    }, () => {
-      if (this.handleValidarAnuncio()) {
-        this.handleActualizarAnuncio();
-      } else {
-        this.setState({
-          isUploading: false
-        });
+    this.setState(
+      {
+        isUploading: true,
+      },
+      () => {
+        if (this.handleValidarAnuncio()) {
+          this.handleActualizarAnuncio();
+        } else {
+          this.setState({
+            isUploading: false,
+          });
+        }
       }
-    });
-    
+    );
   };
 
   handleValidarAnuncio = () => {
@@ -320,20 +355,20 @@ class MisAnuncios extends React.Component {
             <h5>{trans("misAnunciosForm.anuncioActualizado")}</h5>
           );
           this.setState({
-            isUploading: false
+            isUploading: false,
           });
           this.refrescarDatos();
           this.handleCerrarModalVaciarEditData();
         } else {
           this.setState({
-            isUploading: false
+            isUploading: false,
           });
           cogoToast.error(<h5>{trans("misAnunciosForm.error")}</h5>);
         }
       })
       .catch(() => {
         this.setState({
-          isUploading: false
+          isUploading: false,
         });
         cogoToast.error(<h5>{trans("misAnunciosForm.error")}</h5>);
       });
