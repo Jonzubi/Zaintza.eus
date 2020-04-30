@@ -272,6 +272,11 @@
     "eliminar": "Ezabatu",
     "verStats": "Estadistika",
     "visitasConLogin": "Kontu dun bisitak",
-    "visitasSinLogin": "Kontu gabeko bisitak"
+    "visitasSinLogin": "Bisita anonimoak"
+  },
+  "cuidadorStatsForm": {
+    "visitasConLogin": "Kontu dun bisitak",
+    "visitasSinLogin": "Bisita anonimoak",
+    "totalVisitas": "Bisitak guztira"
   }
 }
