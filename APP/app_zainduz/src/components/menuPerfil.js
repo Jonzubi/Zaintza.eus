@@ -3,7 +3,18 @@ import { slide as BurgerMenu } from "react-burger-menu";
 import Avatar from "react-avatar";
 import LogInForm from "./logInForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faUserCircle, faUser, faCalendarAlt, faComments, faBell, faCogs, faSignOutAlt, faUpload } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTimes,
+  faUserCircle,
+  faUser,
+  faCalendarAlt,
+  faComments,
+  faBell,
+  faCogs,
+  faSignOutAlt,
+  faUpload,
+  faChartBar,
+} from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import { initializeUserSession } from "../redux/actions/user";
@@ -17,7 +28,7 @@ import ChangeLang from "../components/changeLang";
 import SocketContext from "../socketio/socket-context";
 import { setCountNotify } from "../redux/actions/notifications";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     isOpened: state.menuPerfil.isOpened,
     direcFoto: state.user.direcFoto,
@@ -28,25 +39,31 @@ const mapStateToProps = state => {
     apellido1: state.user.apellido1,
     countNotifies: state.notification.countNotifies,
     email: state.user.email,
-    contrasena: state.user.contrasena
+    contrasena: state.user.contrasena,
   };
 };
 
 let gSocket = null;
 let notifyReceiving = false;
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    toogleMenuPerfil: payload => dispatch(toogleMenuPerfil(payload)),
+    toogleMenuPerfil: (payload) => dispatch(toogleMenuPerfil(payload)),
     initializeUserSession: () => dispatch(initializeUserSession()),
-    changeFormContent: form => dispatch(changeFormContent(form)),
-    setCountNotify: payload => dispatch(setCountNotify(payload))
+    changeFormContent: (form) => dispatch(changeFormContent(form)),
+    setCountNotify: (payload) => dispatch(setCountNotify(payload)),
   };
 };
 
 class MenuPerfil extends React.Component {
   handleNotifyReceived = () => {
-    const { countNotifies, setCountNotify, idUsuario, email, contrasena } = this.props;
+    const {
+      countNotifies,
+      setCountNotify,
+      idUsuario,
+      email,
+      contrasena,
+    } = this.props;
     //Si no esta logueado no queremos saber notificaciones;
     if (
       typeof this.props.idUsuario == "undefined" ||
@@ -54,10 +71,13 @@ class MenuPerfil extends React.Component {
     )
       return;
 
-    Axios.post(`http://${ipMaquina}:3001/api/procedures/getNotificationsWithIdUsuario/${idUsuario}`, {
-      email,
-      contrasena
-    }).then(resultado => {
+    Axios.post(
+      `http://${ipMaquina}:3001/api/procedures/getNotificationsWithIdUsuario/${idUsuario}`,
+      {
+        email,
+        contrasena,
+      }
+    ).then((resultado) => {
       if (resultado.data != "Vacio" && countNotifies != resultado.data.length) {
         setCountNotify(resultado.data.length);
         cogoToast.info(<h5>{trans("menuPerfil.notificacionRecibida")}</h5>);
@@ -128,7 +148,7 @@ class MenuPerfil extends React.Component {
     this.props.changeFormContent("tabla");
     this.props.toogleMenuPerfil(false);
     gSocket.emit("logout", {
-      idUsuario: idUsuario
+      idUsuario: idUsuario,
     });
     cogoToast.success(<h5>{trans("notificaciones.sesionCerrada")}</h5>);
   }
@@ -147,7 +167,13 @@ class MenuPerfil extends React.Component {
     const { changeFormContent, toogleMenuPerfil } = this.props;
     changeFormContent("misanuncios");
     toogleMenuPerfil(false);
-  }
+  };
+
+  handleClickStats = () => {
+    const { changeFormContent, toogleMenuPerfil } = this.props;
+    changeFormContent("stats");
+    toogleMenuPerfil(false);
+  };
 
   getMenuContent() {
     if (!this.props.tipoUsuario) {
@@ -155,7 +181,7 @@ class MenuPerfil extends React.Component {
     } else {
       return (
         <SocketContext.Consumer>
-          {socket => {
+          {(socket) => {
             gSocket = socket;
             if (!notifyReceiving) {
               socket.on("notifyReceived", this.handleNotifyReceived);
@@ -174,7 +200,7 @@ class MenuPerfil extends React.Component {
                     className="btn btn-secondary"
                     onClick={() => this.handleClickPerfil()}
                   >
-                    <FontAwesomeIcon icon={faUser} className="float-left"/>
+                    <FontAwesomeIcon icon={faUser} className="float-left" />
                     {trans("menuPerfil.perfil")}
                   </button>
                   <button
@@ -182,7 +208,10 @@ class MenuPerfil extends React.Component {
                     className="btn btn-secondary"
                     onClick={() => this.handleClickCalendario()}
                   >
-                    <FontAwesomeIcon icon={faCalendarAlt} className="float-left"/>
+                    <FontAwesomeIcon
+                      icon={faCalendarAlt}
+                      className="float-left"
+                    />
                     {trans("menuPerfil.calendario")}
                   </button>
                   <button
@@ -190,7 +219,7 @@ class MenuPerfil extends React.Component {
                     className="btn btn-secondary"
                     onClick={() => this.handleClickAcuerdos()}
                   >
-                    <FontAwesomeIcon icon={faComments} className="float-left"/>
+                    <FontAwesomeIcon icon={faComments} className="float-left" />
                     {trans("menuPerfil.contratos")}
                   </button>
                   {tipoUsuario === "Cliente" ? (
@@ -199,17 +228,26 @@ class MenuPerfil extends React.Component {
                       className="btn btn-secondary"
                       onClick={() => this.handleClickAnuncios()}
                     >
-                      <FontAwesomeIcon icon={faUpload} className="float-left"/>
+                      <FontAwesomeIcon icon={faUpload} className="float-left" />
                       {trans("menuPerfil.misAnuncios")}
                     </button>
-                  ) : null}
-                  
+                  ) : (
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={() => this.handleClickStats()}
+                    >
+                      <FontAwesomeIcon icon={faChartBar} className="float-left" />
+                      {trans("menuPerfil.stats")}
+                    </button>
+                  )}
+
                   <button
                     type="button"
                     className="btn btn-secondary"
                     onClick={() => this.handleClickNotificaciones()}
                   >
-                    <FontAwesomeIcon icon={faBell} className="float-left"/>
+                    <FontAwesomeIcon icon={faBell} className="float-left" />
                     {trans("menuPerfil.notificaciones")}
                     {countNotifies > 0 ? (
                       <span className="badge badge-light ml-2">
@@ -222,7 +260,7 @@ class MenuPerfil extends React.Component {
                     className="btn btn-secondary"
                     onClick={() => this.handleClickAjustes()}
                   >
-                    <FontAwesomeIcon icon={faCogs} className="float-left"/>
+                    <FontAwesomeIcon icon={faCogs} className="float-left" />
                     {trans("menuPerfil.ajustes")}
                   </button>
                 </div>
@@ -231,7 +269,10 @@ class MenuPerfil extends React.Component {
                   className="mt-5 w-100 btn btn-danger"
                   onClick={() => this.handleLogOut()}
                 >
-                  <FontAwesomeIcon className="mt-1 float-left" icon={faSignOutAlt} />
+                  <FontAwesomeIcon
+                    className="mt-1 float-left"
+                    icon={faSignOutAlt}
+                  />
                   {trans("menuPerfil.salir")}
                 </button>
               </div>
@@ -255,7 +296,7 @@ class MenuPerfil extends React.Component {
           />
         }
         outerContainerId={"outer-container"}
-        onStateChange={state => {
+        onStateChange={(state) => {
           this.props.toogleMenuPerfil(state.isOpen);
         }}
         className="text-center"
@@ -264,14 +305,17 @@ class MenuPerfil extends React.Component {
         right
         styles={{ background: "#343a40" }}
       >
-        <div style={{
-          outline: "none"
-        }} className="d-flex flex-column justify-content-between h-100">
+        <div
+          style={{
+            outline: "none",
+          }}
+          className="d-flex flex-column justify-content-between h-100"
+        >
           <IconAvatar />
           <MenuContent />
           <div className="d-none d-sm-inline">
             <ChangeLang />
-          </div>          
+          </div>
         </div>
       </BurgerMenu>
     );
