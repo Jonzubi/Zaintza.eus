@@ -629,6 +629,23 @@ class TablaAnuncios extends React.Component {
                         className="mr-1"
                       />
                       <span className="font-weight-bold">
+                        {trans("tablaAnuncios.titulo")}
+                      </span>
+                    </div>
+                    <span>{selectedAnuncio.titulo}</span>
+                  </div>
+                  <div
+                    style={{
+                      width: 300,
+                    }}
+                    className="mt-3 d-flex flex-column"
+                  >
+                    <div className="d-flex flex-row align-items-center justify-content-center">
+                      <FontAwesomeIcon
+                        icon={faFileSignature}
+                        className="mr-1"
+                      />
+                      <span className="font-weight-bold">
                         {trans("tablaAnuncios.descripcion")}
                       </span>
                     </div>

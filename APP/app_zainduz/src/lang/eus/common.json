@@ -212,7 +212,8 @@
     "ninos": "Haurra",
     "necesidadEspecial":"Behar berezia",
     "contacto": "Kontaktuaren datuak",
-    "ofrecerCuidado": "Zaintza eskeini"
+    "ofrecerCuidado": "Zaintza eskeini",
+    "titulo": "Izenburua"
   },
   "dropDownDias":{
     "eligeDia": "Aukeratu eguna",
