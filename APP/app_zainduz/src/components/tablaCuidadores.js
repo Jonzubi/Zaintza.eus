@@ -865,7 +865,9 @@ class Tabla extends React.Component {
                   show={this.state.showModal}
                   onHide={() => this.handleShowModalChange(false)}
                 >
-                  <ModalHeader closeLabel="Itxi" closeButton></ModalHeader>
+                  <ModalHeader closeLabel="Itxi" closeButton>
+                    <h5>{trans('tablaCuidadores.cuidador')}</h5>
+                  </ModalHeader>
                   <ModalBody className="d-flex flex-column justify-content-between align-items-center">
                     <div
                       style={{

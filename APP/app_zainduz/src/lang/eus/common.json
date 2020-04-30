@@ -68,7 +68,8 @@
     "exitoEnviarPropuesta": "Proposamena behar bezala bidali da",
     "acuerdoExistente": "Zaintzaile honekin akordio bat duzu jada",
     "filtrar": "Filtratu",
-    "descripcionPropuesta": "Idatzi zure proposamenaren deskribapen zehatza..."
+    "descripcionPropuesta": "Idatzi zure proposamenaren deskribapen zehatza...",
+    "cuidador": "Zaintzailea"
   },
   "registerFormCuidadores": {
     "nombre": "Izena",

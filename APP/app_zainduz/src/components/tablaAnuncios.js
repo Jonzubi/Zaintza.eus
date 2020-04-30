@@ -509,7 +509,7 @@ class TablaAnuncios extends React.Component {
               onHide={() => this.setState({ showModalAnuncio: false })}
             >
               <ModalHeader closeButton>
-                <h5>Kontaktua</h5>
+                <h5>{trans('tablaAnuncios.tituloAnuncio')}</h5>
               </ModalHeader>
               <ModalBody className="d-flex flex-column justify-content-between align-items-center">
                 <div className="">
