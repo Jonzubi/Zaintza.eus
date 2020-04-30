@@ -1492,3 +1492,50 @@ exports.registerAnuncioVisita = async (req, res, modelos) => {
       res.end();
     });
 };
+
+exports.getAnuncioVisitas = async (req, res, modelos) => {
+  const { idAnuncio } = req.params;
+  const { email, contrasena } = req.body;
+
+  const modeloAnuncio = modelo.anuncio;
+  const anuncioBuscado = await modeloAnuncio.findById(idAnuncio);
+  const idPerfil = anuncioBuscado.idCliente;
+
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findOne({
+    idPerfil
+  });
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  let resultado = {};
+
+  const modeloAnuncioVisita = modelos.anuncioVisita;
+  const visitasConLogin = await modeloAnuncioVisita.find({
+    idUsuario: {
+      $ne: null
+    }
+  }).count();
+  const visitasSinLogin = await modeloAnuncioVisita.find({
+    idUsuario: null
+  }).count();
+
+  resultado.visitasConLogin = visitasConLogin;
+  resultado.visitasSinLogin = visitasSinLogin;
+
+  res.writeHead(200, headerResponse);
+  res.write(JSON.stringify(resultado));
+  res.end();
+}
