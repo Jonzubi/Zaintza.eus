@@ -509,7 +509,7 @@ class TablaAnuncios extends React.Component {
               onHide={() => this.setState({ showModalAnuncio: false })}
             >
               <ModalHeader closeButton>
-                <h5>Kontaktua</h5>
+                <h5>{trans('tablaAnuncios.tituloAnuncio')}</h5>
               </ModalHeader>
               <ModalBody className="d-flex flex-column justify-content-between align-items-center">
                 <div className="">
@@ -616,6 +616,23 @@ class TablaAnuncios extends React.Component {
                         </em>
                       )}
                     </span>
+                  </div>
+                  <div
+                    style={{
+                      width: 300,
+                    }}
+                    className="mt-3 d-flex flex-column"
+                  >
+                    <div className="d-flex flex-row align-items-center justify-content-center">
+                      <FontAwesomeIcon
+                        icon={faFileSignature}
+                        className="mr-1"
+                      />
+                      <span className="font-weight-bold">
+                        {trans("tablaAnuncios.titulo")}
+                      </span>
+                    </div>
+                    <span>{selectedAnuncio.titulo}</span>
                   </div>
                   <div
                     style={{

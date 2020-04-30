@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import cogoToast from "cogo-toast";
-import { trans, toBase64 } from "../util/funciones";
+import { trans, toBase64, arrayOfFalses } from "../util/funciones";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -17,6 +17,8 @@ import {
   faClock,
   faPlusCircle,
   faFileSignature,
+  faEllipsisV,
+  faChartBar,
 } from "@fortawesome/free-solid-svg-icons";
 import Avatar from "react-avatar";
 import Modal from "react-bootstrap/Modal";
@@ -27,6 +29,7 @@ import i18next from "i18next";
 import PuebloAutosuggest from "./pueblosAutosuggest";
 import TimeInput from "./customTimeInput";
 import "../components/styles/modalRegistrarse.css";
+import "../components/styles/misAnunciosForm.css";
 import ModalHeader from "react-bootstrap/ModalHeader";
 
 class MisAnuncios extends React.Component {
@@ -46,6 +49,7 @@ class MisAnuncios extends React.Component {
       horario: [],
       descripcionAnuncio: "",
       tituloAnuncio: "",
+      isOpenThreeDotLayer: [],
     };
   }
 
@@ -65,6 +69,7 @@ class MisAnuncios extends React.Component {
         this.setState({
           jsonAnuncios: res.data,
           isLoading: false,
+          isOpenThreeDotLayer: arrayOfFalses(res.data.length),
         });
       })
       .catch(() => {
@@ -387,6 +392,25 @@ class MisAnuncios extends React.Component {
     });
   };
 
+  handleClickOptions = (index) => {
+    const { isOpenThreeDotLayer } = this.state;
+    let auxIsOpen = isOpenThreeDotLayer.slice();
+    if(!index){
+      this.setState({
+        isOpenThreeDotLayer: arrayOfFalses(isOpenThreeDotLayer.length)
+      })
+    }
+    if (auxIsOpen[index]) {
+      auxIsOpen[index] = false;
+    } else {
+      auxIsOpen = arrayOfFalses(isOpenThreeDotLayer.length);
+      auxIsOpen[index] = true;
+    }
+    this.setState({
+      isOpenThreeDotLayer: auxIsOpen,
+    });
+  };
+
   render() {
     const {
       isLoading,
@@ -401,9 +425,11 @@ class MisAnuncios extends React.Component {
       tituloAnuncio,
       descripcionAnuncio,
       isUploading,
+      isOpenThreeDotLayer,
     } = this.state;
     return (
-      <div className={isLoading ? "p-0" : "p-lg-5 p-2"}>
+      <div
+        className={isLoading ? "p-0" : "p-lg-5 p-2"}>
         {isLoading ? (
           <div
             style={{
@@ -425,7 +451,7 @@ class MisAnuncios extends React.Component {
             </small>
           </div>
         ) : (
-          jsonAnuncios.map((anuncio) => (
+          jsonAnuncios.map((anuncio, index) => (
             <div
               style={{
                 boxShadow: "0 0.125rem 0.25rem rgba(0,0,0,.075)",
@@ -441,32 +467,45 @@ class MisAnuncios extends React.Component {
               />
               <span
                 style={{
-                  width: 200
+                  width: 200,
                 }}
-                className="font-weight-bold">
-                {anuncio.titulo.length > 20 ? anuncio.titulo.substring(0, 20) + ' ...' : anuncio.titulo}
+                className="font-weight-bold"
+              >
+                {anuncio.titulo.length > 20
+                  ? anuncio.titulo.substring(0, 20) + " ..."
+                  : anuncio.titulo}
               </span>
               <span
                 style={{
-                  width: 400
+                  width: 400,
                 }}
-                className="d-lg-inline d-none">
-                {anuncio.descripcion.length > 50 ? anuncio.descripcion.substring(0, 50) + ' ...' : anuncio.descripcion}</span>
-              <div>
+                className="d-lg-inline d-none"
+              >
+                {anuncio.descripcion.length > 50
+                  ? anuncio.descripcion.substring(0, 50) + " ..."
+                  : anuncio.descripcion}
+              </span>
+              <div className="d-md-inline d-none">
                 <FontAwesomeIcon
                   style={{
                     cursor: "pointer",
                   }}
                   onClick={() => this.handleEditAnuncio(anuncio)}
-                  size={"2x"}
-                  icon={faPen}
-                  className="text-success mr-5"
+                  icon={faChartBar}
+                  className="text-primary mr-md-5 mr-2"
                 />
                 <FontAwesomeIcon
                   style={{
                     cursor: "pointer",
                   }}
-                  size={"2x"}
+                  onClick={() => this.handleEditAnuncio(anuncio)}
+                  icon={faPen}
+                  className="text-success mr-md-5 mr-2"
+                />
+                <FontAwesomeIcon
+                  style={{
+                    cursor: "pointer",
+                  }}
                   icon={faTrashAlt}
                   className="text-danger"
                   onClick={() =>
@@ -476,6 +515,84 @@ class MisAnuncios extends React.Component {
                     })
                   }
                 />
+              </div>
+              <div className="d-md-none d-inline">
+                <FontAwesomeIcon
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  icon={faEllipsisV}
+                  onClick={() => this.handleClickOptions(index)}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    width: 200,
+                    right: 10,
+                    backgroundColor: "white",
+                    boxShadow: "0 0.125rem 0.25rem rgba(0,0,0,.075)",
+                  }}
+                  className={
+                    isOpenThreeDotLayer[index]
+                      ? "d-flex flex-column rounded border"
+                      : "d-none"
+                  }
+                >
+                  <div
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    className="threeDotsMenu p-1 d-flex flex-row align-items-center justify-content-between"
+                    onClick={() => {
+                      this.handleEditAnuncio(anuncio);
+                      this.handleClickOptions(index);
+                    }}
+                  >
+                    <span className="mr-5">
+                      {trans("misAnunciosForm.verStats")}
+                    </span>
+                    <FontAwesomeIcon
+                      className="text-primary"
+                      icon={faChartBar}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    className="threeDotsMenu p-1 d-flex flex-row align-items-center justify-content-between"
+                    onClick={() => {
+                      this.handleEditAnuncio(anuncio);
+                      this.handleClickOptions(index);
+                    }}
+                  >
+                    <span className="mr-5">
+                      {trans("misAnunciosForm.editar")}
+                    </span>
+                    <FontAwesomeIcon className="text-success" icon={faPen} />
+                  </div>
+                  <div
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    className="threeDotsMenu p-1 d-flex flex-row align-items-center justify-content-between"
+                    onClick={() => {
+                      this.setState({
+                        showModalDeleteAnuncio: true,
+                        selectedAnuncio: anuncio,
+                      });
+                      this.handleClickOptions(index);
+                    }}
+                  >
+                    <span className="mr-5">
+                      {trans("misAnunciosForm.eliminar")}
+                    </span>
+                    <FontAwesomeIcon
+                      className="text-danger"
+                      icon={faTrashAlt}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           ))
