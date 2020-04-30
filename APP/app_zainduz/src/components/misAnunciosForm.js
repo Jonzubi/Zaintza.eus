@@ -460,7 +460,7 @@ class MisAnuncios extends React.Component {
                   onClick={() => this.handleEditAnuncio(anuncio)}
                   size={"2x"}
                   icon={faPen}
-                  className="text-success mr-5"
+                  className="text-success mr-md-5 mr-2"
                 />
                 <FontAwesomeIcon
                   style={{
