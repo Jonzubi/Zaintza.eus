@@ -450,6 +450,16 @@ class MisAnuncios extends React.Component {
     );
   };
 
+  closeOpenedOptionsDiv = () => {
+    const { isOpenThreeDotLayer } = this.state;
+
+    if (isOpenThreeDotLayer.includes(true)){
+      this.setState({
+        isOpenThreeDotLayer: arrayOfFalses(isOpenThreeDotLayer.length)
+      })
+    }
+  }
+
   render() {
     const {
       isLoading,
@@ -471,7 +481,12 @@ class MisAnuncios extends React.Component {
       isLoadingStatsModal,
     } = this.state;
     return (
-      <div className={isLoading ? "p-0" : "p-lg-5 p-2"}>
+      <div
+        onClick={() => this.closeOpenedOptionsDiv()}
+        style={{
+          height: "calc(100vh - 80px)"
+        }}
+        className={isLoading ? "p-0" : "p-lg-5 p-2"}>
         {isLoading ? (
           <div
             style={{
