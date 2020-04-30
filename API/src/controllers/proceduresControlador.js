@@ -8,6 +8,7 @@ const {
 const headerResponse = require("../../util/headerResponse");
 const ipMaquina = require("../../util/ipMaquina");
 const handlebars = require("handlebars");
+import moment from "moment";
 
 exports.getAcuerdosConUsuarios = async (req, res, modelos) => {
   const { email, contrasena, tipoUsuario, idPerfil, estadoAcuerdo } = req.body;
@@ -1427,6 +1428,53 @@ exports.deleteAnuncio = async (req, res, modelos) => {
     .findByIdAndUpdate(idAnuncio, {
       show: false
     })
+    .then((doc) => {
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(doc));
+    })
+    .catch((err) => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+    })
+    .finally((fin) => {
+      res.end();
+    });    
+}
+
+exports.registerAnuncioVisita = async(req, res, modelos) => {
+  const { idAnuncio } = req.params;
+  const { email, contrasena } = req.body;
+
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findOne({
+    email,
+    contrasena
+  });
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  const formData = {
+    idAnuncio,
+    idUsuario: usuario._id,
+    fechaVisto: moment()
+  }
+
+  const modeloAnuncioVisita = modelos.anuncioVisita;
+  modeloAnuncioVisita(formData)
+    .save()
     .then((doc) => {
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(doc));
