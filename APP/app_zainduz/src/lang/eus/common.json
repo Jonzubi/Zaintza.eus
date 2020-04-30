@@ -266,6 +266,9 @@
     "titulo": "Izenburua",
     "descripcion": "Deskribapena",
     "noData": "Ez daukazu zaintza eskaera aktiborik",
-    "anuncio": "Zaintza eskaera"
+    "anuncio": "Zaintza eskaera",
+    "editar": "Datuak editatu",
+    "eliminar": "Ezabatu",
+    "verStats": "Estadistika"
   }
 }
