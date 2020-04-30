@@ -1461,13 +1461,6 @@ exports.registerAnuncioVisita = async (req, res, modelos) => {
       res.end();
       return;
     }
-
-    if (usuario.email !== email || usuario.contrasena !== contrasena) {
-      res.writeHead(405, headerResponse);
-      res.write("Operacion denegada");
-      res.end();
-      return;
-    }
   }
 
   const formData = {
@@ -1531,6 +1524,95 @@ exports.getAnuncioVisitas = async (req, res, modelos) => {
   });
   const visitasSinLogin = await modeloAnuncioVisita.find({
     idAnuncio,
+    idUsuario: null
+  });
+
+  resultado.visitasConLogin = visitasConLogin;
+  resultado.visitasSinLogin = visitasSinLogin;
+
+  res.writeHead(200, headerResponse);
+  res.write(JSON.stringify(resultado));
+  res.end();
+}
+
+exports.registerCuidadorVisita = async(req, res, modelos) => {
+  const { idCuidador } = req.params;
+  const { email, contrasena } = req.body;
+
+  let usuario;
+
+  if (email && contrasena) {
+    const modeloUsuario = modelos.usuario;
+    usuario = await modeloUsuario.findOne({
+      email,
+      contrasena,
+    });
+
+    if (usuario === null) {
+      res.writeHead(405, headerResponse);
+      res.write("Operacion denegada");
+      res.end();
+      return;
+    }
+  }
+
+  const formData = {
+    idCuidador,
+    idUsuario: usuario ? usuario._id : null,
+    fechaVisto: moment().tz('Europe/Madrid').valueOf()
+  };
+
+  const modeloCuidadorVisita = modelos.cuidadorVisita;
+  modeloCuidadorVisita(formData)
+    .save()
+    .then((doc) => {
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(doc));
+    })
+    .catch((err) => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+    })
+    .finally((fin) => {
+      res.end();
+    });
+}
+
+exports.getCuidadorVisitas = async (req, res, modelos) => {
+  const { idCuidador } = req.params;
+  const { email, contrasena } = req.body;
+
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findOne({
+    idPerfil: idCuidador
+  });
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  let resultado = {};
+
+  const modeloCuidadorVisita = modelos.cuidadorVisita;
+  const visitasConLogin = await modeloCuidadorVisita.find({
+    idCuidador,
+    idUsuario: {
+      $ne: null
+    }
+  });
+  const visitasSinLogin = await modeloCuidadorVisita.find({
+    idCuidador,
     idUsuario: null
   });
 
