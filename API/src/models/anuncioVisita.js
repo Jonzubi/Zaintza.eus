@@ -9,7 +9,6 @@ module.exports = (conexion) => {
         },
         idUsuario: {
             type:String,
-            required: true,
             ref: 'Usuario'
         },
         fechaVisto: {
