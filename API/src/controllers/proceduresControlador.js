@@ -8,7 +8,7 @@ const {
 const headerResponse = require("../../util/headerResponse");
 const ipMaquina = require("../../util/ipMaquina");
 const handlebars = require("handlebars");
-const moment = require("moment");
+const moment = require("moment-timezone");
 
 exports.getAcuerdosConUsuarios = async (req, res, modelos) => {
   const { email, contrasena, tipoUsuario, idPerfil, estadoAcuerdo } = req.body;
@@ -1473,7 +1473,7 @@ exports.registerAnuncioVisita = async (req, res, modelos) => {
   const formData = {
     idAnuncio,
     idUsuario: usuario ? usuario._id : null,
-    fechaVisto: moment(),
+    fechaVisto: moment().tz('Europe/Madrid').valueOf()
   };
 
   const modeloAnuncioVisita = modelos.anuncioVisita;

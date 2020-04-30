@@ -15,6 +15,7 @@
     "express": "^4.17.1",
     "handlebars": "^4.7.3",
     "moment": "^2.24.0",
+    "moment-timezone": "^0.5.28",
     "mongoose": "^5.8.6",
     "nodemon": "^1.19.2",
     "socket.io": "^2.3.0"
