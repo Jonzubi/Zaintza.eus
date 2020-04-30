@@ -16,6 +16,7 @@ module.exports = conexion => {
     modelos.historicousuario = require("../src/models/historicousuario")(conexion);
     modelos.ajuste = require("../src/models/ajustes")(conexion);
     modelos.invalidRequest = require("../src/models/invalidRequest")(conexion);
+    modelos.anuncioVisita = require("../src/models/anuncioVisita")(conexion);
 
     return modelos;
 }

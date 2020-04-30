@@ -367,6 +367,17 @@ class TablaAnuncios extends React.Component {
   };
 
   handleViewAnuncio = async (anuncio) => {
+    const { idPerfil, email, contrasena } = this.props;
+
+    if (anuncio.idCliente._id !== idPerfil) {
+      // Significa que el anuncio no es mio, por lo tanto registro la visita
+      const formData= {
+        email,
+        contrasena
+      };
+      axios.post(`http://${ipMaquina}:3001/api/procedures/registerAnuncioVisita/${anuncio._id}`, formData);
+    }
+
     this.setState({
       showModalAnuncio: true,
       selectedAnuncio: anuncio,

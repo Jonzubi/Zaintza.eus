@@ -269,6 +269,8 @@
     "anuncio": "Zaintza eskaera",
     "editar": "Datuak editatu",
     "eliminar": "Ezabatu",
-    "verStats": "Estadistika"
+    "verStats": "Estadistika",
+    "visitasConLogin": "Kontu dun bisitak",
+    "visitasSinLogin": "Kontu gabeko bisitak"
   }
 }

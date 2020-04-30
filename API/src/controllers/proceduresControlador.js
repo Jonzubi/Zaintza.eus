@@ -8,6 +8,7 @@ const {
 const headerResponse = require("../../util/headerResponse");
 const ipMaquina = require("../../util/ipMaquina");
 const handlebars = require("handlebars");
+const moment = require("moment-timezone");
 
 exports.getAcuerdosConUsuarios = async (req, res, modelos) => {
   const { email, contrasena, tipoUsuario, idPerfil, estadoAcuerdo } = req.body;
@@ -1250,7 +1251,7 @@ exports.getMisAnuncios = async (req, res, modelos) => {
   modeloAnuncios
     .find({
       idCliente,
-      show: true
+      show: true,
     })
     .then((doc) => {
       res.writeHead(200, headerResponse);
@@ -1313,11 +1314,11 @@ exports.patchAnuncio = async (req, res, modelos) => {
 
   let puebloIsValid = true;
   pueblo.map((pueblo) => {
-    if (typeof pueblo !== "string"){
+    if (typeof pueblo !== "string") {
       puebloIsValid = false;
     }
   });
-  if (!puebloIsValid){
+  if (!puebloIsValid) {
     res.writeHead(405, headerResponse);
     res.write("Ubicaciones incorrecto");
     res.end();
@@ -1381,7 +1382,7 @@ exports.patchAnuncio = async (req, res, modelos) => {
   }
 
   modeloAnuncios
-    .findByIdAndUpdate(idAnuncio,formData)
+    .findByIdAndUpdate(idAnuncio, formData)
     .then((doc) => {
       res.writeHead(200, headerResponse);
       res.write(JSON.stringify(doc));
@@ -1406,7 +1407,7 @@ exports.deleteAnuncio = async (req, res, modelos) => {
   const anuncioBuscado = await modeloAnuncio.findById(idAnuncio);
   const idCliente = anuncioBuscado.idCliente;
   const usuario = await modeloUsuario.findOne({
-    idPerfil: idCliente
+    idPerfil: idCliente,
   });
 
   if (usuario === null) {
@@ -1425,7 +1426,7 @@ exports.deleteAnuncio = async (req, res, modelos) => {
 
   modeloAnuncio
     .findByIdAndUpdate(idAnuncio, {
-      show: false
+      show: false,
     })
     .then((doc) => {
       res.writeHead(200, headerResponse);
@@ -1438,5 +1439,105 @@ exports.deleteAnuncio = async (req, res, modelos) => {
     })
     .finally((fin) => {
       res.end();
-    });    
+    });
+};
+
+exports.registerAnuncioVisita = async (req, res, modelos) => {
+  const { idAnuncio } = req.params;
+  const { email, contrasena } = req.body;
+
+  let usuario;
+
+  if (email && contrasena) {
+    const modeloUsuario = modelos.usuario;
+    usuario = await modeloUsuario.findOne({
+      email,
+      contrasena,
+    });
+
+    if (usuario === null) {
+      res.writeHead(405, headerResponse);
+      res.write("Operacion denegada");
+      res.end();
+      return;
+    }
+
+    if (usuario.email !== email || usuario.contrasena !== contrasena) {
+      res.writeHead(405, headerResponse);
+      res.write("Operacion denegada");
+      res.end();
+      return;
+    }
+  }
+
+  const formData = {
+    idAnuncio,
+    idUsuario: usuario ? usuario._id : null,
+    fechaVisto: moment().tz('Europe/Madrid').valueOf()
+  };
+
+  const modeloAnuncioVisita = modelos.anuncioVisita;
+  modeloAnuncioVisita(formData)
+    .save()
+    .then((doc) => {
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(doc));
+    })
+    .catch((err) => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+    })
+    .finally((fin) => {
+      res.end();
+    });
+};
+
+exports.getAnuncioVisitas = async (req, res, modelos) => {
+  const { idAnuncio } = req.params;
+  const { email, contrasena } = req.body;
+
+  const modeloAnuncio = modelos.anuncio;
+  const anuncioBuscado = await modeloAnuncio.findById(idAnuncio);
+  const idPerfil = anuncioBuscado.idCliente;
+
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findOne({
+    idPerfil
+  });
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  let resultado = {};
+
+  const modeloAnuncioVisita = modelos.anuncioVisita;
+  const visitasConLogin = await modeloAnuncioVisita.find({
+    idAnuncio,
+    idUsuario: {
+      $ne: null
+    }
+  });
+  const visitasSinLogin = await modeloAnuncioVisita.find({
+    idAnuncio,
+    idUsuario: null
+  });
+
+  resultado.visitasConLogin = visitasConLogin;
+  resultado.visitasSinLogin = visitasSinLogin;
+
+  res.writeHead(200, headerResponse);
+  res.write(JSON.stringify(resultado));
+  res.end();
 }
