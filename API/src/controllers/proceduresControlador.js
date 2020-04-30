@@ -1497,7 +1497,7 @@ exports.getAnuncioVisitas = async (req, res, modelos) => {
   const { idAnuncio } = req.params;
   const { email, contrasena } = req.body;
 
-  const modeloAnuncio = modelo.anuncio;
+  const modeloAnuncio = modelos.anuncio;
   const anuncioBuscado = await modeloAnuncio.findById(idAnuncio);
   const idPerfil = anuncioBuscado.idCliente;
 
@@ -1524,13 +1524,15 @@ exports.getAnuncioVisitas = async (req, res, modelos) => {
 
   const modeloAnuncioVisita = modelos.anuncioVisita;
   const visitasConLogin = await modeloAnuncioVisita.find({
+    idAnuncio,
     idUsuario: {
       $ne: null
     }
-  }).count();
+  });
   const visitasSinLogin = await modeloAnuncioVisita.find({
+    idAnuncio,
     idUsuario: null
-  }).count();
+  });
 
   resultado.visitasConLogin = visitasConLogin;
   resultado.visitasSinLogin = visitasSinLogin;

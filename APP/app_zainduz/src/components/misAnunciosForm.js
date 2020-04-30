@@ -19,6 +19,7 @@ import {
   faFileSignature,
   faEllipsisV,
   faChartBar,
+  faEye,
 } from "@fortawesome/free-solid-svg-icons";
 import Avatar from "react-avatar";
 import Modal from "react-bootstrap/Modal";
@@ -38,8 +39,10 @@ class MisAnuncios extends React.Component {
     this.state = {
       jsonAnuncios: [],
       isLoading: true,
+      isLoadingStatsModal: false,
       isUploading: false,
       selectedAnuncio: {},
+      showModalStats: false,
       showModalEditAnuncio: false,
       showModalDeleteAnuncio: false,
       imgAnuncio: null,
@@ -50,6 +53,8 @@ class MisAnuncios extends React.Component {
       descripcionAnuncio: "",
       tituloAnuncio: "",
       isOpenThreeDotLayer: [],
+      visitasConLogin: 0,
+      visitasSinLogin: 0,
     };
   }
 
@@ -395,10 +400,10 @@ class MisAnuncios extends React.Component {
   handleClickOptions = (index) => {
     const { isOpenThreeDotLayer } = this.state;
     let auxIsOpen = isOpenThreeDotLayer.slice();
-    if(!index){
+    if (!index) {
       this.setState({
-        isOpenThreeDotLayer: arrayOfFalses(isOpenThreeDotLayer.length)
-      })
+        isOpenThreeDotLayer: arrayOfFalses(isOpenThreeDotLayer.length),
+      });
     }
     if (auxIsOpen[index]) {
       auxIsOpen[index] = false;
@@ -409,6 +414,40 @@ class MisAnuncios extends React.Component {
     this.setState({
       isOpenThreeDotLayer: auxIsOpen,
     });
+  };
+
+  handleShowStats = async (anuncio) => {
+    const { email, contrasena } = this.props;
+    this.setState(
+      {
+        showModalStats: true,
+        isLoadingStatsModal: true,
+      },
+      () => {
+        const formData = {
+          email,
+          contrasena,
+        };
+        axios
+          .post(
+            `http://${ipMaquina}:3001/api/procedures/getAnuncioVisitas/${anuncio._id}`,
+            formData
+          )
+          .then((res) => {
+            this.setState({
+              visitasConLogin: res.data.visitasConLogin,
+              visitasSinLogin: res.data.visitasSinLogin,
+              isLoadingStatsModal: false,
+            });
+          })
+          .catch(() => {
+            cogoToast.error(<h5>{trans("notificaciones.errorConexion")}</h5>);
+            this.setState({
+              isLoadingStatsModal: false,
+            });
+          });
+      }
+    );
   };
 
   render() {
@@ -426,10 +465,13 @@ class MisAnuncios extends React.Component {
       descripcionAnuncio,
       isUploading,
       isOpenThreeDotLayer,
+      visitasConLogin,
+      visitasSinLogin,
+      showModalStats,
+      isLoadingStatsModal,
     } = this.state;
     return (
-      <div
-        className={isLoading ? "p-0" : "p-lg-5 p-2"}>
+      <div className={isLoading ? "p-0" : "p-lg-5 p-2"}>
         {isLoading ? (
           <div
             style={{
@@ -490,7 +532,7 @@ class MisAnuncios extends React.Component {
                   style={{
                     cursor: "pointer",
                   }}
-                  onClick={() => this.handleEditAnuncio(anuncio)}
+                  onClick={() => this.handleShowStats(anuncio)}
                   icon={faChartBar}
                   className="text-primary mr-md-5 mr-2"
                 />
@@ -544,7 +586,7 @@ class MisAnuncios extends React.Component {
                     }}
                     className="threeDotsMenu p-1 d-flex flex-row align-items-center justify-content-between"
                     onClick={() => {
-                      this.handleEditAnuncio(anuncio);
+                      this.handleShowStats(anuncio);
                       this.handleClickOptions(index);
                     }}
                   >
@@ -623,6 +665,59 @@ class MisAnuncios extends React.Component {
               {trans("misAnunciosForm.no")}
             </button>
           </ModalFooter>
+        </Modal>
+        <Modal
+          show={showModalStats}
+          onHide={() => this.setState({ showModalStats: false })}
+          style={{
+            maxWidth: 500,
+          }}
+        >
+          <ModalHeader closeButton>
+            <h5>{trans("misAnunciosForm.verStats")}</h5>
+          </ModalHeader>
+          <ModalBody
+            className={
+              !isLoadingStatsModal
+                ? "d-flex flex-column align-items-center"
+                : "d-flex flex-column align-items-center justify-content-center"
+            }
+          >
+            {isLoadingStatsModal ? (
+              <ClipLoader color="#28a745" />
+            ) : (
+              <div>
+                <div
+                  style={{
+                    width: 300,
+                  }}
+                  className="d-flex flex-row align-items-center justify-content-between"
+                >
+                  <span>{trans("misAnunciosForm.visitasConLogin")}</span>
+                  <div>
+                    <span className="font-weight-bold">
+                      {visitasConLogin.length}
+                    </span>
+                    <FontAwesomeIcon icon={faEye} className="ml-1" />
+                  </div>
+                </div>
+                <div
+                  style={{
+                    width: 300,
+                  }}
+                  className="d-flex flex-row align-items-center justify-content-between"
+                >
+                  <span>{trans("misAnunciosForm.visitasSinLogin")}</span>
+                  <div>
+                    <span className="font-weight-bold">
+                      {visitasSinLogin.length}
+                    </span>
+                    <FontAwesomeIcon icon={faEye} className="ml-1" />
+                  </div>
+                </div>
+              </div>
+            )}
+          </ModalBody>
         </Modal>
         <Modal
           show={showModalEditAnuncio}
