@@ -63,6 +63,10 @@ module.exports = (app, modelos) => {
   app.route("/api/procedures/registerAnuncioVisita/:idAnuncio").post((req, res) => proceduresControlador.registerAnuncioVisita(req, res, modelos));
 
   app.route("/api/procedures/getAnuncioVisitas/:idAnuncio").post((req, res) => proceduresControlador.getAnuncioVisitas(req, res, modelos));
+
+  app.route("/api/procedures/registerCuidadorVisita/:idCuidador").post((req, res) => proceduresControlador.registerCuidadorVisita(req, res, modelos));
+
+  app.route("/api/procedures/getCuidadorVisitas/:idCuidador").post((req, res) => proceduresControlador.getCuidadorVisitas(req, res, modelos));
   
   app.route("/Inicio/").get(mainControlador.inicio);
 

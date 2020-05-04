@@ -11,7 +11,8 @@
     "perfil": "Profila",
     "ajustes": "Ezarpenak",
     "notificacionRecibida": "Abisu berri bat duzu",
-    "misAnuncios": "Nire eskaerak"
+    "misAnuncios": "Nire eskaerak",
+    "stats": "Estadistikak"
   },
   "loginForm": {
     "email": "Emaila",
@@ -271,6 +272,11 @@
     "eliminar": "Ezabatu",
     "verStats": "Estadistika",
     "visitasConLogin": "Kontu dun bisitak",
-    "visitasSinLogin": "Kontu gabeko bisitak"
+    "visitasSinLogin": "Bisita anonimoak"
+  },
+  "cuidadorStatsForm": {
+    "visitasConLogin": "Kontu dun bisitak",
+    "visitasSinLogin": "Bisita anonimoak",
+    "totalVisitas": "Bisitak guztira"
   }
 }

@@ -14,6 +14,7 @@ import CalendarioForm from "./components/calendarioForm";
 import FormAnuncio from "./components/formAnuncio";
 import Ajustes from "./components/ajustesForm";
 import MisAnuncios from "./components/misAnunciosForm";
+import CuidadorStatsForm from "./components/cuidadorStatsForm";
 import SocketContext from "./socketio/socket-context";
 import * as io from "socket.io-client";
 import ipMaquina from './util/ipMaquinaAPI';
@@ -68,6 +69,8 @@ class App extends React.Component {
         return <Ajustes />;
       case "misanuncios":
         return <MisAnuncios />;
+      case "stats":
+        return <CuidadorStatsForm />;
       default:
         return <h5>Bad gateway</h5>
     }

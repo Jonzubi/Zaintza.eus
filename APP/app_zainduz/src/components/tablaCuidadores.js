@@ -356,12 +356,21 @@ class Tabla extends React.Component {
   }
 
   handleViewCuidador(cuidador) {
-    let idPerfil = cuidador._id;
-    const objFiltros = {
-      idPerfil: idPerfil,
-    };
+    const { idCliente, email, contrasena } = this.props;
+    const idPerfilCuidador = cuidador._id;
+    if (idCliente !== idPerfilCuidador) {
+      //Significa que no nos estamos viendo a nosotros mismo como cuidador, asi que hay que registrar la visita
+      Axios.post(
+        `http://${ipMaquina}:3001/api/procedures/registerCuidadorVisita/${idPerfilCuidador}`,
+        {
+          email,
+          contrasena,
+        }
+      );
+    }
+
     Axios.get(
-      `http://${ipMaquina}:3001/api/procedures/getEmailWithIdPerfil/${idPerfil}`
+      `http://${ipMaquina}:3001/api/procedures/getEmailWithIdPerfil/${idPerfilCuidador}`
     )
       .then((email) => {
         const response = email.data;
@@ -665,8 +674,18 @@ class Tabla extends React.Component {
     } = this.state;
     const vSelectedCuidador = this.state.selectedCuidador;
     const fechaNacCuidador = new Date(vSelectedCuidador.fechaNacimiento);
-    const telefonoFijoCuidador = vSelectedCuidador.telefonoFijo !== "" ? vSelectedCuidador.telefonoFijo : <em>Definitu gabe</em>;
-    const telefonoMovilCuidador = vSelectedCuidador.telefonoMovil !== "" ? vSelectedCuidador.telefonoMovil : <em>Definitu gabe</em>;
+    const telefonoFijoCuidador =
+      vSelectedCuidador.telefonoFijo !== "" ? (
+        vSelectedCuidador.telefonoFijo
+      ) : (
+        <em>Definitu gabe</em>
+      );
+    const telefonoMovilCuidador =
+      vSelectedCuidador.telefonoMovil !== "" ? (
+        vSelectedCuidador.telefonoMovil
+      ) : (
+        <em>Definitu gabe</em>
+      );
     const traducDias = [
       "Astelehena",
       "Asteartea",
@@ -844,17 +863,18 @@ class Tabla extends React.Component {
                   !this.state.buscado ? (
                   <div
                     style={{
-                      height: "70vh"
+                      height: "70vh",
                     }}
-                    className="d-flex align-items-center justify-content-center">
-                      <ClipLoader color="#28a745" />
+                    className="d-flex align-items-center justify-content-center"
+                  >
+                    <ClipLoader color="#28a745" />
                   </div>
                 ) : (
                   <small
-                  style={{
-                    height: "70vh"
-                  }}
-                  className="d-flex align-items-center justify-content-center text-danger"
+                    style={{
+                      height: "70vh",
+                    }}
+                    className="d-flex align-items-center justify-content-center text-danger"
                   >
                     {trans("tablaCuidadores.noData")}
                   </small>
@@ -866,7 +886,7 @@ class Tabla extends React.Component {
                   onHide={() => this.handleShowModalChange(false)}
                 >
                   <ModalHeader closeLabel="Itxi" closeButton>
-                    <h5>{trans('tablaCuidadores.cuidador')}</h5>
+                    <h5>{trans("tablaCuidadores.cuidador")}</h5>
                   </ModalHeader>
                   <ModalBody className="d-flex flex-column justify-content-between align-items-center">
                     <div
@@ -1051,9 +1071,9 @@ class Tabla extends React.Component {
                             );
                           })
                         ) : (
-                            <em className="mt-1">
-                              {trans("tablaCuidadores.sinDefinir")}
-                            </em>
+                          <em className="mt-1">
+                            {trans("tablaCuidadores.sinDefinir")}
+                          </em>
                         )}
                       </span>
                     </div>
@@ -1161,7 +1181,9 @@ class Tabla extends React.Component {
                                 className="mt-1"
                                 id="txtTituloPropuesta"
                                 aria-describedby="txtNombreHelp"
-                                placeholder={`${i18next.t('tablaCuidadores.tituloPropuesta')}...`}
+                                placeholder={`${i18next.t(
+                                  "tablaCuidadores.tituloPropuesta"
+                                )}...`}
                                 value={this.state.txtTituloPropuesta}
                               />
                             </div>
@@ -1306,7 +1328,9 @@ class Tabla extends React.Component {
                                 }
                                 rows="5"
                                 id="txtDescripcion"
-                                placeholder={`${i18next.t('tablaCuidadores.descripcionPropuesta')}...`}
+                                placeholder={`${i18next.t(
+                                  "tablaCuidadores.descripcionPropuesta"
+                                )}...`}
                                 value={this.state.txtDescripcion}
                               ></textarea>
                             </div>
