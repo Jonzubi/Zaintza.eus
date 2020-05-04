@@ -427,6 +427,12 @@ class RegisterForm extends React.Component {
       return;
     }
 
+    if (this.state.imgContact === null){
+      cogoToast.error(<h5>{trans("registerFormCuidadores.errorRellenaTodo")} (
+        {trans('registerFormCuidadores.imgContact')})</h5>);      
+      return;
+    }
+
     this.setState({ isLoading: true });
 
     var imgContactB64 = await toBase64(this.state.imgContact[0]);
