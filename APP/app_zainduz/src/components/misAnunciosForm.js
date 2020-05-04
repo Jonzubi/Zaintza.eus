@@ -453,12 +453,12 @@ class MisAnuncios extends React.Component {
   closeOpenedOptionsDiv = () => {
     const { isOpenThreeDotLayer } = this.state;
 
-    if (isOpenThreeDotLayer.includes(true)){
+    if (isOpenThreeDotLayer.includes(true)) {
       this.setState({
-        isOpenThreeDotLayer: arrayOfFalses(isOpenThreeDotLayer.length)
-      })
+        isOpenThreeDotLayer: arrayOfFalses(isOpenThreeDotLayer.length),
+      });
     }
-  }
+  };
 
   render() {
     const {
@@ -484,9 +484,10 @@ class MisAnuncios extends React.Component {
       <div
         onClick={() => this.closeOpenedOptionsDiv()}
         style={{
-          height: "calc(100vh - 80px)"
+          height: "calc(100vh - 80px)",
         }}
-        className={isLoading ? "p-0" : "p-lg-5 p-2"}>
+        className={isLoading ? "p-0" : "p-lg-5 p-2"}
+      >
         {isLoading ? (
           <div
             style={{
@@ -726,6 +727,23 @@ class MisAnuncios extends React.Component {
                   <div>
                     <span className="font-weight-bold">
                       {visitasSinLogin.length}
+                    </span>
+                    <FontAwesomeIcon icon={faEye} className="ml-1" />
+                  </div>
+                </div>
+                <div
+                  style={{
+                    width: 300,
+                  }}
+                  className="mt-2 d-flex flex-row align-item-center justify-content-between"
+                >
+                  <span className="font-weight-bold">
+                    {trans("misAnunciosForm.totalVisitas")}
+                  </span>
+                  <div>
+                    <span className="font-weight-bold">
+                      {parseInt(visitasSinLogin.length) +
+                        parseInt(visitasConLogin.length)}
                     </span>
                     <FontAwesomeIcon icon={faEye} className="ml-1" />
                   </div>
