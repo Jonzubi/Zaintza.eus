@@ -19,6 +19,7 @@ import {
   faEuroSign,
   faComments,
   faFileSignature,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import Axios from "axios";
 import Modal from "react-bootstrap/Modal";
@@ -43,6 +44,7 @@ import SocketContext from "../socketio/socket-context";
 import BottomScrollListener from "react-bottom-scroll-listener";
 import ClipLoader from "react-spinners/ClipLoader";
 import i18next from "i18next";
+import Rating from "react-rating";
 
 const mapStateToProps = (state) => {
   return {
@@ -766,6 +768,19 @@ class Tabla extends React.Component {
                               cuidador.direcFotoContacto
                             }
                           />
+                        </div>
+                        <div className="d-flex flex-row align-items-center justify-content-center">
+                            <Rating
+                              readonly
+                              initialRating={3}
+                              emptySymbol={
+                                <FontAwesomeIcon icon={faStar} className="text-secondary"/>
+                              }
+                              fullSymbol={
+                                <FontAwesomeIcon icon={faStar} className="text-warning"/>
+                              }
+                            />
+                            <span className="ml-2">(1)</span>
                         </div>
                         <div className="card-body">
                           <h5 className="card-title mt-2">
