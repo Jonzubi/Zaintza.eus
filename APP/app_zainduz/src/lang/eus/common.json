@@ -167,7 +167,8 @@
     "aceptadoAcuerdo": "-rekin akordio aktibo bat duzu",
     "rechazadoAcuerdo": "-rekin akordioa bukaturik dago",
     "terminarAcuerdo": "Akordioa bukatu", 
-    "acuerdoTerminado": "Akordioa ezeztatu duzu"
+    "acuerdoTerminado": "Akordioa ezeztatu duzu",
+    "acuerdo": "Akordioa"
   },
   "notificacionesForm":{
     "propuestaAcuerdo": "-k akordio proposamena bidali dizu",
