@@ -1623,3 +1623,35 @@ exports.getCuidadorVisitas = async (req, res, modelos) => {
   res.write(JSON.stringify(resultado));
   res.end();
 }
+
+exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
+  const { requiredCards } = req.query;
+  const modeloCuidadores = modelos.cuidador;
+  const resultado = [];
+  const cuidadores = await modeloCuidadores.find({
+    isPublic: true
+  },
+  null,
+  {
+    limit: parseInt(requiredCards)
+  });
+  const modeloUsuarios = modelos.usuario;
+  const modeloValoraciones = modelos.valoracion;
+  for(let index in cuidadores){
+    const usuario = await modeloUsuarios.findOne({
+      idPerfil: cuidadores[index]._id
+    });
+    const idUsuario = usuario._id;
+    const valoraciones = await modeloValoraciones.find({
+      idUsuario
+    });
+    resultado.push({
+      cuidador: cuidadores[index],
+      valoraciones: valoraciones
+    });
+    console.log(resultado);
+  }
+  res.writeHead(200, headerResponse);
+  res.write(JSON.stringify(resultado));
+  res.end();
+}

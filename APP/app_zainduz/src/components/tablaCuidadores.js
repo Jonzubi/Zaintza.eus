@@ -67,15 +67,10 @@ let gSocket = null;
 class Tabla extends React.Component {
   componentDidMount() {
     const { requiredCards } = this.state;
-    Axios.get("http://" + ipMaquina + ":3001/api/cuidador", {
+    Axios.get("http://" + ipMaquina + ":3001/api/procedures/getCuidadoresConValoraciones", {
       params: {
-        filtros: {
-          isPublic: true,
-        },
-        options: {
-          limit: requiredCards,
-        },
-      },
+        requiredCards
+      }
     })
       .then((data) => {
         this.setState({
@@ -665,6 +660,25 @@ class Tabla extends React.Component {
     );
   };
 
+  getValoracionesMedia = (valoraciones) => {
+    if (!valoraciones){
+      return 0;
+    }
+    let total = 0;
+    valoraciones.map((valoracion) => {
+      total += parseInt(valoracion.valor);
+    });
+    total /= valoraciones.length;
+    return total;
+  }
+
+  getValoracionesCount = (valoraciones) => {
+    if(!valoraciones){
+      return 0;
+    }
+    return valoraciones.length;
+  }
+
   render() {
     const {
       showModalFilter,
@@ -765,14 +779,14 @@ class Tabla extends React.Component {
                               "http://" +
                               ipMaquina +
                               ":3001/api/image/" +
-                              cuidador.direcFotoContacto
+                              cuidador.cuidador.direcFotoContacto
                             }
                           />
                         </div>
                         <div className="d-flex flex-row align-items-center justify-content-center">
                             <Rating
                               readonly
-                              initialRating={3}
+                              initialRating={this.getValoracionesMedia(cuidador.valoraciones)}
                               emptySymbol={
                                 <FontAwesomeIcon icon={faStar} className="text-secondary"/>
                               }
@@ -780,17 +794,19 @@ class Tabla extends React.Component {
                                 <FontAwesomeIcon icon={faStar} className="text-warning"/>
                               }
                             />
-                            <span className="ml-2">(1)</span>
+                            <span className="ml-2">(
+                              {this.getValoracionesCount(cuidador.valoraciones)}
+                            )</span>
                         </div>
                         <div className="card-body">
                           <h5 className="card-title mt-2">
-                            {cuidador.nombre + " " + cuidador.apellido1}
+                            {cuidador.cuidador.nombre + " " + cuidador.cuidador.apellido1}
                           </h5>
                           <p
                             className="card-text"
                             style={{ maxHeight: "75px", overflow: "hidden" }}
                           >
-                            {cuidador.descripcion}
+                            {cuidador.cuidador.descripcion}
                           </p>
                         </div>
                         <div className="card-body">
@@ -820,7 +836,7 @@ class Tabla extends React.Component {
 
                           <div className="row">
                             <div className="col text-center">
-                              {cuidador.publicoDisponible.nino ? (
+                              {cuidador.cuidador.publicoDisponible.nino ? (
                                 <FontAwesomeIcon
                                   className="text-success"
                                   icon={faCheck}
@@ -833,7 +849,7 @@ class Tabla extends React.Component {
                               )}
                             </div>
                             <div className="col text-center">
-                              {cuidador.publicoDisponible.terceraEdad ? (
+                              {cuidador.cuidador.publicoDisponible.terceraEdad ? (
                                 <FontAwesomeIcon
                                   className="text-success"
                                   icon={faCheck}
@@ -846,7 +862,7 @@ class Tabla extends React.Component {
                               )}
                             </div>
                             <div className="col text-center">
-                              {cuidador.publicoDisponible.necesidadEspecial ? (
+                              {cuidador.cuidador.publicoDisponible.necesidadEspecial ? (
                                 <FontAwesomeIcon
                                   className="text-success"
                                   icon={faCheck}
@@ -864,7 +880,7 @@ class Tabla extends React.Component {
                           <a
                             className="mr-0 w-100 btn btn-success text-light"
                             onClick={() => {
-                              this.handleViewCuidador(cuidador);
+                              this.handleViewCuidador(cuidador.cuidador);
                             }}
                           >
                             {trans("tablaCuidadores.ver")}
