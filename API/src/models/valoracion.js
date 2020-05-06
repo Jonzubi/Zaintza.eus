@@ -22,5 +22,5 @@ module.exports = conexion => {
       comentario: String
     });
   
-    return conexion.model("Valoracion", valoracion, "valoraciones");
+    return conexion.model("Valoracion", valoracion, "Valoraciones");
   };
