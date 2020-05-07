@@ -220,7 +220,6 @@ class AcuerdosForm extends React.Component {
       isOpenThreeDotLayer,
       showModalTerminarAcuerdo,
     } = this.state;
-    console.log(selectedAcuerdo);
     const laOtraPersona =
       this.props.tipoUsuario != "Cuidador" ? "idCuidador" : "idCliente";
     return (
