@@ -168,7 +168,16 @@
     "rechazadoAcuerdo": "-rekin akordioa bukaturik dago",
     "terminarAcuerdo": "Akordioa bukatu", 
     "acuerdoTerminado": "Akordioa ezeztatu duzu",
-    "acuerdo": "Akordioa"
+    "acuerdo": "Akordioa",
+    "verAcuerdo": "Akordioa ikusi",
+    "askTerminarAcuerdo": "Ziur akordio hitzarmena bukatu nahi duzula?",
+    "titulo": "Izenburua",
+    "descripcion": "Deskribapena",
+    "horario" :"Zaintza ordutegia",
+    "pueblos": "Herria/k",
+    "si": "Bai",
+    "no": "Ez"
+
   },
   "notificacionesForm":{
     "propuestaAcuerdo": "-k akordio proposamena bidali dizu",
