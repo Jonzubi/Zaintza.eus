@@ -159,7 +159,7 @@
   "acuerdosForm": {
     "estadoPendiente": "Onartu zain",
     "estadoAceptado": "Onartua",
-    "estadoRechazado": "Ezeztatua",
+    "estadoRechazado": "Bukatua edo ezeztatua",
     "headerInformacion": "Akordio informazioa",
     "headerEstado": "Egoera",
     "noData": "Ez duzu akordiorik oraindik",
@@ -176,7 +176,8 @@
     "horario" :"Zaintza ordutegia",
     "pueblos": "Herria/k",
     "si": "Bai",
-    "no": "Ez"
+    "no": "Ez",
+    "estado": "Egoera"
 
   },
   "notificacionesForm":{
