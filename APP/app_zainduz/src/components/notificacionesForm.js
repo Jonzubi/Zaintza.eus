@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
   faTrashAlt,
+  faEllipsisV,
 } from "@fortawesome/free-solid-svg-icons";
 import { Collapse } from "react-collapse";
 import Avatar from "react-avatar";
@@ -14,6 +15,11 @@ import cogoToast from "cogo-toast";
 import { setCountNotify } from "../redux/actions/notifications";
 import SocketContext from "../socketio/socket-context";
 import ClipLoader from "react-spinners/ClipLoader";
+import "./styles/notificacionesForm.css";
+import Modal from "react-bootstrap/Modal";
+import ModalHeader from "react-bootstrap/ModalHeader";
+import ModalBody from "react-bootstrap/ModalBody";
+import ModalFooter from "react-bootstrap/ModalFooter";
 
 class NotificacionesForm extends React.Component {
   componentDidMount() {
@@ -50,6 +56,9 @@ class NotificacionesForm extends React.Component {
       jsonNotificaciones: [],
       notificacionesCollapseState: [],
       isLoading: true,
+      isOpenThreeDotLayer: [],
+      showModalNotificacion: false,
+      selectedNotificacion: null,
     };
 
     this.handleToogleCollapseNotificacion = this.handleToogleCollapseNotificacion.bind(
@@ -229,31 +238,73 @@ class NotificacionesForm extends React.Component {
     });
   }
 
+  handleClickOptions = (index) => {
+    const { isOpenThreeDotLayer } = this.state;
+    let auxIsOpen = isOpenThreeDotLayer.slice();
+    if (!index) {
+      this.setState({
+        isOpenThreeDotLayer: arrayOfFalses(isOpenThreeDotLayer.length),
+      });
+    }
+    if (auxIsOpen[index]) {
+      auxIsOpen[index] = false;
+    } else {
+      auxIsOpen = arrayOfFalses(isOpenThreeDotLayer.length);
+      auxIsOpen[index] = true;
+    }
+    this.setState({
+      isOpenThreeDotLayer: auxIsOpen,
+    });
+  };
+
+  closeOpenedOptionsDiv = () => {
+    const { isOpenThreeDotLayer } = this.state;
+
+    if (isOpenThreeDotLayer.includes(true)) {
+      this.setState({
+        isOpenThreeDotLayer: arrayOfFalses(isOpenThreeDotLayer.length),
+      });
+    }
+  };
+
   render() {
-    const { isLoading } = this.state;
+    const {
+      isLoading,
+      isOpenThreeDotLayer,
+      showModalNotificacion,
+      selectedNotificacion,
+    } = this.state;
+    console.log(selectedNotificacion);
+    const laOtraPersona =
+      this.props.tipoUsuario != "Cuidador" ? "idCuidador" : "idCliente";
     return (
       <SocketContext.Consumer>
         {(socket) => (
           <div
             className={
-              this.state.jsonNotificaciones.length !== 0 ? "p-5" : "p-0"
+              this.state.jsonNotificaciones.length !== 0 ? "p-lg-5 p-2" : "p-0"
             }
+            onClick={() => this.closeOpenedOptionsDiv()}
+            style={{
+              height: "calc(100vh - 80px)",
+            }}
           >
             {isLoading ? (
               <div
                 style={{
-                  height: "calc(100vh - 80px)"
+                  height: "calc(100vh - 80px)",
                 }}
-                className="d-flex align-items-center justify-content-center">
+                className="d-flex align-items-center justify-content-center"
+              >
                 <ClipLoader color="#28a745" />
-              </div>              
+              </div>
             ) : this.state.jsonNotificaciones.length !== 0 ? (
               this.state.jsonNotificaciones.map((notificacion, indice) => {
                 return (
                   <div className="w-100 card mt-2 mb-2">
                     <div className="card-header">
-                      <div className="row">
-                        <div className="col-10 text-center">
+                      <div className="d-flex flex-row align-items-center justify-content-between">
+                        <div className="">
                           {notificacion.tipoNotificacion == "Acuerdo" ? (
                             <div className="d-flex align-items-center">
                               <Avatar
@@ -298,56 +349,82 @@ class NotificacionesForm extends React.Component {
                                     " " +
                                     notificacion.idRemitente.idPerfil.apellido1}
                                 </span>{" "}
-                                <span>
-                                  {notificacion.valorGestion
-                                    ? trans(
-                                        "notificacionesForm.otraPersonaAcuerdoAceptado"
-                                      )
-                                    : trans(
-                                        "notificacionesForm.otraPersonaAcuerdoRechazado"
-                                      )}
-                                </span>
                               </div>
-                              <span className="ml-5">
-                                {new Date(
-                                  notificacion.dateEnvioNotificacion
-                                ).getHours() +
-                                  ":" +
-                                  new Date(
-                                    notificacion.dateEnvioNotificacion
-                                  ).getMinutes()}
-                              </span>
                             </div>
                           ) : null}
                         </div>
-                        <div className="col-1 text-center my-auto">
-                          <FontAwesomeIcon
-                            style={{ cursor: "pointer" }}
-                            color={notificacion.visto ? "#7F8C8D" : "#17202A"}
-                            size="2x"
-                            icon={faEye}
-                            className=""
-                            onClick={() =>
-                              this.handleToogleCollapseNotificacion(
-                                indice,
-                                notificacion
-                              )
-                            }
-                          />
+                        <div className="">
+                          {new Date(
+                            notificacion.dateEnvioNotificacion
+                          ).getHours() +
+                            ":" +
+                            new Date(
+                              notificacion.dateEnvioNotificacion
+                            ).getMinutes()}
                         </div>
-                        <div className="col-1 text-center my-auto">
+                        <div>
                           <FontAwesomeIcon
-                            style={{ cursor: "pointer" }}
-                            size="2x"
-                            icon={faTrashAlt}
-                            className="text-danger"
-                            onClick={() =>
-                              this.handleDeleteNotificacion(
-                                notificacion,
-                                indice
-                              )
-                            }
+                            style={{
+                              cursor: "pointer",
+                            }}
+                            icon={faEllipsisV}
+                            onClick={() => this.handleClickOptions(indice)}
                           />
+                          <div
+                            style={{
+                              position: "absolute",
+                              width: 200,
+                              right: 10,
+                              backgroundColor: "white",
+                              boxShadow: "0 0.125rem 0.25rem rgba(0,0,0,.075)",
+                              zIndex: 2,
+                            }}
+                            className={
+                              isOpenThreeDotLayer[indice]
+                                ? "d-flex flex-column rounded border"
+                                : "d-none"
+                            }
+                          >
+                            <div
+                              style={{
+                                cursor: "pointer",
+                              }}
+                              className="threeDotsMenu p-1 d-flex flex-row align-items-center justify-content-between"
+                              onClick={() => {
+                                this.setState({
+                                  selectedNotificacion: notificacion,
+                                  showModalNotificacion: true,
+                                });
+                                this.handleClickOptions(indice);
+                              }}
+                            >
+                              <span className="mr-5">
+                                {trans("notificacionesForm.verNotificacion")}
+                              </span>
+                              <FontAwesomeIcon
+                                className="text-success"
+                                icon={faEye}
+                              />
+                            </div>
+                            <div
+                              className="threeDotsMenu p-1 d-flex flex-row align-items-center justify-content-between"
+                              onClick={() => {
+                                this.setState({});
+                                this.handleClickOptions(indice);
+                              }}
+                              style={{ cursor: "pointer" }}
+                            >
+                              <span className="">
+                                {trans(
+                                  "notificacionesForm.eliminarNotificacion"
+                                )}
+                              </span>
+                              <FontAwesomeIcon
+                                className="text-danger"
+                                icon={faTrashAlt}
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -460,6 +537,49 @@ class NotificacionesForm extends React.Component {
                 </small>
               </div>
             )}
+            {selectedNotificacion ? (
+              <Modal
+                style={{
+                  maxWidth: 500,
+                }}
+                show={showModalNotificacion}
+                onHide={() => this.setState({ showModalNotificacion: false })}
+              >
+                <ModalHeader closeButton>
+                  {<h5>{trans("notificacionesForm.notificacion")}</h5>}
+                </ModalHeader>
+                <ModalBody className="d-flex flex-column align-items-center justify-content-between">
+                  <div
+                    style={{
+                      width: "calc(100% - 20px)",
+                      backgroundSize: "cover",
+                      backgroundPosition: "top",
+                      backgroundRepeat: "no-repeat",
+                      margin: "10px",
+                      display: "flex",
+                      overflow: "hidden",
+                    }}
+                    className="flex-column align-items-center justify-content-center"
+                    alt="Imagen no disponible"
+                  >
+                    <img
+                      style={{
+                        minHeight: "150px",
+                        maxHeight: "150px",
+                        height: "auto",
+                      }}
+                      src={
+                        "http://" +
+                        ipMaquina +
+                        ":3001/api/image/" +
+                        selectedNotificacion.idRemitente.idPerfil.direcFoto
+                      }
+                    />
+                  </div>
+                </ModalBody>
+                <ModalFooter></ModalFooter>
+              </Modal>
+            ) : null}
           </div>
         )}
       </SocketContext.Consumer>

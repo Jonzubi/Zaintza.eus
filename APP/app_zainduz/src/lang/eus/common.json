@@ -191,7 +191,10 @@
     "acuerdoAceptado": "Akordioa onartu duzu",    
     "acuerdoRechazado": "Akordioa ezeztatu duzu",    
     "noData": "Ez daukazu abixurik",
-    "acuerdoYaRechazado": "Akordio jada ezeztatua izanda"
+    "acuerdoYaRechazado": "Akordio jada ezeztatua izanda",
+    "verNotificacion": "Abisua ikusi",
+    "eliminarNotificacion": "Abisua ezabatu",
+    "notificacion": "Abisua"
   },
   "formAnuncio":{
     "titulo": "Izenburua",
