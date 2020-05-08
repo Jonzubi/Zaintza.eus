@@ -204,7 +204,9 @@
     "acuerdoTitulo": "Akordioaren izenburua",
     "acuerdoDescripcion": "Akordioaren deskribapena",
     "acuerdoPueblos": "Herria/k",
-    "acuerdoHorario": "Zaintza ordutegia"
+    "acuerdoHorario": "Zaintza ordutegia",
+    "decisionAcuerdoAceptar": "Ziur akordioa onartu nahi duzula?",
+    "decisionAcuerdoRechazar": "Ziur akordioa ukatu nahi duzula?"
   },
   "formAnuncio":{
     "titulo": "Izenburua",

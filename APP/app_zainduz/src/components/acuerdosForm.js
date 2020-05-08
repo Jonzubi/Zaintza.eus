@@ -1,5 +1,4 @@
 import React from "react";
-import { Collapse } from "react-collapse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCaretDown,
@@ -549,7 +548,7 @@ class AcuerdosForm extends React.Component {
                                       return (
                                         <div className="d-flex flex-row justify-content-between">
                                           <span>
-                                            {trans(`dias.dia_${[dia.dia - 1]}`)}
+                                            {trans(`dias.dia_${dia.dia}`)}
                                           </span>
                                           <span>
                                             {dia.horaInicio +
