@@ -159,7 +159,7 @@
   "acuerdosForm": {
     "estadoPendiente": "Onartu zain",
     "estadoAceptado": "Onartua",
-    "estadoRechazado": "Ezeztatua",
+    "estadoRechazado": "Bukatua edo ezeztatua",
     "headerInformacion": "Akordio informazioa",
     "headerEstado": "Egoera",
     "noData": "Ez duzu akordiorik oraindik",
@@ -176,21 +176,35 @@
     "horario" :"Zaintza ordutegia",
     "pueblos": "Herria/k",
     "si": "Bai",
-    "no": "Ez"
+    "no": "Ez",
+    "estado": "Egoera"
 
   },
   "notificacionesForm":{
     "propuestaAcuerdo": "-k akordio proposamena bidali dizu",
-    "otraPersonaAcuerdoAceptado": "-k akordioa onartu du",
-    "otraPersonaAcuerdoRechazado": "-k akordioa ezeztatu du",
+    "otraPersonaAcuerdoAceptado": "Akordioa onartua izan da",
+    "otraPersonaAcuerdoRechazado": "Akordioa ezeztatua izan da",
     "pueblos":"Herria/k",
     "dias": "Eguna/k",
-    "aceptarAcuerdo": "Onartu akordioa",
-    "rechazarAcuerdo": "Akordio ezeztatu",
+    "aceptarAcuerdo": "Onartu",
+    "rechazarAcuerdo": "Ukatu",
     "acuerdoAceptado": "Akordioa onartu duzu",    
     "acuerdoRechazado": "Akordioa ezeztatu duzu",    
     "noData": "Ez daukazu abixurik",
-    "acuerdoYaRechazado": "Akordio jada ezeztatua izanda"
+    "acuerdoYaRechazado": "Akordio jada ezeztatua izanda",
+    "verNotificacion": "Abisua ikusi",
+    "eliminarNotificacion": "Abisua ezabatu",
+    "notificacion": "Abisua",
+    "tipoNotificacion": "Abisu mota",
+    "tipoAcuerdoGestionado": "Akordio gestioa",
+    "tipoAcuerdo": "Akordio proposamena",
+    "detalle": "Xehetasuna",
+    "detalleAcuerdo": "Proposamena jaso duzu",
+    "acuerdoInfo": "Akordioaren xehetasunak",
+    "acuerdoTitulo": "Akordioaren izenburua",
+    "acuerdoDescripcion": "Akordioaren deskribapena",
+    "acuerdoPueblos": "Herria/k",
+    "acuerdoHorario": "Zaintza ordutegia"
   },
   "formAnuncio":{
     "titulo": "Izenburua",
@@ -238,7 +252,7 @@
     "domingo": "Igandea"
   },
   "dias": {
-    "dia_0": "Igandea",
+    "dia_7": "Igandea",
     "dia_1": "Astelehena",
     "dia_2": "Asteartea",
     "dia_3": "Asteazkena",

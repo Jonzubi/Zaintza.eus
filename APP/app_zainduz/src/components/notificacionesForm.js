@@ -7,6 +7,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
   faTrashAlt,
+  faEllipsisV,
+  faComments,
+  faFileSignature,
+  faHome,
+  faClock,
+  faCheck,
+  faTimes
 } from "@fortawesome/free-solid-svg-icons";
 import { Collapse } from "react-collapse";
 import Avatar from "react-avatar";
@@ -14,6 +21,11 @@ import cogoToast from "cogo-toast";
 import { setCountNotify } from "../redux/actions/notifications";
 import SocketContext from "../socketio/socket-context";
 import ClipLoader from "react-spinners/ClipLoader";
+import "./styles/notificacionesForm.css";
+import Modal from "react-bootstrap/Modal";
+import ModalHeader from "react-bootstrap/ModalHeader";
+import ModalBody from "react-bootstrap/ModalBody";
+import ModalFooter from "react-bootstrap/ModalFooter";
 
 class NotificacionesForm extends React.Component {
   componentDidMount() {
@@ -50,6 +62,9 @@ class NotificacionesForm extends React.Component {
       jsonNotificaciones: [],
       notificacionesCollapseState: [],
       isLoading: true,
+      isOpenThreeDotLayer: [],
+      showModalNotificacion: false,
+      selectedNotificacion: null,
     };
 
     this.handleToogleCollapseNotificacion = this.handleToogleCollapseNotificacion.bind(
@@ -229,125 +244,184 @@ class NotificacionesForm extends React.Component {
     });
   }
 
+  handleClickOptions = (index) => {
+    const { isOpenThreeDotLayer } = this.state;
+    let auxIsOpen = isOpenThreeDotLayer.slice();
+    if (!index) {
+      this.setState({
+        isOpenThreeDotLayer: arrayOfFalses(isOpenThreeDotLayer.length),
+      });
+    }
+    if (auxIsOpen[index]) {
+      auxIsOpen[index] = false;
+    } else {
+      auxIsOpen = arrayOfFalses(isOpenThreeDotLayer.length);
+      auxIsOpen[index] = true;
+    }
+    this.setState({
+      isOpenThreeDotLayer: auxIsOpen,
+    });
+  };
+
+  closeOpenedOptionsDiv = () => {
+    const { isOpenThreeDotLayer } = this.state;
+
+    if (isOpenThreeDotLayer.includes(true)) {
+      this.setState({
+        isOpenThreeDotLayer: arrayOfFalses(isOpenThreeDotLayer.length),
+      });
+    }
+  };
+
+  getDetalleNotificacion = (notificacion) => {
+    switch (notificacion.tipoNotificacion) {
+      case "Acuerdo":
+        return <span>{trans("notificacionesForm.detalleAcuerdo")}</span>;
+      case "AcuerdoGestionado":
+        return notificacion.valorGestion ? (
+          <span className="text-success">
+            {trans("notificacionesForm.otraPersonaAcuerdoAceptado")}
+          </span>
+        ) : (
+          <span className="text-danger">
+            {trans("notificacionesForm.otraPersonaAcuerdoRechazado")}
+          </span>
+        );
+
+      default:
+        return <span>ERROR</span>;
+    }
+  };
+
   render() {
-    const { isLoading } = this.state;
+    const {
+      isLoading,
+      isOpenThreeDotLayer,
+      showModalNotificacion,
+      selectedNotificacion,
+    } = this.state;
+    console.log(selectedNotificacion);
     return (
       <SocketContext.Consumer>
         {(socket) => (
           <div
             className={
-              this.state.jsonNotificaciones.length !== 0 ? "p-5" : "p-0"
+              this.state.jsonNotificaciones.length !== 0 ? "p-lg-5 p-2" : "p-0"
             }
+            onClick={() => this.closeOpenedOptionsDiv()}
+            style={{
+              height: "calc(100vh - 80px)",
+            }}
           >
             {isLoading ? (
               <div
                 style={{
-                  height: "calc(100vh - 80px)"
+                  height: "calc(100vh - 80px)",
                 }}
-                className="d-flex align-items-center justify-content-center">
+                className="d-flex align-items-center justify-content-center"
+              >
                 <ClipLoader color="#28a745" />
-              </div>              
+              </div>
             ) : this.state.jsonNotificaciones.length !== 0 ? (
               this.state.jsonNotificaciones.map((notificacion, indice) => {
                 return (
                   <div className="w-100 card mt-2 mb-2">
                     <div className="card-header">
-                      <div className="row">
-                        <div className="col-10 text-center">
-                          {notificacion.tipoNotificacion == "Acuerdo" ? (
-                            <div className="d-flex align-items-center">
-                              <Avatar
-                                size={50}
-                                className=""
-                                name={notificacion.idRemitente.idPerfil.nombre}
-                                src={
-                                  "http://" +
-                                  ipMaquina +
-                                  ":3001/api/image/" +
-                                  notificacion.idRemitente.idPerfil.direcFoto
-                                }
-                              />
-                              <div className="ml-3">
-                                <span className="font-weight-bold">
-                                  {notificacion.idRemitente.idPerfil.nombre +
-                                    " " +
-                                    notificacion.idRemitente.idPerfil.apellido1}
-                                </span>{" "}
-                                <span>
-                                  {trans("notificacionesForm.propuestaAcuerdo")}
-                                </span>
-                              </div>
+                      <div className="d-flex flex-row align-items-center justify-content-between">
+                        <div className="">
+                          <div className="d-flex align-items-center">
+                            <Avatar
+                              size={50}
+                              className=""
+                              name={notificacion.idRemitente.idPerfil.nombre}
+                              src={
+                                "http://" +
+                                ipMaquina +
+                                ":3001/api/image/" +
+                                notificacion.idRemitente.idPerfil.direcFoto
+                              }
+                            />
+                            <div className="ml-3">
+                              <span className="font-weight-bold">
+                                {notificacion.idRemitente.idPerfil.nombre +
+                                  " " +
+                                  notificacion.idRemitente.idPerfil.apellido1}
+                              </span>{" "}
                             </div>
-                          ) : notificacion.tipoNotificacion ==
-                            "AcuerdoGestionado" ? (
-                            <div className="d-flex align-items-center">
-                              <Avatar
-                                size={50}
-                                className=""
-                                name={notificacion.idRemitente.idPerfil.nombre}
-                                src={
-                                  "http://" +
-                                  ipMaquina +
-                                  ":3001/api/image/" +
-                                  notificacion.idRemitente.idPerfil.direcFoto
-                                }
-                              />
-                              <div className="ml-3">
-                                <span className="font-weight-bold">
-                                  {notificacion.idRemitente.idPerfil.nombre +
-                                    " " +
-                                    notificacion.idRemitente.idPerfil.apellido1}
-                                </span>{" "}
-                                <span>
-                                  {notificacion.valorGestion
-                                    ? trans(
-                                        "notificacionesForm.otraPersonaAcuerdoAceptado"
-                                      )
-                                    : trans(
-                                        "notificacionesForm.otraPersonaAcuerdoRechazado"
-                                      )}
-                                </span>
-                              </div>
-                              <span className="ml-5">
-                                {new Date(
-                                  notificacion.dateEnvioNotificacion
-                                ).getHours() +
-                                  ":" +
-                                  new Date(
-                                    notificacion.dateEnvioNotificacion
-                                  ).getMinutes()}
+                          </div>
+                        </div>
+                        <div className="">
+                          {new Date(
+                            notificacion.dateEnvioNotificacion
+                          ).getHours() +
+                            ":" +
+                            new Date(
+                              notificacion.dateEnvioNotificacion
+                            ).getMinutes()}
+                        </div>
+                        <div>
+                          <FontAwesomeIcon
+                            style={{
+                              cursor: "pointer",
+                            }}
+                            icon={faEllipsisV}
+                            onClick={() => this.handleClickOptions(indice)}
+                          />
+                          <div
+                            style={{
+                              position: "absolute",
+                              width: 200,
+                              right: 10,
+                              backgroundColor: "white",
+                              boxShadow: "0 0.125rem 0.25rem rgba(0,0,0,.075)",
+                              zIndex: 2,
+                            }}
+                            className={
+                              isOpenThreeDotLayer[indice]
+                                ? "d-flex flex-column rounded border"
+                                : "d-none"
+                            }
+                          >
+                            <div
+                              style={{
+                                cursor: "pointer",
+                              }}
+                              className="threeDotsMenu p-1 d-flex flex-row align-items-center justify-content-between"
+                              onClick={() => {
+                                this.setState({
+                                  selectedNotificacion: notificacion,
+                                  showModalNotificacion: true,
+                                });
+                                this.handleClickOptions(indice);
+                              }}
+                            >
+                              <span className="mr-5">
+                                {trans("notificacionesForm.verNotificacion")}
                               </span>
+                              <FontAwesomeIcon
+                                className="text-success"
+                                icon={faEye}
+                              />
                             </div>
-                          ) : null}
-                        </div>
-                        <div className="col-1 text-center my-auto">
-                          <FontAwesomeIcon
-                            style={{ cursor: "pointer" }}
-                            color={notificacion.visto ? "#7F8C8D" : "#17202A"}
-                            size="2x"
-                            icon={faEye}
-                            className=""
-                            onClick={() =>
-                              this.handleToogleCollapseNotificacion(
-                                indice,
-                                notificacion
-                              )
-                            }
-                          />
-                        </div>
-                        <div className="col-1 text-center my-auto">
-                          <FontAwesomeIcon
-                            style={{ cursor: "pointer" }}
-                            size="2x"
-                            icon={faTrashAlt}
-                            className="text-danger"
-                            onClick={() =>
-                              this.handleDeleteNotificacion(
-                                notificacion,
-                                indice
-                              )
-                            }
-                          />
+                            <div
+                              className="threeDotsMenu p-1 d-flex flex-row align-items-center justify-content-between"
+                              onClick={() => {
+                                this.setState({});
+                                this.handleClickOptions(indice);
+                              }}
+                              style={{ cursor: "pointer" }}
+                            >
+                              <span className="">
+                                {trans(
+                                  "notificacionesForm.eliminarNotificacion"
+                                )}
+                              </span>
+                              <FontAwesomeIcon
+                                className="text-danger"
+                                icon={faTrashAlt}
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -460,6 +534,199 @@ class NotificacionesForm extends React.Component {
                 </small>
               </div>
             )}
+            {selectedNotificacion ? (
+              <Modal
+                style={{
+                  maxWidth: 500,
+                }}
+                show={showModalNotificacion}
+                onHide={() => this.setState({ showModalNotificacion: false })}
+              >
+                <ModalHeader closeButton>
+                  {<h5>{trans("notificacionesForm.notificacion")}</h5>}
+                </ModalHeader>
+                <ModalBody className="d-flex flex-column align-items-center">
+                  <div
+                    style={{
+                      width: "calc(100% - 20px)",
+                      backgroundSize: "cover",
+                      backgroundPosition: "top",
+                      backgroundRepeat: "no-repeat",
+                      margin: "10px",
+                      display: "flex",
+                      overflow: "hidden",
+                    }}
+                    className="flex-column align-items-center justify-content-center"
+                    alt="Imagen no disponible"
+                  >
+                    <img
+                      style={{
+                        minHeight: "150px",
+                        maxHeight: "150px",
+                        height: "auto",
+                      }}
+                      src={
+                        "http://" +
+                        ipMaquina +
+                        ":3001/api/image/" +
+                        selectedNotificacion.idRemitente.idPerfil.direcFoto
+                      }
+                    />
+                  </div>
+                  <div
+                    style={{
+                      width: 300,
+                    }}
+                    className="mt-3 d-flex flex-row align-items-center justify-content-between"
+                  >
+                    <span className="font-weight-bold">
+                      {trans("notificacionesForm.tipoNotificacion")}:
+                    </span>
+                    <span>
+                      {trans(
+                        `notificacionesForm.tipo${selectedNotificacion.tipoNotificacion}`
+                      )}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      width: 300,
+                    }}
+                    className="mt-3 d-flex flex-row align-items-center justify-content-between"
+                  >
+                    <span className="font-weight-bold">
+                      {trans("notificacionesForm.detalle")}:
+                    </span>
+                    {this.getDetalleNotificacion(selectedNotificacion)}
+                  </div>
+                  {selectedNotificacion.tipoNotificacion === "Acuerdo" ? (
+                    <div
+                      className="mt-5"
+                      style={{
+                        width: 300,
+                      }}
+                    >
+                      <div className="d-flex flex-row align-items-center justify-content-center">
+                        <FontAwesomeIcon
+                          size={"2x"}
+                          icon={faComments}
+                          className="mr-2"
+                        />
+                        <span
+                          style={{
+                            fontSize: 20,
+                          }}
+                          className="font-weight-bold"
+                        >
+                          {trans("notificacionesForm.acuerdoInfo")}
+                        </span>
+                      </div>
+                      <div
+                        style={{
+                          width: 300,
+                        }}
+                        className="mt-3 d-flex flex-column"
+                      >
+                        <div className="d-flex flex-row align-items-center justify-content-center">
+                          <FontAwesomeIcon
+                            icon={faFileSignature}
+                            className="mr-2"
+                          />
+                          <span className="font-weight-bold">
+                            {trans("notificacionesForm.acuerdoTitulo")}
+                          </span>
+                        </div>
+                        <span className="">
+                          {selectedNotificacion.acuerdo.tituloAcuerdo}
+                        </span>
+                      </div>
+                      <div
+                        style={{
+                          width: 300,
+                        }}
+                        className="mt-3 d-flex flex-column"
+                      >
+                        <div className="d-flex flex-row align-items-center justify-content-center">
+                          <FontAwesomeIcon
+                            icon={faFileSignature}
+                            className="mr-2"
+                          />
+                          <span className="font-weight-bold">
+                            {trans("notificacionesForm.acuerdoDescripcion")}
+                          </span>
+                        </div>
+                        <span className="">
+                          {selectedNotificacion.acuerdo.descripcionAcuerdo}
+                        </span>
+                      </div>
+                      <div
+                        style={{
+                          width: 300,
+                        }}
+                        className="mt-3 d-flex flex-column"
+                      >
+                        <div className="d-flex flex-row align-items-center justify-content-center">
+                          <FontAwesomeIcon icon={faHome} className="mr-2" />
+                          <span className="font-weight-bold">
+                            {trans("notificacionesForm.acuerdoPueblos")}
+                          </span>
+                        </div>
+                        <div className="">
+                          {selectedNotificacion.acuerdo.pueblo.map((pueblo) => (
+                            <span>{pueblo}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div
+                        style={{
+                          width: 300,
+                        }}
+                        className="mt-3 d-flex flex-column"
+                      >
+                        <div className="d-flex flex-row align-items-center justify-content-center">
+                          <FontAwesomeIcon icon={faClock} className="mr-2" />
+                          <span className="font-weight-bold">
+                            {trans("notificacionesForm.acuerdoHorario")}
+                          </span>
+                        </div>
+                        {selectedNotificacion.acuerdo.diasAcordados.map(
+                          (dia) => (
+                            <div className="d-flex flex-row align-items-center justify-content-between">
+                              <span>{trans(`dias.dia_${dia.dia}`)}</span>
+                              <div>
+                                <span>{dia.horaInicio}</span>
+                                {" - "}
+                                <span>{dia.horaFin}</span>
+                              </div>
+                            </div>
+                          )
+                        )}
+                      </div>
+                      <div
+                        style={{
+                          width: 300
+                        }}
+                        className="mt-5 d-flex flex-row align-items-center justify-content-between"
+                      >
+                        <button
+                          className="btn btn-success"
+                        >
+                          {trans('notificacionesForm.aceptarAcuerdo')}
+                          <FontAwesomeIcon icon={faCheck} className="ml-2" />
+                        </button>
+                        <button
+                          className="btn btn-danger"
+                        >
+                        {trans('notificacionesForm.rechazarAcuerdo')}
+                        <FontAwesomeIcon icon={faTimes} className="ml-2" />
+                        </button>
+                      </div>
+                    </div>
+                  ) : null}
+                </ModalBody>
+                <ModalFooter></ModalFooter>
+              </Modal>
+            ) : null}
           </div>
         )}
       </SocketContext.Consumer>

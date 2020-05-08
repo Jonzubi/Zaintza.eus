@@ -337,7 +337,7 @@ class AcuerdosForm extends React.Component {
                                 backgroundColor: "white",
                                 boxShadow:
                                   "0 0.125rem 0.25rem rgba(0,0,0,.075)",
-                                zIndex: 2
+                                zIndex: 2,
                               }}
                               className={
                                 isOpenThreeDotLayer[indice]
@@ -434,7 +434,7 @@ class AcuerdosForm extends React.Component {
                               display: "flex",
                               overflow: "hidden",
                             }}
-                            className="flex-row align-items-center justify-content-center"
+                            className="flex-column align-items-center justify-content-center"
                             alt="Imagen no disponible"
                           >
                             <img
@@ -450,6 +450,22 @@ class AcuerdosForm extends React.Component {
                                 selectedAcuerdo[laOtraPersona].direcFoto
                               }
                             />
+                            <div className="mt-2">
+                              <span className="mr-2">{trans("acuerdosForm.estado")}:</span>
+                              {acuerdo.estadoAcuerdo === 2 ? (
+                                <span className="text-danger">
+                                  {trans("acuerdosForm.estadoRechazado")}
+                                </span>
+                              ) : acuerdo.estadoAcuerdo === 1 ? (
+                                <span className="text-success">
+                                  {trans("acuerdosForm.estadoAceptado")}
+                                </span>
+                              ) : (
+                                <span className="text-secondary">
+                                  {trans("acuerdosForm.estadoPendiente")}
+                                </span>
+                              )}
+                            </div>
                           </div>
                           <div
                             style={{
