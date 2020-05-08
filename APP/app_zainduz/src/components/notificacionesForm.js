@@ -8,6 +8,12 @@ import {
   faEye,
   faTrashAlt,
   faEllipsisV,
+  faComments,
+  faFileSignature,
+  faHome,
+  faClock,
+  faCheck,
+  faTimes
 } from "@fortawesome/free-solid-svg-icons";
 import { Collapse } from "react-collapse";
 import Avatar from "react-avatar";
@@ -267,6 +273,26 @@ class NotificacionesForm extends React.Component {
     }
   };
 
+  getDetalleNotificacion = (notificacion) => {
+    switch (notificacion.tipoNotificacion) {
+      case "Acuerdo":
+        return <span>{trans("notificacionesForm.detalleAcuerdo")}</span>;
+      case "AcuerdoGestionado":
+        return notificacion.valorGestion ? (
+          <span className="text-success">
+            {trans("notificacionesForm.otraPersonaAcuerdoAceptado")}
+          </span>
+        ) : (
+          <span className="text-danger">
+            {trans("notificacionesForm.otraPersonaAcuerdoRechazado")}
+          </span>
+        );
+
+      default:
+        return <span>ERROR</span>;
+    }
+  };
+
   render() {
     const {
       isLoading,
@@ -275,8 +301,6 @@ class NotificacionesForm extends React.Component {
       selectedNotificacion,
     } = this.state;
     console.log(selectedNotificacion);
-    const laOtraPersona =
-      this.props.tipoUsuario != "Cuidador" ? "idCuidador" : "idCliente";
     return (
       <SocketContext.Consumer>
         {(socket) => (
@@ -305,53 +329,26 @@ class NotificacionesForm extends React.Component {
                     <div className="card-header">
                       <div className="d-flex flex-row align-items-center justify-content-between">
                         <div className="">
-                          {notificacion.tipoNotificacion == "Acuerdo" ? (
-                            <div className="d-flex align-items-center">
-                              <Avatar
-                                size={50}
-                                className=""
-                                name={notificacion.idRemitente.idPerfil.nombre}
-                                src={
-                                  "http://" +
-                                  ipMaquina +
-                                  ":3001/api/image/" +
-                                  notificacion.idRemitente.idPerfil.direcFoto
-                                }
-                              />
-                              <div className="ml-3">
-                                <span className="font-weight-bold">
-                                  {notificacion.idRemitente.idPerfil.nombre +
-                                    " " +
-                                    notificacion.idRemitente.idPerfil.apellido1}
-                                </span>{" "}
-                                <span>
-                                  {trans("notificacionesForm.propuestaAcuerdo")}
-                                </span>
-                              </div>
+                          <div className="d-flex align-items-center">
+                            <Avatar
+                              size={50}
+                              className=""
+                              name={notificacion.idRemitente.idPerfil.nombre}
+                              src={
+                                "http://" +
+                                ipMaquina +
+                                ":3001/api/image/" +
+                                notificacion.idRemitente.idPerfil.direcFoto
+                              }
+                            />
+                            <div className="ml-3">
+                              <span className="font-weight-bold">
+                                {notificacion.idRemitente.idPerfil.nombre +
+                                  " " +
+                                  notificacion.idRemitente.idPerfil.apellido1}
+                              </span>{" "}
                             </div>
-                          ) : notificacion.tipoNotificacion ==
-                            "AcuerdoGestionado" ? (
-                            <div className="d-flex align-items-center">
-                              <Avatar
-                                size={50}
-                                className=""
-                                name={notificacion.idRemitente.idPerfil.nombre}
-                                src={
-                                  "http://" +
-                                  ipMaquina +
-                                  ":3001/api/image/" +
-                                  notificacion.idRemitente.idPerfil.direcFoto
-                                }
-                              />
-                              <div className="ml-3">
-                                <span className="font-weight-bold">
-                                  {notificacion.idRemitente.idPerfil.nombre +
-                                    " " +
-                                    notificacion.idRemitente.idPerfil.apellido1}
-                                </span>{" "}
-                              </div>
-                            </div>
-                          ) : null}
+                          </div>
                         </div>
                         <div className="">
                           {new Date(
@@ -548,7 +545,7 @@ class NotificacionesForm extends React.Component {
                 <ModalHeader closeButton>
                   {<h5>{trans("notificacionesForm.notificacion")}</h5>}
                 </ModalHeader>
-                <ModalBody className="d-flex flex-column align-items-center justify-content-between">
+                <ModalBody className="d-flex flex-column align-items-center">
                   <div
                     style={{
                       width: "calc(100% - 20px)",
@@ -576,6 +573,156 @@ class NotificacionesForm extends React.Component {
                       }
                     />
                   </div>
+                  <div
+                    style={{
+                      width: 300,
+                    }}
+                    className="mt-3 d-flex flex-row align-items-center justify-content-between"
+                  >
+                    <span className="font-weight-bold">
+                      {trans("notificacionesForm.tipoNotificacion")}:
+                    </span>
+                    <span>
+                      {trans(
+                        `notificacionesForm.tipo${selectedNotificacion.tipoNotificacion}`
+                      )}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      width: 300,
+                    }}
+                    className="mt-3 d-flex flex-row align-items-center justify-content-between"
+                  >
+                    <span className="font-weight-bold">
+                      {trans("notificacionesForm.detalle")}:
+                    </span>
+                    {this.getDetalleNotificacion(selectedNotificacion)}
+                  </div>
+                  {selectedNotificacion.tipoNotificacion === "Acuerdo" ? (
+                    <div
+                      className="mt-5"
+                      style={{
+                        width: 300,
+                      }}
+                    >
+                      <div className="d-flex flex-row align-items-center justify-content-center">
+                        <FontAwesomeIcon
+                          size={"2x"}
+                          icon={faComments}
+                          className="mr-2"
+                        />
+                        <span
+                          style={{
+                            fontSize: 20,
+                          }}
+                          className="font-weight-bold"
+                        >
+                          {trans("notificacionesForm.acuerdoInfo")}
+                        </span>
+                      </div>
+                      <div
+                        style={{
+                          width: 300,
+                        }}
+                        className="mt-3 d-flex flex-column"
+                      >
+                        <div className="d-flex flex-row align-items-center justify-content-center">
+                          <FontAwesomeIcon
+                            icon={faFileSignature}
+                            className="mr-2"
+                          />
+                          <span className="font-weight-bold">
+                            {trans("notificacionesForm.acuerdoTitulo")}
+                          </span>
+                        </div>
+                        <span className="">
+                          {selectedNotificacion.acuerdo.tituloAcuerdo}
+                        </span>
+                      </div>
+                      <div
+                        style={{
+                          width: 300,
+                        }}
+                        className="mt-3 d-flex flex-column"
+                      >
+                        <div className="d-flex flex-row align-items-center justify-content-center">
+                          <FontAwesomeIcon
+                            icon={faFileSignature}
+                            className="mr-2"
+                          />
+                          <span className="font-weight-bold">
+                            {trans("notificacionesForm.acuerdoDescripcion")}
+                          </span>
+                        </div>
+                        <span className="">
+                          {selectedNotificacion.acuerdo.descripcionAcuerdo}
+                        </span>
+                      </div>
+                      <div
+                        style={{
+                          width: 300,
+                        }}
+                        className="mt-3 d-flex flex-column"
+                      >
+                        <div className="d-flex flex-row align-items-center justify-content-center">
+                          <FontAwesomeIcon icon={faHome} className="mr-2" />
+                          <span className="font-weight-bold">
+                            {trans("notificacionesForm.acuerdoPueblos")}
+                          </span>
+                        </div>
+                        <div className="">
+                          {selectedNotificacion.acuerdo.pueblo.map((pueblo) => (
+                            <span>{pueblo}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div
+                        style={{
+                          width: 300,
+                        }}
+                        className="mt-3 d-flex flex-column"
+                      >
+                        <div className="d-flex flex-row align-items-center justify-content-center">
+                          <FontAwesomeIcon icon={faClock} className="mr-2" />
+                          <span className="font-weight-bold">
+                            {trans("notificacionesForm.acuerdoHorario")}
+                          </span>
+                        </div>
+                        {selectedNotificacion.acuerdo.diasAcordados.map(
+                          (dia) => (
+                            <div className="d-flex flex-row align-items-center justify-content-between">
+                              <span>{trans(`dias.dia_${dia.dia}`)}</span>
+                              <div>
+                                <span>{dia.horaInicio}</span>
+                                {" - "}
+                                <span>{dia.horaFin}</span>
+                              </div>
+                            </div>
+                          )
+                        )}
+                      </div>
+                      <div
+                        style={{
+                          width: 300
+                        }}
+                        className="mt-5 d-flex flex-row align-items-center justify-content-between"
+                      >
+                        <button
+                          className="btn btn-success"
+                        >
+                          {trans('notificacionesForm.aceptarAcuerdo')}
+                          <FontAwesomeIcon icon={faCheck} className="ml-2" />
+                        </button>
+                        <button
+                          className="btn btn-danger"
+                        >
+                        {trans('notificacionesForm.rechazarAcuerdo')}
+                        <FontAwesomeIcon icon={faTimes} className="ml-2" />
+                        </button>
+                      </div>
+                    </div>
+                  ) : null}
                 </ModalBody>
                 <ModalFooter></ModalFooter>
               </Modal>
