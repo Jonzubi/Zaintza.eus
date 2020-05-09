@@ -18,7 +18,7 @@ module.exports = (conexion) => {
     idAcuerdo: {
       type: String,
       required: true,
-      ref: "Usuario",
+      ref: "Acuerdo",
     },
     valor: {
       type: Number,

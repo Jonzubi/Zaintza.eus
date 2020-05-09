@@ -1649,7 +1649,6 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
       cuidador: cuidadores[index],
       valoraciones: valoraciones
     });
-    console.log(resultado);
   }
   res.writeHead(200, headerResponse);
   res.write(JSON.stringify(resultado));

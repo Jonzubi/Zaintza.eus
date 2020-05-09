@@ -353,7 +353,6 @@ class NotificacionesForm extends React.Component {
       jsonNotificaciones,
       showModalDeleteNotificacion,
     } = this.state;
-    console.log(selectedNotificacion);
     return (
       <SocketContext.Consumer>
         {(socket) => (
