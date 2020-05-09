@@ -14,6 +14,7 @@ import {
   faClock,
   faCheck,
   faTimes,
+  faExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import { Collapse } from "react-collapse";
 import Avatar from "react-avatar";
@@ -41,6 +42,7 @@ class NotificacionesForm extends React.Component {
       isOpenThreeDotLayer: [],
       showModalNotificacion: false,
       showModalDecision: false,
+      showModalDeleteNotificacion: false,
       selectedNotificacion: null,
     };
   }
@@ -86,6 +88,12 @@ class NotificacionesForm extends React.Component {
         }
       );
       setCountNotify(countNotifies - 1);
+      this.setState(
+        {
+          isLoading: true,
+        },
+        () => this.refrescarDatos()
+      );
     }
   };
 
@@ -210,9 +218,14 @@ class NotificacionesForm extends React.Component {
     );
   }
 
-  async handleDeleteNotificacion(notificacion, indice) {
-    const { countNotifies, setCountNotify, email, contrasena } = this.props;
-    let auxJsonNotif = this.state.jsonNotificaciones;
+  handleDeleteNotificacionAfterDecision = async (notificacion) => {
+    const {
+      countNotifies,
+      setCountNotify,
+      email,
+      contrasena,
+      tipoUsuario,
+    } = this.props;
 
     await axios.patch(
       "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
@@ -222,15 +235,63 @@ class NotificacionesForm extends React.Component {
         contrasena,
       }
     );
-    delete auxJsonNotif[indice];
 
+    this.setState(
+      {
+        isLoading: true,
+      },
+      () => this.refrescarDatos()
+    );
+  };
+
+  async handleDeleteNotificacion(notificacion, socket) {
+    const {
+      countNotifies,
+      setCountNotify,
+      email,
+      contrasena,
+      tipoUsuario,
+    } = this.props;
+
+    await axios.patch(
+      "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
+      {
+        show: false,
+        email,
+        contrasena,
+      }
+    );
+
+    let estadoAcuerdo;
+    if (notificacion.tipoNotificacion === "Acuerdo") {
+      estadoAcuerdo = await axios.post(
+        "http://" +
+          ipMaquina +
+          ":3001/api/procedures/getAcuerdoStatus/" +
+          notificacion.acuerdo._id,
+        {
+          whoAmI: tipoUsuario,
+          email,
+          contrasena,
+        }
+      );
+    }
+
+    if (
+      notificacion.tipoNotificacion === "Acuerdo" &&
+      estadoAcuerdo.data === 0
+    ) {
+      this.handleGestionarPropuesta(notificacion, false, socket);
+    }
     if (!notificacion.visto) {
       setCountNotify(countNotifies - 1);
     }
-
-    this.setState({
-      jsonNotificaciones: auxJsonNotif,
-    });
+    this.setState(
+      {
+        isLoading: true,
+      },
+      () => this.refrescarDatos()
+    );
   }
 
   handleClickOptions = (index) => {
@@ -290,6 +351,7 @@ class NotificacionesForm extends React.Component {
       selectedNotificacion,
       showModalDecision,
       jsonNotificaciones,
+      showModalDeleteNotificacion,
     } = this.state;
     console.log(selectedNotificacion);
     return (
@@ -321,6 +383,12 @@ class NotificacionesForm extends React.Component {
                       <div className="d-flex flex-row align-items-center justify-content-between">
                         <div className="">
                           <div className="d-flex align-items-center">
+                            {!notificacion.visto ? (
+                              <FontAwesomeIcon
+                                icon={faExclamation}
+                                className="mr-1"
+                              />
+                            ) : null}
                             <Avatar
                               size={50}
                               className=""
@@ -402,6 +470,10 @@ class NotificacionesForm extends React.Component {
                               onClick={() => {
                                 this.setState({});
                                 this.handleClickOptions(indice);
+                                this.setState({
+                                  showModalDeleteNotificacion: true,
+                                  selectedNotificacion: notificacion,
+                                });
                               }}
                               style={{ cursor: "pointer" }}
                             >
@@ -700,9 +772,7 @@ class NotificacionesForm extends React.Component {
                   ) : null}
                 </ModalBody>
                 {selectedNotificacion.tipoNotificacion === "Acuerdo" ? (
-                  <ModalFooter
-                    className="d-flex flex-row align-items-center justify-content-between"
-                  >
+                  <ModalFooter className="d-flex flex-row align-items-center justify-content-between">
                     <button
                       onClick={() => {
                         this.decisionAcuerdo = "Aceptar";
@@ -747,8 +817,11 @@ class NotificacionesForm extends React.Component {
                   onClick={() => {
                     this.handleGestionarPropuesta(
                       selectedNotificacion,
-                      true,
+                      this.decisionAcuerdo === "Aceptar",
                       socket
+                    );
+                    this.handleDeleteNotificacionAfterDecision(
+                      selectedNotificacion
                     );
                     this.setState({
                       showModalNotificacion: false,
@@ -766,9 +839,46 @@ class NotificacionesForm extends React.Component {
                       false,
                       socket
                     );
+                    this.handleDeleteNotificacionAfterDecision(
+                      selectedNotificacion
+                    );
                     this.setState({
                       showModalNotificacion: false,
                       showModalDecision: false,
+                    });
+                  }}
+                >
+                  {trans("misAnunciosForm.no")}
+                </button>
+              </ModalFooter>
+            </Modal>
+            <Modal
+              onHide={() =>
+                this.setState({ showModalDeleteNotificacion: false })
+              }
+              show={showModalDeleteNotificacion}
+              className="modalRegistrarse"
+            >
+              <ModalBody className="d-flex flex-row align-items-center justify-content-center">
+                {trans(`notificacionesForm.askDeleteNotificacion`)}
+              </ModalBody>
+              <ModalFooter className="d-flex flex-row align-items-center justify-content-between">
+                <button
+                  className="btn btn-success"
+                  onClick={() => {
+                    this.handleDeleteNotificacion(selectedNotificacion, socket);
+                    this.setState({
+                      showModalDeleteNotificacion: false,
+                    });
+                  }}
+                >
+                  {trans("misAnunciosForm.si")}
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => {
+                    this.setState({
+                      showModalDeleteNotificacion: false,
                     });
                   }}
                 >

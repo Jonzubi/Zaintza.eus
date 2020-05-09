@@ -206,7 +206,8 @@
     "acuerdoPueblos": "Herria/k",
     "acuerdoHorario": "Zaintza ordutegia",
     "decisionAcuerdoAceptar": "Ziur akordioa onartu nahi duzula?",
-    "decisionAcuerdoRechazar": "Ziur akordioa ukatu nahi duzula?"
+    "decisionAcuerdoRechazar": "Ziur akordioa ukatu nahi duzula?",
+    "askDeleteNotificacion": "Ziur abisua ezabatu nahi duzula? Akordio proposamen motako abisua bada ezeztatua izango da."
   },
   "formAnuncio":{
     "titulo": "Izenburua",
