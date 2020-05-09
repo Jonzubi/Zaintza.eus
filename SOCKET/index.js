@@ -29,7 +29,7 @@ io.on('connection', (socket) => {
         if(usertToNotify !== undefined) {
             io.to(`${usertToNotify.socketId}`).emit('notifyReceived');
         } else {
-            console.log("[Evento Notify] Destinatario no encontrado");
+            console.log("[Evento Notify] Destinatario no encontrado\nIdUsuarioMandado:" + idUsuario);
         }
     });
 
