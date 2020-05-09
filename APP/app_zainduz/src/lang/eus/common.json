@@ -177,7 +177,10 @@
     "pueblos": "Herria/k",
     "si": "Bai",
     "no": "Ez",
-    "estado": "Egoera"
+    "estado": "Egoera",
+    "enviarValoracion": "Bidali balorazioa",
+    "valorarCuidador": "Eman 1etik 5era zaintzaileari buruz duzun iritzia",
+    "detalles": "Xehetasunak"
 
   },
   "notificacionesForm":{

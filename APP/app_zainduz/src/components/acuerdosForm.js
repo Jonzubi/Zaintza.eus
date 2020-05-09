@@ -6,6 +6,7 @@ import {
   faUserMd,
   faCity,
   faFileSignature,
+  faStar,
   faHome,
   faClock,
   faEye,
@@ -26,6 +27,8 @@ import Modal from "react-bootstrap/Modal";
 import ModalBody from "react-bootstrap/ModalBody";
 import ModalFooter from "react-bootstrap/ModalFooter";
 import ModalHeader from "react-bootstrap/ModalHeader";
+import Rating from "react-rating";
+import i18next from "i18next";
 import "./styles/acuerdosForm.css";
 
 const mapStateToProps = (state) => {
@@ -52,8 +55,12 @@ class AcuerdosForm extends React.Component {
       isLoading: true,
       showAcuerdoModal: false,
       showModalTerminarAcuerdo: false,
+      showModalValoracion: true,
       selectedAcuerdo: null,
       isOpenThreeDotLayer: [],
+      valoracionValue: 3,
+      valoracionDetalle: "",
+      valoracionIsUploading: false,
     };
 
     this.handleToogleCollapseAcuerdo = this.handleToogleCollapseAcuerdo.bind(
@@ -210,6 +217,30 @@ class AcuerdosForm extends React.Component {
     }
   };
 
+  handleValoracionDetalleChange = (event) => {
+    this.setState({
+      valoracionDetalle: event.target.value,
+    });
+  };
+
+  handleValoracionValueChange = (value) => {
+    this.setState({
+      valoracionValue: value,
+    });
+  };
+
+  handleEnviarValoracion = () => {
+    const { valoracionDetalle, valoracionValue } = this.state;
+    console.log(valoracionDetalle);
+    console.log(valoracionValue);
+
+    this.setState({
+      valoracionIsUploading: true
+    }, () => {
+      
+    });
+  };
+
   render() {
     const {
       isLoading,
@@ -218,6 +249,10 @@ class AcuerdosForm extends React.Component {
       selectedAcuerdo,
       isOpenThreeDotLayer,
       showModalTerminarAcuerdo,
+      showModalValoracion,
+      valoracionDetalle,
+      valoracionValue,
+      valoracionIsUploading,
     } = this.state;
     const laOtraPersona =
       this.props.tipoUsuario != "Cuidador" ? "idCuidador" : "idCliente";
@@ -381,6 +416,7 @@ class AcuerdosForm extends React.Component {
                                   if (acuerdo.estadoAcuerdo !== 2) {
                                     this.setState({
                                       showModalTerminarAcuerdo: true,
+                                      selectedAcuerdo: acuerdo,
                                     });
                                     this.handleClickOptions(indice);
                                   }
@@ -450,7 +486,9 @@ class AcuerdosForm extends React.Component {
                               }
                             />
                             <div className="mt-2">
-                              <span className="mr-2">{trans("acuerdosForm.estado")}:</span>
+                              <span className="mr-2">
+                                {trans("acuerdosForm.estado")}:
+                              </span>
                               {acuerdo.estadoAcuerdo === 2 ? (
                                 <span className="text-danger">
                                   {trans("acuerdosForm.estadoRechazado")}
@@ -582,6 +620,7 @@ class AcuerdosForm extends React.Component {
                             this.handleTerminarAcuerdo(acuerdo, socket);
                             this.setState({
                               showModalTerminarAcuerdo: false,
+                              showModalValoracion: true,
                             });
                           }}
                         >
@@ -597,6 +636,60 @@ class AcuerdosForm extends React.Component {
                         >
                           {trans("acuerdosForm.no")}
                         </button>
+                      </ModalFooter>
+                    </Modal>
+                    <Modal
+                      show={showModalValoracion}
+                      onHide={() =>
+                        this.setState({ showModalValoracion: false })
+                      }
+                      style={{
+                        maxWidth: 500,
+                      }}
+                      className="modalRegistrarse"
+                    >
+                      <ModalBody className="p-1 d-flex flex-column justify-content-between">
+                        <span className="d-flex flex-row align-items-center justify-content-center font-weight-bold">
+                          {trans("acuerdosForm.valorarCuidador")}
+                        </span>
+                        <Rating
+                          onChange={this.handleValoracionValueChange}
+                          className="mt-3 d-flex flex-row align-items-center justify-content-center"
+                          initialRating={valoracionValue}
+                          emptySymbol={
+                            <FontAwesomeIcon
+                              size={"2x"}
+                              icon={faStar}
+                              className="text-secondary"
+                            />
+                          }
+                          fullSymbol={
+                            <FontAwesomeIcon
+                              size={"2x"}
+                              icon={faStar}
+                              className="text-warning"
+                            />
+                          }
+                        />
+                        <textarea
+                          className="mt-3"
+                          rows={3}
+                          placeholder={i18next.t("acuerdosForm.detalles")}
+                          value={valoracionDetalle}
+                          onChange={this.handleValoracionDetalleChange}
+                        />
+                      </ModalBody>
+                      <ModalFooter className="d-flex flex-row align-items-center justify-content-center">
+                        {valoracionIsUploading ? (
+                          <ClipLoader color="#28a745" />
+                        ) : (
+                          <button
+                            onClick={() => this.handleEnviarValoracion()}
+                            className="btn btn-success"
+                          >
+                            {trans("acuerdosForm.enviarValoracion")}
+                          </button>
+                        )}
                       </ModalFooter>
                     </Modal>
                   </div>
