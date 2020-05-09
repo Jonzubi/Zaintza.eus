@@ -1,11 +1,16 @@
 import React from "react";
-import { Collapse } from "react-collapse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCaretDown,
   faCircle,
   faUserMd,
   faCity,
+  faFileSignature,
+  faHome,
+  faClock,
+  faEye,
+  faEllipsisV,
+  faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
@@ -17,6 +22,11 @@ import Avatar from "react-avatar";
 import cogoToast from "cogo-toast";
 import SocketContext from "../socketio/socket-context";
 import ClipLoader from "react-spinners/ClipLoader";
+import Modal from "react-bootstrap/Modal";
+import ModalBody from "react-bootstrap/ModalBody";
+import ModalFooter from "react-bootstrap/ModalFooter";
+import ModalHeader from "react-bootstrap/ModalHeader";
+import "./styles/acuerdosForm.css";
 
 const mapStateToProps = (state) => {
   return {
@@ -30,6 +40,28 @@ const mapStateToProps = (state) => {
 
 class AcuerdosForm extends React.Component {
   componentDidMount() {
+    this.refrescarAcuerdoData();
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      jsonAcuerdos: [],
+      acuerdosCollapseState: [],
+      isLoading: true,
+      showAcuerdoModal: false,
+      showModalTerminarAcuerdo: false,
+      selectedAcuerdo: null,
+      isOpenThreeDotLayer: [],
+    };
+
+    this.handleToogleCollapseAcuerdo = this.handleToogleCollapseAcuerdo.bind(
+      this
+    );
+  }
+
+  refrescarAcuerdoData = () => {
     //buscarUsuOrCuid =>> En esta variable guardo si el usuario iniciado es cliente o cuidador para asi si es cuidador
     //buscar cliente en el acuerdo y viceversa, ESTO ME DARA LA INFORMACION DE LA OTRA PARTE DEL ACUERDO
     const { idPerfil, tipoUsuario, email, contrasena } = this.props;
@@ -47,7 +79,7 @@ class AcuerdosForm extends React.Component {
       .then((resultado) => {
         this.setState({
           jsonAcuerdos: resultado.data,
-          acuerdosCollapseState: arrayOfFalses(resultado.data.length),
+          isOpenThreeDotLayer: arrayOfFalses(resultado.data.length),
           isLoading: false,
         });
       })
@@ -57,28 +89,17 @@ class AcuerdosForm extends React.Component {
           isLoading: false,
         });
       });
-  }
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      jsonAcuerdos: [],
-      acuerdosCollapseState: [],
-      isLoading: true,
-    };
-
-    this.handleToogleCollapseAcuerdo = this.handleToogleCollapseAcuerdo.bind(
-      this
-    );
-  }
+  };
 
   handleToogleCollapseAcuerdo(index) {
+    const { jsonAcuerdos } = this.state;
     let aux = this.state.acuerdosCollapseState;
     aux[index] = !aux[index];
 
     this.setState({
       acuerdosCollapseState: aux,
+      selectedAcuerdo: jsonAcuerdos[index],
+      showAcuerdoModal: true,
     });
   }
 
@@ -103,7 +124,7 @@ class AcuerdosForm extends React.Component {
     }
   }
 
-  async handleTerminarAcuerdo(acuerdo, indice, socket) {
+  async handleTerminarAcuerdo(acuerdo, socket) {
     if (acuerdo.estadoAcuerdo == 2) {
       return;
     }
@@ -149,26 +170,67 @@ class AcuerdosForm extends React.Component {
       idUsuario: elOtroUsu.data,
     });
 
-    let auxJsonAcuerdos = this.state.jsonAcuerdos;
-    auxJsonAcuerdos[indice].estadoAcuerdo = 2;
     this.setState(
       {
-        jsonAcuerdos: auxJsonAcuerdos,
+        isLoading: true,
       },
       () => {
+        this.refrescarAcuerdoData();
         cogoToast.success(<h5>{trans("acuerdosForm.acuerdoTerminado")}</h5>);
       }
     );
   }
 
+  handleClickOptions = (index) => {
+    const { isOpenThreeDotLayer } = this.state;
+    let auxIsOpen = isOpenThreeDotLayer.slice();
+    if (!index) {
+      this.setState({
+        isOpenThreeDotLayer: arrayOfFalses(isOpenThreeDotLayer.length),
+      });
+    }
+    if (auxIsOpen[index]) {
+      auxIsOpen[index] = false;
+    } else {
+      auxIsOpen = arrayOfFalses(isOpenThreeDotLayer.length);
+      auxIsOpen[index] = true;
+    }
+    this.setState({
+      isOpenThreeDotLayer: auxIsOpen,
+    });
+  };
+
+  closeOpenedOptionsDiv = () => {
+    const { isOpenThreeDotLayer } = this.state;
+
+    if (isOpenThreeDotLayer.includes(true)) {
+      this.setState({
+        isOpenThreeDotLayer: arrayOfFalses(isOpenThreeDotLayer.length),
+      });
+    }
+  };
+
   render() {
-    const { isLoading, jsonAcuerdos } = this.state;
+    const {
+      isLoading,
+      jsonAcuerdos,
+      showAcuerdoModal,
+      selectedAcuerdo,
+      isOpenThreeDotLayer,
+      showModalTerminarAcuerdo,
+    } = this.state;
     const laOtraPersona =
       this.props.tipoUsuario != "Cuidador" ? "idCuidador" : "idCliente";
     return (
       <SocketContext.Consumer>
         {(socket) => (
-          <div className={jsonAcuerdos.length > 0 ? "p-lg-5 p-2" : "p-0"}>
+          <div
+            onClick={() => this.closeOpenedOptionsDiv()}
+            style={{
+              height: "calc(100vh - 80px)",
+            }}
+            className={jsonAcuerdos.length > 0 ? "p-lg-5 p-2" : "p-0"}
+          >
             {isLoading ? (
               <div
                 style={{
@@ -261,84 +323,282 @@ class AcuerdosForm extends React.Component {
                           <div className="">
                             <FontAwesomeIcon
                               style={{ cursor: "pointer" }}
-                              size="2x"
-                              icon={faCaretDown}
+                              size="1x"
+                              icon={faEllipsisV}
                               className="ml-5"
-                              onClick={() =>
-                                this.handleToogleCollapseAcuerdo(indice)
-                              }
+                              onClick={() => this.handleClickOptions(indice)}
                             />
+                            <div
+                              style={{
+                                position: "absolute",
+                                width: 200,
+                                right: 10,
+                                backgroundColor: "white",
+                                boxShadow:
+                                  "0 0.125rem 0.25rem rgba(0,0,0,.075)",
+                                zIndex: 2,
+                              }}
+                              className={
+                                isOpenThreeDotLayer[indice]
+                                  ? "d-flex flex-column rounded border"
+                                  : "d-none"
+                              }
+                            >
+                              <div
+                                style={{
+                                  cursor: "pointer",
+                                }}
+                                className="threeDotsMenu p-1 d-flex flex-row align-items-center justify-content-between"
+                                onClick={() => {
+                                  this.setState({
+                                    selectedAcuerdo: acuerdo,
+                                    showAcuerdoModal: true,
+                                  });
+                                  this.handleClickOptions(indice);
+                                }}
+                              >
+                                <span className="mr-5">
+                                  {trans("acuerdosForm.verAcuerdo")}
+                                </span>
+                                <FontAwesomeIcon
+                                  className="text-success"
+                                  icon={faEye}
+                                />
+                              </div>
+                              <div
+                                style={{
+                                  cursor:
+                                    acuerdo.estadoAcuerdo !== 2
+                                      ? "pointer"
+                                      : "context-menu",
+                                }}
+                                className={
+                                  acuerdo.estadoAcuerdo !== 2
+                                    ? "threeDotsMenu p-1 d-flex flex-row align-items-center justify-content-between"
+                                    : "p-1 d-flex flex-row align-items-center justify-content-between"
+                                }
+                                onClick={() => {
+                                  if (acuerdo.estadoAcuerdo !== 2) {
+                                    this.setState({
+                                      showModalTerminarAcuerdo: true,
+                                    });
+                                    this.handleClickOptions(indice);
+                                  }
+                                }}
+                              >
+                                <span
+                                  className={
+                                    acuerdo.estadoAcuerdo !== 2
+                                      ? "mr-5"
+                                      : "text-secondary mr-5"
+                                  }
+                                >
+                                  {trans("acuerdosForm.terminarAcuerdo")}
+                                </span>
+                                <FontAwesomeIcon
+                                  className={
+                                    acuerdo.estadoAcuerdo !== 2
+                                      ? "text-danger"
+                                      : "text-secondary"
+                                  }
+                                  icon={faTrashAlt}
+                                />
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <Collapse
-                      className="card-body"
-                      isOpened={this.state.acuerdosCollapseState[indice]}
-                    >
-                      <div>
-                        <h3 className="">{acuerdo.tituloAcuerdo}</h3>
-                        <hr />
-                        <div className="p-5 font-weight-bold text-center">
-                          {acuerdo.descripcionAcuerdo}
-                        </div>
-                        <div className="row">
-                          <div className="col-6 text-center">
-                            <span>{trans("notificacionesForm.pueblos")}</span>
-                            <hr />
-                            <ul className="list-group">
-                              {typeof acuerdo.pueblo.map != "undefined"
-                                ? acuerdo.pueblo.map((pueblo) => {
-                                    return (
-                                      <li className="list-group-item font-weight-bold">
-                                        {pueblo}
-                                      </li>
-                                    );
-                                  })
-                                : null}
-                            </ul>
-                          </div>
-                          <div className="col-6 text-center">
-                            <span>{trans("notificacionesForm.dias")}</span>
-                            <hr />
-                            <ul className="list-group">
-                              {typeof acuerdo.diasAcordados.map != "undefined"
-                                ? acuerdo.diasAcordados.map((dia) => {
-                                    return (
-                                      <li className="list-group-item">
-                                        <span className="font-weight-bold">
-                                          {this.traducirDia(dia.dia) + ": "}
-                                        </span>
-                                        <span>
-                                          {dia.horaInicio + " - " + dia.horaFin}
-                                        </span>
-                                      </li>
-                                    );
-                                  })
-                                : null}
-                            </ul>
-                          </div>
-                        </div>
-                        <div className="row ml-0 mr-0 mt-5">
-                          <button
-                            onClick={() =>
-                              this.handleTerminarAcuerdo(
-                                acuerdo,
-                                indice,
-                                socket
-                              )
-                            }
-                            className={
-                              acuerdo.estadoAcuerdo != 2
-                                ? "w-100 btn btn-danger"
-                                : "w-100 btn btn-danger disabled"
-                            }
+                    {selectedAcuerdo !== null ? (
+                      <Modal
+                        style={{
+                          maxWidth: 500,
+                        }}
+                        show={showAcuerdoModal}
+                        onHide={() =>
+                          this.setState({ showAcuerdoModal: false })
+                        }
+                      >
+                        <ModalHeader closeButton>
+                          <h5>{trans("acuerdosForm.acuerdo")}</h5>
+                        </ModalHeader>
+                        <ModalBody className="d-flex flex-column justify-content-between align-items-center">
+                          <div
+                            style={{
+                              width: "calc(100% - 20px)",
+                              backgroundSize: "cover",
+                              backgroundPosition: "top",
+                              backgroundRepeat: "no-repeat",
+                              margin: "10px",
+                              display: "flex",
+                              overflow: "hidden",
+                            }}
+                            className="flex-column align-items-center justify-content-center"
+                            alt="Imagen no disponible"
                           >
-                            {trans("acuerdosForm.terminarAcuerdo")}
-                          </button>
-                        </div>
-                      </div>
-                    </Collapse>
+                            <img
+                              style={{
+                                minHeight: "150px",
+                                maxHeight: "150px",
+                                height: "auto",
+                              }}
+                              src={
+                                "http://" +
+                                ipMaquina +
+                                ":3001/api/image/" +
+                                selectedAcuerdo[laOtraPersona].direcFoto
+                              }
+                            />
+                            <div className="mt-2">
+                              <span className="mr-2">{trans("acuerdosForm.estado")}:</span>
+                              {acuerdo.estadoAcuerdo === 2 ? (
+                                <span className="text-danger">
+                                  {trans("acuerdosForm.estadoRechazado")}
+                                </span>
+                              ) : acuerdo.estadoAcuerdo === 1 ? (
+                                <span className="text-success">
+                                  {trans("acuerdosForm.estadoAceptado")}
+                                </span>
+                              ) : (
+                                <span className="text-secondary">
+                                  {trans("acuerdosForm.estadoPendiente")}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <div
+                            style={{
+                              width: 300,
+                            }}
+                            className="mt-3 d-flex flex-column"
+                          >
+                            <div className="d-flex flex-row align-items-center justify-content-center">
+                              <FontAwesomeIcon
+                                icon={faFileSignature}
+                                className="mr-1"
+                              />
+                              <span className="font-weight-bold">
+                                {trans("acuerdosForm.titulo")}
+                              </span>
+                            </div>
+                            <span>{selectedAcuerdo.tituloAcuerdo}</span>
+                          </div>
+                          <div
+                            style={{
+                              width: 300,
+                            }}
+                            className="mt-3 d-flex flex-column"
+                          >
+                            <div className="d-flex flex-row align-items-center justify-content-center">
+                              <FontAwesomeIcon
+                                icon={faFileSignature}
+                                className="mr-1"
+                              />
+                              <span className="font-weight-bold">
+                                {trans("acuerdosForm.descripcion")}
+                              </span>
+                            </div>
+                            <span>{selectedAcuerdo.descripcionAcuerdo}</span>
+                          </div>
+                          <div
+                            style={{
+                              width: 300,
+                            }}
+                          >
+                            <div className="text-center">
+                              <FontAwesomeIcon icon={faHome} className="mr-1" />
+                              <span className="font-weight-bold text-center">
+                                {trans("acuerdosForm.pueblos")}
+                              </span>
+                            </div>
+                            <span className="">
+                              {typeof selectedAcuerdo.pueblo != "undefined"
+                                ? selectedAcuerdo.pueblo.map(
+                                    (ubicacion, index) => {
+                                      return (
+                                        <div>
+                                          <span>{ubicacion}</span>
+                                          <br />
+                                        </div>
+                                      );
+                                    }
+                                  )
+                                : null}
+                            </span>
+                          </div>
+                          <div
+                            style={{
+                              width: 300,
+                            }}
+                          >
+                            <div className="text-center">
+                              <FontAwesomeIcon
+                                icon={faClock}
+                                className="mr-1"
+                              />
+                              <span className="font-weight-bold text-center">
+                                {trans("acuerdosForm.horario")}
+                              </span>
+                            </div>
+                            <span className="">
+                              {typeof selectedAcuerdo.diasAcordados !=
+                              "undefined"
+                                ? selectedAcuerdo.diasAcordados.map(
+                                    (dia, index) => {
+                                      return (
+                                        <div className="d-flex flex-row justify-content-between">
+                                          <span>
+                                            {trans(`dias.dia_${dia.dia}`)}
+                                          </span>
+                                          <span>
+                                            {dia.horaInicio +
+                                              " - " +
+                                              dia.horaFin}
+                                          </span>
+                                        </div>
+                                      );
+                                    }
+                                  )
+                                : null}
+                            </span>
+                          </div>
+                        </ModalBody>
+                      </Modal>
+                    ) : null}
+                    <Modal
+                      className="modalRegistrarse"
+                      show={showModalTerminarAcuerdo}
+                      onHide={() =>
+                        this.setState({ showModalTerminarAcuerdo: false })
+                      }
+                    >
+                      <ModalBody className="d-flex flex-row align-items-center justify-content-center">
+                        {trans("acuerdosForm.askTerminarAcuerdo")}
+                      </ModalBody>
+                      <ModalFooter className="d-flex flex-row align-items-center justify-content-between">
+                        <button
+                          className="btn btn-success"
+                          onClick={() => {
+                            this.handleTerminarAcuerdo(acuerdo, socket);
+                            this.setState({
+                              showModalTerminarAcuerdo: false,
+                            });
+                          }}
+                        >
+                          {trans("acuerdosForm.si")}
+                        </button>
+                        <button
+                          className="btn btn-danger"
+                          onClick={() =>
+                            this.setState({
+                              showModalTerminarAcuerdo: false,
+                            })
+                          }
+                        >
+                          {trans("acuerdosForm.no")}
+                        </button>
+                      </ModalFooter>
+                    </Modal>
                   </div>
                 );
               })
