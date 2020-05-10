@@ -1701,7 +1701,7 @@ exports.postNewValoracion = async(req, res, modelos) => {
     res.end();
     return;
   }
-
+  const modeloValoracion = modelos.valoracion;
   //Comprobar que no hay ninguna valoracion con ese acuerdo
   const acuerdoRepetido = await modeloValoracion.findOne({
     idAcuerdo
@@ -1715,7 +1715,6 @@ exports.postNewValoracion = async(req, res, modelos) => {
   }
 
   //Por ultimo registrar la valoracion para el idUsuario
-  const modeloValoracion = modelos.valoracion;
   modeloValoracion({
     idUsuario,
     idValorador,
@@ -1723,6 +1722,7 @@ exports.postNewValoracion = async(req, res, modelos) => {
     valor,
     comentario
   })
+  .save()
   .then((doc) => {
     res.writeHead(200, headerResponse);
     res.write(JSON.stringify(doc));

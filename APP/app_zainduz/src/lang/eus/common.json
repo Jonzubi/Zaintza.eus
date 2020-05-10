@@ -30,7 +30,8 @@
     "sesionCerrada": "Saioa behar bezala itxi da",
     "datosIncorrectos": "Erabiltzaile izena edo pasahitza ez da zuzena...",
     "errorConexion": "Konektatzeko arazaoak daude...",
-    "servidorNoDisponible": "Zerbitzariak ez du erantzuten"
+    "servidorNoDisponible": "Zerbitzariak ez du erantzuten",
+    "errorGeneral":"Arazo bat gertatu da"
   },
   "tablaCuidadores": {
     "noData": "Ez dago daturik",

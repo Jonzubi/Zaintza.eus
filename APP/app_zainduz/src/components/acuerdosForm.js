@@ -55,7 +55,7 @@ class AcuerdosForm extends React.Component {
       isLoading: true,
       showAcuerdoModal: false,
       showModalTerminarAcuerdo: false,
-      showModalValoracion: true,
+      showModalValoracion: false,
       selectedAcuerdo: null,
       isOpenThreeDotLayer: [],
       valoracionValue: 3,
@@ -180,6 +180,7 @@ class AcuerdosForm extends React.Component {
     this.setState(
       {
         isLoading: true,
+        showModalValoracion: true
       },
       () => {
         this.refrescarAcuerdoData();
@@ -229,16 +230,44 @@ class AcuerdosForm extends React.Component {
     });
   };
 
-  handleEnviarValoracion = () => {
-    const { valoracionDetalle, valoracionValue } = this.state;
-    console.log(valoracionDetalle);
-    console.log(valoracionValue);
+  handleEnviarValoracion = async () => {
+    const { valoracionDetalle, valoracionValue, selectedAcuerdo } = this.state;
+    const { idUsuario, email, contrasena } = this.props;
 
-    this.setState({
-      valoracionIsUploading: true
-    }, () => {
-      
-    });
+    this.setState(
+      {
+        valoracionIsUploading: true,
+      },
+      async () => {
+        const idUsuarioAValorar = await axios.get(`http://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${selectedAcuerdo.idCuidador._id}`)
+        const formData = {
+          idUsuario: idUsuarioAValorar.data,
+          idValorador: idUsuario,
+          idAcuerdo: selectedAcuerdo._id,
+          valor: valoracionValue,
+          comentario: valoracionDetalle,
+          email,
+          contrasena
+        };
+        axios.post(`http://${ipMaquina}:3001/api/procedures/postNewValoracion`, formData)
+        .then(() => {
+          cogoToast.success(
+          <h5>{trans('acuerdosForm.valoracionEnviada')}</h5>
+          )
+        })
+        .catch(() => {
+          cogoToast.error(
+          <h5>{trans('notificaciones.errorGeneral')}</h5>
+          )
+        })
+        .finally(() => {
+          this.setState({
+            valoracionIsUploading: false,
+            showModalValoracion: false
+          })
+        });
+      }
+    );
   };
 
   render() {
@@ -254,8 +283,9 @@ class AcuerdosForm extends React.Component {
       valoracionValue,
       valoracionIsUploading,
     } = this.state;
+    const { tipoUsuario } = this.props;
     const laOtraPersona =
-      this.props.tipoUsuario != "Cuidador" ? "idCuidador" : "idCliente";
+      tipoUsuario != "Cuidador" ? "idCuidador" : "idCliente";
     return (
       <SocketContext.Consumer>
         {(socket) => (
@@ -619,8 +649,7 @@ class AcuerdosForm extends React.Component {
                           onClick={() => {
                             this.handleTerminarAcuerdo(acuerdo, socket);
                             this.setState({
-                              showModalTerminarAcuerdo: false,
-                              showModalValoracion: true,
+                              showModalTerminarAcuerdo: false
                             });
                           }}
                         >
@@ -638,60 +667,62 @@ class AcuerdosForm extends React.Component {
                         </button>
                       </ModalFooter>
                     </Modal>
-                    <Modal
-                      show={showModalValoracion}
-                      onHide={() =>
-                        this.setState({ showModalValoracion: false })
-                      }
-                      style={{
-                        maxWidth: 500,
-                      }}
-                      className="modalRegistrarse"
-                    >
-                      <ModalBody className="p-1 d-flex flex-column justify-content-between">
-                        <span className="d-flex flex-row align-items-center justify-content-center font-weight-bold">
-                          {trans("acuerdosForm.valorarCuidador")}
-                        </span>
-                        <Rating
-                          onChange={this.handleValoracionValueChange}
-                          className="mt-3 d-flex flex-row align-items-center justify-content-center"
-                          initialRating={valoracionValue}
-                          emptySymbol={
-                            <FontAwesomeIcon
-                              size={"2x"}
-                              icon={faStar}
-                              className="text-secondary"
-                            />
-                          }
-                          fullSymbol={
-                            <FontAwesomeIcon
-                              size={"2x"}
-                              icon={faStar}
-                              className="text-warning"
-                            />
-                          }
-                        />
-                        <textarea
-                          className="mt-3"
-                          rows={3}
-                          placeholder={i18next.t("acuerdosForm.detalles")}
-                          value={valoracionDetalle}
-                          onChange={this.handleValoracionDetalleChange}
-                        />
-                      </ModalBody>
-                      <ModalFooter className="d-flex flex-row align-items-center justify-content-center">
-                        {valoracionIsUploading ? (
-                          <ClipLoader color="#28a745" />
-                        ) : (
-                          <button
-                            onClick={() => this.handleEnviarValoracion()}
-                            className="btn btn-success"
-                          >
-                            {trans("acuerdosForm.enviarValoracion")}
-                          </button>
-                        )}
-                      </ModalFooter>
-                    </Modal>
+                    {tipoUsuario === "Cliente" ? (
+                      <Modal
+                        show={showModalValoracion}
+                        onHide={() =>
+                          this.setState({ showModalValoracion: false })
+                        }
+                        style={{
+                          maxWidth: 500,
+                        }}
+                        className="modalRegistrarse"
+                      >
+                        <ModalBody className="p-1 d-flex flex-column justify-content-between">
+                          <span className="d-flex flex-row align-items-center justify-content-center font-weight-bold">
+                            {trans("acuerdosForm.valorarCuidador")}
+                          </span>
+                          <Rating
+                            onChange={this.handleValoracionValueChange}
+                            className="mt-3 d-flex flex-row align-items-center justify-content-center"
+                            initialRating={valoracionValue}
+                            emptySymbol={
+                              <FontAwesomeIcon
+                                size={"2x"}
+                                icon={faStar}
+                                className="text-secondary"
+                              />
+                            }
+                            fullSymbol={
+                              <FontAwesomeIcon
+                                size={"2x"}
+                                icon={faStar}
+                                className="text-warning"
+                              />
+                            }
+                          />
+                          <textarea
+                            className="mt-3"
+                            rows={3}
+                            placeholder={i18next.t("acuerdosForm.detalles")}
+                            value={valoracionDetalle}
+                            onChange={this.handleValoracionDetalleChange}
+                          />
+                        </ModalBody>
+                        <ModalFooter className="d-flex flex-row align-items-center justify-content-center">
+                          {valoracionIsUploading ? (
+                            <ClipLoader color="#28a745" />
+                          ) : (
+                            <button
+                              onClick={() => this.handleEnviarValoracion()}
+                              className="btn btn-success"
+                            >
+                              {trans("acuerdosForm.enviarValoracion")}
+                            </button>
+                          )}
+                        </ModalFooter>
+                      </Modal>
+                    ) : null}
                   </div>
                 );
               })
