@@ -1654,3 +1654,85 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
   res.write(JSON.stringify(resultado));
   res.end();
 }
+
+exports.postNewValoracion = async(req, res, modelos) => {
+  const { idUsuario, idValorador, idAcuerdo, valor, comentario, email, contrasena } = req.body;
+
+  //Primero validar que el idValorador(El que envia esta peticion) es autentico
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findById(idValorador);
+
+  if (usuario === null) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+    return;
+  }
+  //Comprobar que el idUsuario existe
+  const usuarioValorar = await modeloUsuario.findById(idUsuario);
+  if (usuarioValorar === null){
+    res.writeHead(405, headerResponse);
+    res.write("El usuario a valorar no existe");
+    res.end();
+    return;
+  }
+  
+  //Comprobar que el acuerdo existe y que se ha terminado
+  const modeloAcuerdo = modelos.acuerdo;
+  const acuerdo = await modeloAcuerdo.findById(idAcuerdo);
+
+  if(acuerdo == null){
+    res.writeHead(405, headerResponse);
+    res.write("El acuerdo no existe");
+    res.end();
+    return;
+  }
+
+  if(acuerdo.estadoAcuerdo !== 2){
+    res.writeHead(405, headerResponse);
+    res.write("El acuerdo no está terminado");
+    res.end();
+    return;
+  }
+
+  //Comprobar que no hay ninguna valoracion con ese acuerdo
+  const acuerdoRepetido = await modeloValoracion.findOne({
+    idAcuerdo
+  });
+
+  if(acuerdoRepetido !== null){
+    res.writeHead(405, headerResponse);
+    res.write("Ya existe una valoracion con este acuerdo");
+    res.end();
+    return;
+  }
+
+  //Por ultimo registrar la valoracion para el idUsuario
+  const modeloValoracion = modelos.valoracion;
+  modeloValoracion({
+    idUsuario,
+    idValorador,
+    idAcuerdo,
+    valor,
+    comentario
+  })
+  .then((doc) => {
+    res.writeHead(200, headerResponse);
+    res.write(JSON.stringify(doc));
+  })
+  .catch((err) => {
+    console.log(err);
+    res.writeHead(500, headerResponse);
+    res.write(JSON.stringify(err));
+  })
+  .finally((fin) => {
+    res.end();
+  });
+}
