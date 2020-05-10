@@ -30,7 +30,8 @@
     "sesionCerrada": "Saioa behar bezala itxi da",
     "datosIncorrectos": "Erabiltzaile izena edo pasahitza ez da zuzena...",
     "errorConexion": "Konektatzeko arazaoak daude...",
-    "servidorNoDisponible": "Zerbitzariak ez du erantzuten"
+    "servidorNoDisponible": "Zerbitzariak ez du erantzuten",
+    "errorGeneral":"Arazo bat gertatu da"
   },
   "tablaCuidadores": {
     "noData": "Ez dago daturik",
@@ -177,7 +178,11 @@
     "pueblos": "Herria/k",
     "si": "Bai",
     "no": "Ez",
-    "estado": "Egoera"
+    "estado": "Egoera",
+    "enviarValoracion": "Bidali balorazioa",
+    "valorarCuidador": "Eman 1etik 5era zaintzaileari buruz duzun iritzia",
+    "detalles": "Xehetasunak",
+    "valoracionEnviada": "Balorazioa bidalia"
 
   },
   "notificacionesForm":{
