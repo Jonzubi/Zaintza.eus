@@ -181,7 +181,8 @@
     "estado": "Egoera",
     "enviarValoracion": "Bidali balorazioa",
     "valorarCuidador": "Eman 1etik 5era zaintzaileari buruz duzun iritzia",
-    "detalles": "Xehetasunak"
+    "detalles": "Xehetasunak",
+    "valoracionEnviada": "Balorazioa bidalia"
 
   },
   "notificacionesForm":{
