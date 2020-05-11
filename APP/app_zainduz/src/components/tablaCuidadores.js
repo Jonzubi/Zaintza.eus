@@ -701,6 +701,7 @@ class Tabla extends React.Component {
               {
                 selectedCuidador: cuidador,
                 showModalValoraciones: true,
+                valoracionesIsLoading: true
               },
               () => this.loadValoracionesData(cuidador)
             )
