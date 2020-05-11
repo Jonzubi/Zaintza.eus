@@ -1736,3 +1736,28 @@ exports.postNewValoracion = async(req, res, modelos) => {
     res.end();
   });
 }
+
+exports.getValoracionesDelCuidador = async (req, res, modelos) => {
+  const { idUsuario } = req.params;
+
+  const modeloValoracion = modelos.valoracion;
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findById(idUsuario);
+
+  if(usuario === null){
+    res.writeHead(405, headerResponse);
+    res.write("El usuario no existe");
+    res.end();
+    return;
+  }
+
+  const valoraciones = await modeloValoracion.find({
+    idUsuario: usuario._id
+  }).populate({
+    path: "idValorador",
+    populate: "idPerfil",
+  });
+  res.writeHead(200, headerResponse);
+  res.write(JSON.stringify(valoraciones));
+  res.end();
+}

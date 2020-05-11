@@ -45,6 +45,7 @@ import BottomScrollListener from "react-bottom-scroll-listener";
 import ClipLoader from "react-spinners/ClipLoader";
 import i18next from "i18next";
 import Rating from "react-rating";
+import Avatar from "react-avatar";
 
 const mapStateToProps = (state) => {
   return {
@@ -67,11 +68,16 @@ let gSocket = null;
 class Tabla extends React.Component {
   componentDidMount() {
     const { requiredCards } = this.state;
-    Axios.get("http://" + ipMaquina + ":3001/api/procedures/getCuidadoresConValoraciones", {
-      params: {
-        requiredCards
+    Axios.get(
+      "http://" +
+        ipMaquina +
+        ":3001/api/procedures/getCuidadoresConValoraciones",
+      {
+        params: {
+          requiredCards,
+        },
       }
-    })
+    )
       .then((data) => {
         this.setState({
           jsonCuidadores: data.data,
@@ -95,9 +101,12 @@ class Tabla extends React.Component {
       propuestaIsLoading: false,
       buscado: false,
       jsonCuidadores: {},
+      jsonValoraciones: [],
       showModal: false,
       showPropuestaModal: false,
       showModalFilter: false,
+      showModalValoraciones: false,
+      valoracionesIsLoading: true,
       selectedCuidador: {},
       suggestionsPueblos: [],
       auxAddPueblo: "",
@@ -661,7 +670,7 @@ class Tabla extends React.Component {
   };
 
   getValoracionesMedia = (valoraciones) => {
-    if (!valoraciones){
+    if (!valoraciones) {
       return 0;
     }
     let total = 0;
@@ -670,14 +679,50 @@ class Tabla extends React.Component {
     });
     total /= valoraciones.length;
     return total;
-  }
+  };
 
-  getValoracionesCount = (valoraciones) => {
-    if(!valoraciones){
+  getValoracionesCount = (valoraciones, cuidador) => {
+    if (!valoraciones) {
       return 0;
     }
-    return valoraciones.length;
-  }
+    console.log(cuidador);
+    return (
+      <span
+        style={{
+          cursor: "pointer",
+        }}
+      >
+        (
+        <u
+          className="text-primary"
+          onClick={() =>
+            this.setState(
+              {
+                selectedCuidador: cuidador,
+                showModalValoraciones: true,
+              },
+              () => this.loadValoracionesData(cuidador)
+            )
+          }
+        >{`${valoraciones.length}`}</u>
+        )
+      </span>
+    );
+  };
+
+  loadValoracionesData = async (cuidador) => {
+    const idUsuarioDelCuidador = await Axios.get(
+      `http://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${cuidador._id}`
+    );
+    const valoraciones = await Axios.get(
+      `http://${ipMaquina}:3001/api/procedures/getValoracionesDelCuidador/${idUsuarioDelCuidador.data}`
+    );
+
+    this.setState({
+      valoracionesIsLoading: false,
+      jsonValoraciones: valoraciones.data,
+    });
+  };
 
   render() {
     const {
@@ -687,6 +732,9 @@ class Tabla extends React.Component {
       diasDisponible,
       showPropuestaModal,
       propuestaIsLoading,
+      valoracionesIsLoading,
+      jsonValoraciones,
+      showModalValoraciones,
     } = this.state;
     const vSelectedCuidador = this.state.selectedCuidador;
     const fechaNacCuidador = new Date(vSelectedCuidador.fechaNacimiento);
@@ -784,23 +832,36 @@ class Tabla extends React.Component {
                           />
                         </div>
                         <div className="d-flex flex-row align-items-center justify-content-center">
-                            <Rating
-                              readonly
-                              initialRating={this.getValoracionesMedia(cuidador.valoraciones)}
-                              emptySymbol={
-                                <FontAwesomeIcon icon={faStar} className="text-secondary"/>
-                              }
-                              fullSymbol={
-                                <FontAwesomeIcon icon={faStar} className="text-warning"/>
-                              }
-                            />
-                            <span className="ml-2">(
-                              {this.getValoracionesCount(cuidador.valoraciones)}
-                            )</span>
+                          <Rating
+                            readonly
+                            initialRating={this.getValoracionesMedia(
+                              cuidador.valoraciones
+                            )}
+                            emptySymbol={
+                              <FontAwesomeIcon
+                                icon={faStar}
+                                className="text-secondary"
+                              />
+                            }
+                            fullSymbol={
+                              <FontAwesomeIcon
+                                icon={faStar}
+                                className="text-warning"
+                              />
+                            }
+                          />
+                          <span className="ml-2">
+                            {this.getValoracionesCount(
+                              cuidador.valoraciones,
+                              cuidador.cuidador
+                            )}
+                          </span>
                         </div>
                         <div className="card-body">
                           <h5 className="card-title mt-2">
-                            {cuidador.cuidador.nombre + " " + cuidador.cuidador.apellido1}
+                            {cuidador.cuidador.nombre +
+                              " " +
+                              cuidador.cuidador.apellido1}
                           </h5>
                           <p
                             className="card-text"
@@ -849,7 +910,8 @@ class Tabla extends React.Component {
                               )}
                             </div>
                             <div className="col text-center">
-                              {cuidador.cuidador.publicoDisponible.terceraEdad ? (
+                              {cuidador.cuidador.publicoDisponible
+                                .terceraEdad ? (
                                 <FontAwesomeIcon
                                   className="text-success"
                                   icon={faCheck}
@@ -862,7 +924,8 @@ class Tabla extends React.Component {
                               )}
                             </div>
                             <div className="col text-center">
-                              {cuidador.cuidador.publicoDisponible.necesidadEspecial ? (
+                              {cuidador.cuidador.publicoDisponible
+                                .necesidadEspecial ? (
                                 <FontAwesomeIcon
                                   className="text-success"
                                   icon={faCheck}
@@ -1434,6 +1497,71 @@ class Tabla extends React.Component {
                         Restablecer filtros
                       </Button>
                     </div>
+                  </ModalBody>
+                </Modal>
+                <Modal
+                  onHide={() => this.setState({ showModalValoraciones: false })}
+                  show={showModalValoraciones}
+                  style={{
+                    maxWidth: 500,
+                  }}
+                >
+                  <ModalHeader closeButton>
+                    <h5>{trans('tablaCuidadores.valoraciones')}</h5>
+                  </ModalHeader>
+                  <ModalBody
+                    className={
+                      valoracionesIsLoading
+                        ? "d-flex flex-row align-items-center justify-content-center"
+                        : "d-flex flex-column"
+                    }
+                  >
+                    {valoracionesIsLoading ? (
+                      <ClipLoader color="#28a745" />
+                    ) : (
+                      jsonValoraciones.map((valoracion) => (
+                        <div
+                          style={{
+                            boxShadow: "0 0.125rem 0.25rem rgba(0,0,0,.075)",
+                          }}
+                          className="mt-3 p-2 d-flex flex-row align-items-center justify-content-between"
+                        >
+                          <Avatar
+                            name={
+                              valoracion.idValorador.idPerfil.nombre +
+                              " " +
+                              valoracion.idValorador.idPerfil.apellido1
+                            }
+                            src={
+                              "http://" +
+                              ipMaquina +
+                              ":3001/api/image/" +
+                              valoracion.idValorador.idPerfil.direcFoto
+                            }
+                            size={50}
+                            round={true}
+                          />
+                          <div
+                            className="d-flex flex-column"
+                            style={{ width: 300 }}
+                          >
+                            {valoracion.comentario}
+                            <span className="d-flex flex-row justify-content-end blockquote-footer">
+                              {valoracion.idValorador.idPerfil.nombre +
+                                " " +
+                                valoracion.idValorador.idPerfil.apellido1}
+                            </span>
+                          </div>
+                          <div>
+                            {valoracion.valor}
+                            <FontAwesomeIcon
+                              icon={faStar}
+                              className="text-warning ml-1"
+                            />
+                          </div>
+                        </div>
+                      ))
+                    )}
                   </ModalBody>
                 </Modal>
               </div>
