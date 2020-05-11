@@ -27,6 +27,7 @@ module.exports = (conexion) => {
       max: 5,
     },
     comentario: String,
+    fechaValorado: Date,
   });
 
   return conexion.model("Valoracion", valoracion, "Valoraciones");

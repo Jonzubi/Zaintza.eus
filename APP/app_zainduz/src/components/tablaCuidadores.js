@@ -46,6 +46,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import i18next from "i18next";
 import Rating from "react-rating";
 import Avatar from "react-avatar";
+import moment from "moment";
 
 const mapStateToProps = (state) => {
   return {
@@ -1507,7 +1508,7 @@ class Tabla extends React.Component {
                   }}
                 >
                   <ModalHeader closeButton>
-                    <h5>{trans('tablaCuidadores.valoraciones')}</h5>
+                    <h5>{trans("tablaCuidadores.valoraciones")}</h5>
                   </ModalHeader>
                   <ModalBody
                     className={
@@ -1546,11 +1547,18 @@ class Tabla extends React.Component {
                             style={{ width: 300 }}
                           >
                             {valoracion.comentario}
-                            <span className="d-flex flex-row justify-content-end blockquote-footer">
-                              {valoracion.idValorador.idPerfil.nombre +
-                                " " +
-                                valoracion.idValorador.idPerfil.apellido1}
-                            </span>
+                            <div className="d-flex flex-row justify-content-between">
+                              <small>
+                                {moment(valoracion.fechaValorado).format(
+                                  "YYYY/MM/DD"
+                                )}
+                              </small>
+                              <span className="blockquote-footer">
+                                {valoracion.idValorador.idPerfil.nombre +
+                                  " " +
+                                  valoracion.idValorador.idPerfil.apellido1}
+                              </span>
+                            </div>
                           </div>
                           <div>
                             {valoracion.valor}

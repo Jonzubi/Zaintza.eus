@@ -1466,7 +1466,7 @@ exports.registerAnuncioVisita = async (req, res, modelos) => {
   const formData = {
     idAnuncio,
     idUsuario: usuario ? usuario._id : null,
-    fechaVisto: moment().tz('Europe/Madrid').valueOf()
+    fechaVisto: moment().tz("Europe/Madrid").valueOf(),
   };
 
   const modeloAnuncioVisita = modelos.anuncioVisita;
@@ -1496,7 +1496,7 @@ exports.getAnuncioVisitas = async (req, res, modelos) => {
 
   const modeloUsuario = modelos.usuario;
   const usuario = await modeloUsuario.findOne({
-    idPerfil
+    idPerfil,
   });
 
   if (usuario === null) {
@@ -1519,12 +1519,12 @@ exports.getAnuncioVisitas = async (req, res, modelos) => {
   const visitasConLogin = await modeloAnuncioVisita.find({
     idAnuncio,
     idUsuario: {
-      $ne: null
-    }
+      $ne: null,
+    },
   });
   const visitasSinLogin = await modeloAnuncioVisita.find({
     idAnuncio,
-    idUsuario: null
+    idUsuario: null,
   });
 
   resultado.visitasConLogin = visitasConLogin;
@@ -1533,9 +1533,9 @@ exports.getAnuncioVisitas = async (req, res, modelos) => {
   res.writeHead(200, headerResponse);
   res.write(JSON.stringify(resultado));
   res.end();
-}
+};
 
-exports.registerCuidadorVisita = async(req, res, modelos) => {
+exports.registerCuidadorVisita = async (req, res, modelos) => {
   const { idCuidador } = req.params;
   const { email, contrasena } = req.body;
 
@@ -1559,7 +1559,7 @@ exports.registerCuidadorVisita = async(req, res, modelos) => {
   const formData = {
     idCuidador,
     idUsuario: usuario ? usuario._id : null,
-    fechaVisto: moment().tz('Europe/Madrid').valueOf()
+    fechaVisto: moment().tz("Europe/Madrid").valueOf(),
   };
 
   const modeloCuidadorVisita = modelos.cuidadorVisita;
@@ -1577,7 +1577,7 @@ exports.registerCuidadorVisita = async(req, res, modelos) => {
     .finally((fin) => {
       res.end();
     });
-}
+};
 
 exports.getCuidadorVisitas = async (req, res, modelos) => {
   const { idCuidador } = req.params;
@@ -1585,7 +1585,7 @@ exports.getCuidadorVisitas = async (req, res, modelos) => {
 
   const modeloUsuario = modelos.usuario;
   const usuario = await modeloUsuario.findOne({
-    idPerfil: idCuidador
+    idPerfil: idCuidador,
   });
 
   if (usuario === null) {
@@ -1608,12 +1608,12 @@ exports.getCuidadorVisitas = async (req, res, modelos) => {
   const visitasConLogin = await modeloCuidadorVisita.find({
     idCuidador,
     idUsuario: {
-      $ne: null
-    }
+      $ne: null,
+    },
   });
   const visitasSinLogin = await modeloCuidadorVisita.find({
     idCuidador,
-    idUsuario: null
+    idUsuario: null,
   });
 
   resultado.visitasConLogin = visitasConLogin;
@@ -1622,41 +1622,52 @@ exports.getCuidadorVisitas = async (req, res, modelos) => {
   res.writeHead(200, headerResponse);
   res.write(JSON.stringify(resultado));
   res.end();
-}
+};
 
 exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
   const { requiredCards } = req.query;
   const modeloCuidadores = modelos.cuidador;
   const resultado = [];
-  const cuidadores = await modeloCuidadores.find({
-    isPublic: true
-  },
-  null,
-  {
-    limit: parseInt(requiredCards)
-  });
+  const cuidadores = await modeloCuidadores.find(
+    {
+      isPublic: true,
+    },
+    null,
+    {
+      limit: parseInt(requiredCards),
+    }
+  );
   const modeloUsuarios = modelos.usuario;
   const modeloValoraciones = modelos.valoracion;
-  for(let index in cuidadores){
+  for (let index in cuidadores) {
     const usuario = await modeloUsuarios.findOne({
-      idPerfil: cuidadores[index]._id
+      idPerfil: cuidadores[index]._id,
     });
     const idUsuario = usuario._id;
     const valoraciones = await modeloValoraciones.find({
-      idUsuario
+      idUsuario,
     });
     resultado.push({
       cuidador: cuidadores[index],
-      valoraciones: valoraciones
+      valoraciones: valoraciones,
     });
   }
   res.writeHead(200, headerResponse);
   res.write(JSON.stringify(resultado));
   res.end();
-}
+};
 
-exports.postNewValoracion = async(req, res, modelos) => {
-  const { idUsuario, idValorador, idAcuerdo, valor, comentario, email, contrasena } = req.body;
+exports.postNewValoracion = async (req, res, modelos) => {
+  const {
+    idUsuario,
+    idValorador,
+    idAcuerdo,
+    valor,
+    comentario,
+    email,
+    contrasena,
+    fechaValorado,
+  } = req.body;
 
   //Primero validar que el idValorador(El que envia esta peticion) es autentico
   const modeloUsuario = modelos.usuario;
@@ -1677,25 +1688,25 @@ exports.postNewValoracion = async(req, res, modelos) => {
   }
   //Comprobar que el idUsuario existe
   const usuarioValorar = await modeloUsuario.findById(idUsuario);
-  if (usuarioValorar === null){
+  if (usuarioValorar === null) {
     res.writeHead(405, headerResponse);
     res.write("El usuario a valorar no existe");
     res.end();
     return;
   }
-  
+
   //Comprobar que el acuerdo existe y que se ha terminado
   const modeloAcuerdo = modelos.acuerdo;
   const acuerdo = await modeloAcuerdo.findById(idAcuerdo);
 
-  if(acuerdo == null){
+  if (acuerdo == null) {
     res.writeHead(405, headerResponse);
     res.write("El acuerdo no existe");
     res.end();
     return;
   }
 
-  if(acuerdo.estadoAcuerdo !== 2){
+  if (acuerdo.estadoAcuerdo !== 2) {
     res.writeHead(405, headerResponse);
     res.write("El acuerdo no está terminado");
     res.end();
@@ -1704,10 +1715,10 @@ exports.postNewValoracion = async(req, res, modelos) => {
   const modeloValoracion = modelos.valoracion;
   //Comprobar que no hay ninguna valoracion con ese acuerdo
   const acuerdoRepetido = await modeloValoracion.findOne({
-    idAcuerdo
+    idAcuerdo,
   });
 
-  if(acuerdoRepetido !== null){
+  if (acuerdoRepetido !== null) {
     res.writeHead(405, headerResponse);
     res.write("Ya existe una valoracion con este acuerdo");
     res.end();
@@ -1720,22 +1731,23 @@ exports.postNewValoracion = async(req, res, modelos) => {
     idValorador,
     idAcuerdo,
     valor,
-    comentario
+    comentario,
+    fechaValorado,
   })
-  .save()
-  .then((doc) => {
-    res.writeHead(200, headerResponse);
-    res.write(JSON.stringify(doc));
-  })
-  .catch((err) => {
-    console.log(err);
-    res.writeHead(500, headerResponse);
-    res.write(JSON.stringify(err));
-  })
-  .finally((fin) => {
-    res.end();
-  });
-}
+    .save()
+    .then((doc) => {
+      res.writeHead(200, headerResponse);
+      res.write(JSON.stringify(doc));
+    })
+    .catch((err) => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+    })
+    .finally((fin) => {
+      res.end();
+    });
+};
 
 exports.getValoracionesDelCuidador = async (req, res, modelos) => {
   const { idUsuario } = req.params;
@@ -1744,20 +1756,22 @@ exports.getValoracionesDelCuidador = async (req, res, modelos) => {
   const modeloUsuario = modelos.usuario;
   const usuario = await modeloUsuario.findById(idUsuario);
 
-  if(usuario === null){
+  if (usuario === null) {
     res.writeHead(405, headerResponse);
     res.write("El usuario no existe");
     res.end();
     return;
   }
 
-  const valoraciones = await modeloValoracion.find({
-    idUsuario: usuario._id
-  }).populate({
-    path: "idValorador",
-    populate: "idPerfil",
-  });
+  const valoraciones = await modeloValoracion
+    .find({
+      idUsuario: usuario._id,
+    })
+    .populate({
+      path: "idValorador",
+      populate: "idPerfil",
+    });
   res.writeHead(200, headerResponse);
   res.write(JSON.stringify(valoraciones));
   res.end();
-}
+};
