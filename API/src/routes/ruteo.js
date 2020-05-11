@@ -71,6 +71,8 @@ module.exports = (app, modelos) => {
   app.route("/api/procedures/getCuidadoresConValoraciones").get((req, res) => proceduresControlador.getCuidadoresConValoraciones(req, res, modelos));
 
   app.route("/api/procedures/postNewValoracion").post((req, res) => proceduresControlador.postNewValoracion(req, res, modelos));
+
+  app.route("/api/procedures/getValoracionesDelCuidador/:idUsuario").get((req, res) => proceduresControlador.getValoracionesDelCuidador(req, res, modelos));
   
   app.route("/Inicio/").get(mainControlador.inicio);
 

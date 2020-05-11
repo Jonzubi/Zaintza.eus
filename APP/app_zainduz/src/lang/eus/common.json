@@ -71,7 +71,8 @@
     "acuerdoExistente": "Zaintzaile honekin akordio bat duzu jada",
     "filtrar": "Filtratu",
     "descripcionPropuesta": "Idatzi zure proposamenaren deskribapen zehatza...",
-    "cuidador": "Zaintzailea"
+    "cuidador": "Zaintzailea",
+    "valoraciones": "Balorazioak"
   },
   "registerFormCuidadores": {
     "nombre": "Izena",

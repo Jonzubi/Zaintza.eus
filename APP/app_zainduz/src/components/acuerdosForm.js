@@ -30,6 +30,7 @@ import ModalHeader from "react-bootstrap/ModalHeader";
 import Rating from "react-rating";
 import i18next from "i18next";
 import "./styles/acuerdosForm.css";
+import moment from "moment";
 
 const mapStateToProps = (state) => {
   return {
@@ -247,7 +248,8 @@ class AcuerdosForm extends React.Component {
           valor: valoracionValue,
           comentario: valoracionDetalle,
           email,
-          contrasena
+          contrasena,
+          fechaValorado: moment()
         };
         axios.post(`http://${ipMaquina}:3001/api/procedures/postNewValoracion`, formData)
         .then(() => {
