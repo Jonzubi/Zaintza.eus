@@ -1545,7 +1545,7 @@ class Tabla extends React.Component {
                           />
                           <div
                             className="d-flex flex-column"
-                            style={{ width: 300 }}
+                            style={{ width: '70%' }}
                           >
                             {valoracion.comentario}
                             <div className="d-flex flex-row justify-content-between">
