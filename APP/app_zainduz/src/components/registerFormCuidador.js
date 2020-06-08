@@ -36,7 +36,7 @@ import { connect } from "react-redux";
 import { changeFormContent } from "../redux/actions/app";
 import { saveUserSession } from "../redux/actions/user";
 import municipios from "../util/municipos";
-import { trans } from "../util/funciones";
+import { trans, isValidEmail } from "../util/funciones";
 import SocketContext from "../socketio/socket-context";
 import ClipLoader from "react-spinners/ClipLoader";
 import "./styles/registerFormCuidador.css";
@@ -416,6 +416,17 @@ class RegisterForm extends React.Component {
         });
         if (error) return;
       }
+    }
+
+    // Comprobamos que el email sea valido sintacticamente
+    const { txtEmail } = this.state;
+    if(!isValidEmail(txtEmail)){
+      cogoToast.error(
+        <h5>
+          {trans('commonErrors.invalidEmail')}
+        </h5>
+      );
+      return;
     }
 
     const checkIfEmailExists = await axios.get(

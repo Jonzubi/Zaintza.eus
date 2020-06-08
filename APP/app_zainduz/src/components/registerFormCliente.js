@@ -2,7 +2,7 @@ import React from "react";
 import Avatar from "react-avatar-edit";
 import cogoToast from "cogo-toast";
 import { connect } from "react-redux";
-import { trans, getRandomString } from "../util/funciones";
+import { trans, getRandomString, isValidEmail } from "../util/funciones";
 import { saveUserSession } from "../redux/actions/user";
 import { changeFormContent } from "../redux/actions/app";
 import axios from "axios";
@@ -105,6 +105,18 @@ class RegisterFormCliente extends React.Component {
         return;
       }
     }
+    
+    const { txtNombre, txtApellido1, txtApellido2, txtMovil, txtFijo, avatarPreview, txtEmail, txtContrasena} = this.state;
+
+    // Comprobamos que el email sea valido sintacticamente
+    if(!isValidEmail(txtEmail)){
+      cogoToast.error(
+        <h5>
+          {trans('commonErrors.invalidEmail')}
+        </h5>
+      );
+      return;
+    }
 
     const checkIfEmailExists = await axios.get(
       `http://${ipMaquina}:3001/api/procedures/checkIfEmailExists/${this.state.txtEmail}`
@@ -115,9 +127,7 @@ class RegisterFormCliente extends React.Component {
       return;
     }
 
-    this.setState({ isLoading: true });
-
-    const { txtNombre, txtApellido1, txtApellido2, txtMovil, txtFijo, avatarPreview, txtEmail, txtContrasena} = this.state;
+    this.setState({ isLoading: true });    
 
     const validationToken = getRandomString(30);
 

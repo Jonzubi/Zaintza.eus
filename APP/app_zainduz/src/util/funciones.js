@@ -47,3 +47,8 @@ export const getTodayDate = () => {
   var today = mm + "/" + dd + "/" + yyyy;
   return today;
 };
+
+export const isValidEmail = (email) => {
+  const rex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return rex.test(String(email).toLowerCase());
+}

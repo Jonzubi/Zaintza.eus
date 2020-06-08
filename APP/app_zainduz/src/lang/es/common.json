@@ -253,6 +253,30 @@
     },
     "pueblosAutosuggest": {
       "holderPueblos": "Introduce un pueblo..."
+    },
+    "misAnunciosForm": {
+      "askDeleteForm": "Desea eliminar el anuncio?",
+      "si": "Si",
+      "no": "No",
+      "guardarCambios": "Aplicar cambios",
+      "titulo": "Titulo",
+      "descripcion": "Descripción",
+      "noData": "No tienes ningun anuncio de cuidado activo",
+      "anuncio": "Anuncio de cuidado",
+      "editar": "Editar datos",
+      "eliminar": "Eliminar",
+      "verStats": "Estadística",
+      "visitasConLogin": "Visitas con login",
+      "visitasSinLogin": "Visitas anónimas",
+      "totalVisitas": "Total visitas"
+    },
+    "cuidadorStatsForm": {
+      "visitasConLogin": "Visitas con login",
+      "visitasSinLogin": "Visitas anónimas",
+      "totalVisitas": "Total visitas"
+    },
+    "commonErrors": {
+      "invalidEmail": "El email introducido no es correcto"
     }
   }
   

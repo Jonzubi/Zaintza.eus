@@ -312,5 +312,8 @@
     "visitasConLogin": "Kontu dun bisitak",
     "visitasSinLogin": "Bisita anonimoak",
     "totalVisitas": "Bisitak guztira"
+  },
+  "commonErrors": {
+    "invalidEmail": "Sartutako emaila ez da zuzena"
   }
 }
