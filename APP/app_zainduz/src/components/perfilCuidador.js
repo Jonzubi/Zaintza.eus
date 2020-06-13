@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import Avatar from "react-avatar-edit";
-import ImageUploader from "react-images-upload";
+import ImageUploader from "./contactImageUploader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEdit,
@@ -571,43 +571,7 @@ class PerfilCuidador extends React.Component {
               </div>
             ) : (
               <ImageUploader
-                fileContainerStyle={
-                  this.state.imgContact != ""
-                    ? { background: "#28a745" }
-                    : this.state.error.txtNombre
-                    ? { background: "#dc3545" }
-                    : {}
-                }
-                buttonClassName={
-                  this.state.imgContact != "" ? "bg-light text-dark" : ""
-                }
-                errorClass="bg-danger text-light"
-                fileSizeError="handiegia da"
-                fileTypeError="ez du formatu zuzena"
-                singleImage={true}
-                label={
-                  this.state.imgContact != ""
-                    ? "Gehienez: 5MB | " +
-                      this.state.imgContact[0].name +
-                      " (" +
-                      (this.state.imgContact[0].size / 1024 / 1024).toFixed(2) +
-                      " MB)"
-                    : "Gehienez: 5MB | Gomendaturiko dimentsioa (288x300)"
-                }
-                labelClass={
-                  this.state.imgContact != ""
-                    ? "text-light font-weight-bold"
-                    : ""
-                }
-                withIcon={true}
-                buttonText={
-                  this.state.imgContact != ""
-                    ? "Aukeratu beste irudi bat"
-                    : "Aukeratu zure kontaktu irudia"
-                }
                 onChange={this.onChangeContactImg}
-                imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
-                maxFileSize={5242880}
               />
             )}
           </div>

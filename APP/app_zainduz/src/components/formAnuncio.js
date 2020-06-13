@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from 'react-redux';
 import cogoToast from "cogo-toast";
 import { trans, toBase64 } from "../util/funciones";
-import ImageUploader from "react-images-upload";
+import ImageUploader from "./contactImageUploader";
 import i18next from "i18next";
 import TimeInput from "./customTimeInput";
 import PuebloAutosuggest from "./pueblosAutosuggest";
@@ -399,37 +399,7 @@ class FormAnuncio extends React.Component {
       <div className="p-5">
         <div className="form-group d-flex justify-content-center position-relative">
           <ImageUploader
-            fileContainerStyle={
-              this.state.imgAnuncio != null ? { background: "#28a745" } : {}
-            }
-            buttonClassName={
-              this.state.imgAnuncio != null ? "bg-light text-dark" : ""
-            }
-            errorClass="bg-danger text-light"
-            fileSizeError="handiegia da"
-            fileTypeError="ez du formatu zuzena"
-            singleImage={true}
-            label={
-              this.state.imgAnuncio != null
-                ? "Gehienez: 5MB | " +
-                  this.state.imgAnuncio[0].name +
-                  " (" +
-                  (this.state.imgAnuncio[0].size / 1024 / 1024).toFixed(2) +
-                  " MB)"
-                : "Gehienez: 5MB | Gomendaturiko dimentsioa (288x300)"
-            }
-            labelClass={
-              this.state.imgAnuncio != null ? "text-light font-weight-bold" : ""
-            }
-            withIcon={true}
-            buttonText={
-              this.state.imgAnuncio != null
-                ? i18next.t("formAnuncio.eligeOtraFoto")
-                : i18next.t("formAnuncio.eligeUnaFoto")
-            }
-            onChange={this.onChangeContactImg}
-            imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
-            maxFileSize={5242880}
+            onImageChoose={this.onChangeContactImg}
           />
         </div>
         <div className="form-group row">
