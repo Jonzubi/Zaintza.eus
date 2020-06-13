@@ -21,7 +21,7 @@ import {
 import axios from "axios";
 import ipMaquina from "../util/ipMaquinaAPI";
 import Avatar, { Avatar as AvatarUpload } from "react-avatar-edit";
-import ImageUploader from "react-images-upload";
+import ContactImageUploader from "./contactImageUploader";
 import cogoToast from "cogo-toast";
 import { ReactDatez as Calendario } from "react-datez";
 import Switch from "react-switch";
@@ -518,7 +518,6 @@ class RegisterForm extends React.Component {
 
   render() {
     const { diasDisponible } = this.state;
-    
     return (
       <SocketContext.Consumer>
         {socket => (
@@ -543,46 +542,8 @@ class RegisterForm extends React.Component {
                   />
                 </div>
                 <div className="col-lg-3 col-12 d-flex flex-row justify-content-center align-items-center">
-                  <ImageUploader
-                    fileContainerStyle={
-                      this.state.imgContact != null
-                        ? { background: "#28a745" }
-                        : this.state.error.txtNombre
-                        ? { background: "#dc3545" }
-                        : {}
-                    }
-                    buttonClassName={
-                      this.state.imgContact != null ? "bg-light text-dark" : ""
-                    }
-                    errorClass="bg-danger text-light"
-                    fileSizeError="handiegia da"
-                    fileTypeError="ez du formatu zuzena"
-                    singleImage={true}
-                    label={
-                      this.state.imgContact != null
-                        ? "Gehienez: 5MB | " +
-                          this.state.imgContact[0].name +
-                          " (" +
-                          (this.state.imgContact[0].size / 1024 / 1024).toFixed(
-                            2
-                          ) +
-                          " MB)"
-                        : "Gehienez: 5MB | Gomendaturiko dimentsioa (288x300)"
-                    }
-                    labelClass={
-                      this.state.imgContact != null
-                        ? "text-light font-weight-bold"
-                        : ""
-                    }
-                    withIcon={true}
-                    buttonText={
-                      this.state.imgContact != null
-                        ? "Aukeratu beste irudi bat"
-                        : "Aukeratu zure kontaktu irudia"
-                    }
-                    onChange={this.onChangeContactImg}
-                    imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
-                    maxFileSize={5242880}
+                  <ContactImageUploader
+                    onImageChoose={this.onChangeContactImg}
                   />
                 </div>
 

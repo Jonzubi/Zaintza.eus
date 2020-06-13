@@ -276,7 +276,14 @@
       "totalVisitas": "Total visitas"
     },
     "commonErrors": {
-      "invalidEmail": "El email introducido no es correcto"
+      "invalidEmail": "El email introducido no es correcto",
+      "tooBigImage": "La imagen introducida es demasiado grande (10MB max.)",
+      "tooBig": "es demasiado grande",
+      "wrongFormat": "no tiene el formato correcto"
+    },
+    "customImageUploader": {
+      "maxMegaBytes": "Máximo: 10MB",
+      "suggestedDimension": "Dimensión recomendada (288x300)"
     }
   }
   
