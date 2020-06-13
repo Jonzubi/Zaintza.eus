@@ -25,7 +25,7 @@ import Avatar from "react-avatar";
 import Modal from "react-bootstrap/Modal";
 import ModalBody from "react-bootstrap/ModalBody";
 import ModalFooter from "react-bootstrap/ModalFooter";
-import ImageUploader from "react-images-upload";
+import ImageUploader from "./contactImageUploader";
 import i18next from "i18next";
 import PuebloAutosuggest from "./pueblosAutosuggest";
 import TimeInput from "./customTimeInput";
@@ -764,39 +764,7 @@ class MisAnuncios extends React.Component {
           </ModalHeader>
           <ModalBody className="d-flex flex-column justify-content-between align-items-center">
             <ImageUploader
-              fileContainerStyle={
-                this.state.imgAnuncio != null ? { background: "#28a745" } : {}
-              }
-              buttonClassName={
-                this.state.imgAnuncio != null ? "bg-light text-dark" : ""
-              }
-              errorClass="bg-danger text-light"
-              fileSizeError="handiegia da"
-              fileTypeError="ez du formatu zuzena"
-              singleImage={true}
-              label={
-                this.state.imgAnuncio != null
-                  ? "Gehienez: 5MB | " +
-                    this.state.imgAnuncio[0].name +
-                    " (" +
-                    (this.state.imgAnuncio[0].size / 1024 / 1024).toFixed(2) +
-                    " MB)"
-                  : "Gehienez: 5MB | Gomendaturiko dimentsioa (288x300)"
-              }
-              labelClass={
-                this.state.imgAnuncio != null
-                  ? "text-light font-weight-bold"
-                  : ""
-              }
-              withIcon={true}
-              buttonText={
-                this.state.imgAnuncio != null
-                  ? i18next.t("formAnuncio.eligeOtraFoto")
-                  : i18next.t("formAnuncio.eligeUnaFoto")
-              }
-              onChange={this.onChangeAnuncioImg}
-              imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
-              maxFileSize={5242880}
+              onImageChoose={this.onChangeAnuncioImg}
             />
             <div
               style={{
