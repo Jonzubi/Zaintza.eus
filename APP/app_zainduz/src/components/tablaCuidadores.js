@@ -637,14 +637,9 @@ class Tabla extends React.Component {
         auxFilterPueblo: "",
       },
       () => {
-        Axios.get("http://" + ipMaquina + ":3001/api/cuidador", {
+        Axios.get("http://" + ipMaquina + ":3001/api/procedures/getCuidadoresConValoraciones", {
           params: {
-            filtros: {
-              isPublic: true,
-            },
-            options: {
-              limit: requiredCards,
-            },
+            requiredCards,
           },
         })
           .then((data) => {
