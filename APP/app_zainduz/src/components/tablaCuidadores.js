@@ -701,7 +701,7 @@ class Tabla extends React.Component {
               {
                 selectedCuidador: cuidador,
                 showModalValoraciones: true,
-                valoracionesIsLoading: true
+                valoracionesIsLoading: true,
               },
               () => this.loadValoracionesData(cuidador)
             )
@@ -801,7 +801,8 @@ class Tabla extends React.Component {
             gSocket = socket;
             return (
               <div className="d-flex flex-wrap justify-content-center">
-                {typeof this.state.jsonCuidadores.map != "undefined" && this.state.jsonCuidadores.length !== 0 &&
+                {typeof this.state.jsonCuidadores.map != "undefined" &&
+                this.state.jsonCuidadores.length !== 0 &&
                 this.state.buscado ? (
                   this.state.jsonCuidadores.map((cuidador, indice) => {
                     return (
@@ -1520,7 +1521,7 @@ class Tabla extends React.Component {
                   >
                     {valoracionesIsLoading ? (
                       <ClipLoader color="#28a745" />
-                    ) : (
+                    ) : jsonValoraciones.length !== 0 ? (
                       jsonValoraciones.map((valoracion) => (
                         <div
                           style={{
@@ -1545,7 +1546,7 @@ class Tabla extends React.Component {
                           />
                           <div
                             className="d-flex flex-column"
-                            style={{ width: '70%' }}
+                            style={{ width: "70%" }}
                           >
                             {valoracion.comentario}
                             <div className="d-flex flex-row justify-content-between">
@@ -1570,6 +1571,15 @@ class Tabla extends React.Component {
                           </div>
                         </div>
                       ))
+                    ) : (
+                      <small
+                        style={{
+                          height: "70vh",
+                        }}
+                        className="d-flex align-items-center justify-content-center text-danger"
+                      >
+                        {trans("tablaCuidadores.noValoration")}
+                      </small>
                     )}
                   </ModalBody>
                 </Modal>

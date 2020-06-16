@@ -35,6 +35,7 @@
   },
   "tablaCuidadores": {
     "noData": "Ez dago daturik",
+    "noValoration": "Ez dago baloraziorik",
     "ninos": "Haurrak",
     "terceraEdad": "Adinekoak",
     "necesidadEspecial": "Behar bereziak",

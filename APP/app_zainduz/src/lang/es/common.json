@@ -33,6 +33,7 @@
     },
     "tablaCuidadores": {
       "noData": "No hay datos",
+      "noValoration": "No hay valoraciones",
       "ninos": "Niños",
       "terceraEdad": "Tercera edad",
       "necesidadEspecial": "Necesidades especiales",
