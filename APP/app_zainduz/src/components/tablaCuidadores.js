@@ -801,7 +801,7 @@ class Tabla extends React.Component {
             gSocket = socket;
             return (
               <div className="d-flex flex-wrap justify-content-center">
-                {typeof this.state.jsonCuidadores.map != "undefined" &&
+                {typeof this.state.jsonCuidadores.map != "undefined" && this.state.jsonCuidadores.length !== 0 &&
                 this.state.buscado ? (
                   this.state.jsonCuidadores.map((cuidador, indice) => {
                     return (
