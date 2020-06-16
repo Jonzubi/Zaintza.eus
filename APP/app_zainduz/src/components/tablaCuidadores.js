@@ -601,12 +601,10 @@ class Tabla extends React.Component {
         buscado: false,
       },
       () => {
-        Axios.get("http://" + ipMaquina + ":3001/api/cuidador", {
+        Axios.get("http://" + ipMaquina + ":3001/api/procedures/getCuidadoresConValoraciones", {
           params: {
-            filtros: objFiltros,
-            options: {
-              limit: requiredCards,
-            },
+            requiredCards,
+            filterUbicacion: auxFilterPueblo
           },
         })
           .then((data) => {

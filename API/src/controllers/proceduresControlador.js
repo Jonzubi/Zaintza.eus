@@ -1625,13 +1625,17 @@ exports.getCuidadorVisitas = async (req, res, modelos) => {
 };
 
 exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
-  const { requiredCards } = req.query;
+  const { requiredCards, filterUbicacion } = req.query;
   const modeloCuidadores = modelos.cuidador;
   const resultado = [];
+  let cuidadoresFilter = {
+    isPublic: true
+  };
+  if(filterUbicacion !== undefined){
+    cuidadoresFilter.ubicaciones = filterUbicacion;
+  }
   const cuidadores = await modeloCuidadores.find(
-    {
-      isPublic: true,
-    },
+    cuidadoresFilter,
     null,
     {
       limit: parseInt(requiredCards),
