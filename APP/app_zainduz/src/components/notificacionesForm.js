@@ -27,6 +27,7 @@ import Modal from "react-bootstrap/Modal";
 import ModalHeader from "react-bootstrap/ModalHeader";
 import ModalBody from "react-bootstrap/ModalBody";
 import ModalFooter from "react-bootstrap/ModalFooter";
+import moment from 'moment';
 
 class NotificacionesForm extends React.Component {
   componentDidMount() {
@@ -408,15 +409,9 @@ class NotificacionesForm extends React.Component {
                             </div>
                           </div>
                         </div>
-                        <div className="">
-                          {new Date(
-                            notificacion.dateEnvioNotificacion
-                          ).getHours() +
-                            ":" +
-                            new Date(
-                              notificacion.dateEnvioNotificacion
-                            ).getMinutes()}
-                        </div>
+                        <small className="">
+                          {moment(notificacion.dateEnvioNotificacion).format('YYYY/MM/DD HH:mm')}
+                        </small>
                         <div>
                           <FontAwesomeIcon
                             style={{
