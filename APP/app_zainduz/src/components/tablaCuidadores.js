@@ -679,7 +679,7 @@ class Tabla extends React.Component {
     if (!valoraciones) {
       return 0;
     }
-    console.log(cuidador);
+    
     return (
       <span
         style={{

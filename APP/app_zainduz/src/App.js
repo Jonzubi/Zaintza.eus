@@ -38,7 +38,6 @@ class App extends React.Component {
 
   componentDidMount() {
     const altura = document.getElementById("headRoom").clientHeight;
-    console.log(altura);
     this.setState({
       cabeceraHeight: altura
     });
