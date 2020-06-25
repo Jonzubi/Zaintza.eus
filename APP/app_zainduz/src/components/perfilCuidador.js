@@ -571,7 +571,7 @@ class PerfilCuidador extends React.Component {
               </div>
             ) : (
               <ImageUploader
-                onChange={this.onChangeContactImg}
+                onImageChoose={this.onChangeContactImg}
               />
             )}
           </div>
