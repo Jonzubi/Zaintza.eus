@@ -236,8 +236,10 @@ exports.getImage = (req, res) => {
         }
       });
       if (!found) {
-        res.write("Vacio");
-        res.end();
+        let noImageDirPath =  __dirname.substring(0, __dirname.lastIndexOf("\\")) + "\\assets\\noImage.png";
+        let stream = fs.createReadStream(noImageDirPath);
+        res.setHeader("Content-Type", "image/png");
+        stream.pipe(res);
       }
     }
   });
