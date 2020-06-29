@@ -35,7 +35,7 @@ const isValidRequest = async (req, res, modelos) => {
     }
     console.log(formData);
     const invalidRequestConfigurado = new invalidRequestModel(formData);
-    //invalidRequestConfigurado.save();
+    invalidRequestConfigurado.save();
     res.writeHead(405, headerResponse);
     res.write(`La IP: ${ipAddress} ha sido registrada por una operacion no lícita`);
     res.end();
