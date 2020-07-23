@@ -1,0 +1,34 @@
+
+    {
+        "osm_type": "N",
+        "osm_id": 32446996,
+        "class": "place",
+        "type": "village",
+        "admin_level": 8,
+        "rank_search": 19,
+        "rank_address": 16,
+        "place_id": 195763,
+        "parent_place_id": 236143684,
+        "housenumber": -1,
+        "country_code": "es",
+        "langaddress": "Urzainqui\/Urzainki, Navarra - Nafarroa, Espa\u00f1a",
+        "placename": "Urzainqui\/Urzainki",
+        "ref": "Urzainqui\/Urzainki",
+        "lon": "-0.9472109",
+        "lat": "42.8313263",
+        "importance": 0.7060264210009668,
+        "addressimportance": "8.831322928142486",
+        "extra_place": null,
+        "addresstype": "village",
+        "asgeojson": "{\"type\":\"Point\",\"coordinates\":[-0.9472109,42.8313263]}",
+        "aBoundingBox": [
+            "42.8113263",
+            "42.8513263",
+            "-0.9672109",
+            "-0.9272109"
+        ],
+        "icon": "https:\/\/nominatim.openstreetmap.org\/images\/mapicons\/poi_place_village.p.20.png",
+        "label": "Village",
+        "name": "Urzainqui\/Urzainki, Navarra - Nafarroa, Espa\u00f1a",
+        "foundorder": -0.8823322928142485
+    }

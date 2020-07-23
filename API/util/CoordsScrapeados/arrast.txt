@@ -1,0 +1,34 @@
+
+    {
+        "osm_type": "N",
+        "osm_id": 2277330687,
+        "class": "place",
+        "type": "hamlet",
+        "admin_level": 15,
+        "rank_search": 19,
+        "rank_address": 16,
+        "place_id": 22745906,
+        "parent_place_id": 235740674,
+        "housenumber": -1,
+        "country_code": "fr",
+        "langaddress": "Arrast, Oloron-Sainte-Marie, Pyr\u00e9n\u00e9es-Atlantiques, Nouvelle-Aquitaine, France m\u00e9tropolitaine, France",
+        "placename": "Arrast",
+        "ref": "Arrast",
+        "lon": "-0.8512651",
+        "lat": "43.2925896",
+        "importance": 0.3950646030836139,
+        "addressimportance": "8.777990178348876",
+        "extra_place": null,
+        "addresstype": "hamlet",
+        "asgeojson": "{\"type\":\"Point\",\"coordinates\":[-0.8512651,43.2925896]}",
+        "aBoundingBox": [
+            "43.2725896",
+            "43.3125896",
+            "-0.8712651",
+            "-0.8312651"
+        ],
+        "icon": "https:\/\/nominatim.openstreetmap.org\/images\/mapicons\/poi_place_village.p.20.png",
+        "label": "Hamlet",
+        "name": "Arrast, Oloron-Sainte-Marie, Pyr\u00e9n\u00e9es-Atlantiques, Nouvelle-Aquitaine, France m\u00e9tropolitaine, France",
+        "foundorder": -0.8768990178348876
+    }

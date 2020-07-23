@@ -1,0 +1,34 @@
+
+    {
+        "osm_type": "N",
+        "osm_id": 2284130191,
+        "class": "place",
+        "type": "hamlet",
+        "admin_level": 15,
+        "rank_search": 19,
+        "rank_address": 16,
+        "place_id": 21534098,
+        "parent_place_id": 235740674,
+        "housenumber": -1,
+        "country_code": "fr",
+        "langaddress": "Berrogain, Oloron-Sainte-Marie, Pyr\u00e9n\u00e9es-Atlantiques, Nouvelle-Aquitaine, France m\u00e9tropolitaine, 64130, France",
+        "placename": "Berrogain",
+        "ref": "Berrogain",
+        "lon": "-0.8549087",
+        "lat": "43.2517878",
+        "importance": 0.375,
+        "addressimportance": "8.777990178348876",
+        "extra_place": null,
+        "addresstype": "hamlet",
+        "asgeojson": "{\"type\":\"Point\",\"coordinates\":[-0.8549087,43.2517878]}",
+        "aBoundingBox": [
+            "43.2317878",
+            "43.2717878",
+            "-0.8749087",
+            "-0.8349087"
+        ],
+        "icon": "https:\/\/nominatim.openstreetmap.org\/images\/mapicons\/poi_place_village.p.20.png",
+        "label": "Hamlet",
+        "name": "Berrogain, Oloron-Sainte-Marie, Pyr\u00e9n\u00e9es-Atlantiques, Nouvelle-Aquitaine, France m\u00e9tropolitaine, 64130, France",
+        "foundorder": -0.8768990178348876
+    }

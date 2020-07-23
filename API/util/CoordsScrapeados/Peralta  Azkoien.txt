@@ -1,0 +1,34 @@
+
+    {
+        "osm_type": "N",
+        "osm_id": 282837142,
+        "class": "place",
+        "type": "village",
+        "admin_level": 8,
+        "rank_search": 19,
+        "rank_address": 16,
+        "place_id": 917840,
+        "parent_place_id": 236143684,
+        "housenumber": -1,
+        "country_code": "es",
+        "langaddress": "Peralta \/ Azkoien, Navarra - Nafarroa, 31350, Espa\u00f1a",
+        "placename": "Peralta \/ Azkoien",
+        "ref": "Peralta \/ Azkoien",
+        "lon": "-1.7970061",
+        "lat": "42.3385459",
+        "importance": 0.47500000000000003,
+        "addressimportance": "8.831322928142486",
+        "extra_place": null,
+        "addresstype": "village",
+        "asgeojson": "{\"type\":\"Point\",\"coordinates\":[-1.7970061,42.3385459]}",
+        "aBoundingBox": [
+            "42.3185459",
+            "42.3585459",
+            "-1.8170061",
+            "-1.7770061"
+        ],
+        "icon": "https:\/\/nominatim.openstreetmap.org\/images\/mapicons\/poi_place_village.p.20.png",
+        "label": "Village",
+        "name": "Peralta \/ Azkoien, Navarra - Nafarroa, 31350, Espa\u00f1a",
+        "foundorder": -0.8823322928142485
+    }

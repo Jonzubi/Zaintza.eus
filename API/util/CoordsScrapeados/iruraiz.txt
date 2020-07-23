@@ -1,0 +1,33 @@
+
+    {
+        "osm_type": "W",
+        "osm_id": 327996661,
+        "class": "landuse",
+        "type": "reservoir",
+        "admin_level": 15,
+        "rank_search": 22,
+        "rank_address": 0,
+        "place_id": 164374093,
+        "parent_place_id": 236201360,
+        "housenumber": -1,
+        "country_code": "es",
+        "langaddress": "Iruraiz, Ordo\u00f1ana Mendia, San Mill\u00e1n\/Donemiliaga, Arabako lautada\/Llanada Alavesa, Araba\/\u00c1lava, Euskadi, 01208, Espa\u00f1a",
+        "placename": "Iruraiz",
+        "ref": "Iruraiz",
+        "lon": "-2.366277388171547",
+        "lat": "42.8774077",
+        "importance": 0.29999999999999993,
+        "addressimportance": "8.101466791394081",
+        "extra_place": null,
+        "addresstype": "reservoir",
+        "asgeojson": "{\"type\":\"Polygon\",\"coordinates\":[[[-2.3677974,42.8784065],[-2.3677826,42.8783305],[-2.367642,42.8779232],[-2.3673459,42.8770558],[-2.3672126,42.8769771],[-2.3647698,42.876394],[-2.3646958,42.8763994],[-2.3645877,42.8765344],[-2.3645674,42.8766332],[-2.364579,42.8767437],[-2.3645056,42.8768513],[-2.3644423,42.876975],[-2.3644536,42.8770788],[-2.3646313,42.8771812],[-2.36482,42.8772574],[-2.3653575,42.877558],[-2.3654432,42.8775939],[-2.3654584,42.8776692],[-2.3655351,42.8777697],[-2.3656898,42.8778547],[-2.3659949,42.8779779],[-2.3674569,42.8783441],[-2.3677308,42.8784201],[-2.3677974,42.8784065]]]}",
+        "aBoundingBox": [
+            "42.876394",
+            "42.8784201",
+            "-2.3677974",
+            "-2.3644423"
+        ],
+        "label": "Reservoir",
+        "name": "Iruraiz, Ordo\u00f1ana Mendia, San Mill\u00e1n\/Donemiliaga, Arabako lautada\/Llanada Alavesa, Araba\/\u00c1lava, Euskadi, 01208, Espa\u00f1a",
+        "foundorder": -0.7938466791394081
+    }

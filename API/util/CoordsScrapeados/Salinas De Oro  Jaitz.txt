@@ -1,0 +1,34 @@
+
+    {
+        "osm_type": "N",
+        "osm_id": 1439532197,
+        "class": "place",
+        "type": "village",
+        "admin_level": 8,
+        "rank_search": 19,
+        "rank_address": 16,
+        "place_id": 15980294,
+        "parent_place_id": 236143684,
+        "housenumber": -1,
+        "country_code": "es",
+        "langaddress": "Salinas de Oro \/ Jaitz, Navarra - Nafarroa, Espa\u00f1a",
+        "placename": "Salinas de Oro \/ Jaitz",
+        "ref": "Salinas de Oro \/ Jaitz",
+        "lon": "-1.8893416",
+        "lat": "42.7754085",
+        "importance": 0.675,
+        "addressimportance": "8.831322928142486",
+        "extra_place": null,
+        "addresstype": "village",
+        "asgeojson": "{\"type\":\"Point\",\"coordinates\":[-1.8893416,42.7754085]}",
+        "aBoundingBox": [
+            "42.7554085",
+            "42.7954085",
+            "-1.9093416",
+            "-1.8693416"
+        ],
+        "icon": "https:\/\/nominatim.openstreetmap.org\/images\/mapicons\/poi_place_village.p.20.png",
+        "label": "Village",
+        "name": "Salinas de Oro \/ Jaitz, Navarra - Nafarroa, Espa\u00f1a",
+        "foundorder": -0.8823322928142485
+    }

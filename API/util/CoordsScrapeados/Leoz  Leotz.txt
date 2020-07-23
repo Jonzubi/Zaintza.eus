@@ -1,0 +1,34 @@
+
+    {
+        "osm_type": "N",
+        "osm_id": 1439532171,
+        "class": "place",
+        "type": "village",
+        "admin_level": 8,
+        "rank_search": 19,
+        "rank_address": 16,
+        "place_id": 15029329,
+        "parent_place_id": 236143684,
+        "housenumber": -1,
+        "country_code": "es",
+        "langaddress": "Leotz\/Leoz, Navarra - Nafarroa, Espa\u00f1a",
+        "placename": "Leotz\/Leoz",
+        "ref": "Leotz\/Leoz",
+        "lon": "-1.5190074",
+        "lat": "42.6452194",
+        "importance": 0.4173380601845065,
+        "addressimportance": "8.831322928142486",
+        "extra_place": null,
+        "addresstype": "village",
+        "asgeojson": "{\"type\":\"Point\",\"coordinates\":[-1.5190074,42.6452194]}",
+        "aBoundingBox": [
+            "42.6252194",
+            "42.6652194",
+            "-1.5390074",
+            "-1.4990074"
+        ],
+        "icon": "https:\/\/nominatim.openstreetmap.org\/images\/mapicons\/poi_place_village.p.20.png",
+        "label": "Village",
+        "name": "Leotz\/Leoz, Navarra - Nafarroa, Espa\u00f1a",
+        "foundorder": -0.8823322928142485
+    }

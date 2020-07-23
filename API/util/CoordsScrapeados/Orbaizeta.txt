@@ -1,0 +1,34 @@
+
+    {
+        "osm_type": "N",
+        "osm_id": 249416657,
+        "class": "place",
+        "type": "village",
+        "admin_level": 8,
+        "rank_search": 19,
+        "rank_address": 16,
+        "place_id": 677717,
+        "parent_place_id": 235433039,
+        "housenumber": -1,
+        "country_code": "es",
+        "langaddress": "Orbaizeta, Orbaitzeta, Navarra - Nafarroa, 31671, Espa\u00f1a",
+        "placename": "Orbaizeta",
+        "ref": "Orbaizeta",
+        "lon": "-1.2301437",
+        "lat": "42.9743136",
+        "importance": 0.385,
+        "addressimportance": "9.050920766763038",
+        "extra_place": null,
+        "addresstype": "village",
+        "asgeojson": "{\"type\":\"Point\",\"coordinates\":[-1.2301437,42.9743136]}",
+        "aBoundingBox": [
+            "42.9543136",
+            "42.9943136",
+            "-1.2501437",
+            "-1.2101437"
+        ],
+        "icon": "https:\/\/nominatim.openstreetmap.org\/images\/mapicons\/poi_place_village.p.20.png",
+        "label": "Village",
+        "name": "Orbaizeta, Orbaitzeta, Navarra - Nafarroa, 31671, Espa\u00f1a",
+        "foundorder": -0.9042920766763038
+    }

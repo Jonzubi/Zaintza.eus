@@ -1,0 +1,34 @@
+
+    {
+        "osm_type": "N",
+        "osm_id": 390017590,
+        "class": "place",
+        "type": "village",
+        "admin_level": 15,
+        "rank_search": 19,
+        "rank_address": 16,
+        "place_id": 3508941,
+        "parent_place_id": 235688874,
+        "housenumber": -1,
+        "country_code": "fr",
+        "langaddress": "Gotein, Gotein-Libarrenx, Oloron-Sainte-Marie, Pyr\u00e9n\u00e9es-Atlantiques, Nouvelle-Aquitaine, France m\u00e9tropolitaine, 64130, France",
+        "placename": "Gotein",
+        "ref": "Gotein",
+        "lon": "-0.9020332",
+        "lat": "43.1905628",
+        "importance": 0.39557607821300267,
+        "addressimportance": "9.867749764563149",
+        "extra_place": null,
+        "addresstype": "village",
+        "asgeojson": "{\"type\":\"Point\",\"coordinates\":[-0.9020332,43.1905628]}",
+        "aBoundingBox": [
+            "43.1705628",
+            "43.2105628",
+            "-0.9220332",
+            "-0.8820332"
+        ],
+        "icon": "https:\/\/nominatim.openstreetmap.org\/images\/mapicons\/poi_place_village.p.20.png",
+        "label": "Village",
+        "name": "Gotein, Gotein-Libarrenx, Oloron-Sainte-Marie, Pyr\u00e9n\u00e9es-Atlantiques, Nouvelle-Aquitaine, France m\u00e9tropolitaine, 64130, France",
+        "foundorder": -0.9859749764563148
+    }

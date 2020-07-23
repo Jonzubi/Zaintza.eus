@@ -1,0 +1,34 @@
+
+    {
+        "osm_type": "W",
+        "osm_id": 807805536,
+        "class": "amenity",
+        "type": "fire_station",
+        "admin_level": 15,
+        "rank_search": 30,
+        "rank_address": 30,
+        "place_id": 289181945,
+        "parent_place_id": 120990208,
+        "housenumber": -1,
+        "country_code": "fr",
+        "langaddress": "Centre d'incendie et de secours d'Aldudes \/ Suhiltzaileak, D 948, Aldudes, Bayonne, Pyr\u00e9n\u00e9es-Atlantiques, Nouvelle-Aquitaine, France m\u00e9tropolitaine, 64430, France",
+        "placename": "Centre d'incendie et de secours d'Aldudes \/ Suhiltzaileak",
+        "ref": "ALD",
+        "lon": "-1.4260265003441055",
+        "lat": "43.09355145",
+        "importance": 0.101,
+        "addressimportance": "9.80244083991215",
+        "extra_place": null,
+        "addresstype": "amenity",
+        "asgeojson": "{\"type\":\"Polygon\",\"coordinates\":[[[-1.4262083,43.0933465],[-1.4258771,43.0933274],[-1.4258455,43.0937564],[-1.4261755,43.0937694],[-1.4262083,43.0933465]]]}",
+        "aBoundingBox": [
+            "43.0933274",
+            "43.0937694",
+            "-1.4262083",
+            "-1.4258455"
+        ],
+        "icon": "https:\/\/nominatim.openstreetmap.org\/images\/mapicons\/amenity_firestation3.p.20.png",
+        "label": "Fire Station",
+        "name": "Centre d'incendie et de secours d'Aldudes \/ Suhiltzaileak, D 948, Aldudes, Bayonne, Pyr\u00e9n\u00e9es-Atlantiques, Nouvelle-Aquitaine, France m\u00e9tropolitaine, 64430, France",
+        "foundorder": -0.974244083991215
+    }

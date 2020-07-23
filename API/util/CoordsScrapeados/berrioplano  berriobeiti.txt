@@ -1,0 +1,34 @@
+
+    {
+        "osm_type": "N",
+        "osm_id": 282783965,
+        "class": "place",
+        "type": "village",
+        "admin_level": 8,
+        "rank_search": 19,
+        "rank_address": 16,
+        "place_id": 902290,
+        "parent_place_id": 235444037,
+        "housenumber": -1,
+        "country_code": "es",
+        "langaddress": "Berrioplano\/Berriobeiti, Berrioplano, Navarra - Nafarroa, 31195, Espa\u00f1a",
+        "placename": "Berrioplano\/Berriobeiti",
+        "ref": "Berrioplano\/Berriobeiti",
+        "lon": "-1.6903219",
+        "lat": "42.854508",
+        "importance": 0.45436519468301145,
+        "addressimportance": "9.06543508832346",
+        "extra_place": null,
+        "addresstype": "village",
+        "asgeojson": "{\"type\":\"Point\",\"coordinates\":[-1.6903219,42.854508]}",
+        "aBoundingBox": [
+            "42.834508",
+            "42.874508",
+            "-1.7103219",
+            "-1.6703219"
+        ],
+        "icon": "https:\/\/nominatim.openstreetmap.org\/images\/mapicons\/poi_place_village.p.20.png",
+        "label": "Village",
+        "name": "Berrioplano\/Berriobeiti, Berrioplano, Navarra - Nafarroa, 31195, Espa\u00f1a",
+        "foundorder": -0.9057435088323459
+    }

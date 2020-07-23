@@ -1,0 +1,34 @@
+
+    {
+        "osm_type": "N",
+        "osm_id": 252444937,
+        "class": "place",
+        "type": "village",
+        "admin_level": 8,
+        "rank_search": 19,
+        "rank_address": 16,
+        "place_id": 688203,
+        "parent_place_id": 235438609,
+        "housenumber": -1,
+        "country_code": "es",
+        "langaddress": "Ayegui\/Aiegi, Ayegui, Navarra - Nafarroa, 31240, Espa\u00f1a",
+        "placename": "Ayegui\/Aiegi",
+        "ref": "Ayegui\/Aiegi",
+        "lon": "-2.0369908",
+        "lat": "42.6588276",
+        "importance": 0.7225836689764067,
+        "addressimportance": "9.226506041575322",
+        "extra_place": null,
+        "addresstype": "village",
+        "asgeojson": "{\"type\":\"Point\",\"coordinates\":[-2.0369908,42.6588276]}",
+        "aBoundingBox": [
+            "42.6388276",
+            "42.6788276",
+            "-2.0569908",
+            "-2.0169908"
+        ],
+        "icon": "https:\/\/nominatim.openstreetmap.org\/images\/mapicons\/poi_place_village.p.20.png",
+        "label": "Village",
+        "name": "Ayegui\/Aiegi, Ayegui, Navarra - Nafarroa, 31240, Espa\u00f1a",
+        "foundorder": -0.9218506041575322
+    }

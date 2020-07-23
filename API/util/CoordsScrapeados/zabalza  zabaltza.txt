@@ -1,0 +1,34 @@
+
+    {
+        "osm_type": "N",
+        "osm_id": 3590669180,
+        "class": "place",
+        "type": "village",
+        "admin_level": 15,
+        "rank_search": 19,
+        "rank_address": 16,
+        "place_id": 46681057,
+        "parent_place_id": 236143684,
+        "housenumber": -1,
+        "country_code": "es",
+        "langaddress": "Zabalza\/Zabaltza, Navarra - Nafarroa, 31448, Espa\u00f1a",
+        "placename": "Zabalza\/Zabaltza",
+        "ref": "Zabalza\/Zabaltza",
+        "lon": "-1.2199699",
+        "lat": "42.753511",
+        "importance": 0.47500000000000003,
+        "addressimportance": "8.831322928142486",
+        "extra_place": null,
+        "addresstype": "village",
+        "asgeojson": "{\"type\":\"Point\",\"coordinates\":[-1.2199699,42.753511]}",
+        "aBoundingBox": [
+            "42.733511",
+            "42.773511",
+            "-1.2399699",
+            "-1.1999699"
+        ],
+        "icon": "https:\/\/nominatim.openstreetmap.org\/images\/mapicons\/poi_place_village.p.20.png",
+        "label": "Village",
+        "name": "Zabalza\/Zabaltza, Navarra - Nafarroa, 31448, Espa\u00f1a",
+        "foundorder": -0.8823322928142485
+    }

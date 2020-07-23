@@ -1,0 +1,34 @@
+
+    {
+        "osm_type": "N",
+        "osm_id": 1439532124,
+        "class": "place",
+        "type": "village",
+        "admin_level": 8,
+        "rank_search": 19,
+        "rank_address": 16,
+        "place_id": 15616317,
+        "parent_place_id": 235437567,
+        "housenumber": -1,
+        "country_code": "es",
+        "langaddress": "Esparza de Salazar \/ Espartza Zaraitzu, Esparza de Salazar, Navarra - Nafarroa, 31451, Espa\u00f1a",
+        "placename": "Esparza de Salazar \/ Espartza Zaraitzu",
+        "ref": "Esparza de Salazar \/ Espartza Zaraitzu",
+        "lon": "-1.0990518",
+        "lat": "42.8547125",
+        "importance": 1.0060599168710156,
+        "addressimportance": "9.109078503678278",
+        "extra_place": null,
+        "addresstype": "village",
+        "asgeojson": "{\"type\":\"Point\",\"coordinates\":[-1.0990518,42.8547125]}",
+        "aBoundingBox": [
+            "42.8347125",
+            "42.8747125",
+            "-1.1190518",
+            "-1.0790518"
+        ],
+        "icon": "https:\/\/nominatim.openstreetmap.org\/images\/mapicons\/poi_place_village.p.20.png",
+        "label": "Village",
+        "name": "Esparza de Salazar \/ Espartza Zaraitzu, Esparza de Salazar, Navarra - Nafarroa, 31451, Espa\u00f1a",
+        "foundorder": -0.9101078503678278
+    }

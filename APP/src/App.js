@@ -18,6 +18,7 @@ import CuidadorStatsForm from "./screens/CuidadorStatsScreen/cuidadorStatsForm";
 import SocketContext from "./socketio/socket-context";
 import * as io from "socket.io-client";
 import ipMaquina from './util/ipMaquinaAPI';
+import { geolocated } from 'react-geolocated';
 
 const mapStateToProps = state => {
   return { formContent: state.app.formContent };
@@ -76,6 +77,7 @@ class App extends React.Component {
   }
 
   render() {
+    console.log(this.props);
     const AppContent = this.getContent.bind(this);
     const { cabeceraHeight } = this.state;
     return (
@@ -96,4 +98,9 @@ class App extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(App);
+export default geolocated({
+  positionOptions: {
+      enableHighAccuracy: false,
+  },
+  userDecisionTimeout: 5000,
+})(connect(mapStateToProps)(App));

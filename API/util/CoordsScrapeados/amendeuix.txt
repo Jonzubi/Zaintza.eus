@@ -1,0 +1,34 @@
+
+    {
+        "osm_type": "N",
+        "osm_id": 389725564,
+        "class": "place",
+        "type": "village",
+        "admin_level": 15,
+        "rank_search": 19,
+        "rank_address": 16,
+        "place_id": 3507121,
+        "parent_place_id": 235717795,
+        "housenumber": -1,
+        "country_code": "fr",
+        "langaddress": "Amendeuix, Bayonne, Pyr\u00e9n\u00e9es-Atlantiques, Nouvelle-Aquitaine, France m\u00e9tropolitaine, 64120, France",
+        "placename": "Amendeuix",
+        "ref": "Amendeuix",
+        "lon": "-1.0443992",
+        "lat": "43.3541484",
+        "importance": 0.4075723342298069,
+        "addressimportance": "8.777990178348876",
+        "extra_place": null,
+        "addresstype": "village",
+        "asgeojson": "{\"type\":\"Point\",\"coordinates\":[-1.0443992,43.3541484]}",
+        "aBoundingBox": [
+            "43.3341484",
+            "43.3741484",
+            "-1.0643992",
+            "-1.0243992"
+        ],
+        "icon": "https:\/\/nominatim.openstreetmap.org\/images\/mapicons\/poi_place_village.p.20.png",
+        "label": "Village",
+        "name": "Amendeuix, Bayonne, Pyr\u00e9n\u00e9es-Atlantiques, Nouvelle-Aquitaine, France m\u00e9tropolitaine, 64120, France",
+        "foundorder": -0.8769990178348875
+    }

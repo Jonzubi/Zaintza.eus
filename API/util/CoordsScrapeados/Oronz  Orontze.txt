@@ -1,0 +1,34 @@
+
+    {
+        "osm_type": "N",
+        "osm_id": 765715385,
+        "class": "place",
+        "type": "village",
+        "admin_level": 8,
+        "rank_search": 19,
+        "rank_address": 16,
+        "place_id": 6668824,
+        "parent_place_id": 235433567,
+        "housenumber": -1,
+        "country_code": "es",
+        "langaddress": "Oronz \/ Orontze, Oronz, Navarra - Nafarroa, 31451, Espa\u00f1a",
+        "placename": "Oronz \/ Orontze",
+        "ref": "Oronz \/ Orontze",
+        "lon": "-1.0965787",
+        "lat": "42.8685267",
+        "importance": 0.48500000000000004,
+        "addressimportance": "9.109379843674347",
+        "extra_place": null,
+        "addresstype": "village",
+        "asgeojson": "{\"type\":\"Point\",\"coordinates\":[-1.0965787,42.8685267]}",
+        "aBoundingBox": [
+            "42.8485267",
+            "42.8885267",
+            "-1.1165787",
+            "-1.0765787"
+        ],
+        "icon": "https:\/\/nominatim.openstreetmap.org\/images\/mapicons\/poi_place_village.p.20.png",
+        "label": "Village",
+        "name": "Oronz \/ Orontze, Oronz, Navarra - Nafarroa, 31451, Espa\u00f1a",
+        "foundorder": -0.9101379843674346
+    }

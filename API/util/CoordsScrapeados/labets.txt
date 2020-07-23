@@ -1,0 +1,34 @@
+
+    {
+        "osm_type": "N",
+        "osm_id": 389776428,
+        "class": "place",
+        "type": "village",
+        "admin_level": 15,
+        "rank_search": 19,
+        "rank_address": 16,
+        "place_id": 3560693,
+        "parent_place_id": 235717795,
+        "housenumber": -1,
+        "country_code": "fr",
+        "langaddress": "Labets, Bayonne, Pyr\u00e9n\u00e9es-Atlantiques, Nouvelle-Aquitaine, France m\u00e9tropolitaine, France",
+        "placename": "Labets",
+        "ref": "Labets",
+        "lon": "-1.0563529",
+        "lat": "43.3836401",
+        "importance": 0.403230229325644,
+        "addressimportance": "8.777990178348876",
+        "extra_place": null,
+        "addresstype": "village",
+        "asgeojson": "{\"type\":\"Point\",\"coordinates\":[-1.0563529,43.3836401]}",
+        "aBoundingBox": [
+            "43.3636401",
+            "43.4036401",
+            "-1.0763529",
+            "-1.0363529"
+        ],
+        "icon": "https:\/\/nominatim.openstreetmap.org\/images\/mapicons\/poi_place_village.p.20.png",
+        "label": "Village",
+        "name": "Labets, Bayonne, Pyr\u00e9n\u00e9es-Atlantiques, Nouvelle-Aquitaine, France m\u00e9tropolitaine, France",
+        "foundorder": -0.8769990178348875
+    }

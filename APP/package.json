@@ -27,6 +27,7 @@
     "react-collapse": "^5.0.0",
     "react-datez": "^1.4.0",
     "react-dom": "^16.9.0",
+    "react-geolocated": "^3.0.1",
     "react-headroom": "^2.2.8",
     "react-i18next": "^10.13.1",
     "react-images-upload": "^1.2.7",

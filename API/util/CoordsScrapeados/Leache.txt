@@ -1,0 +1,34 @@
+
+    {
+        "osm_type": "N",
+        "osm_id": 1439532165,
+        "class": "place",
+        "type": "village",
+        "admin_level": 8,
+        "rank_search": 19,
+        "rank_address": 16,
+        "place_id": 14978631,
+        "parent_place_id": 236143684,
+        "housenumber": -1,
+        "country_code": "es",
+        "langaddress": "Leache\/Leatxe, Navarra - Nafarroa, 31492, Espa\u00f1a",
+        "placename": "Leache\/Leatxe",
+        "ref": "Leache\/Leatxe",
+        "lon": "-1.4069932",
+        "lat": "42.607675",
+        "importance": 0.375,
+        "addressimportance": "8.831322928142486",
+        "extra_place": null,
+        "addresstype": "village",
+        "asgeojson": "{\"type\":\"Point\",\"coordinates\":[-1.4069932,42.607675]}",
+        "aBoundingBox": [
+            "42.587675",
+            "42.627675",
+            "-1.4269932",
+            "-1.3869932"
+        ],
+        "icon": "https:\/\/nominatim.openstreetmap.org\/images\/mapicons\/poi_place_village.p.20.png",
+        "label": "Village",
+        "name": "Leache\/Leatxe, Navarra - Nafarroa, 31492, Espa\u00f1a",
+        "foundorder": -0.8823322928142485
+    }

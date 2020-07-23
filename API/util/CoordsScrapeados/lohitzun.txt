@@ -1,0 +1,33 @@
+
+    {
+        "osm_type": "N",
+        "osm_id": 1319918553,
+        "class": "place",
+        "type": "farm",
+        "admin_level": 15,
+        "rank_search": 20,
+        "rank_address": 0,
+        "place_id": 14701666,
+        "parent_place_id": 235729522,
+        "housenumber": -1,
+        "country_code": "fr",
+        "langaddress": "Lohitz\u00fcn, Lacarry-Arhan-Charritte-de-Haut, Oloron-Sainte-Marie, Pyr\u00e9n\u00e9es-Atlantiques, Nouvelle-Aquitaine, France m\u00e9tropolitaine, 64470, France",
+        "placename": "Lohitz\u00fcn",
+        "ref": "Lohitz\u00fcn",
+        "lon": "-0.9332051",
+        "lat": "43.085493",
+        "importance": 0.25,
+        "addressimportance": "9.861496264710826",
+        "extra_place": null,
+        "addresstype": "farm",
+        "asgeojson": "{\"type\":\"Point\",\"coordinates\":[-0.9332051,43.085493]}",
+        "aBoundingBox": [
+            "43.075493",
+            "43.095493",
+            "-0.9432051",
+            "-0.9232051"
+        ],
+        "label": "Farm",
+        "name": "Lohitz\u00fcn, Lacarry-Arhan-Charritte-de-Haut, Oloron-Sainte-Marie, Pyr\u00e9n\u00e9es-Atlantiques, Nouvelle-Aquitaine, France m\u00e9tropolitaine, 64470, France",
+        "foundorder": -0.9848496264710827
+    }
