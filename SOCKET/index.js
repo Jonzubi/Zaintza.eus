@@ -2,6 +2,8 @@ const app = require('express')();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const port = 3002;
+const conexion = require('../API/util/bdConnection');
+const modelos = require('../API/util/requireAllModels')(conexion);
 
 let usuariosConectados = [];
 let usuariosLogueados = [];
