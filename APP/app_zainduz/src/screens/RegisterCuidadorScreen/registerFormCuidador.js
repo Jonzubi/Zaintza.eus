@@ -19,27 +19,27 @@ import {
   faUsers
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import ipMaquina from "../util/ipMaquinaAPI";
+import ipMaquina from "../../util/ipMaquinaAPI";
 import Avatar, { Avatar as AvatarUpload } from "react-avatar-edit";
-import ContactImageUploader from "./contactImageUploader";
+import ContactImageUploader from "../../components/contactImageUploader";
 import cogoToast from "cogo-toast";
 import { ReactDatez as Calendario } from "react-datez";
 import Switch from "react-switch";
-import TimeInput from "./customTimeInput";
-import PuebloAutosuggest from "./pueblosAutosuggest";
+import TimeInput from "../../components/customTimeInput";
+import PuebloAutosuggest from "../../components/pueblosAutosuggest";
 import "react-datez/dist/css/react-datez.css";
-import imgNino from "../util/images/nino.png";
-import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
-import imgTerceraEdad from "../util/images/terceraEdad.png";
-import { getRandomString, toBase64 } from "../util/funciones";
+import imgNino from "../../util/images/nino.png";
+import imgNecesidadEspecial from "../../util/images/genteConNecesidadesEspeciales.png";
+import imgTerceraEdad from "../../util/images/terceraEdad.png";
+import { getRandomString, toBase64 } from "../../util/funciones";
 import { connect } from "react-redux";
-import { changeFormContent } from "../redux/actions/app";
-import { saveUserSession } from "../redux/actions/user";
-import municipios from "../util/municipos";
-import { trans, isValidEmail } from "../util/funciones";
-import SocketContext from "../socketio/socket-context";
+import { changeFormContent } from "../../redux/actions/app";
+import { saveUserSession } from "../../redux/actions/user";
+import municipios from "../../util/municipos";
+import { trans, isValidEmail } from "../../util/funciones";
+import SocketContext from "../../socketio/socket-context";
 import ClipLoader from "react-spinners/ClipLoader";
-import "./styles/registerFormCuidador.css";
+import "./registerFormCuidador.css";
 import i18next from "i18next";
 
 const mapDispatchToProps = dispatch => {

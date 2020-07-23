@@ -1,10 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { trans } from "../util/funciones";
-import { changeFormContent } from "../redux/actions/app";
+import { trans } from "../../util/funciones";
+import { changeFormContent } from "../../redux/actions/app";
 import axios from "axios";
 import cogoToast from "cogo-toast";
-import ipMaquina from "../util/ipMaquinaAPI";
+import ipMaquina from "../../util/ipMaquinaAPI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPhoneAlt,
@@ -22,16 +22,16 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/Modal";
 import ModalHeader from "react-bootstrap/ModalHeader";
-import "./styles/tablaAnuncios.css";
+import "./tablaAnuncios.css";
 import ModalBody from "react-bootstrap/ModalBody";
 import ModalFooter from "react-bootstrap/ModalFooter";
-import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
+import { toogleMenuPerfil } from "../../redux/actions/menuPerfil";
 import i18next from "i18next";
 import BottomScrollListener from "react-bottom-scroll-listener";
-import PuebloAutosuggest from "./pueblosAutosuggest";
+import PuebloAutosuggest from "../../components/pueblosAutosuggest";
 import Button from "react-bootstrap/Button";
 import ClipLoader from "react-spinners/ClipLoader";
-import SocketContext from "../socketio/socket-context";
+import SocketContext from "../../socketio/socket-context";
 
 const mapStateToProps = (state) => {
   return {

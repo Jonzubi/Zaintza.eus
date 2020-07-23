@@ -1,10 +1,10 @@
 import React from "react";
 import Avatar from "react-avatar-edit";
 import { connect } from "react-redux";
-import { changeFormContent } from "../redux/actions/app";
-import { saveUserSession } from "../redux/actions/user";
-import { trans } from "../util/funciones";
-import ipMaquina from "../util/ipMaquinaAPI";
+import { changeFormContent } from "../../redux/actions/app";
+import { saveUserSession } from "../../redux/actions/user";
+import { trans } from "../../util/funciones";
+import ipMaquina from "../../util/ipMaquinaAPI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faSave, faUser, faMobileAlt, faPhoneAlt } from "@fortawesome/free-solid-svg-icons";
 import Axios from "axios";

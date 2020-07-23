@@ -1,7 +1,7 @@
 import React from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import { connect } from "react-redux";
-import ipMaquina from "../util/ipMaquinaAPI";
+import ipMaquina from "../../util/ipMaquinaAPI";
 import axios from "axios";
 import moment from "moment";
 import ClipLoader from "react-spinners/ClipLoader";

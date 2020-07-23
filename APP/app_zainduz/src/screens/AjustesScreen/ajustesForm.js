@@ -2,9 +2,9 @@ import React from "react";
 import cogoToast from "cogo-toast";
 import { connect } from "react-redux";
 import Axios from "axios";
-import ipMaquina from "../util/ipMaquinaAPI";
-import { saveUserSession } from "../redux/actions/user";
-import { trans } from "../util/funciones";
+import ipMaquina from "../../util/ipMaquinaAPI";
+import { saveUserSession } from "../../redux/actions/user";
+import { trans } from "../../util/funciones";
 import i18n from "i18next";
 import i18next from "i18next";
 

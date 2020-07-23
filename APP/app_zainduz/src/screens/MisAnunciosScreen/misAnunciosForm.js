@@ -1,9 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import axios from "axios";
-import ipMaquina from "../util/ipMaquinaAPI";
+import ipMaquina from "../../util/ipMaquinaAPI";
 import cogoToast from "cogo-toast";
-import { trans, toBase64, arrayOfFalses } from "../util/funciones";
+import { trans, toBase64, arrayOfFalses } from "../../util/funciones";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -25,12 +25,12 @@ import Avatar from "react-avatar";
 import Modal from "react-bootstrap/Modal";
 import ModalBody from "react-bootstrap/ModalBody";
 import ModalFooter from "react-bootstrap/ModalFooter";
-import ImageUploader from "./contactImageUploader";
+import ImageUploader from "../../components/contactImageUploader";
 import i18next from "i18next";
-import PuebloAutosuggest from "./pueblosAutosuggest";
-import TimeInput from "./customTimeInput";
-import "../components/styles/modalRegistrarse.css";
-import "../components/styles/misAnunciosForm.css";
+import PuebloAutosuggest from "../../components/pueblosAutosuggest";
+import TimeInput from "../../components/customTimeInput";
+import "./modalRegistrarse.css";
+import "./misAnunciosForm.css";
 import ModalHeader from "react-bootstrap/ModalHeader";
 
 class MisAnuncios extends React.Component {

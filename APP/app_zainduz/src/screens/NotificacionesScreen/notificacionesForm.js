@@ -1,8 +1,8 @@
 import React from "react";
 import axios from "axios";
-import ipMaquina from "../util/ipMaquinaAPI";
+import ipMaquina from "../../util/ipMaquinaAPI";
 import { connect } from "react-redux";
-import { trans, arrayOfFalses, getTodayDate } from "../util/funciones";
+import { trans, arrayOfFalses, getTodayDate } from "../../util/funciones";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
@@ -19,10 +19,10 @@ import {
 import { Collapse } from "react-collapse";
 import Avatar from "react-avatar";
 import cogoToast from "cogo-toast";
-import { setCountNotify } from "../redux/actions/notifications";
-import SocketContext from "../socketio/socket-context";
+import { setCountNotify } from "../../redux/actions/notifications";
+import SocketContext from "../../socketio/socket-context";
 import ClipLoader from "react-spinners/ClipLoader";
-import "./styles/notificacionesForm.css";
+import "./notificacionesForm.css";
 import Modal from "react-bootstrap/Modal";
 import ModalHeader from "react-bootstrap/ModalHeader";
 import ModalBody from "react-bootstrap/ModalBody";

@@ -17,11 +17,11 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { connect } from "react-redux";
 import axios from "axios";
-import ipMaquina from "../util/ipMaquinaAPI";
-import { trans, arrayOfFalses, getTodayDate } from "../util/funciones";
+import ipMaquina from "../../util/ipMaquinaAPI";
+import { trans, arrayOfFalses, getTodayDate } from "../../util/funciones";
 import Avatar from "react-avatar";
 import cogoToast from "cogo-toast";
-import SocketContext from "../socketio/socket-context";
+import SocketContext from "../../socketio/socket-context";
 import ClipLoader from "react-spinners/ClipLoader";
 import Modal from "react-bootstrap/Modal";
 import ModalBody from "react-bootstrap/ModalBody";
@@ -29,7 +29,7 @@ import ModalFooter from "react-bootstrap/ModalFooter";
 import ModalHeader from "react-bootstrap/ModalHeader";
 import Rating from "react-rating";
 import i18next from "i18next";
-import "./styles/acuerdosForm.css";
+import "./acuerdosForm.css";
 import moment from "moment";
 
 const mapStateToProps = (state) => {

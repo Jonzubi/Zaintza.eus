@@ -2,9 +2,9 @@ import React from "react";
 import Axios from "axios";
 import { connect } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
-import ipMaquina from "../util/ipMaquinaAPI";
+import ipMaquina from "../../util/ipMaquinaAPI";
 import cogoToast from "cogo-toast";
-import { trans } from "../util/funciones";
+import { trans } from "../../util/funciones";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 

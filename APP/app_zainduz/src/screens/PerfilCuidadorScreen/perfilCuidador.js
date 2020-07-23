@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import Avatar from "react-avatar-edit";
-import ImageUploader from "./contactImageUploader";
+import ImageUploader from "../../components/contactImageUploader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEdit,
@@ -17,21 +17,21 @@ import {
   faUsers,
   faEuroSign
 } from "@fortawesome/free-solid-svg-icons";
-import TimeInput from "./customTimeInput";
-import PuebloAutosuggest from "./pueblosAutosuggest";
+import TimeInput from "../../components/customTimeInput";
+import PuebloAutosuggest from "../../components/pueblosAutosuggest";
 import { ReactDatez as Calendario } from "react-datez";
 import cogoToast from "cogo-toast";
 import Switch from "react-switch";
-import { trans } from "../util/funciones";
-import ipMaquina from "../util/ipMaquinaAPI";
-import municipios from "../util/municipos";
-import imgNino from "../util/images/nino.png";
-import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
-import imgTerceraEdad from "../util/images/terceraEdad.png";
+import { trans } from "../../util/funciones";
+import ipMaquina from "../../util/ipMaquinaAPI";
+import municipios from "../../util/municipos";
+import imgNino from "../../util/images/nino.png";
+import imgNecesidadEspecial from "../../util/images/genteConNecesidadesEspeciales.png";
+import imgTerceraEdad from "../../util/images/terceraEdad.png";
 import ClipLoader from "react-spinners/ClipLoader";
-import { getRandomString, toBase64 } from "../util/funciones";
+import { getRandomString, toBase64 } from "../../util/funciones";
 import Axios from "axios";
-import {saveUserSession} from "../redux/actions/user";
+import {saveUserSession} from "../../redux/actions/user";
 import i18next from "i18next";
 
 const mapStateToProps = state => {

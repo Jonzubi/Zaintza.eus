@@ -1,11 +1,11 @@
 import React from "react";
 import { connect } from 'react-redux';
 import cogoToast from "cogo-toast";
-import { trans, toBase64 } from "../util/funciones";
-import ImageUploader from "./contactImageUploader";
+import { trans, toBase64 } from "../../util/funciones";
+import ImageUploader from "../../components/contactImageUploader";
 import i18next from "i18next";
-import TimeInput from "./customTimeInput";
-import PuebloAutosuggest from "./pueblosAutosuggest";
+import TimeInput from "../../components/customTimeInput";
+import PuebloAutosuggest from "../../components/pueblosAutosuggest";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMale,
@@ -18,13 +18,13 @@ import {
   faUsers,
   faEuroSign
 } from "@fortawesome/free-solid-svg-icons";
-import municipios from "../util/municipos";
-import ipMaquina from "../util/ipMaquinaAPI";
-import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
-import imgTerceraEdad from "../util/images/terceraEdad.png";
-import imgNino from "../util/images/nino.png";
+import municipios from "../../util/municipos";
+import ipMaquina from "../../util/ipMaquinaAPI";
+import imgNecesidadEspecial from "../../util/images/genteConNecesidadesEspeciales.png";
+import imgTerceraEdad from "../../util/images/terceraEdad.png";
+import imgNino from "../../util/images/nino.png";
 import Axios from "axios";
-import { changeFormContent } from "../redux/actions/app";
+import { changeFormContent } from "../../redux/actions/app";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const mapStateToProps = state => {
