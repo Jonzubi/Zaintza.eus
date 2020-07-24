@@ -1,4 +1,4 @@
-[
+exports.coordsMunicipios = [
     {
       "nombreCiudad": "Abaltzisketa",
       "longitud": "-2.1052186",
@@ -3314,5 +3314,5 @@
       "longitud": "-2.129460",
       "latitud": "43.127380"
     }
-  ]
+  ];
   

@@ -9,6 +9,25 @@ const headerResponse = require("../../util/headerResponse");
 const ipMaquina = require("../../util/ipMaquina");
 const handlebars = require("handlebars");
 const moment = require("moment-timezone");
+const { coordsMunicipios } = require('../../util/municipiosCoords');
+
+const getKmFromCoords = function (lat1, lon1, lat2, lon2) {
+  rad = function (x) {
+    return (x * Math.PI) / 180;
+  };
+  var R = 6378.137; //Radio de la tierra en km
+  var dLat = rad(lat2 - lat1);
+  var dLong = rad(lon2 - lon1);
+  var a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(rad(lat1)) *
+      Math.cos(rad(lat2)) *
+      Math.sin(dLong / 2) *
+      Math.sin(dLong / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c;
+  return d.toFixed(3); //Retorna tres decimales
+};
 
 exports.getAcuerdosConUsuarios = async (req, res, modelos) => {
   const { email, contrasena, tipoUsuario, idPerfil, estadoAcuerdo } = req.body;
@@ -1625,7 +1644,7 @@ exports.getCuidadorVisitas = async (req, res, modelos) => {
 };
 
 exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
-  const { requiredCards, filterUbicacion } = req.query;
+  const { requiredCards, filterUbicacion, coords } = req.query;
   const modeloCuidadores = modelos.cuidador;
   const resultado = [];
   let cuidadoresFilter = {
@@ -1656,8 +1675,46 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
       valoraciones: valoraciones,
     });
   }
+
+  const resultadoConCoords = [];
+
+  if (coords) {
+    const objCoords = JSON.parse(coords);
+    // TODO Filtrar `resultado` y medir la distancia del pueblo configurado del cuidador y pasado por cliente
+    resultado.filter(eachItem => {
+      let shouldBeSend = true;
+      let minDistancia = 100000000;
+      eachItem.cuidador.ubicaciones.forEach(ubicacion => {
+        const ubicacionCoords = coordsMunicipios.find(coord => coord.nombreCiudad === ubicacion);
+        if (ubicacionCoords){
+          const { latitud, longitud } = ubicacionCoords;
+          const clienteLatitud = objCoords.latitud;
+          const clienteLongitud = objCoords.longitud;
+          const distancia = parseInt(getKmFromCoords(clienteLatitud, clienteLongitud, latitud, longitud));
+          if (distancia > 30) {
+            // Si el cliente esta a mas de 30 KM del cuidador no aparecera en la aplicacion web
+            shouldBeSend = false;
+          }
+
+          if (minDistancia > distancia) {
+            minDistancia = distancia;
+          }
+        } else {
+          shouldBeSend = false;
+        }
+      });
+      if (shouldBeSend) {
+        resultadoConCoords.push(Object.assign({ ...eachItem, distancia: minDistancia }));
+      }
+    }); 
+  }
+
+  resultadoConCoords.sort((a, b) => a.distancia > b.distancia ? 1 : -1);
+  
+
+  const enviarResultado = resultadoConCoords.length > 0 ? resultadoConCoords : resultado;
   res.writeHead(200, headerResponse);
-  res.write(JSON.stringify(resultado));
+  res.write(JSON.stringify(enviarResultado));
   res.end();
 };
 
