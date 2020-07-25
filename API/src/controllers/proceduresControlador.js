@@ -4,6 +4,7 @@ const {
   getTodayDate,
   caesarShift,
   readHTMLFile,
+  shuffleArray
 } = require("../../util/funciones");
 const headerResponse = require("../../util/headerResponse");
 const ipMaquina = require("../../util/ipMaquina");
@@ -1711,8 +1712,8 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
 
   resultadoConCoords.sort((a, b) => a.distancia > b.distancia ? 1 : -1);
   
-
-  const enviarResultado = resultadoConCoords.length > 0 ? resultadoConCoords : resultado;
+  // Si se han calculado las distancias, enviará el array ordenado por distancia, si no va a devolver los cuidadores con un orden random
+  const enviarResultado = resultadoConCoords.length > 0 ? resultadoConCoords : shuffleArray(resultado);
   res.writeHead(200, headerResponse);
   res.write(JSON.stringify(enviarResultado));
   res.end();
