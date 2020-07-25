@@ -284,7 +284,9 @@
     "definirIdioma": "Hizkuntza zehaztu",
     "holderContrasenaActual": "Orain duzun pasahitza...",
     "holderNuevaContrasena": "Pasahitz berria...",
-    "holderRepetirContrasena": "Sartu berriz zure pasahitz berria..."
+    "holderRepetirContrasena": "Sartu berriz zure pasahitz berria...",
+    "distancia": "Distantzia",
+    "shownCards": "Ze distanzia maximotara (KM) ikusi nahi dituzu zaintzaileak / zaintza eskaerak ?"
   },
   "header": {
     "subirAnuncio": "Zaintza eskaera igo",

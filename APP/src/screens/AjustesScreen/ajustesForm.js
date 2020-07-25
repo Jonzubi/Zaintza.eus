@@ -7,6 +7,7 @@ import { saveUserSession } from "../../redux/actions/user";
 import { trans } from "../../util/funciones";
 import i18n from "i18next";
 import i18next from "i18next";
+import Slider from '@material-ui/core/Slider';
 
 class AjustesForm extends React.Component {
   constructor(props) {
@@ -270,6 +271,23 @@ class AjustesForm extends React.Component {
                 {trans("ajustesForm.definirIdioma")}
               </div>
             </div>
+            <hr />
+            <h5>{trans("ajustesForm.distancia")}</h5>
+            <hr />
+            <span>{trans("ajustesForm.shownCards")}</span>
+            <Slider
+              className="mt-3"
+              style={{
+                color: "#28a745"
+              }}
+              defaultValue={30}
+              aria-labelledby="discrete-slider-small-steps"
+              step={10}
+              marks
+              min={10}
+              max={100}
+              valueLabelDisplay="auto"
+            />
           </div>
         </div>
       </div>
