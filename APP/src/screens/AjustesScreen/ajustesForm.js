@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import Axios from "axios";
 import ipMaquina from "../../util/ipMaquinaAPI";
 import { saveUserSession } from "../../redux/actions/user";
+import { SetCoords } from "../../redux/actions/coords";
 import { trans } from "../../util/funciones";
 import i18n from "i18next";
 import i18next from "i18next";
@@ -18,7 +19,8 @@ class AjustesForm extends React.Component {
       txtNewPassword: "",
       txtRepeatNewPassword: "",
       formChosen: "perfil",
-      langChosen: i18n.language
+      langChosen: i18n.language,
+      maxDistance: 30
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -121,15 +123,26 @@ class AjustesForm extends React.Component {
       formChosen: form
     });
   }
+
+  handleSaveMaxDistance = () => {
+    const { maxDistance } = this.state;
+    console.log(maxDistance);
+  }
+
+  handleMaxDistanceChange = (event, value) => {
+    this.setState({
+      maxDistance: value
+    })
+  }
+
   render() {
     const {
       txtActualPassword,
       txtNewPassword,
       txtRepeatNewPassword,
       formChosen,
-      langChosen
+      langChosen,
     } = this.state;
-    const { idLangPred } = this.props;
     return (
       <div className="p-lg-5 mt-lg-0 mt-2">
         <div className="row-lg flex-lg-row d-flex flex-column">
@@ -280,7 +293,10 @@ class AjustesForm extends React.Component {
               style={{
                 color: "#28a745"
               }}
+              onChange={this.handleMaxDistanceChange}
               defaultValue={30}
+              getAriaValueText={(value) => `${value}km`}
+              valueLabelFormat={(value) => `${value}km`}
               aria-labelledby="discrete-slider-small-steps"
               step={10}
               marks
@@ -288,6 +304,14 @@ class AjustesForm extends React.Component {
               max={100}
               valueLabelDisplay="auto"
             />
+            <div className="d-flex justify-content-end mt-5">
+              <div
+                className="btn btn-success"
+                onClick={() => this.handleSaveMaxDistance()}
+              >
+                {trans("ajustesForm.definirMaxDistance")}
+              </div>
+            </div>
           </div>
         </div>
       </div>

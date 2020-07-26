@@ -1837,3 +1837,7 @@ exports.getValoracionesDelCuidador = async (req, res, modelos) => {
   res.write(JSON.stringify(valoraciones));
   res.end();
 };
+
+exports.patchMaxDistance = (req, res, modelos) => {
+  
+}

@@ -9,6 +9,10 @@ module.exports = (conexion) => {
         },
         idLangPred: {
             type: String
+        },
+        maxDistance: {
+            type: Number,
+            default: 30
         }
     });
 
