@@ -9,6 +9,7 @@ import { trans } from "../../util/funciones";
 import i18n from "i18next";
 import i18next from "i18next";
 import Slider from '@material-ui/core/Slider';
+import { SetMaxDistance } from '../../redux/actions/coords';
 
 class AjustesForm extends React.Component {
   constructor(props) {
@@ -126,7 +127,18 @@ class AjustesForm extends React.Component {
 
   handleSaveMaxDistance = () => {
     const { maxDistance } = this.state;
-    console.log(maxDistance);
+    const { idUsuario, setMaxDistance, email, contrasena } = this.props;
+    Axios
+      .patch(`http://${ipMaquina}:3001/api/procedures/patchMaxDistance/${idUsuario}`, {
+        email,
+        contrasena,
+        maxDistance
+      })
+      .then(() => {
+        cogoToast.success(<h5>{trans("ajustesForm.maxDistanceDefined")}</h5>);
+        setMaxDistance(maxDistance);
+      })
+      .catch(() => cogoToast.error(<h5>{trans("perfilCliente.errorGeneral")}</h5>))
   }
 
   handleMaxDistanceChange = (event, value) => {
@@ -143,6 +155,7 @@ class AjustesForm extends React.Component {
       formChosen,
       langChosen,
     } = this.state;
+    const { maxDistance } = this.props;
     return (
       <div className="p-lg-5 mt-lg-0 mt-2">
         <div className="row-lg flex-lg-row d-flex flex-column">
@@ -294,7 +307,7 @@ class AjustesForm extends React.Component {
                 color: "#28a745"
               }}
               onChange={this.handleMaxDistanceChange}
-              defaultValue={30}
+              defaultValue={maxDistance}
               getAriaValueText={(value) => `${value}km`}
               valueLabelFormat={(value) => `${value}km`}
               aria-labelledby="discrete-slider-small-steps"
@@ -329,7 +342,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  saveUserSession: payload => dispatch(saveUserSession(payload))
+  saveUserSession: payload => dispatch(saveUserSession(payload)),
+  setMaxDistance: payload => dispatch(SetMaxDistance(payload))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AjustesForm);

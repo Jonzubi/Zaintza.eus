@@ -55,7 +55,8 @@ const mapStateToProps = (state) => {
     email: state.user.email,
     contrasena: state.user.contrasena,
     latitud: state.coords.latitud,
-    longitud: state.coords.longitud
+    longitud: state.coords.longitud,
+    maxDistance: state.coords.maxDistance,
   };
 };
 
@@ -69,56 +70,69 @@ let gSocket = null;
 
 class Tabla extends React.Component {
   componentDidMount() {
-    this.refrescarCuidadores();    
+    this.refrescarCuidadores();
   }
 
   refrescarCuidadores = (isBottom) => {
     const { requiredCards } = this.state;
-    const { latitud, longitud } = this.props;
+    const { latitud, longitud, maxDistance } = this.props;
     let coords = null;
-    if (latitud !== 0 && longitud !== 0){
+    if (latitud !== 0 && longitud !== 0) {
       coords = {
         latitud,
-        longitud
-      }
+        longitud,
+      };
     }
-    Axios.get(
-      "http://" +
-        ipMaquina +
-        ":3001/api/procedures/getCuidadoresConValoraciones",
+    this.setState(
       {
-        params: {
-          requiredCards: !isBottom ? requiredCards : requiredCards + 100,
-          coords
-        },
+        jsonCuidadores: {},
+        buscado: false,
+      },
+      () => {
+        Axios.get(
+          "http://" +
+            ipMaquina +
+            ":3001/api/procedures/getCuidadoresConValoraciones",
+          {
+            params: {
+              requiredCards: !isBottom ? requiredCards : requiredCards + 100,
+              coords,
+              maxDistance,
+            },
+          }
+        )
+          .then((data) => {
+            this.setState({
+              jsonCuidadores: data.data,
+              buscado: true,
+              isFiltering: false, // Por si clicka en handleResetFilter
+              showModalFilter: false, // Por si clicka en handleResetFilter
+              requiredCards: !isBottom ? requiredCards : requiredCards + 100,
+            });
+          })
+          .catch((err) => {
+            this.setState({
+              buscado: true,
+              showModalFilter: false, // Por si clicka en handleResetFilter
+            });
+            cogoToast.error(
+              <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
+            );
+          });
       }
-    )
-      .then((data) => {
-        this.setState({
-          jsonCuidadores: data.data,
-          buscado: true,
-          isFiltering: false, // Por si clicka en handleResetFilter
-          showModalFilter: false, // Por si clicka en handleResetFilter
-          requiredCards: !isBottom ? requiredCards : requiredCards + 100
-        });
-      })
-      .catch((err) => {
-        this.setState({
-          buscado: true,
-          showModalFilter: false, // Por si clicka en handleResetFilter
-        });
-        cogoToast.error(
-          <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
-        );
-      });
-  }
+    );
+  };
 
   componentDidUpdate(prevProps) {
-    const { latitud, longitud } = this.props;
+    const { latitud, longitud, maxDistance } = this.props;
     const prevLatitud = prevProps.latitud;
     const prevLongitud = prevProps.longitud;
 
-    if (latitud !== prevLatitud && longitud !== prevLongitud){
+    if (latitud !== prevLatitud && longitud !== prevLongitud) {
+      this.refrescarCuidadores();
+    }
+
+    if (maxDistance !== prevProps.maxDistance) {
       this.refrescarCuidadores();
     }
   }
@@ -609,12 +623,17 @@ class Tabla extends React.Component {
         buscado: false,
       },
       () => {
-        Axios.get("http://" + ipMaquina + ":3001/api/procedures/getCuidadoresConValoraciones", {
-          params: {
-            requiredCards,
-            filterUbicacion: auxFilterPueblo
-          },
-        })
+        Axios.get(
+          "http://" +
+            ipMaquina +
+            ":3001/api/procedures/getCuidadoresConValoraciones",
+          {
+            params: {
+              requiredCards,
+              filterUbicacion: auxFilterPueblo,
+            },
+          }
+        )
           .then((data) => {
             this.setState({
               jsonCuidadores: data.data,
@@ -644,7 +663,7 @@ class Tabla extends React.Component {
         auxFilterPueblo: "",
       },
       () => {
-        this.refrescarCuidadores()
+        this.refrescarCuidadores();
       }
     );
   };
@@ -665,7 +684,7 @@ class Tabla extends React.Component {
     if (!valoraciones) {
       return 0;
     }
-    
+
     return (
       <span
         style={{

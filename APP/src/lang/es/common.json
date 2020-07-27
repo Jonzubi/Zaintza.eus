@@ -249,7 +249,8 @@
       "holderRepetirContrasena": "Introduce la nueva contraseña otra vez...",
       "distancia": "Distancia",
       "shownCards": "A que distancia máxima (KM) quieres ver los cuidadores / peticiones de cuidado ?",
-      "definirMaxDistance": "Definir distancia máxima"
+      "definirMaxDistance": "Definir distancia máxima",
+      "maxDistanceDefined": "Distancia máxima establecida"
     },
     "header": {
       "subirAnuncio": "Crear solicitud de cuidado",

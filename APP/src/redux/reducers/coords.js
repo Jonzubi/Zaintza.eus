@@ -3,7 +3,7 @@ import { SET_COORDS, RESET_COORDS, SET_MAX_DISNTACE, RESET_MAX_DISNTACE } from "
 const initialState = {
     latitud : 0,
     longitud: 0,
-    maxDistance: 0
+    maxDistance: 30
 };
 
 function reducer(state = initialState, action){

@@ -13,6 +13,7 @@ import {translate} from "react-i18next";
 import SocketContext from "../socketio/socket-context";
 import ClipLoader from "react-spinners/ClipLoader";
 import i18next from "i18next";
+import { SetMaxDistance } from '../redux/actions/coords';
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -20,7 +21,8 @@ const mapDispatchToProps = dispatch => {
     toogleMenuPerfil: payload => dispatch(toogleMenuPerfil(payload)),
     saveUserSession: user => dispatch(saveUserSession(user)),
     toogleModal: payload => dispatch(toogleModal(payload)),
-    changeLang: payload => dispatch(changeLang(payload))
+    changeLang: payload => dispatch(changeLang(payload)),
+    setMaxDistance: payload => dispatch(SetMaxDistance(payload))
   };
 };
 
@@ -41,7 +43,7 @@ class LogInForm extends React.Component {
   }
 
   async handleLogIn(socket) {
-    const { changeLang } = this.props;
+    const { changeLang, setMaxDistance } = this.props;
     const vEmail = this.state.txtEmail;
     const vContrasena = this.state.txtContrasena;
     var objFiltros = {
@@ -96,6 +98,10 @@ class LogInForm extends React.Component {
               if (resultado.data.idLangPred !== undefined) {
                 i18n.changeLanguage(resultado.data.idLangPred);
                 changeLang(resultado.data.idLangPred);
+              }
+
+              if (resultado.data.maxDistance !== undefined) {
+                setMaxDistance(resultado.data.maxDistance);
               }
               
 

@@ -1645,7 +1645,7 @@ exports.getCuidadorVisitas = async (req, res, modelos) => {
 };
 
 exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
-  const { requiredCards, filterUbicacion, coords } = req.query;
+  const { requiredCards, filterUbicacion, coords, maxDistance } = req.query;
   const modeloCuidadores = modelos.cuidador;
   const resultado = [];
   let cuidadoresFilter = {
@@ -1677,13 +1677,14 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
     });
   }
 
+  const ifMaxDistance = maxDistance || 30;
   const resultadoConCoords = [];
 
   if (coords) {
     const objCoords = JSON.parse(coords);
     // TODO Filtrar `resultado` y medir la distancia del pueblo configurado del cuidador y pasado por cliente
     resultado.filter(eachItem => {
-      let shouldBeSend = true;
+      let shouldBeSend = false;
       let minDistancia = 100000000;
       eachItem.cuidador.ubicaciones.forEach(ubicacion => {
         const ubicacionCoords = coordsMunicipios.find(coord => coord.nombreCiudad === ubicacion);
@@ -1692,10 +1693,11 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
           const clienteLatitud = objCoords.latitud;
           const clienteLongitud = objCoords.longitud;
           const distancia = parseInt(getKmFromCoords(clienteLatitud, clienteLongitud, latitud, longitud));
-          if (distancia > 30) {
-            // Si el cliente esta a mas de 30 KM del cuidador no aparecera en la aplicacion web
-            shouldBeSend = false;
-          }
+          
+          // Si el cliente esta a mas de 30 KM del cuidador (o la maxima distancia configurada) no aparecera en la aplicacion web
+          if (!shouldBeSend) {
+            shouldBeSend = distancia < ifMaxDistance;
+          }          
 
           if (minDistancia > distancia) {
             minDistancia = distancia;
@@ -1838,7 +1840,7 @@ exports.getValoracionesDelCuidador = async (req, res, modelos) => {
   res.end();
 };
 
-exports.patchMaxDistance = (req, res, modelos) => {
+exports.patchMaxDistance = async (req, res, modelos) => {
   const { id } = req.params;
   const { email, contrasena, maxDistance } = req.body;
   const modeloUsuario = modelos.usuario;
@@ -1847,6 +1849,12 @@ exports.patchMaxDistance = (req, res, modelos) => {
   if (usuario.email !== email || usuario.contrasena !== contrasena) {
     res.writeHead(405, headerResponse);
     res.write("Operacion denegada");
+    res.end();
+  }
+
+  if (!maxDistance) {
+    res.writeHead(405, headerResponse);
+    res.write("Falta maxDistance");
     res.end();
   }
 
