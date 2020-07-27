@@ -1839,5 +1839,44 @@ exports.getValoracionesDelCuidador = async (req, res, modelos) => {
 };
 
 exports.patchMaxDistance = (req, res, modelos) => {
-  
+  const { id } = req.params;
+  const { email, contrasena, maxDistance } = req.body;
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findById(id);
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+  }
+
+  const modeloAjustes = modelos.ajuste;
+
+  const ajusteExistente = await modeloAjustes.find({ idUsuario: id });
+  if (ajusteExistente.length === 0) {
+    const ajuste = await modeloAjustes({
+      idUsuario: id,
+      maxDistance,
+    })
+      .save()
+      .catch((err) => {
+        res.writeHead(500, headerResponse);
+        res.write(JSON.stringify(err));
+        res.end();
+      });
+    res.writeHead(200, headerResponse);
+    res.write(JSON.stringify(ajuste));
+    res.end();
+  } else {
+    const ajuste = await modeloAjustes
+      .findOneAndUpdate({ idUsuario: id }, { maxDistance })
+      .catch((err) => {
+        res.writeHead(500, headerResponse);
+        res.write(JSON.stringify(err));
+        res.end();
+      });
+    res.writeHead(200, headerResponse);
+    res.write(JSON.stringify(ajuste));
+    res.end();
+  }
 }
