@@ -218,7 +218,7 @@ exports.getAnunciosConPerfil = async (req, res, modelos) => {
   
   const ifMaxDistance = maxDistance || 30;
   const resultadoConCoords = [];
-  const resultadoSinCoords = [];
+  let resultadoSinCoords = [];
 
   if (coords) {
     const objCoords = JSON.parse(coords);
