@@ -21,3 +21,10 @@ El proyecto de SEIM para Aplicación Web de 2º
 **Notas**
 
 - Es necesario tener conexión a internet ya que la aplicacion accede a una base de datos en la nube.
+
+**Gastos hasta la fecha**
+
+- Compra del dominio **Zaintza.eus**: **22.98€**
+- Prueba **AWS** en el despliegue de la aplicación: **8.20€**
+
+**TOTAL**: **31.18€**
