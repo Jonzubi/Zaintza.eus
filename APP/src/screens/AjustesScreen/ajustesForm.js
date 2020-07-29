@@ -4,9 +4,12 @@ import { connect } from "react-redux";
 import Axios from "axios";
 import ipMaquina from "../../util/ipMaquinaAPI";
 import { saveUserSession } from "../../redux/actions/user";
+import { SetCoords } from "../../redux/actions/coords";
 import { trans } from "../../util/funciones";
 import i18n from "i18next";
 import i18next from "i18next";
+import Slider from '@material-ui/core/Slider';
+import { SetMaxDistance } from '../../redux/actions/coords';
 
 class AjustesForm extends React.Component {
   constructor(props) {
@@ -17,7 +20,8 @@ class AjustesForm extends React.Component {
       txtNewPassword: "",
       txtRepeatNewPassword: "",
       formChosen: "perfil",
-      langChosen: i18n.language
+      langChosen: i18n.language,
+      maxDistance: props.maxDistance || 30
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -120,15 +124,38 @@ class AjustesForm extends React.Component {
       formChosen: form
     });
   }
+
+  handleSaveMaxDistance = () => {
+    const { maxDistance } = this.state;
+    const { idUsuario, setMaxDistance, email, contrasena } = this.props;
+    Axios
+      .patch(`http://${ipMaquina}:3001/api/procedures/patchMaxDistance/${idUsuario}`, {
+        email,
+        contrasena,
+        maxDistance
+      })
+      .then(() => {
+        cogoToast.success(<h5>{trans("ajustesForm.maxDistanceDefined")}</h5>);
+        setMaxDistance(maxDistance);
+      })
+      .catch(() => cogoToast.error(<h5>{trans("perfilCliente.errorGeneral")}</h5>))
+  }
+
+  handleMaxDistanceChange = (event, value) => {
+    this.setState({
+      maxDistance: value
+    })
+  }
+
   render() {
     const {
       txtActualPassword,
       txtNewPassword,
       txtRepeatNewPassword,
       formChosen,
-      langChosen
+      langChosen,
     } = this.state;
-    const { idLangPred } = this.props;
+    const { maxDistance } = this.props;
     return (
       <div className="p-lg-5 mt-lg-0 mt-2">
         <div className="row-lg flex-lg-row d-flex flex-column">
@@ -270,6 +297,34 @@ class AjustesForm extends React.Component {
                 {trans("ajustesForm.definirIdioma")}
               </div>
             </div>
+            <hr />
+            <h5>{trans("ajustesForm.distancia")}</h5>
+            <hr />
+            <span>{trans("ajustesForm.shownCards")}</span>
+            <Slider
+              className="mt-3"
+              style={{
+                color: "#28a745"
+              }}
+              onChange={this.handleMaxDistanceChange}
+              defaultValue={maxDistance}
+              getAriaValueText={(value) => `${value}km`}
+              valueLabelFormat={(value) => `${value}km`}
+              aria-labelledby="discrete-slider-small-steps"
+              step={10}
+              marks
+              min={10}
+              max={100}
+              valueLabelDisplay="auto"
+            />
+            <div className="d-flex justify-content-end mt-5">
+              <div
+                className="btn btn-success"
+                onClick={() => this.handleSaveMaxDistance()}
+              >
+                {trans("ajustesForm.definirMaxDistance")}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -283,11 +338,13 @@ const mapStateToProps = state => ({
   idLangPred: state.user.idLangPred,
   email: state.user.email,
   contrasena: state.user.contrasena,
-  nowLang: state.app.nowLang
+  nowLang: state.app.nowLang,
+  maxDistance: state.coords.maxDistance
 });
 
 const mapDispatchToProps = dispatch => ({
-  saveUserSession: payload => dispatch(saveUserSession(payload))
+  saveUserSession: payload => dispatch(saveUserSession(payload)),
+  setMaxDistance: payload => dispatch(SetMaxDistance(payload))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AjustesForm);

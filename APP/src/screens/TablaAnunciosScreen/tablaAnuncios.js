@@ -40,6 +40,9 @@ const mapStateToProps = (state) => {
     idUsuario: state.user._idUsuario,
     email: state.user.email,
     contrasena: state.user.contrasena,
+    latitud: state.coords.latitud,
+    longitud: state.coords.longitud,
+    maxDistance: state.coords.maxDistance,
   };
 };
 
@@ -70,60 +73,78 @@ class TablaAnuncios extends React.Component {
   }
 
   componentDidMount() {
-    const { requiredCards } = this.state;
-    axios
-      .get(
-        "http://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil",
-        {
-          params: {
-            options: {
-              limit: requiredCards,
-            },
-            filtros: {
-              show: true,
-            },
-          },
-        }
-      )
-      .then((res) => {
-        this.setState({
-          jsonAnuncios: res.data,
-          buscado: true,
-        });
-      })
-      .catch((err) => {
-        cogoToast.error(
-          <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
-        );
-      });
+    this.refrescarAnuncios();
   }
+
+  componentDidUpdate(prevProps) {
+    const { latitud, longitud, maxDistance } = this.props;
+    const prevLatitud = prevProps.latitud;
+    const prevLongitud = prevProps.longitud;
+
+    if (latitud !== prevLatitud && longitud !== prevLongitud) {
+      this.refrescarAnuncios();
+    }
+
+    if (maxDistance !== prevProps.maxDistance) {
+      this.refrescarAnuncios();
+    }
+  }
+
+  refrescarAnuncios = (isBottom) => {
+    const { requiredCards } = this.state;
+    const { latitud, longitud, maxDistance } = this.props;
+    let coords = null;
+    if (latitud !== 0 && longitud !== 0) {
+      coords = {
+        latitud,
+        longitud,
+      };
+    }
+    this.setState(
+      {
+        jsonAnuncios: {},
+        buscado: false,
+        auxFilterPueblo: "",
+      },
+      () => {
+        axios
+          .get(
+            "http://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil",
+            {
+              params: {
+                coords,
+                maxDistance,
+                options: {
+                  limit: !isBottom ? requiredCards : requiredCards + 100,
+                },
+                filtros: {
+                  show: true,
+                },
+              },
+            }
+          )
+          .then((res) => {
+            this.setState({
+              jsonAnuncios: res.data,
+              buscado: true,
+              showModalFilter: false,
+              isFiltering: false,
+            });
+          })
+          .catch((err) => {
+            cogoToast.error(
+              <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
+            );
+          });
+      }
+    );
+  };
 
   onScreenBottom = () => {
     const { jsonAnuncios, requiredCards } = this.state;
 
     if (jsonAnuncios.length === requiredCards) {
-      axios
-        .get(
-          "http://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil",
-          {
-            params: {
-              options: {
-                limit: requiredCards + 100,
-              },
-            },
-          }
-        )
-        .then((data) => {
-          this.setState({
-            jsonAnuncios: data.data,
-            requiredCards: requiredCards + 100,
-          });
-        })
-        .catch((err) => {
-          cogoToast.error(
-            <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
-          );
-        });
+      this.refrescarAnuncios(true);
     }
   };
 
@@ -199,7 +220,9 @@ class TablaAnuncios extends React.Component {
       return;
     }
 
-    const idUsuarioCliente = await axios.get(`http://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${anuncio.idCliente._id}`);
+    const idUsuarioCliente = await axios.get(
+      `http://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${anuncio.idCliente._id}`
+    );
 
     let formData = {
       idCuidador: idPerfil,
@@ -230,8 +253,8 @@ class TablaAnuncios extends React.Component {
             cogoToast.success(
               <h5>{trans("tablaAnuncios.propuestaEnviada")}</h5>
             );
-            socket.emit('notify', {
-              idUsuario: idUsuarioCliente.data
+            socket.emit("notify", {
+              idUsuario: idUsuarioCliente.data,
             });
           })
           .catch((err) => {
@@ -331,44 +354,7 @@ class TablaAnuncios extends React.Component {
   };
 
   handleResetFilters = () => {
-    const { requiredCards } = this.state;
-    this.setState(
-      {
-        jsonAnuncios: {},
-        buscado: false,
-        auxFilterPueblo: "",
-      },
-      () => {
-        axios
-          .get(
-            "http://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil",
-            {
-              params: {
-                options: {
-                  limit: requiredCards,
-                },
-              },
-            }
-          )
-          .then((res) => {
-            this.setState({
-              jsonAnuncios: res.data,
-              buscado: true,
-              showModalFilter: false,
-              isFiltering: false,
-            });
-          })
-          .catch((err) => {
-            this.setState({
-              buscado: true,
-              showModalFilter: false,
-            });
-            cogoToast.error(
-              <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
-            );
-          });
-      }
-    );
+    this.refrescarAnuncios();
   };
 
   handleViewAnuncio = async (anuncio) => {
@@ -478,26 +464,26 @@ class TablaAnuncios extends React.Component {
                                 "http://" +
                                 ipMaquina +
                                 ":3001/api/image/" +
-                                anuncio.direcFoto
+                                anuncio.anuncio.direcFoto
                               }
                             />
                           </div>
                           <div className="card-body">
                             <h5 className="card-title mt-2">
-                              {anuncio.titulo}
+                              {anuncio.anuncio.titulo}
                             </h5>
                             <p
                               className="card-text"
                               style={{ maxHeight: "75px", overflow: "hidden" }}
                             >
-                              {anuncio.descripcion}
+                              {anuncio.anuncio.descripcion}
                             </p>
                           </div>
                           <div className="card-body card-footer">
                             <a
                               className="mr-0 w-100 btn btn-success text-light"
                               onClick={() => {
-                                this.handleViewAnuncio(anuncio);
+                                this.handleViewAnuncio(anuncio.anuncio);
                               }}
                             >
                               {trans("tablaAnuncios.ver")}

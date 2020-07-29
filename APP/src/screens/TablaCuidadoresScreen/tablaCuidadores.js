@@ -54,6 +54,9 @@ const mapStateToProps = (state) => {
     idUsuario: state.user._idUsuario,
     email: state.user.email,
     contrasena: state.user.contrasena,
+    latitud: state.coords.latitud,
+    longitud: state.coords.longitud,
+    maxDistance: state.coords.maxDistance,
   };
 };
 
@@ -67,31 +70,71 @@ let gSocket = null;
 
 class Tabla extends React.Component {
   componentDidMount() {
+    this.refrescarCuidadores();
+  }
+
+  refrescarCuidadores = (isBottom) => {
     const { requiredCards } = this.state;
-    Axios.get(
-      "http://" +
-        ipMaquina +
-        ":3001/api/procedures/getCuidadoresConValoraciones",
+    const { latitud, longitud, maxDistance } = this.props;
+    let coords = null;
+    if (latitud !== 0 && longitud !== 0) {
+      coords = {
+        latitud,
+        longitud,
+      };
+    }
+    this.setState(
       {
-        params: {
-          requiredCards,
-        },
+        jsonCuidadores: {},
+        buscado: false,
+      },
+      () => {
+        Axios.get(
+          "http://" +
+            ipMaquina +
+            ":3001/api/procedures/getCuidadoresConValoraciones",
+          {
+            params: {
+              requiredCards: !isBottom ? requiredCards : requiredCards + 100,
+              coords,
+              maxDistance,
+            },
+          }
+        )
+          .then((data) => {
+            this.setState({
+              jsonCuidadores: data.data,
+              buscado: true,
+              isFiltering: false, // Por si clicka en handleResetFilter
+              showModalFilter: false, // Por si clicka en handleResetFilter
+              requiredCards: !isBottom ? requiredCards : requiredCards + 100,
+            });
+          })
+          .catch((err) => {
+            this.setState({
+              buscado: true,
+              showModalFilter: false, // Por si clicka en handleResetFilter
+            });
+            cogoToast.error(
+              <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
+            );
+          });
       }
-    )
-      .then((data) => {
-        this.setState({
-          jsonCuidadores: data.data,
-          buscado: true,
-        });
-      })
-      .catch((err) => {
-        this.setState({
-          buscado: true,
-        });
-        cogoToast.error(
-          <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
-        );
-      });
+    );
+  };
+
+  componentDidUpdate(prevProps) {
+    const { latitud, longitud, maxDistance } = this.props;
+    const prevLatitud = prevProps.latitud;
+    const prevLongitud = prevProps.longitud;
+
+    if (latitud !== prevLatitud && longitud !== prevLongitud) {
+      this.refrescarCuidadores();
+    }
+
+    if (maxDistance !== prevProps.maxDistance) {
+      this.refrescarCuidadores();
+    }
   }
 
   constructor(props) {
@@ -167,27 +210,7 @@ class Tabla extends React.Component {
     const { jsonCuidadores, requiredCards } = this.state;
 
     if (jsonCuidadores.length === requiredCards) {
-      Axios.get("http://" + ipMaquina + ":3001/api/cuidador", {
-        params: {
-          filtros: {
-            isPublic: true,
-          },
-          options: {
-            limit: requiredCards + 100,
-          },
-        },
-      })
-        .then((data) => {
-          this.setState({
-            jsonCuidadores: data.data,
-            requiredCards: requiredCards + 100,
-          });
-        })
-        .catch((err) => {
-          cogoToast.error(
-            <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
-          );
-        });
+      this.refrescarCuidadores(true);
     }
   };
 
@@ -600,12 +623,17 @@ class Tabla extends React.Component {
         buscado: false,
       },
       () => {
-        Axios.get("http://" + ipMaquina + ":3001/api/procedures/getCuidadoresConValoraciones", {
-          params: {
-            requiredCards,
-            filterUbicacion: auxFilterPueblo
-          },
-        })
+        Axios.get(
+          "http://" +
+            ipMaquina +
+            ":3001/api/procedures/getCuidadoresConValoraciones",
+          {
+            params: {
+              requiredCards,
+              filterUbicacion: auxFilterPueblo,
+            },
+          }
+        )
           .then((data) => {
             this.setState({
               jsonCuidadores: data.data,
@@ -628,7 +656,6 @@ class Tabla extends React.Component {
   };
 
   handleResetFilters = () => {
-    const { requiredCards } = this.state;
     this.setState(
       {
         jsonCuidadores: {},
@@ -636,28 +663,7 @@ class Tabla extends React.Component {
         auxFilterPueblo: "",
       },
       () => {
-        Axios.get("http://" + ipMaquina + ":3001/api/procedures/getCuidadoresConValoraciones", {
-          params: {
-            requiredCards,
-          },
-        })
-          .then((data) => {
-            this.setState({
-              jsonCuidadores: data.data,
-              buscado: true,
-              isFiltering: false,
-              showModalFilter: false,
-            });
-          })
-          .catch((err) => {
-            this.setState({
-              buscado: true,
-              showModalFilter: false,
-            });
-            cogoToast.error(
-              <h5>{trans("notificaciones.servidorNoDisponible")}</h5>
-            );
-          });
+        this.refrescarCuidadores();
       }
     );
   };
@@ -678,7 +684,7 @@ class Tabla extends React.Component {
     if (!valoraciones) {
       return 0;
     }
-    
+
     return (
       <span
         style={{

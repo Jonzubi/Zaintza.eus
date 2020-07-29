@@ -18,28 +18,22 @@ import CuidadorStatsForm from "./screens/CuidadorStatsScreen/cuidadorStatsForm";
 import SocketContext from "./socketio/socket-context";
 import * as io from "socket.io-client";
 import ipMaquina from './util/ipMaquinaAPI';
-
-const mapStateToProps = state => {
-  return { formContent: state.app.formContent };
-};
+import { SetCoords } from './redux/actions/coords';
 
 const socket = io(`http://${ipMaquina}:3002`);
 
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpenMenuPerfil: false,
-      formContent: "tabla",
-      cabeceraHeight: 0
-    };
-  }
 
   componentDidMount() {
-    const altura = document.getElementById("headRoom").clientHeight;
-    this.setState({
-      cabeceraHeight: altura
+    const { setCoords } = this.props;
+    navigator.geolocation.getCurrentPosition((position) => {
+      console.log("Actualizando coordenadas", position);
+      console.log(setCoords);
+      setCoords({
+        latitud: position.coords.latitude,
+        longitud: position.coords.longitude
+      });
     });
   }
 
@@ -77,7 +71,6 @@ class App extends React.Component {
 
   render() {
     const AppContent = this.getContent.bind(this);
-    const { cabeceraHeight } = this.state;
     return (
       <SocketContext.Provider value={socket}>
         <div>
@@ -85,7 +78,7 @@ class App extends React.Component {
           <div id="outer-container" className="w-100">
             <Cabecera />
             <div style={{
-              height: cabeceraHeight
+              height: 80
             }} />
             <AppContent />
             <ModalRegistrarse />
@@ -96,4 +89,12 @@ class App extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(App);
+const mapStateToProps = state => {
+  return { formContent: state.app.formContent };
+};
+
+const mapDispatchToProps = dispatch => ({
+  setCoords: payload => dispatch(SetCoords(payload))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

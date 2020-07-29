@@ -27,6 +27,7 @@ import Axios from "axios";
 import ChangeLang from "../components/changeLang";
 import SocketContext from "../socketio/socket-context";
 import { setCountNotify } from "../redux/actions/notifications";
+import { ResetMaxDistance } from '../redux/actions/coords';
 
 const mapStateToProps = (state) => {
   return {
@@ -52,6 +53,7 @@ const mapDispatchToProps = (dispatch) => {
     initializeUserSession: () => dispatch(initializeUserSession()),
     changeFormContent: (form) => dispatch(changeFormContent(form)),
     setCountNotify: (payload) => dispatch(setCountNotify(payload)),
+    resetMaxDistance: () => dispatch(ResetMaxDistance())
   };
 };
 
@@ -106,7 +108,7 @@ class MenuPerfil extends React.Component {
     ) : (
       <Avatar
         name={this.props.nombre + " " + this.props.apellido1 || ""}
-        src={"http://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto}
+        src={"http://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto + "?isAvatar=true"}
         className="mx-auto"
         round={true}
         size="200"
@@ -142,9 +144,10 @@ class MenuPerfil extends React.Component {
   }
 
   handleLogOut() {
-    const { idUsuario } = this.props;
+    const { idUsuario, resetMaxDistance } = this.props;
 
     this.props.initializeUserSession();
+    resetMaxDistance();
     this.props.changeFormContent("tabla");
     this.props.toogleMenuPerfil(false);
     gSocket.emit("logout", {

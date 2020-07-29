@@ -4,11 +4,31 @@ const {
   getTodayDate,
   caesarShift,
   readHTMLFile,
+  shuffleArray
 } = require("../../util/funciones");
 const headerResponse = require("../../util/headerResponse");
 const ipMaquina = require("../../util/ipMaquina");
 const handlebars = require("handlebars");
 const moment = require("moment-timezone");
+const { coordsMunicipios } = require('../../util/municipiosCoords');
+
+const getKmFromCoords = function (lat1, lon1, lat2, lon2) {
+  rad = function (x) {
+    return (x * Math.PI) / 180;
+  };
+  var R = 6378.137; //Radio de la tierra en km
+  var dLat = rad(lat2 - lat1);
+  var dLong = rad(lon2 - lon1);
+  var a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(rad(lat1)) *
+      Math.cos(rad(lat2)) *
+      Math.sin(dLong / 2) *
+      Math.sin(dLong / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c;
+  return d.toFixed(3); //Retorna tres decimales
+};
 
 exports.getAcuerdosConUsuarios = async (req, res, modelos) => {
   const { email, contrasena, tipoUsuario, idPerfil, estadoAcuerdo } = req.body;
@@ -182,29 +202,68 @@ exports.getUsuarioConPerfil = async (req, res, modelos) => {
   }
 };
 
-exports.getAnunciosConPerfil = (req, res, modelos) => {
+exports.getAnunciosConPerfil = async (req, res, modelos) => {
   const modeloAnuncios = modelos.anuncio;
+  const { filtros, options, maxDistance, coords } = req.query;
   let strColumnas, objFiltros, objOptions;
-  if (typeof req.query.filtros != "undefined") {
+  if (typeof filtros != "undefined") {
     objFiltros = JSON.parse(req.query.filtros);
   }
-  if (typeof req.query.options !== "undefined") {
+  if (typeof options !== "undefined") {
     objOptions = JSON.parse(req.query.options);
   }
-  modeloAnuncios
+  const anuncios = await modeloAnuncios
     .find(objFiltros, strColumnas, objOptions)
-    .populate("idCliente")
-    .then((respuesta) => {
-      res.writeHead(200, headerResponse);
-      res.write(JSON.stringify(respuesta));
-      res.end();
-    })
-    .catch((err) => {
-      console.log(err);
-      res.writeHead(500, headerResponse);
-      res.write(JSON.stringify(err));
-      res.end();
-    });
+    .populate("idCliente");
+  
+  const ifMaxDistance = maxDistance || 30;
+  const resultadoConCoords = [];
+  let resultadoSinCoords = [];
+
+  if (coords) {
+    const objCoords = JSON.parse(coords);
+
+    anuncios.filter(eachItem => {
+      let shouldBeSend = false;
+      let minDistancia = 100000000;
+      eachItem.pueblo.forEach(ubicacion => {
+        const ubicacionCoords = coordsMunicipios.find(coord => coord.nombreCiudad === ubicacion);
+        if (ubicacionCoords){
+          const { latitud, longitud } = ubicacionCoords;
+          const clienteLatitud = objCoords.latitud;
+          const clienteLongitud = objCoords.longitud;
+          const distancia = parseInt(getKmFromCoords(clienteLatitud, clienteLongitud, latitud, longitud));
+          
+          if (!shouldBeSend) {
+            shouldBeSend = distancia < ifMaxDistance;
+          }          
+
+          if (minDistancia > distancia) {
+            minDistancia = distancia;
+          }
+        } else {
+          shouldBeSend = false;
+        }
+      });
+      if (shouldBeSend) {
+        resultadoConCoords.push(Object.assign({ anuncio: eachItem, distancia: minDistancia }));
+      }
+    }); 
+  } else {
+    resultadoSinCoords = anuncios.map(anuncio => ({
+      anuncio,
+      distancia: false
+    }));
+  }
+
+  resultadoConCoords.sort((a, b) => a.distancia > b.distancia ? 1 : -1);
+  
+  // Si se han calculado las distancias, enviará el array ordenado por distancia, si no va a devolver los cuidadores con un orden random
+  const enviarResultado = resultadoConCoords.length > 0 ? resultadoConCoords : shuffleArray(resultadoSinCoords);
+
+  res.writeHead(200, headerResponse);
+  res.write(JSON.stringify(enviarResultado));
+  res.end();
 };
 
 exports.postNewCuidador = async (req, res, modelos) => {
@@ -1625,7 +1684,7 @@ exports.getCuidadorVisitas = async (req, res, modelos) => {
 };
 
 exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
-  const { requiredCards, filterUbicacion } = req.query;
+  const { requiredCards, filterUbicacion, coords, maxDistance } = req.query;
   const modeloCuidadores = modelos.cuidador;
   const resultado = [];
   let cuidadoresFilter = {
@@ -1656,8 +1715,48 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
       valoraciones: valoraciones,
     });
   }
+
+  const ifMaxDistance = maxDistance || 30;
+  const resultadoConCoords = [];
+
+  if (coords) {
+    const objCoords = JSON.parse(coords);
+    // TODO Filtrar `resultado` y medir la distancia del pueblo configurado del cuidador y pasado por cliente
+    resultado.filter(eachItem => {
+      let shouldBeSend = false;
+      let minDistancia = 100000000;
+      eachItem.cuidador.ubicaciones.forEach(ubicacion => {
+        const ubicacionCoords = coordsMunicipios.find(coord => coord.nombreCiudad === ubicacion);
+        if (ubicacionCoords){
+          const { latitud, longitud } = ubicacionCoords;
+          const clienteLatitud = objCoords.latitud;
+          const clienteLongitud = objCoords.longitud;
+          const distancia = parseInt(getKmFromCoords(clienteLatitud, clienteLongitud, latitud, longitud));
+          
+          // Si el cliente esta a mas de 30 KM del cuidador (o la maxima distancia configurada) no aparecera en la aplicacion web
+          if (!shouldBeSend) {
+            shouldBeSend = distancia < ifMaxDistance;
+          }          
+
+          if (minDistancia > distancia) {
+            minDistancia = distancia;
+          }
+        } else {
+          shouldBeSend = false;
+        }
+      });
+      if (shouldBeSend) {
+        resultadoConCoords.push(Object.assign({ ...eachItem, distancia: minDistancia }));
+      }
+    }); 
+  }
+
+  resultadoConCoords.sort((a, b) => a.distancia > b.distancia ? 1 : -1);
+  
+  // Si se han calculado las distancias, enviará el array ordenado por distancia, si no va a devolver los cuidadores con un orden random
+  const enviarResultado = resultadoConCoords.length > 0 ? resultadoConCoords : shuffleArray(resultado);
   res.writeHead(200, headerResponse);
-  res.write(JSON.stringify(resultado));
+  res.write(JSON.stringify(enviarResultado));
   res.end();
 };
 
@@ -1779,3 +1878,52 @@ exports.getValoracionesDelCuidador = async (req, res, modelos) => {
   res.write(JSON.stringify(valoraciones));
   res.end();
 };
+
+exports.patchMaxDistance = async (req, res, modelos) => {
+  const { id } = req.params;
+  const { email, contrasena, maxDistance } = req.body;
+  const modeloUsuario = modelos.usuario;
+  const usuario = await modeloUsuario.findById(id);
+
+  if (usuario.email !== email || usuario.contrasena !== contrasena) {
+    res.writeHead(405, headerResponse);
+    res.write("Operacion denegada");
+    res.end();
+  }
+
+  if (!maxDistance) {
+    res.writeHead(405, headerResponse);
+    res.write("Falta maxDistance");
+    res.end();
+  }
+
+  const modeloAjustes = modelos.ajuste;
+
+  const ajusteExistente = await modeloAjustes.find({ idUsuario: id });
+  if (ajusteExistente.length === 0) {
+    const ajuste = await modeloAjustes({
+      idUsuario: id,
+      maxDistance,
+    })
+      .save()
+      .catch((err) => {
+        res.writeHead(500, headerResponse);
+        res.write(JSON.stringify(err));
+        res.end();
+      });
+    res.writeHead(200, headerResponse);
+    res.write(JSON.stringify(ajuste));
+    res.end();
+  } else {
+    const ajuste = await modeloAjustes
+      .findOneAndUpdate({ idUsuario: id }, { maxDistance })
+      .catch((err) => {
+        res.writeHead(500, headerResponse);
+        res.write(JSON.stringify(err));
+        res.end();
+      });
+    res.writeHead(200, headerResponse);
+    res.write(JSON.stringify(ajuste));
+    res.end();
+  }
+}

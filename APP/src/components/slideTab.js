@@ -9,9 +9,12 @@ import { faUserMd, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import {trans} from "../util/funciones";
 
 class SlideTab extends React.Component {
-  state = {
-    index: 0
-  };
+  constructor(props){
+    super(props);
+    this.state = {
+      index: 0
+    }
+  }
 
   handleChange = (event, value) => {
     this.setState({
@@ -27,7 +30,6 @@ class SlideTab extends React.Component {
 
   render() {
     const { index } = this.state;
-
     return (
       <div>
         <Tabs value={index} centered onChange={this.handleChange}>
@@ -44,11 +46,11 @@ class SlideTab extends React.Component {
             label={trans('slideTab.ofertas')}
           />
         </Tabs>
-        <SwipeableViews index={index} onChangeIndex={this.handleChangeIndex}>
-          <div>
+        <SwipeableViews key="Swipe" index={index} onChangeIndex={this.handleChangeIndex}>
+          <div key="tablaCuidadores">
             <TablaCuidadores />
           </div>
-          <div>
+          <div key="tablaAnuncios">
             <TablaAnuncios />
           </div>
         </SwipeableViews>
