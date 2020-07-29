@@ -21,7 +21,7 @@ class AjustesForm extends React.Component {
       txtRepeatNewPassword: "",
       formChosen: "perfil",
       langChosen: i18n.language,
-      maxDistance: 30
+      maxDistance: props.maxDistance || 30
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -338,7 +338,8 @@ const mapStateToProps = state => ({
   idLangPred: state.user.idLangPred,
   email: state.user.email,
   contrasena: state.user.contrasena,
-  nowLang: state.app.nowLang
+  nowLang: state.app.nowLang,
+  maxDistance: state.coords.maxDistance
 });
 
 const mapDispatchToProps = dispatch => ({
