@@ -45,7 +45,7 @@ class Header extends React.Component {
     ) : (
       <Avatar
         name={this.props.nombre + " " + this.props.apellido1}
-        src={"http://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto}
+        src={"http://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto + "?isAvatar=true"}
         size={50}
         round={true}
         onClick={() => this.props.toogleMenuPerfil(true)}

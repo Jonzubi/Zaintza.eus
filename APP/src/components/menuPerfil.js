@@ -108,7 +108,7 @@ class MenuPerfil extends React.Component {
     ) : (
       <Avatar
         name={this.props.nombre + " " + this.props.apellido1 || ""}
-        src={"http://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto}
+        src={"http://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto + "?isAvatar=true"}
         className="mx-auto"
         round={true}
         size="200"

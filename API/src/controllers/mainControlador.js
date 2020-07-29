@@ -236,6 +236,11 @@ exports.getImage = (req, res) => {
         }
       });
       if (!found) {
+        const { isAvatar } = req.query;
+        if (isAvatar) {
+          res.end();
+          return;
+        }
         let noImageDirPath =  __dirname.substring(0, __dirname.lastIndexOf("\\")) + "\\assets\\noImage.png";
         let stream = fs.createReadStream(noImageDirPath);
         res.setHeader("Content-Type", "image/png");
