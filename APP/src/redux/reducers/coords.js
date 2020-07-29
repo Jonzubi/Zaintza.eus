@@ -15,7 +15,7 @@ function reducer(state = initialState, action){
         case SET_MAX_DISNTACE:
             return Object.assign({},state,{ maxDistance: action.payload })
         case RESET_MAX_DISNTACE:
-            return Object.assign({},state,{ maxDistance: 0 })
+            return Object.assign({},state,{ maxDistance: 30 })
         default:
             return state;
     }
