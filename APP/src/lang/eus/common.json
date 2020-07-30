@@ -329,5 +329,19 @@
     "suggestedDimension": "Gomendaturiko dimentsioa (288x300)",
     "chooseContactImage": "Aukeratu irudi bat",
     "chooseAnotherImage": "Aukeratu beste irudi bat"
+  },
+  "meses": {
+    "0": "Urtarrila",
+    "1": "Otsaila",
+    "2": "Martxoa",
+    "3": "Apirila",
+    "4": "Maiatza",
+    "5": "Ekaina",
+    "6": "Uztaila",
+    "7": "Abuztua",
+    "8": "Iraila",
+    "9": "Urria",
+    "10": "Azaroa",
+    "11": "Abendua"
   }
 }
