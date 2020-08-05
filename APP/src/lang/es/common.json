@@ -116,6 +116,8 @@
       "errorPuebloRepetido": "ya está elegido",
       "errorRellenaTodo": "Rellena los datos necesarios",
       "errorDiaNoElegido": "No has elegido ningún dia",
+      "errorDiaHoraIncorrecto": "El horario introducido no es correcto",
+      "errorPublicoNoSeleccionado": "Elige al menos una categoria de cuidado",
       "errorImagen": "Hay algún problema con la imagen",
       "registroCompletado": "Te has registrado",
       "darGracias": "Gracias por parte de Zaintza.eus",

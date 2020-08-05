@@ -125,6 +125,8 @@ class RegisterForm extends React.Component {
         txtFechaNacimiento: false,
         txtContrasena: false,
         txtMovil: false,
+        diasDisponible: false,
+        publicoDisponible: false,
         ubicaciones: false,
         txtDescripcion: false,
         imgContact: false
@@ -398,7 +400,7 @@ class RegisterForm extends React.Component {
           </h5>
         );
         let auxError = this.state.error;
-        auxError[clave] = true;
+        auxError.txtNombre = true;
         this.setState({
           error: auxError
         });
@@ -415,8 +417,59 @@ class RegisterForm extends React.Component {
             error = true;
             return;
           }
+          let { horaInicio, horaFin } = confDia;
+          horaInicio = horaInicio.split(':'); // Separamos horas y minutos para compararlos 
+          horaFin = horaFin.split(':'); // y decir que hora fin no sea antes que hora inicio
+
+          if (parseInt(horaInicio[0]) > parseInt(horaFin[0])){
+            // La hora de horainicio es mayor por lo que error
+            cogoToast.error(
+              <h5>{trans("registerFormCuidadores.errorDiaHoraIncorrecto")}</h5>
+            );
+            error = true;
+            return;
+          } else if(parseInt(horaInicio[0]) === parseInt(horaFin[0])){
+            if (parseInt(horaInicio[1]) >= parseInt(horaFin[1])) {
+              // Los minutos de horainicio son mayores, siendo la hora igual por lo que error
+              cogoToast.error(
+                <h5>{trans("registerFormCuidadores.errorDiaHoraIncorrecto")}</h5>
+              );
+              error = true;
+              return;
+            }
+          }
         });
-        if (error) return;
+
+        if (error) {
+          const { error } = this.state;
+          let auxError = { ...error };
+          auxError.diasDisponible = true;
+          this.setState({
+            error: auxError
+          });
+          return;
+        } 
+      }
+      // Comprobamos que haya metido al menos una categoria de cuidado
+      if (clave === 'publicoDisponible') {
+        const { publicoDisponible } = this.state;
+
+        const publicoSeleccionado = Object.keys(publicoDisponible).find(publico => publicoDisponible[publico]);
+
+        if (!publicoSeleccionado) {
+          const { error } = this.state;
+          let auxError = { ...error };
+          auxError.publicoDisponible = true;
+          this.setState({
+            error: auxError
+          });
+          cogoToast.error(
+            <h5>
+              {trans('registerFormCuidadores.errorPublicoNoSeleccionado')}
+            </h5>
+          );
+          return;
+        }
       }
     }
 
@@ -519,7 +572,7 @@ class RegisterForm extends React.Component {
   }
 
   render() {
-    const { diasDisponible } = this.state;
+    const { diasDisponible, error } = this.state;
     return (
       <SocketContext.Consumer>
         {socket => (
@@ -551,7 +604,7 @@ class RegisterForm extends React.Component {
                     />
                   </div>
                 </div>
-                <div className="col-lg-3 col-12 d-flex flex-column">
+                <div className={ error.txtNombre ? "col-lg-3 col-12 d-flex flex-column border border-danger rounded" : "col-lg-3 col-12 d-flex flex-column"}>
                   <div className="d-flex justify-content-lg-start justify-content-center align-items-center mb-lg-0 mb-2 mt-lg-0 mt-2">
                     <FontAwesomeIcon icon={faPortrait} className="mr-1" />
                     <span>
@@ -800,7 +853,7 @@ class RegisterForm extends React.Component {
                       icon={faPlusCircle}
                     />                    
                   </span>                  
-                  <div className="w-100 mt-2" id="diasDisponible">
+                  <div className={ error.diasDisponible ? "w-100 mt-2 border border-danger" : "w-100 mt-2"} id="diasDisponible">
                     {/* Aqui iran los dias dinamicamente */}
                     {this.state.diasDisponible.map((dia, indice) => {
                       return (
@@ -811,14 +864,14 @@ class RegisterForm extends React.Component {
                             className="d-inline"
                             id={"dia" + indice}
                           >
-                            <option>Aukeratu eguna</option>
-                            <option value="1">Astelehena</option>
-                            <option value="2">Asteartea</option>
-                            <option value="3">Asteazkena</option>
-                            <option value="4">Osteguna</option>
-                            <option value="5">Ostirala</option>
-                            <option value="6">Larunbata</option>
-                            <option value="7">Igandea</option>
+                            <option>{i18next.t('registerFormCuidadores.elegirDia')}</option>
+                            <option value="1">{i18next.t('registerFormCuidadores.lunes')}</option>
+                            <option value="2">{i18next.t('registerFormCuidadores.martes')}</option>
+                            <option value="3">{i18next.t('registerFormCuidadores.miercoles')}</option>
+                            <option value="4">{i18next.t('registerFormCuidadores.jueves')}</option>
+                            <option value="5">{i18next.t('registerFormCuidadores.viernes')}</option>
+                            <option value="6">{i18next.t('registerFormCuidadores.sabado')}</option>
+                            <option value="7">{i18next.t('registerFormCuidadores.domingo')}</option>
                           </select>
                           <div className="d-flex flex-row align-items-center">
                             <TimeInput
@@ -858,7 +911,7 @@ class RegisterForm extends React.Component {
                     })}
                   </div>
                 </div>
-                <div className="col-lg-6 col-12 mt-3">
+                <div className={ error.txtNombre ? "col-lg-6 col-12 mt-3 border border-danger" : "col-lg-6 col-12 mt-3"}>
                   {/* Insertar ubicaciones disponibles aqui */}
                   <span className="d-flex flex-row justify-content-center align-items-center">
                     <FontAwesomeIcon icon={faHome} className="mr-1" />
@@ -904,7 +957,7 @@ class RegisterForm extends React.Component {
                 </div>
               </div>
               <div className="row">
-                <div className="col-lg-6 col-12 d-flex flex-column mt-3">
+                <div className={ error.publicoDisponible ? "col-lg-6 col-12 d-flex flex-column mt-3 border border-danger" : "col-lg-6 col-12 d-flex flex-column mt-3"}>
                   {/* Insertar publico disponibles aqui */}
                   <span className="d-flex flex-row justify-content-center align-items-center">
                     <FontAwesomeIcon icon={faUsers} className="mr-1" />

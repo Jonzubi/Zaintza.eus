@@ -121,6 +121,8 @@
     "errorPuebloRepetido": "sartu duzu jada",
     "errorRellenaTodo": "Bete beharrezko datu guztiak",
     "errorDiaNoElegido": "Ez duzu eguna aukeratu",
+    "errorDiaHoraIncorrecto": "Sartutako ordutegia ez da zuzena",
+    "errorPublicoNoSeleccionado": "Aukeratu zaintza kategoria bat gutxienez",
     "errorImagen": "Irudiarekin arazorenbat dago",
     "registroCompletado": "Izena eman duzu",
     "darGracias": "Eskerrik asko Zaintza.eus-en partez",
