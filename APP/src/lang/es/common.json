@@ -72,6 +72,8 @@
       "descripcionPropuesta": "Escribe la descripción detallada de tu propuesta..."
     },
     "registerFormCuidadores": {
+      "avatar": "Avatar",
+      "fotoContacto": "Foto de contacto",
       "nombre": "Nombre",
       "insertNombre": "Introducir nombre...",
       "apellido1": "Primer apellido",

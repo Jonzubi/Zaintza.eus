@@ -76,6 +76,8 @@
     "valoraciones": "Balorazioak"
   },
   "registerFormCuidadores": {
+    "avatar": "Avatarra",
+    "fotoContacto": "Kontaktu irudia",
     "nombre": "Izena",
     "insertNombre": "Sartu izena...",
     "apellido1": "Lehen abizena",

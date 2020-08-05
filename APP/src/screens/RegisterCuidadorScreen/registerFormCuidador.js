@@ -16,7 +16,9 @@ import {
   faEuroSign,
   faPenSquare,
   faVenusMars,
-  faUsers
+  faUsers,
+  faUserCircle,
+  faPortrait
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import ipMaquina from "../../util/ipMaquinaAPI";
@@ -523,28 +525,44 @@ class RegisterForm extends React.Component {
         {socket => (
           <div className="p-5 d-flex flex-column">
               <div className="row">
-                <div className="col-lg-3 col-12 d-flex flex-row justify-content-center align-items-center">
-                  <Avatar
-                    label="Aukeratu avatarra"
-                    labelStyle={{
-                      fontSize: "15px",
-                      fontWeight: "bold",
-                      cursor: "pointer",
-                      width: "100%",
-                      height: "100%"
-                    }}
-                    height={200}
-                    width={200}
-                    onCrop={this.onCrop}
-                    onClose={this.onClose}
-                    onBeforeFileLoad={this.onBeforeFileLoad}
-                    src={this.state.avatarSrc}
-                  />
+                <div className="col-lg-3 col-12 d-flex flex-column">
+                  <div className="d-flex justify-content-lg-start justify-content-center align-items-center mb-lg-0 mb-2">
+                    <FontAwesomeIcon icon={faUserCircle} className="mr-1" />
+                    <span>
+                      {trans("registerFormCuidadores.avatar")}
+                    </span>
+                  </div>
+                  <div className="d-flex justify-content-center">
+                    <Avatar
+                      label="Aukeratu avatarra"
+                      labelStyle={{
+                        fontSize: "15px",
+                        fontWeight: "bold",
+                        cursor: "pointer",
+                        width: "100%",
+                        height: "100%"
+                      }}
+                      height={200}
+                      width={200}
+                      onCrop={this.onCrop}
+                      onClose={this.onClose}
+                      onBeforeFileLoad={this.onBeforeFileLoad}
+                      src={this.state.avatarSrc}
+                    />
+                  </div>
                 </div>
-                <div className="col-lg-3 col-12 d-flex flex-row justify-content-center align-items-center">
-                  <ContactImageUploader
-                    onImageChoose={this.onChangeContactImg}
-                  />
+                <div className="col-lg-3 col-12 d-flex flex-column">
+                  <div className="d-flex justify-content-lg-start justify-content-center align-items-center mb-lg-0 mb-2 mt-lg-0 mt-2">
+                    <FontAwesomeIcon icon={faPortrait} className="mr-1" />
+                    <span>
+                      {trans("registerFormCuidadores.fotoContacto")}
+                    </span>
+                  </div>
+                  <div className="d-flex justify-content-center">
+                    <ContactImageUploader
+                      onImageChoose={this.onChangeContactImg}
+                    />
+                  </div>                  
                 </div>
 
                 <div className="col-lg-6 col-12">
