@@ -177,12 +177,54 @@ class CuidadorFormStats extends React.Component {
               style={{
                 width:
                   window.innerWidth < 991
-                    ? window.innerWidth
+                    ? window.innerWidth * 0.9
                     : window.innerWidth * 0.6,
                 height: 400,
               }}
             >
               <Line data={data} />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginTop: window.innerWidth < 991 ? 0 : 200,
+                width:
+                  window.innerWidth < 991
+                    ? window.innerWidth
+                    : window.innerWidth * 0.3,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <span>{trans("cuidadorStatsForm.visitasSinLogin")}</span>
+                <div>
+                  <span className="font-weight-bold">
+                    {visitasSinLogin.length}
+                  </span>
+                  <FontAwesomeIcon icon={faEye} className="ml-1" />
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <span>{trans("cuidadorStatsForm.visitasConLogin")}</span>
+                <div>
+                  <span className="font-weight-bold">
+                    {visitasConLogin.length}
+                  </span>
+                  <FontAwesomeIcon icon={faEye} className="ml-1" />
+                </div>
+              </div>
             </div>
           </div>
         )}
