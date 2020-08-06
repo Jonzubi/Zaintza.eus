@@ -19,6 +19,7 @@ import {
   faEuroSign,
   faIdCard,
   faUpload,
+  faMapMarkerAlt
 } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/Modal";
 import ModalHeader from "react-bootstrap/ModalHeader";
@@ -43,6 +44,7 @@ const mapStateToProps = (state) => {
     latitud: state.coords.latitud,
     longitud: state.coords.longitud,
     maxDistance: state.coords.maxDistance,
+    nowLang: state.app.nowLang
   };
 };
 
@@ -441,6 +443,19 @@ class TablaAnuncios extends React.Component {
                           className="card w-20 m-4"
                           style={{ width: "18rem" }}
                         >
+                        {anuncio.distancia ? 
+                          <div
+                            className="card-header d-flex flex-row align-items-center justify-content-center"
+                          >
+                            <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-1" />
+                            <span>{i18next.t('tablaCuidadores.distancia', {
+                              distancia: anuncio.distancia
+                            })}
+                            </span>
+                          </div>
+                          : 
+                          null
+                        }
                           <div
                             style={{
                               //backgroundImage:"url(http://" + ipMaquina + ":3001/api/image/" + cuidador.direcFotoContacto + ")",
