@@ -81,8 +81,24 @@ class Header extends React.Component {
           className="d-flex flex-column"
           style={{ textDecoration: "none" }}
         >
-          <h1 className="text-light mb-0">Zaintza</h1>
-          <span className="d-flex flex-row justify-content-end align-items-center font-weight-bold text-light">BETA</span>
+          {window.innerWidth > 768 ?
+            <>
+              <h1 className="text-light mb-0">Zaintza</h1>
+              <span className="d-flex flex-row justify-content-end align-items-center font-weight-bold text-light">BETA</span>
+            </>
+            :
+            <>
+              <h4 className="text-light mb-0">Zaintza</h4>
+              <span
+                className="d-flex flex-row justify-content-end align-items-center font-weight-bold text-light"
+                style={{
+                  fontSize: 10
+                }}
+              >
+                BETA
+              </span>
+            </>
+          }
         </a>
         <div className="d-flex flex-row align-items-center">
           {tipoUsuario === "Cliente" ? (
