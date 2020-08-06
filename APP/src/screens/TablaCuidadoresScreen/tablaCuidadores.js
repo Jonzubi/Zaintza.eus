@@ -20,6 +20,7 @@ import {
   faComments,
   faFileSignature,
   faStar,
+  faMapMarkerAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import Axios from "axios";
 import Modal from "react-bootstrap/Modal";
@@ -57,6 +58,7 @@ const mapStateToProps = (state) => {
     latitud: state.coords.latitud,
     longitud: state.coords.longitud,
     maxDistance: state.coords.maxDistance,
+    nowLang: state.app.nowLang
   };
 };
 
@@ -805,6 +807,19 @@ class Tabla extends React.Component {
                   this.state.jsonCuidadores.map((cuidador, indice) => {
                     return (
                       <div className="card w-20 m-4" style={{ width: "18rem" }}>
+                        {cuidador.distancia ? 
+                          <div
+                            className="card-header d-flex flex-row align-items-center justify-content-center"
+                          >
+                            <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-1" />
+                            <span>{i18next.t('tablaCuidadores.distancia', {
+                              distancia: cuidador.distancia
+                            })}
+                            </span>
+                          </div>
+                          : 
+                          null
+                        }
                         <div
                           style={{
                             //backgroundImage:"url(http://" + ipMaquina + ":3001/api/image/" + cuidador.direcFotoContacto + ")",

@@ -73,7 +73,8 @@
     "filtrar": "Filtratu",
     "descripcionPropuesta": "Idatzi zure proposamenaren deskribapen zehatza...",
     "cuidador": "Zaintzailea",
-    "valoraciones": "Balorazioak"
+    "valoraciones": "Balorazioak",
+    "distancia": "Distantzia: {{distancia}} Km-tara"
   },
   "registerFormCuidadores": {
     "avatar": "Avatarra",

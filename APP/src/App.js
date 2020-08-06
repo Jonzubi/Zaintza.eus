@@ -28,8 +28,6 @@ class App extends React.Component {
   componentDidMount() {
     const { setCoords } = this.props;
     navigator.geolocation.getCurrentPosition((position) => {
-      console.log("Actualizando coordenadas", position);
-      console.log(setCoords);
       setCoords({
         latitud: position.coords.latitude,
         longitud: position.coords.longitude

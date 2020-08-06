@@ -69,7 +69,8 @@
       "exitoEnviarPropuesta": "Propuesta enviada con éxito",
       "acuerdoExistente": "Tienes un acuerdo activo con este cuidador",
       "filtrar": "Filtrar",
-      "descripcionPropuesta": "Escribe la descripción detallada de tu propuesta..."
+      "descripcionPropuesta": "Escribe la descripción detallada de tu propuesta...",
+      "distancia": "Distancia: A {{distancia}} KM"
     },
     "registerFormCuidadores": {
       "avatar": "Avatar",
