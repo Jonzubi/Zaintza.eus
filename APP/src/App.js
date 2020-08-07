@@ -32,6 +32,8 @@ class App extends React.Component {
         latitud: position.coords.latitude,
         longitud: position.coords.longitude
       });
+    }, null, {
+      enableHighAccuracy: true
     });
   }
 
