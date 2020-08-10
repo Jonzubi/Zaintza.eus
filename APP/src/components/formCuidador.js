@@ -73,6 +73,8 @@ class FormCuidador extends React.Component {
       ubicaciones,
       publicoDisponible,
       precioPorPublico,
+      email,
+      contrasena,
     } = props;
 
     const auxResetDiasDisponible = [
@@ -106,6 +108,8 @@ class FormCuidador extends React.Component {
       txtMovil: isProfileView ? movil : "",
       txtTelefFijo: isProfileView ? telefFijo : "",
       txtDescripcion: isProfileView ? descripcion : "",
+      txtEmail: isProfileView ? email : "",
+      txtContrasena: isProfileView ? contrasena : "",
       diasDisponible: isProfileView
         ? diasDisponible || auxResetDiasDisponible
         : auxResetDiasDisponible,
@@ -227,6 +231,8 @@ class FormCuidador extends React.Component {
       txtTelefFijo,
       hoverSexoM,
       hoverSexoF,
+      txtEmail,
+      txtContrasena,
     } = this.state;
     const { direcFoto, isProfileView } = this.props;
     return (
@@ -343,9 +349,9 @@ class FormCuidador extends React.Component {
 
                 <div className="row">
                   <div className="col-lg-6 col-12 mt-3">
-                    <label htmlFor="txtApellido1">
+                    <span htmlFor="txtApellido1">
                       {trans("registerFormCuidadores.apellido1")}
-                    </label>
+                    </span>
                     <input
                       onChange={this.handleTextInputChange}
                       type="text"
@@ -360,9 +366,9 @@ class FormCuidador extends React.Component {
                     />
                   </div>
                   <div className="col-lg-6 col-12 mt-3">
-                    <label htmlFor="txtApellido2">
+                    <span htmlFor="txtApellido2">
                       {trans("registerFormCuidadores.apellido2")}
-                    </label>
+                    </span>
                     <input
                       onChange={this.handleTextInputChange}
                       type="text"
@@ -473,6 +479,95 @@ class FormCuidador extends React.Component {
                 }}
               >
                 <FontAwesomeIcon className="fa-5x" icon={faFemale} />
+              </div>
+            </div>
+            {/* Tercera fila */}
+            <div className="row">
+              {!isProfileView ? (
+                <>
+                  <div className="col-lg-6 col-12 mt-3">
+                    <FontAwesomeIcon icon={faAt} className="mr-1" />
+                    <span htmlFor="txtEmail">
+                      {trans("registerFormCuidadores.email")}
+                    </span>{" "}
+                    (<span className="text-danger font-weight-bold">*</span>)
+                    <input
+                      onChange={this.handleTextInputChange}
+                      type="email"
+                      class={
+                        error.txtEmail
+                          ? "border border-danger form-control"
+                          : "form-control"
+                      }
+                      id="txtEmail"
+                      aria-describedby="emailHelp"
+                      placeholder={`${i18next.t(
+                        "registerFormCuidadores.email"
+                      )}...`}
+                      value={txtEmail}
+                    />
+                  </div>
+                  <div className="col-lg-6 col-12 mt-3">
+                    <FontAwesomeIcon icon={faKey} className="mr-1 mt-3" />
+                    <span className="pt-2" htmlFor="txtContrasena">
+                      {trans("registerFormCuidadores.contrasena")}
+                    </span>{" "}
+                    (<span className="text-danger font-weight-bold">*</span>)
+                    <input
+                      onChange={this.handleTextInputChange}
+                      type="password"
+                      class={
+                        error.txtContrasena
+                          ? "border border-danger form-control"
+                          : "form-control"
+                      }
+                      id="txtContrasena"
+                      placeholder={`${i18next.t(
+                        "registerFormCuidadores.contrasena"
+                      )}...`}
+                      value={txtContrasena}
+                    />
+                  </div>
+                </>
+              ) : null}
+            </div>
+            <div className="row">
+              <div class="col-lg-6 col-12 mt-3">
+                <FontAwesomeIcon icon={faMobileAlt} className="mr-1" />
+                <span htmlFor="txtMovil">
+                  {trans("registerFormCuidadores.movil")}
+                </span>{" "}
+                (<span className="text-danger font-weight-bold">*</span>)
+                <input
+                  onChange={this.handleTextInputChange}
+                  type="number"
+                  class={
+                    error.txtMovil
+                      ? "border border-danger form-control"
+                      : "form-control"
+                  }
+                  disabled={!isProfileView || isEditing ? null : "disabled"}
+                  id="txtMovil"
+                  aria-describedby="emailHelp"
+                  placeholder={`${i18next.t(
+                    "registerFormCuidadores.movil"
+                  )}...`}
+                  value={txtMovil}
+                />
+              </div>
+              <div className="col-lg-6 col-12 mt-3">
+                <span className="" htmlFor="txtTelefono">
+                  {trans("registerFormCuidadores.telefFijo")}
+                </span>
+                <input
+                  onChange={this.handleTextInputChange}
+                  type="number"
+                  class="form-control"
+                  disabled={!isProfileView || isEditing ? null : "disabled"}
+                  id="txtTelefono"
+                  placeholder={`${i18next.t('registerFormCuidadores.telefFijo')}...`}
+                  value={txtTelefFijo}
+                />
               </div>
             </div>
             <div id="loaderOrButton" className="row mt-5">
