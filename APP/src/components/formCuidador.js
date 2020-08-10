@@ -2,7 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import cogoToast from "cogo-toast";
+import { ReactDatez as Calendario } from "react-datez";
 import Avatar from "react-avatar-edit";
+import ClipLoader from "react-spinners/ClipLoader";
 import {
   faMale,
   faFemale,
@@ -22,6 +24,8 @@ import {
   faUsers,
   faUserCircle,
   faPortrait,
+  faEdit,
+  faSave,
 } from "@fortawesome/free-solid-svg-icons";
 import i18next from "i18next";
 import { saveUserSession } from "../redux/actions/user";
@@ -178,6 +182,36 @@ class FormCuidador extends React.Component {
     });
   };
 
+  handleCalendarChange = (valor) => {
+    this.setState({
+      txtFechaNacimiento: valor,
+    });
+  };
+
+  handleSexChange = (sex) => {
+    this.setState({
+      txtSexo: sex,
+    });
+  };
+
+  handleSexHover = (sex) => {
+    this.setState({ [sex]: true });
+  };
+
+  handleSexLeave = (sex) => {
+    this.setState({ [sex]: false });
+  };
+
+  handleEdit = () => {
+    this.setState({
+      isEditing: true,
+    });
+  };
+
+  handleGuardarCambios = async () => {
+    // TODO handle guardar cambios
+  };
+
   render() {
     const {
       avatarSrc,
@@ -186,6 +220,13 @@ class FormCuidador extends React.Component {
       txtNombre,
       txtApellido1,
       txtApellido2,
+      txtFechaNacimiento,
+      txtDescripcion,
+      txtMovil,
+      txtSexo,
+      txtTelefFijo,
+      hoverSexoM,
+      hoverSexoF,
     } = this.state;
     const { direcFoto, isProfileView } = this.props;
     return (
@@ -241,9 +282,35 @@ class FormCuidador extends React.Component {
                   <span>{trans("registerFormCuidadores.fotoContacto")}</span>
                 </div>
                 <div className="d-flex justify-content-center">
-                  <ContactImageUploader
-                    onImageChoose={this.onChangeContactImg}
-                  />
+                  {isProfileView && !isEditing ? (
+                    <div
+                      style={{
+                        //backgroundImage:"url(http://" + ipMaquina + ":3001/api/image/" + cuidador.direcFotoContacto + ")",
+                        // height: "300px",
+                        backgroundSize: "cover",
+                        backgroundPosition: "top",
+                        backgroundRepeat: "no-repeat",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        overflow: "hidden",
+                      }}
+                    >
+                      <img
+                        style={{ maxHeight: "250px", height: "auto" }}
+                        src={
+                          "http://" +
+                          ipMaquina +
+                          ":3001/api/image/" +
+                          this.props.direcFotoContacto
+                        }
+                      />
+                    </div>
+                  ) : (
+                    <ContactImageUploader
+                      onImageChoose={this.onChangeContactImg}
+                    />
+                  )}
                 </div>
               </div>
               {/* Fin columna avatar e imagen contacto */}
@@ -265,6 +332,7 @@ class FormCuidador extends React.Component {
                         : "form-control"
                     }
                     id="txtNombre"
+                    disabled={!isProfileView || isEditing ? null : "disabled"}
                     aria-describedby="txtNombreHelp"
                     placeholder={i18next.t(
                       "registerFormCuidadores.insertNombre"
@@ -283,6 +351,7 @@ class FormCuidador extends React.Component {
                       type="text"
                       class="form-control"
                       id="txtApellido1"
+                      disabled={!isProfileView || isEditing ? null : "disabled"}
                       aria-describedby="txtNombreHelp"
                       placeholder={`${i18next.t(
                         "registerFormCuidadores.apellido1"
@@ -299,6 +368,7 @@ class FormCuidador extends React.Component {
                       type="text"
                       class="form-control"
                       id="txtApellido2"
+                      disabled={!isProfileView || isEditing ? null : "disabled"}
                       aria-describedby="txtNombreHelp"
                       placeholder={`${i18next.t(
                         "registerFormCuidadores.apellido2"
@@ -308,6 +378,128 @@ class FormCuidador extends React.Component {
                   </div>
                 </div>
                 {/* Fin columna nombres y apellidos */}
+              </div>
+            </div>
+            {/* Segunda fila */}
+            <div className="row">
+              <div className="col-lg-6 col-12 mt-3">
+                <FontAwesomeIcon icon={faCalendarAlt} className="mr-1" />
+                <span htmlFor="txtFechaNacimiento">
+                  {trans("registerFormCuidadores.fechaNac")}
+                </span>{" "}
+                (<span className="text-danger font-weight-bold">*</span>)
+                <br />
+                <Calendario
+                  dateFormat="YYYY/MM/DD"
+                  inputClassName="form-control"
+                  inputStyle={{ width: "100%" }}
+                  displayCalendars={!isProfileView || isEditing ? 1 : 0}
+                  className={
+                    error.txtFechaNacimiento
+                      ? "border border-danger w-100"
+                      : "w-100"
+                  }
+                  allowPast={true}
+                  allowFuture={false}
+                  id="txtFechaNacimiento"
+                  handleChange={this.handleCalendarChange}
+                  disableInputIcon={isProfileView && !isEditing}
+                  value={txtFechaNacimiento}
+                />
+              </div>
+              <div className="d-lg-none d-inline col-12 mt-3">
+                <FontAwesomeIcon icon={faVenusMars} className="mr-1" />
+                <span>{trans("registerFormCuidadores.sexo")}</span> (
+                <span className="text-danger">*</span>)
+              </div>
+              <div
+                className={
+                  error.txtSexo
+                    ? "col-lg-3 col-6 text-center p-1 border border-danger mt-3"
+                    : "col-lg-3 col-6 text-center p-1 mt-3"
+                }
+                onClick={() =>
+                  !isProfileView || isEditing ? this.handleSexChange("M") : null
+                }
+                onMouseEnter={() =>
+                  !isProfileView || isEditing
+                    ? this.handleSexHover("hoverSexoM")
+                    : null
+                }
+                onMouseLeave={() =>
+                  !isProfileView || isEditing
+                    ? this.handleSexLeave("hoverSexoM")
+                    : null
+                }
+                id="txtSexM"
+                style={{
+                  borderRadius: "8px",
+                  cursor: !isProfileView || isEditing ? "pointer" : "no-drop",
+                  boxShadow: "0 0.125rem 0.25rem rgba(0,0,0,.075)",
+                  background:
+                    txtSexo == "M" ? "#28a745" : hoverSexoM ? "#545b62" : "",
+                  color: txtSexo == "M" || hoverSexoM ? "white" : "black",
+                }}
+              >
+                <FontAwesomeIcon className="fa-5x" icon={faMale} />
+              </div>
+              <div
+                className={
+                  error.txtSexo
+                    ? "col-lg-3 col-6 text-center p-1 border border-danger mt-3"
+                    : "col-lg-3 col-6 text-center p-1 mt-3"
+                }
+                id="txtSexF"
+                onClick={() =>
+                  !isProfileView || isEditing ? this.handleSexChange("F") : null
+                }
+                onMouseEnter={() =>
+                  !isProfileView || isEditing
+                    ? this.handleSexHover("hoverSexoF")
+                    : null
+                }
+                onMouseLeave={() =>
+                  !isProfileView || isEditing
+                    ? this.handleSexLeave("hoverSexoF")
+                    : null
+                }
+                style={{
+                  borderRadius: "8px",
+                  cursor: !isProfileView || isEditing ? "pointer" : "no-drop",
+                  boxShadow: "0 0.125rem 0.25rem rgba(0,0,0,.075)",
+                  background:
+                    txtSexo == "F" ? "#28a745" : hoverSexoF ? "#545b62" : "",
+                  color: txtSexo == "F" || hoverSexoF ? "white" : "black",
+                }}
+              >
+                <FontAwesomeIcon className="fa-5x" icon={faFemale} />
+              </div>
+            </div>
+            <div id="loaderOrButton" className="row mt-5">
+              <div className="col-12">
+                {!this.state.isEditing ? (
+                  <button
+                    onClick={() => this.handleEdit()}
+                    type="button"
+                    className="w-100 btn btn-info "
+                  >
+                    {trans("perfilCliente.editar")}
+                    <FontAwesomeIcon className="ml-1" icon={faEdit} />
+                  </button>
+                ) : this.state.isLoading ? (
+                  <div className="d-flex align-items-center justify-content-center">
+                    <ClipLoader color="#28a745" />
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => this.handleGuardarCambios()}
+                    type="button"
+                    className="w-100 btn btn-success"
+                  >
+                    {trans("perfilCliente.guardarCambios")}
+                    <FontAwesomeIcon className="ml-1" icon={faSave} />
+                  </button>
+                )}
               </div>
             </div>
           </div>
