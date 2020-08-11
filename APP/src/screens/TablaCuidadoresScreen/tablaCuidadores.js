@@ -807,7 +807,7 @@ class Tabla extends React.Component {
                   this.state.jsonCuidadores.map((cuidador, indice) => {
                     return (
                       <div className="card w-20 m-4" style={{ width: "18rem" }}>
-                        {cuidador.distancia ? 
+                        {cuidador.distancia !== undefined ? 
                           <div
                             className="card-header d-flex flex-row align-items-center justify-content-center"
                           >
