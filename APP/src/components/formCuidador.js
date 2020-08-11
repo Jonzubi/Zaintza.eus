@@ -34,6 +34,8 @@ import ipMaquina from "../util/ipMaquinaAPI";
 import { trans, isValidEmail } from "../util/funciones";
 import ContactImageUploader from "../components/contactImageUploader";
 import TimeInput from "../components/customTimeInput";
+import municipios from "../util/municipos";
+import PuebloAutosuggest from "../components/pueblosAutosuggest";
 
 class FormCuidador extends React.Component {
   constructor(props) {
@@ -275,6 +277,54 @@ class FormCuidador extends React.Component {
     }
   }
 
+  handleAddPueblo = (c, { suggestion }) => {
+    const { ubicaciones, auxAddPueblo } = this.state;
+    this.setState(
+      {
+        auxAddPueblo: suggestion
+      },
+      () => {
+        let pueblo = auxAddPueblo;
+        if (pueblo == "") return;
+
+        if (!municipios.includes(pueblo)) {
+          cogoToast.error(
+            <h5>
+              {pueblo} {trans("registerFormCuidadores.errorPuebloNoExiste")}
+            </h5>
+          );
+          return;
+        }
+
+        for (var clave in ubicaciones) {
+          if (ubicaciones[clave] == pueblo) {
+            cogoToast.error(
+              <h5>
+                {pueblo} {trans("registerFormCuidadores.errorPuebloRepetido")}
+              </h5>
+            );
+            return;
+          }
+        }
+        ubicaciones.push(pueblo);
+        this.setState({
+          ubicaciones: ubicaciones,
+          auxAddPueblo: ""
+        });
+      }
+    );
+  }
+
+  handleRemovePueblo = () => {
+    const { ubicaciones } = this.state;
+    this.setState({
+      ubicaciones:
+        typeof ubicaciones.pop() != "undefined"
+          ? ubicaciones
+          : []
+    });
+  }
+
   render() {
     const {
       avatarSrc,
@@ -292,7 +342,9 @@ class FormCuidador extends React.Component {
       hoverSexoF,
       txtEmail,
       txtContrasena,
-      diasDisponible
+      diasDisponible,
+      ubicaciones,
+      isLoading
     } = this.state;
     const { direcFoto, isProfileView } = this.props;
     return (
@@ -633,91 +685,141 @@ class FormCuidador extends React.Component {
             </div>
             {/* Fin tercera fila */}
             {/* Inicio cuarta fila */}
-            <div className="d-flex flex-column col-lg-6 col-12 mt-3">
-              <span className="d-flex flex-row justify-content-between align-items-center">
-                <FontAwesomeIcon
-                  style={{ cursor: "pointer" }}
-                  onClick={this.removeDiasDisponible}
-                  className={!isProfileView || (isEditing && diasDisponible.length > 0) ? "text-danger" : "text-secondary"}
-                  icon={faMinusCircle}
-                />
-                <div>
-                  <FontAwesomeIcon icon={faClock} className="mr-1" />
-                  <span className="lead">
-                    {trans("registerFormCuidadores.diasDisponible")}:
-                  </span>
-                </div>
-                <FontAwesomeIcon
-                  style={{ cursor: "pointer" }}
-                  onClick={this.addDiasDisponible}
-                  className={!isProfileView || isEditing ? "text-success" : "text-secondary"}
-                  icon={faPlusCircle}
-                />                    
-              </span>
-              <div className={ error.diasDisponible ? "w-100 mt-2 border border-danger" : "w-100 mt-2"} id="diasDisponible">
-                {/* Aqui iran los dias dinamicamente */}
-                {this.state.diasDisponible.map((dia, indice) => {
-                  return (
-                    <div className="mt-1 d-flex flex-row align-items-center justify-content-between">
-                      <select
-                        value={dia.dia}
-                        onChange={this.handleDiasDisponibleChange}
-                        disabled={isProfileView && !isEditing}
-                        className="d-inline"
-                        id={"dia" + indice}
-                      >
-                        <option>{i18next.t('registerFormCuidadores.elegirDia')}</option>
-                        <option value="1">{i18next.t('registerFormCuidadores.lunes')}</option>
-                        <option value="2">{i18next.t('registerFormCuidadores.martes')}</option>
-                        <option value="3">{i18next.t('registerFormCuidadores.miercoles')}</option>
-                        <option value="4">{i18next.t('registerFormCuidadores.jueves')}</option>
-                        <option value="5">{i18next.t('registerFormCuidadores.viernes')}</option>
-                        <option value="6">{i18next.t('registerFormCuidadores.sabado')}</option>
-                        <option value="7">{i18next.t('registerFormCuidadores.domingo')}</option>
-                      </select>
-                      <div className="d-flex flex-row align-items-center">
-                        <TimeInput
+            <div className="row">
+              <div className="d-flex flex-column col-lg-6 col-12 mt-3">
+                <span className="d-flex flex-row justify-content-between align-items-center">
+                  <FontAwesomeIcon
+                    style={{ cursor: "pointer" }}
+                    onClick={this.removeDiasDisponible}
+                    className={!isProfileView || (isEditing && diasDisponible.length > 0) ? "text-danger" : "text-secondary"}
+                    icon={faMinusCircle}
+                  />
+                  <div>
+                    <FontAwesomeIcon icon={faClock} className="mr-1" />
+                    <span className="lead">
+                      {trans("registerFormCuidadores.diasDisponible")}:
+                    </span>
+                  </div>
+                  <FontAwesomeIcon
+                    style={{ cursor: "pointer" }}
+                    onClick={this.addDiasDisponible}
+                    className={!isProfileView || isEditing ? "text-success" : "text-secondary"}
+                    icon={faPlusCircle}
+                  />                    
+                </span>
+                <div className={ error.diasDisponible ? "w-100 mt-2 border border-danger" : "w-100 mt-2"} id="diasDisponible">
+                  {/* Aqui iran los dias dinamicamente */}
+                  {this.state.diasDisponible.map((dia, indice) => {
+                    return (
+                      <div className="mt-1 d-flex flex-row align-items-center justify-content-between">
+                        <select
+                          value={dia.dia}
+                          onChange={this.handleDiasDisponibleChange}
                           disabled={isProfileView && !isEditing}
-                          onTimeChange={(valor) => {
-                            this.handleDiasDisponibleChange(
-                              valor,
-                              "horaInicio" + indice
-                            );
-                          }}
-                          id={"horaInicio" + indice}
-                          initTime={
-                            diasDisponible[indice].horaInicio
-                          }
-                          style={{
-                            width: 50,
-                          }}
-                          className="text-center"
-                        />
-                        -
-                        <TimeInput
-                          disabled={isProfileView && !isEditing}
-                          onTimeChange={(valor) => {
-                            this.handleDiasDisponibleChange(
-                              valor,
-                              "horaFin" + indice
-                            );
-                          }}
-                          id={"horaFin" + indice}
-                          initTime={diasDisponible[indice].horaFin}
-                          style={{
-                            width: 50,
-                          }}
-                          className="text-center"
-                        />
+                          className="d-inline"
+                          id={"dia" + indice}
+                        >
+                          <option>{i18next.t('registerFormCuidadores.elegirDia')}</option>
+                          <option value="1">{i18next.t('registerFormCuidadores.lunes')}</option>
+                          <option value="2">{i18next.t('registerFormCuidadores.martes')}</option>
+                          <option value="3">{i18next.t('registerFormCuidadores.miercoles')}</option>
+                          <option value="4">{i18next.t('registerFormCuidadores.jueves')}</option>
+                          <option value="5">{i18next.t('registerFormCuidadores.viernes')}</option>
+                          <option value="6">{i18next.t('registerFormCuidadores.sabado')}</option>
+                          <option value="7">{i18next.t('registerFormCuidadores.domingo')}</option>
+                        </select>
+                        <div className="d-flex flex-row align-items-center">
+                          <TimeInput
+                            disabled={isProfileView && !isEditing}
+                            onTimeChange={(valor) => {
+                              this.handleDiasDisponibleChange(
+                                valor,
+                                "horaInicio" + indice
+                              );
+                            }}
+                            id={"horaInicio" + indice}
+                            initTime={
+                              diasDisponible[indice].horaInicio
+                            }
+                            style={{
+                              width: 50,
+                            }}
+                            className="text-center"
+                          />
+                          -
+                          <TimeInput
+                            disabled={isProfileView && !isEditing}
+                            onTimeChange={(valor) => {
+                              this.handleDiasDisponibleChange(
+                                valor,
+                                "horaFin" + indice
+                              );
+                            }}
+                            id={"horaFin" + indice}
+                            initTime={diasDisponible[indice].horaFin}
+                            style={{
+                              width: 50,
+                            }}
+                            className="text-center"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>                
+                    );
+                  })}
+                </div>                
+              </div>
+              <div className="col">
+                <span className="d-flex flex-row justify-content-center align-items-center mt-3">
+                  <FontAwesomeIcon icon={faHome} className="mr-1" />
+                  <span
+                    htmlFor="txtAddPueblos"
+                    className="lead"
+                  >
+                    {trans("registerFormCuidadores.pueblosDisponible")}
+                  </span>{" "}
+                  (<span className="text-danger font-weight-bold">*</span>)
+                </span>
+                <div class="mt-2">
+                  <PuebloAutosuggest
+                    onSuggestionSelected={this.handleAddPueblo}
+                    disabled={isProfileView && !isEditing}
+                  />
+                  {ubicaciones.length > 0 ? (
+                    <h5 className="mt-2 lead">
+                      {trans("registerFormCuidadores.pueblosSeleccionados")}:
+                    </h5>
+                  ) : (
+                    ""
+                  )}
+
+                  <ul className="list-group">
+                    {ubicaciones.map(pueblo => {
+                      return <li className="list-group-item">{pueblo}</li>;
+                    })}
+                  </ul>
+                  {ubicaciones.length > 0 ? (
+                    <a
+                      onClick={this.handleRemovePueblo}
+                      className={
+                        !isProfileView || isEditing
+                          ? "mt-4 btn btn-danger float-right text-light"
+                          : "mt-4 btn btn-danger float-right text-light disabled"
+                      }
+                    >
+                      {trans("registerFormCuidadores.eliminarPueblo")}{" "}
+                      <FontAwesomeIcon icon={faMinusCircle} />
+                    </a>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <br />
+              </div>
             </div>
+            
             <div id="loaderOrButton" className="row mt-5">
               <div className="col-12">
-                {!this.state.isEditing ? (
+                {isProfileView && !isEditing ? (
                   <button
                     onClick={() => this.handleEdit()}
                     type="button"
@@ -726,7 +828,7 @@ class FormCuidador extends React.Component {
                     {trans("perfilCliente.editar")}
                     <FontAwesomeIcon className="ml-1" icon={faEdit} />
                   </button>
-                ) : this.state.isLoading ? (
+                ) : isLoading ? (
                   <div className="d-flex align-items-center justify-content-center">
                     <ClipLoader color="#28a745" />
                   </div>
