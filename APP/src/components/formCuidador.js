@@ -33,6 +33,7 @@ import SocketContext from "../socketio/socket-context";
 import ipMaquina from "../util/ipMaquinaAPI";
 import { trans, isValidEmail } from "../util/funciones";
 import ContactImageUploader from "../components/contactImageUploader";
+import TimeInput from "../components/customTimeInput";
 
 class FormCuidador extends React.Component {
   constructor(props) {
@@ -150,7 +151,7 @@ class FormCuidador extends React.Component {
     //La idea es recoger el nombre del componente y asignarselo al estado, algo como, this.setState({this.state[name] = e.target.value});
     const stateId = e.target.id;
     //No vamos a dejar que el usuario meta mas de 9 digitos para el telefono
-    if (stateId == "txtMovil" || stateId == "txtTelefono") {
+    if (stateId == "txtMovil" || stateId == "txtTelefFijo") {
       if (e.target.value.toString() > 9) {
         e.target.value = e.target.value.slice(0, 9);
       }
@@ -216,6 +217,64 @@ class FormCuidador extends React.Component {
     // TODO handle guardar cambios
   };
 
+  removeDiasDisponible = () => {
+    const { isEditing } = this.state;
+    const { isProfileView } = this.props;
+    if (isProfileView && !isEditing)
+      return;
+    this.setState({
+      diasDisponible:
+        typeof this.state.diasDisponible.pop() != "undefined"
+          ? this.state.diasDisponible
+          : []
+    });
+  }
+
+  addDiasDisponible = () => {
+    const { isEditing } = this.state;
+    const { isProfileView } = this.props;
+    if (isProfileView && !isEditing){
+      return;
+    }
+    let auxDiasDisponible = this.state.diasDisponible;
+    auxDiasDisponible.push({
+      dia: 0,
+      horaInicio: "00:00",
+      horaFin: "00:00"
+    });
+
+    this.setState({
+      diasDisponible: auxDiasDisponible
+    });
+  }
+
+  handleDiasDisponibleChange = (e, indice) => {
+    if (typeof indice == "undefined") {
+      //Significa que lo que se ha cambiado es el combo de los dias
+      var origen = e.target;
+      var indice = parseInt(origen.id.substr(origen.id.length - 1));
+      var valor = origen.value;
+
+      let auxDiasDisponible = this.state.diasDisponible;
+      auxDiasDisponible[indice]["dia"] = valor;
+
+      this.setState({
+        diasDisponible: auxDiasDisponible
+      });
+    } else {
+      //Significa que ha cambiado la hora, no se sabe si inicio o fin, eso esta en "indice"
+      let atributo = indice.substr(0, indice.length - 1);
+      indice = indice.substr(indice.length - 1);
+
+      let auxDiasDisponible = this.state.diasDisponible;
+      auxDiasDisponible[indice][atributo] = e;
+
+      this.setState({
+        diasDisponible: auxDiasDisponible
+      });
+    }
+  }
+
   render() {
     const {
       avatarSrc,
@@ -233,6 +292,7 @@ class FormCuidador extends React.Component {
       hoverSexoF,
       txtEmail,
       txtContrasena,
+      diasDisponible
     } = this.state;
     const { direcFoto, isProfileView } = this.props;
     return (
@@ -556,6 +616,7 @@ class FormCuidador extends React.Component {
                 />
               </div>
               <div className="col-lg-6 col-12 mt-3">
+                <FontAwesomeIcon icon={faPhoneSquareAlt} className="mr-1 mt-3" />
                 <span className="" htmlFor="txtTelefono">
                   {trans("registerFormCuidadores.telefFijo")}
                 </span>
@@ -564,11 +625,95 @@ class FormCuidador extends React.Component {
                   type="number"
                   class="form-control"
                   disabled={!isProfileView || isEditing ? null : "disabled"}
-                  id="txtTelefono"
+                  id="txtTelefFijo"
                   placeholder={`${i18next.t('registerFormCuidadores.telefFijo')}...`}
                   value={txtTelefFijo}
                 />
               </div>
+            </div>
+            {/* Fin tercera fila */}
+            {/* Inicio cuarta fila */}
+            <div className="d-flex flex-column col-lg-6 col-12 mt-3">
+              <span className="d-flex flex-row justify-content-between align-items-center">
+                <FontAwesomeIcon
+                  style={{ cursor: "pointer" }}
+                  onClick={this.removeDiasDisponible}
+                  className={!isProfileView || (isEditing && diasDisponible.length > 0) ? "text-danger" : "text-secondary"}
+                  icon={faMinusCircle}
+                />
+                <div>
+                  <FontAwesomeIcon icon={faClock} className="mr-1" />
+                  <span className="lead">
+                    {trans("registerFormCuidadores.diasDisponible")}:
+                  </span>
+                </div>
+                <FontAwesomeIcon
+                  style={{ cursor: "pointer" }}
+                  onClick={this.addDiasDisponible}
+                  className={!isProfileView || isEditing ? "text-success" : "text-secondary"}
+                  icon={faPlusCircle}
+                />                    
+              </span>
+              <div className={ error.diasDisponible ? "w-100 mt-2 border border-danger" : "w-100 mt-2"} id="diasDisponible">
+                {/* Aqui iran los dias dinamicamente */}
+                {this.state.diasDisponible.map((dia, indice) => {
+                  return (
+                    <div className="mt-1 d-flex flex-row align-items-center justify-content-between">
+                      <select
+                        value={dia.dia}
+                        onChange={this.handleDiasDisponibleChange}
+                        disabled={isProfileView && !isEditing}
+                        className="d-inline"
+                        id={"dia" + indice}
+                      >
+                        <option>{i18next.t('registerFormCuidadores.elegirDia')}</option>
+                        <option value="1">{i18next.t('registerFormCuidadores.lunes')}</option>
+                        <option value="2">{i18next.t('registerFormCuidadores.martes')}</option>
+                        <option value="3">{i18next.t('registerFormCuidadores.miercoles')}</option>
+                        <option value="4">{i18next.t('registerFormCuidadores.jueves')}</option>
+                        <option value="5">{i18next.t('registerFormCuidadores.viernes')}</option>
+                        <option value="6">{i18next.t('registerFormCuidadores.sabado')}</option>
+                        <option value="7">{i18next.t('registerFormCuidadores.domingo')}</option>
+                      </select>
+                      <div className="d-flex flex-row align-items-center">
+                        <TimeInput
+                          disabled={isProfileView && !isEditing}
+                          onTimeChange={(valor) => {
+                            this.handleDiasDisponibleChange(
+                              valor,
+                              "horaInicio" + indice
+                            );
+                          }}
+                          id={"horaInicio" + indice}
+                          initTime={
+                            diasDisponible[indice].horaInicio
+                          }
+                          style={{
+                            width: 50,
+                          }}
+                          className="text-center"
+                        />
+                        -
+                        <TimeInput
+                          disabled={isProfileView && !isEditing}
+                          onTimeChange={(valor) => {
+                            this.handleDiasDisponibleChange(
+                              valor,
+                              "horaFin" + indice
+                            );
+                          }}
+                          id={"horaFin" + indice}
+                          initTime={diasDisponible[indice].horaFin}
+                          style={{
+                            width: 50,
+                          }}
+                          className="text-center"
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>                
             </div>
             <div id="loaderOrButton" className="row mt-5">
               <div className="col-12">
