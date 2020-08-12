@@ -443,7 +443,7 @@ class TablaAnuncios extends React.Component {
                           className="card w-20 m-4"
                           style={{ width: "18rem" }}
                         >
-                        {anuncio.distancia ? 
+                        {anuncio.distancia !== undefined ? 
                           <div
                             className="card-header d-flex flex-row align-items-center justify-content-center"
                           >
