@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import cogoToast from "cogo-toast";
 import { ReactDatez as Calendario } from "react-datez";
 import Avatar from "react-avatar-edit";
+import Switch from "react-switch";
 import ClipLoader from "react-spinners/ClipLoader";
 import {
   faMale,
@@ -36,6 +37,9 @@ import ContactImageUploader from "../components/contactImageUploader";
 import TimeInput from "../components/customTimeInput";
 import municipios from "../util/municipos";
 import PuebloAutosuggest from "../components/pueblosAutosuggest";
+import imgNino from "../util/images/nino.png";
+import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
+import imgTerceraEdad from "../util/images/terceraEdad.png";
 
 class FormCuidador extends React.Component {
   constructor(props) {
@@ -278,12 +282,13 @@ class FormCuidador extends React.Component {
   }
 
   handleAddPueblo = (c, { suggestion }) => {
-    const { ubicaciones, auxAddPueblo } = this.state;
+    const { ubicaciones } = this.state;
     this.setState(
       {
         auxAddPueblo: suggestion
       },
       () => {
+        const { auxAddPueblo } = this.state;
         let pueblo = auxAddPueblo;
         if (pueblo == "") return;
 
@@ -325,6 +330,40 @@ class FormCuidador extends React.Component {
     });
   }
 
+  handlePublicoHover = (publico) => {
+    this.setState({
+      [publico]: true
+    });
+  }
+
+  handlePublicoLeave = (publico) => {
+    this.setState({
+      [publico]: false
+    });
+  }
+
+  handlePublicoChange = (publico) => {
+    let auxPublicoDisponible = this.state.publicoDisponible;
+    auxPublicoDisponible[publico] = !auxPublicoDisponible[publico];
+    this.setState({
+      publicoDisponible: auxPublicoDisponible
+    });
+  }
+
+  handlePrecioChange = (atributo, valor) => {
+    let auxPrecioPublico = this.state.precioPorPublico;
+    auxPrecioPublico[atributo] = valor;
+    this.setState({
+      precioPorPublico: auxPrecioPublico
+    });
+  }
+
+  handleIsPublicChange = (valor) => {
+    this.setState({
+      isPublic: valor
+    });
+  }
+
   render() {
     const {
       avatarSrc,
@@ -344,7 +383,13 @@ class FormCuidador extends React.Component {
       txtContrasena,
       diasDisponible,
       ubicaciones,
-      isLoading
+      isLoading,
+      publicoDisponible,
+      hoverNecesidadEspecial,
+      hoverNino,
+      hoverTerceraEdad,
+      precioPorPublico,
+      isPublic
     } = this.state;
     const { direcFoto, isProfileView } = this.props;
     return (
@@ -709,7 +754,7 @@ class FormCuidador extends React.Component {
                 </span>
                 <div className={ error.diasDisponible ? "w-100 mt-2 border border-danger" : "w-100 mt-2"} id="diasDisponible">
                   {/* Aqui iran los dias dinamicamente */}
-                  {this.state.diasDisponible.map((dia, indice) => {
+                  {diasDisponible.map((dia, indice) => {
                     return (
                       <div className="mt-1 d-flex flex-row align-items-center justify-content-between">
                         <select
@@ -816,7 +861,210 @@ class FormCuidador extends React.Component {
                 <br />
               </div>
             </div>
-            
+            {/* Fin cuarta fila */}
+            {/* Inicio quinta fila */}
+            <div className="row">
+              <div className={ error.publicoDisponible ? "col-lg-6 col-12 d-flex flex-column mt-3 border border-danger" : "col-lg-6 col-12 d-flex flex-column mt-3"}>
+                <span className="d-flex flex-row justify-content-center align-items-center">
+                  <FontAwesomeIcon icon={faUsers} className="mr-1" />
+                  <span className="lead">
+                    {trans("registerFormCuidadores.publicoDisponible")}:
+                  </span>
+                </span>
+                <div className="row md-2">
+                  <div
+                    onClick={() =>
+                      !isProfileView || isEditing ? this.handlePublicoChange("nino") : null
+                    }
+                    onMouseEnter={() =>
+                      !isProfileView || isEditing
+                        ? this.handlePublicoHover("hoverNino")
+                        : null
+                    }
+                    onMouseLeave={() =>
+                      !isProfileView || isEditing
+                        ? this.handlePublicoLeave("hoverNino")
+                        : null
+                    }
+                    className="col-4 text-center p-1"
+                    style={{
+                      background: publicoDisponible.nino
+                        ? "#28a745"
+                        : hoverNino
+                        ? "#545b62"
+                        : "",
+                      cursor: !isProfileView || isEditing ? "pointer" : "no-drop"
+                    }}
+                  >
+                    <img src={imgNino} className="w-100 h-100" />
+                    <small className="font-weight-bold">
+                      {trans("registerFormCuidadores.ninos")}
+                    </small>
+                  </div>
+                  <div
+                    onClick={() =>
+                      !isProfileView || isEditing
+                        ? this.handlePublicoChange("terceraEdad")
+                        : null
+                    }
+                    onMouseEnter={() =>
+                      !isProfileView || isEditing
+                        ? this.handlePublicoHover("hoverTerceraEdad")
+                        : null
+                    }
+                    onMouseLeave={() =>
+                      !isProfileView || isEditing
+                        ? this.handlePublicoLeave("hoverTerceraEdad")
+                        : null
+                    }
+                    className="col-4 text-center p-1"
+                    style={{
+                      background: publicoDisponible.terceraEdad
+                        ? "#28a745"
+                        : hoverTerceraEdad
+                        ? "#545b62"
+                        : "",
+                      cursor: !isProfileView || isEditing ? "pointer" : "no-drop"
+                    }}
+                  >
+                    <img src={imgTerceraEdad} className="w-100 h-100" />
+                    <small className="font-weight-bold">
+                      {trans("registerFormCuidadores.terceraEdad")}
+                    </small>
+                  </div>
+                  <div
+                    onClick={() =>
+                      !isProfileView || isEditing
+                        ? this.handlePublicoChange("necesidadEspecial")
+                        : null
+                    }
+                    onMouseEnter={() =>
+                      !isProfileView || isEditing
+                        ? this.handlePublicoHover("hoverNecesidadEspecial")
+                        : null
+                    }
+                    onMouseLeave={() =>
+                      !isProfileView || isEditing
+                        ? this.handlePublicoLeave("hoverNecesidadEspecial")
+                        : null
+                    }
+                    className="col-4 text-center p-1"
+                    style={{
+                      background: publicoDisponible.necesidadEspecial
+                        ? "#28a745"
+                        : hoverNecesidadEspecial
+                        ? "#545b62"
+                        : "",
+                      cursor: !isProfileView || isEditing ? "pointer" : "no-drop"
+                    }}
+                  >
+                    <img src={imgNecesidadEspecial} className="w-100 h-100" />
+                    <small className="font-weight-bold">
+                      {trans("registerFormCuidadores.necesidadEspecial")}
+                    </small>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-6 col-12 mt-5">
+                <span className="d-flex flex-row justify-content-center align-items-center">
+                  <FontAwesomeIcon icon={faEuroSign} className="mr-1" />
+                  <span className="lead">{trans("registerFormCuidadores.precioPorPublico")}:</span>
+                </span>
+                <div className="list-group md-2">
+                  <div className="list-group-item text-center p-1">
+                    <small>
+                      <b>{trans("registerFormCuidadores.ninos")}</b>
+                    </small>
+                    <input
+                      onChange={event => {
+                        this.handlePrecioChange("nino", event.target.value);
+                      }}
+                      className="form-control"
+                      disabled={
+                        !isEditing && isProfileView
+                          ? true
+                          : !publicoDisponible.nino
+                      }
+                      value={precioPorPublico.nino}
+                      type="number"
+                      placeholder={`${i18next.t('registerFormCuidadores.holderPrecio')}`}
+                    />
+                  </div>
+                  <div className="list-group-item text-center p-1">
+                    <small>
+                      <b>{trans("registerFormCuidadores.terceraEdad")}</b>
+                    </small>
+                    <input
+                      onChange={event => {
+                        this.handlePrecioChange("terceraEdad", event.target.value);
+                      }}
+                      disabled={
+                        !isEditing && isProfileView
+                          ? true
+                          : !publicoDisponible.terceraEdad
+                      }
+                      value={precioPorPublico.terceraEdad}
+                      className="form-control"
+                      type="number"
+                      placeholder={`${i18next.t('registerFormCuidadores.holderPrecio')}`}
+                    />
+                  </div>
+                  <div className="list-group-item text-center p-1">
+                    <small>
+                      <b>{trans("registerFormCuidadores.necesidadEspecial")}</b>
+                    </small>
+                    <input
+                      onChange={event => {
+                        this.handlePrecioChange(
+                          "necesidadEspecial",
+                          event.target.value
+                        );
+                      }}
+                      disabled={
+                        !isEditing && isProfileView
+                          ? true
+                          : !publicoDisponible.necesidadEspecial
+                      }
+                      value={precioPorPublico.necesidadEspecial}
+                      className="form-control"
+                      type="number"
+                      placeholder={`${i18next.t('registerFormCuidadores.holderPrecio')}`}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* Fin quinta fila */}
+            <div class="mt-3">
+              <FontAwesomeIcon icon={faPenSquare} className="mr-1" />
+              <span htmlFor="txtDescripcion">
+                {trans("registerFormCuidadores.descripcion")}
+              </span>{" "}
+              (<span className="text-danger font-weight-bold">*</span>)
+              <textarea
+                onChange={this.handleTextInputChange}
+                class={
+                  error.txtDescripcion
+                    ? "border border-danger form-control"
+                    : "form-control"
+                }
+                disabled={!isEditing && isProfileView}
+                rows="5"
+                id="txtDescripcion"
+                placeholder={`${i18next.t('registerFormCuidadores.descripcion')}...`}
+                value={txtDescripcion}
+              ></textarea>
+            </div>
+            <div className="mt-3">
+              <Switch
+                onChange={this.handleIsPublicChange}
+                checked={isPublic}
+                disabled={!isEditing && isProfileView}
+                id="isPublic"
+              />
+              <br />
+              <small>{trans("registerFormCuidadores.publicarAuto")}</small>
+            </div>
             <div id="loaderOrButton" className="row mt-5">
               <div className="col-12">
                 {isProfileView && !isEditing ? (
