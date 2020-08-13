@@ -55,7 +55,7 @@ class FormCuidador extends React.Component {
       "txtDescripcion",
     ];
     if (!isProfileView) {
-      this.requiredStates.push("txtEmail, txtContrasena");
+      this.requiredStates.push("txtEmail", "txtContrasena");
     }
     //El array de abajo es para traducir el error
     this.requiredStatesTraduc = {
@@ -135,7 +135,7 @@ class FormCuidador extends React.Component {
       isPublic: isProfileView ? isPublic : true,
       avatarSrc: "",
       avatarPreview: "",
-      imgContact: "",
+      imgContact: null,
       hoverSexoM: false,
       hoverSexoF: false,
       isLoading: false,
@@ -154,6 +154,7 @@ class FormCuidador extends React.Component {
         ubicaciones: false,
         txtDescripcion: false,
         imgContact: false,
+        diasDisponible: false
       },
     };
   }
@@ -413,10 +414,9 @@ class FormCuidador extends React.Component {
           return;
         } else if (this.state.error.diasDisponible === true) {
           const { error } = this.state;
-          let auxError = { ...error };
-          auxError.diasDisponible = false;
+          error.diasDisponible = false;
           this.setState({
-            error: auxError
+            error: error
           });
         }
       }
@@ -439,12 +439,33 @@ class FormCuidador extends React.Component {
           );
           return;
         } else if (error.publicoDisponible === true) {
-          let auxError = { ...error };
-          auxError.publicoDisponible = false;
+          error.publicoDisponible = false;
           this.setState({
-            error: auxError
+            error: error
           });
         }
+      }
+      // Comprobacion para la imagen de contacto
+      const { isProfileView } = this.props;
+      const { imgContact } = this.state;
+
+      if (!isProfileView && imgContact === null) {
+        const { error } = this.state;
+        let auxError = { ...error };
+        auxError.imgContact = true;
+        this.setState({
+          error: auxError
+        });
+
+        cogoToast.error(<h5>{trans("registerFormCuidadores.errorRellenaTodo")} (
+          {trans('registerFormCuidadores.imgContact')})</h5>);      
+        return;
+      } else if (this.state.error.imgContact === true) {
+        const { error } = this.state;
+        error.imgContact = false;
+        this.setState({
+          error: error
+        });
       }
       // La comprobacion genérica para los demás
       if (this.requiredStates.includes(clave)) {
@@ -550,7 +571,8 @@ class FormCuidador extends React.Component {
               >
                 <div className="d-flex justify-content-lg-start justify-content-center align-items-center mb-lg-0 mb-2 mt-lg-0 mt-2">
                   <FontAwesomeIcon icon={faPortrait} className="mr-1" />
-                  <span>{trans("registerFormCuidadores.fotoContacto")}</span>
+                  <span className="mr-1">{trans("registerFormCuidadores.fotoContacto")}</span>                  
+                  (<span className="text-danger font-weight-bold">*</span>)
                 </div>
                 <div className="d-flex justify-content-center">
                   {isProfileView && !isEditing ? (
