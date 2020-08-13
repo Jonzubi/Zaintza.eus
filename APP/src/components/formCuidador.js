@@ -44,6 +44,7 @@ import imgTerceraEdad from "../util/images/terceraEdad.png";
 class FormCuidador extends React.Component {
   constructor(props) {
     super(props);
+    const { isProfileView } = this.props;
 
     this.requiredStates = [
       "txtNombre",
@@ -53,6 +54,9 @@ class FormCuidador extends React.Component {
       "ubicaciones",
       "txtDescripcion",
     ];
+    if (!isProfileView) {
+      this.requiredStates.push("txtEmail, txtContrasena");
+    }
     //El array de abajo es para traducir el error
     this.requiredStatesTraduc = {
       txtNombre: "registerFormCuidadores.nombre",
@@ -61,10 +65,11 @@ class FormCuidador extends React.Component {
       txtMovil: "registerFormCuidadores.movil",
       ubicaciones: "registerFormCuidadores.pueblosDisponible",
       txtDescripcion: "registerFormCuidadores.descripcion",
+      txtEmail: "registerFormCuidadores.email",
+      txtContrasena: "registerFormCuidadores.contrasena",
     };
 
     const {
-      isProfileView,
       nombre,
       apellido1,
       apellido2,
@@ -219,23 +224,20 @@ class FormCuidador extends React.Component {
     });
   };
 
-  handleGuardarCambios = async () => {
-    // TODO handle guardar cambios
-  };
-
+  
   removeDiasDisponible = () => {
     const { isEditing } = this.state;
     const { isProfileView } = this.props;
     if (isProfileView && !isEditing)
-      return;
+    return;
     this.setState({
       diasDisponible:
-        typeof this.state.diasDisponible.pop() != "undefined"
-          ? this.state.diasDisponible
-          : []
+      typeof this.state.diasDisponible.pop() != "undefined"
+      ? this.state.diasDisponible
+      : []
     });
   }
-
+  
   addDiasDisponible = () => {
     const { isEditing } = this.state;
     const { isProfileView } = this.props;
@@ -248,22 +250,22 @@ class FormCuidador extends React.Component {
       horaInicio: "00:00",
       horaFin: "00:00"
     });
-
+    
     this.setState({
       diasDisponible: auxDiasDisponible
     });
   }
-
+  
   handleDiasDisponibleChange = (e, indice) => {
     if (typeof indice == "undefined") {
       //Significa que lo que se ha cambiado es el combo de los dias
       var origen = e.target;
       var indice = parseInt(origen.id.substr(origen.id.length - 1));
       var valor = origen.value;
-
+      
       let auxDiasDisponible = this.state.diasDisponible;
       auxDiasDisponible[indice]["dia"] = valor;
-
+      
       this.setState({
         diasDisponible: auxDiasDisponible
       });
@@ -271,16 +273,16 @@ class FormCuidador extends React.Component {
       //Significa que ha cambiado la hora, no se sabe si inicio o fin, eso esta en "indice"
       let atributo = indice.substr(0, indice.length - 1);
       indice = indice.substr(indice.length - 1);
-
+      
       let auxDiasDisponible = this.state.diasDisponible;
       auxDiasDisponible[indice][atributo] = e;
-
+      
       this.setState({
         diasDisponible: auxDiasDisponible
       });
     }
   }
-
+  
   handleAddPueblo = (c, { suggestion }) => {
     const { ubicaciones } = this.state;
     this.setState(
@@ -291,7 +293,7 @@ class FormCuidador extends React.Component {
         const { auxAddPueblo } = this.state;
         let pueblo = auxAddPueblo;
         if (pueblo == "") return;
-
+        
         if (!municipios.includes(pueblo)) {
           cogoToast.error(
             <h5>
@@ -300,7 +302,7 @@ class FormCuidador extends React.Component {
           );
           return;
         }
-
+        
         for (var clave in ubicaciones) {
           if (ubicaciones[clave] == pueblo) {
             cogoToast.error(
@@ -317,31 +319,31 @@ class FormCuidador extends React.Component {
           auxAddPueblo: ""
         });
       }
-    );
-  }
-
-  handleRemovePueblo = () => {
-    const { ubicaciones } = this.state;
-    this.setState({
-      ubicaciones:
+      );
+    }
+    
+    handleRemovePueblo = () => {
+      const { ubicaciones } = this.state;
+      this.setState({
+        ubicaciones:
         typeof ubicaciones.pop() != "undefined"
-          ? ubicaciones
-          : []
+        ? ubicaciones
+        : []
+      });
+    }
+    
+    handlePublicoHover = (publico) => {
+      this.setState({
+        [publico]: true
+      });
+    }
+    
+    handlePublicoLeave = (publico) => {
+      this.setState({
+        [publico]: false
     });
   }
-
-  handlePublicoHover = (publico) => {
-    this.setState({
-      [publico]: true
-    });
-  }
-
-  handlePublicoLeave = (publico) => {
-    this.setState({
-      [publico]: false
-    });
-  }
-
+  
   handlePublicoChange = (publico) => {
     let auxPublicoDisponible = this.state.publicoDisponible;
     auxPublicoDisponible[publico] = !auxPublicoDisponible[publico];
@@ -349,7 +351,7 @@ class FormCuidador extends React.Component {
       publicoDisponible: auxPublicoDisponible
     });
   }
-
+  
   handlePrecioChange = (atributo, valor) => {
     let auxPrecioPublico = this.state.precioPorPublico;
     auxPrecioPublico[atributo] = valor;
@@ -357,12 +359,118 @@ class FormCuidador extends React.Component {
       precioPorPublico: auxPrecioPublico
     });
   }
-
+  
   handleIsPublicChange = (valor) => {
     this.setState({
       isPublic: valor
     });
   }
+  
+  handleGuardarCambios = async () => {
+    // TODO handle guardar cambios
+    for (var clave in this.state) {
+      if (this.state[clave] === null) continue;
+      //Hago una comporbacion diferente para los dias, para que haya elegido un dia en el combo
+      if (clave == "diasDisponible") {
+        let error = false;
+        this.state[clave].map(confDia => {
+          if (confDia.dia == 0 || isNaN(confDia.dia)) {
+            cogoToast.error(
+              <h5>{trans("registerFormCuidadores.errorDiaNoElegido")}</h5>
+            );
+            error = true;
+            return;
+          }
+          let { horaInicio, horaFin } = confDia;
+          horaInicio = horaInicio.split(':'); // Separamos horas y minutos para compararlos 
+          horaFin = horaFin.split(':'); // y decir que hora fin no sea antes que hora inicio
+
+          if (parseInt(horaInicio[0]) > parseInt(horaFin[0])){
+            // La hora de horainicio es mayor por lo que error
+            cogoToast.error(
+              <h5>{trans("registerFormCuidadores.errorDiaHoraIncorrecto")}</h5>
+            );
+            error = true;
+            return;
+          } else if(parseInt(horaInicio[0]) === parseInt(horaFin[0])){
+            if (parseInt(horaInicio[1]) >= parseInt(horaFin[1])) {
+              // Los minutos de horainicio son mayores, siendo la hora igual por lo que error
+              cogoToast.error(
+                <h5>{trans("registerFormCuidadores.errorDiaHoraIncorrecto")}</h5>
+              );
+              error = true;
+              return;
+            }
+          }
+        });
+        if (error) {
+          const { error } = this.state;
+          let auxError = { ...error };
+          auxError.diasDisponible = true;
+          this.setState({
+            error: auxError
+          });
+          return;
+        } else if (this.state.error.diasDisponible === true) {
+          const { error } = this.state;
+          let auxError = { ...error };
+          auxError.diasDisponible = false;
+          this.setState({
+            error: auxError
+          });
+        }
+      }
+      // Comprobamos que haya metido al menos una categoria de cuidado
+      if (clave === 'publicoDisponible') {
+        const { publicoDisponible } = this.state;
+
+        const publicoSeleccionado = Object.keys(publicoDisponible).find(publico => publicoDisponible[publico]);
+        const { error } = this.state;
+        if (!publicoSeleccionado) {          
+          let auxError = { ...error };
+          auxError.publicoDisponible = true;
+          this.setState({
+            error: auxError
+          });
+          cogoToast.error(
+            <h5>
+              {trans('registerFormCuidadores.errorPublicoNoSeleccionado')}
+            </h5>
+          );
+          return;
+        } else if (error.publicoDisponible === true) {
+          let auxError = { ...error };
+          auxError.publicoDisponible = false;
+          this.setState({
+            error: auxError
+          });
+        }
+      }
+      // La comprobacion genérica para los demás
+      if (this.requiredStates.includes(clave)) {
+        let auxError = this.state.error;
+        if (this.state[clave].length === 0) {
+          cogoToast.error(
+            <h5>
+              {trans("registerFormCuidadores.errorRellenaTodo")} (
+              {trans(this.requiredStatesTraduc[clave])})
+            </h5>
+          );
+          auxError[clave] = true;
+          this.setState({
+            error: auxError
+          });
+          return;
+        } else if (auxError[clave] === true) {
+          // Esto es por si el usuario ha rellenado una informacion que le faltaba previamente y ahora ya no hay error
+          auxError[clave] = false;
+          this.setState({
+            error: auxError
+          });
+        }
+      }      
+    }
+  };
 
   render() {
     const {
@@ -813,7 +921,7 @@ class FormCuidador extends React.Component {
                   })}
                 </div>                
               </div>
-              <div className="col">
+              <div className={error.ubicaciones ? "col border border-danger" : "col"}>
                 <span className="d-flex flex-row justify-content-center align-items-center mt-3">
                   <FontAwesomeIcon icon={faHome} className="mr-1" />
                   <span
