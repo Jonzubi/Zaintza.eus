@@ -5,6 +5,7 @@ import cogoToast from "cogo-toast";
 import { ReactDatez as Calendario } from "react-datez";
 import Avatar from "react-avatar-edit";
 import Switch from "react-switch";
+import axios from 'axios';
 import ClipLoader from "react-spinners/ClipLoader";
 import {
   faMale,
@@ -40,6 +41,8 @@ import PuebloAutosuggest from "../components/pueblosAutosuggest";
 import imgNino from "../util/images/nino.png";
 import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.png";
 import imgTerceraEdad from "../util/images/terceraEdad.png";
+import { getRandomString, toBase64 } from "../util/funciones";
+import { changeFormContent } from "../redux/actions/app";
 
 class FormCuidador extends React.Component {
   constructor(props) {
@@ -494,6 +497,194 @@ class FormCuidador extends React.Component {
         }
       }      
     }
+
+    // Comprobamos que el email sea valido sintacticamente
+    const { isProfileView } = this.props;
+    const { isEditing, imgContact } = this.state;
+    if (!isProfileView) {
+      const { txtEmail } = this.state;
+      let { error } = this.state;
+      if(!isValidEmail(txtEmail)) {
+        cogoToast.error(
+          <h5>
+            {trans('commonErrors.invalidEmail')}
+          </h5>
+        );      
+        error.txtEmail = true;
+        this.setState({
+          error: error
+        })
+        return;
+      } else if (error.txtEmail) {
+        error.txtEmail = false;
+        this.setState({
+          error: error
+        });
+      }
+
+      const checkIfEmailExists = await axios.get(
+        `http://${ipMaquina}:3001/api/procedures/checkIfEmailExists/${txtEmail}`
+      );
+
+      if (checkIfEmailExists.data !== "Vacio") {
+        cogoToast.error(<h5>{trans("registerFormCuidadores.emailExistente")}</h5>);
+        error.txtEmail = true;
+        this.setState({
+          error: error
+        })
+        return;
+      } else if (error.txtEmail) {
+        error.txtEmail = false;
+        this.setState({
+          error: error
+        });
+      }
+    }
+
+    this.setState({ isLoading: true });
+
+    /* Empezamos con la subida de datos */
+    let imgContactB64 = "";
+
+    if (!isProfileView || (isEditing && imgContact !== null)) {
+      imgContactB64 = await toBase64(imgContact[0]);
+    }
+
+    if (imgContactB64 instanceof Error) {
+      cogoToast.error(<h5>{trans("registerFormCuidadores.errorImagen")}</h5>);
+      return;
+    }
+
+    const {
+      txtNombre,
+      txtApellido1,
+      txtApellido2,
+      txtSexo,
+      avatarPreview,
+      txtDescripcion,
+      txtMovil,
+      txtTelefFijo,
+      isPublic,
+      diasDisponible,
+      txtFechaNacimiento,
+      ubicaciones,
+      publicoDisponible,
+      precioPorPublico,
+      txtEmail,
+      txtContrasena
+    } = this.state;
+
+    const {
+      email,
+      contrasena,
+      _idUsuario,
+      changeFormContent
+    } = this.props;
+
+    if (!isProfileView) {
+      const validationToken = getRandomString(30);
+
+      const formData = {
+        nombre: txtNombre,
+        apellido1: txtApellido1,
+        apellido2: txtApellido2,
+        sexo: txtSexo,
+        avatarPreview: avatarPreview,
+        imgContactB64: imgContactB64,
+        descripcion: txtDescripcion,
+        telefonoMovil: txtMovil,
+        telefonoFijo: txtTelefFijo,
+        isPublic: isPublic,
+        diasDisponible: diasDisponible,
+        fechaNacimiento: txtFechaNacimiento,
+        ubicaciones: ubicaciones,
+        publicoDisponible: publicoDisponible,
+        precioPorPublico: precioPorPublico,
+        email: txtEmail,
+        contrasena: txtContrasena,
+        tipoUsuario: "Cuidador",
+        validationToken
+      };
+
+      const insertedCuidador = await axios
+        .post(
+          "http://" + ipMaquina + ":3001/api/procedures/postNewCuidador",
+          formData
+        )
+        .catch(err => {
+          this.setState({
+            isLoading: false
+          });
+          cogoToast.error(
+            <h5>{trans("registerFormCuidadores.errorGeneral")}</h5>
+          );
+          return;
+        });
+
+        if (insertedCuidador === undefined) {
+          //Si entra aqui el servidor a tenido un error
+          //Por ahora ese error seria un duplicado de email
+          return;
+        }
+
+      axios.post(`http://${ipMaquina}:3003/smtp/registerEmail`, {
+        toEmail: txtEmail,
+        nombre: txtNombre,
+        apellido: txtApellido1,
+        validationToken
+      });
+
+      cogoToast.success(
+        <div>
+          <h5>{trans("registerFormCuidadores.registroCompletado")}</h5>
+          <small>
+            <b>{trans("registerFormCuidadores.darGracias")}</b>
+          </small>
+        </div>
+      );
+    } else {
+      let formData = {
+        nombre: txtNombre,
+        apellido1: txtApellido1,
+        apellido2: txtApellido2,
+        fechaNacimiento: txtFechaNacimiento,
+        sexo: txtSexo,
+        imgContactB64: imgContactB64,//Los cambios son // Ahora mandare las imagenes en B64 a la API para guardarlo en un paso
+        avatarPreview: avatarPreview,//Estas dos lineas //
+        descripcion: txtDescripcion,
+        ubicaciones: ubicaciones,
+        publicoDisponible: publicoDisponible,
+        telefonoMovil: txtMovil,
+        telefonoFijo: txtTelefFijo,
+        isPublic: isPublic,
+        precioPorPublico: precioPorPublico,
+        diasDisponible: diasDisponible,
+        email,
+        contrasena,
+        idUsuario: _idUsuario
+      };
+  
+      axios.patch(
+        "http://" + ipMaquina + ":3001/api/procedures/patchCuidador/" + this.props._id,
+        formData
+      )
+        .then(res => {
+          const { direcFoto, direcFotoContacto } = res.data;
+          this.props.saveUserSession(Object.assign({}, formData, {direcFoto: direcFoto, direcFotoContacto: direcFotoContacto}));
+          cogoToast.success(<h5>{trans("perfilCliente.datosActualizados")}</h5>);
+        })
+        .catch(err => {
+          cogoToast.error(<h5>{trans("perfilCliente.errorGeneral")}</h5>);
+        })
+        .finally(() => {
+          this.setState({
+            isLoading: false
+          });
+        });
+    }
+
+    changeFormContent("tabla");
+    
   };
 
   render() {
@@ -1266,6 +1457,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   saveUserSession: (user) => dispatch(saveUserSession(user)),
+  changeFormContent: form => dispatch(changeFormContent(form)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormCuidador);
