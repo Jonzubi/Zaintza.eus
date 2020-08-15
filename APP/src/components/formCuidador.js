@@ -449,24 +449,27 @@ class FormCuidador extends React.Component {
       const { isProfileView } = this.props;
       const { imgContact } = this.state;
 
-      if (!isProfileView && imgContact === null) {
-        const { error } = this.state;
-        let auxError = { ...error };
-        auxError.imgContact = true;
-        this.setState({
-          error: auxError
-        });
+      if (clave === 'imgContact') {
+          if (!isProfileView && imgContact === null) {
+          const { error } = this.state;
+          let auxError = { ...error };
+          auxError.imgContact = true;
+          this.setState({
+            error: auxError
+          });
 
-        cogoToast.error(<h5>{trans("registerFormCuidadores.errorRellenaTodo")} (
-          {trans('registerFormCuidadores.imgContact')})</h5>);      
-        return;
-      } else if (this.state.error.imgContact === true) {
-        const { error } = this.state;
-        error.imgContact = false;
-        this.setState({
-          error: error
-        });
+          cogoToast.error(<h5>{trans("registerFormCuidadores.errorRellenaTodo")} (
+            {trans('registerFormCuidadores.imgContact')})</h5>);      
+          return;
+          } else if (this.state.error.imgContact === true) {
+            const { error } = this.state;
+            error.imgContact = false;
+            this.setState({
+              error: error
+            });
+          }
       }
+      
       // La comprobacion genérica para los demás
       if (this.requiredStates.includes(clave)) {
         let auxError = this.state.error;
