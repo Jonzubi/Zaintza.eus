@@ -43,6 +43,8 @@ import imgNecesidadEspecial from "../util/images/genteConNecesidadesEspeciales.p
 import imgTerceraEdad from "../util/images/terceraEdad.png";
 import { getRandomString, toBase64 } from "../util/funciones";
 import { changeFormContent } from "../redux/actions/app";
+import "react-datez/dist/css/react-datez.css";
+import "./styles/registerFormCuidador.css";
 
 class FormCuidador extends React.Component {
   constructor(props) {
@@ -627,6 +629,8 @@ class FormCuidador extends React.Component {
           return;
         }
 
+        changeFormContent("tabla");
+
       axios.post(`http://${ipMaquina}:3003/smtp/registerEmail`, {
         toEmail: txtEmail,
         nombre: txtNombre,
@@ -677,14 +681,12 @@ class FormCuidador extends React.Component {
           cogoToast.error(<h5>{trans("perfilCliente.errorGeneral")}</h5>);
         })
         .finally(() => {
+          changeFormContent("tabla");
           this.setState({
             isLoading: false
           });
         });
-    }
-
-    changeFormContent("tabla");
-    
+    }    
   };
 
   render() {
