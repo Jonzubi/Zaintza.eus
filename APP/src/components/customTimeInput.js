@@ -83,10 +83,11 @@ class CustomTimeInput extends React.Component {
   };
   render() {
     const { inputValue } = this.state;
-    const { style, className } = this.props;
+    const { style, className, disabled } = this.props;
     return (
       <input
         style={style}
+        disabled={disabled}
         className={className}
         onBlur={this.completeText}
         onChange={this.onInputChange}
