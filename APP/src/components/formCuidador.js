@@ -571,8 +571,12 @@ class FormCuidador extends React.Component {
               >
                 <div className="d-flex justify-content-lg-start justify-content-center align-items-center mb-lg-0 mb-2 mt-lg-0 mt-2">
                   <FontAwesomeIcon icon={faPortrait} className="mr-1" />
-                  <span className="mr-1">{trans("registerFormCuidadores.fotoContacto")}</span>                  
-                  (<span className="text-danger font-weight-bold">*</span>)
+                  <span className="mr-1">{trans("registerFormCuidadores.fotoContacto")}</span>
+                  {!isProfileView ?       
+                    (<span className="text-danger font-weight-bold">*</span>)
+                    : 
+                    null
+                  }
                 </div>
                 <div className="d-flex justify-content-center">
                   {isProfileView && !isEditing ? (
