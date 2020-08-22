@@ -82,49 +82,24 @@ class FormAnuncio extends React.Component {
       error: false,
       isLoading: false
     };
-
-    this.onClose = this.onClose.bind(this);
-    this.onCrop = this.onCrop.bind(this);
-    this.onChangeContactImg = this.onChangeContactImg.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleAuxAddPuebloChange = this.handleAuxAddPuebloChange.bind(this);
-    this.getSuggestions = this.getSuggestions.bind(this);
-    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(
-      this
-    );
-    this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(
-      this
-    );
-    this.handleAddPueblo = this.handleAddPueblo.bind(this);
-    this.handleRemovePueblo = this.handleRemovePueblo.bind(this);
-    this.addDiasDisponible = this.addDiasDisponible.bind(this);
-    this.removeDiasDisponible = this.removeDiasDisponible.bind(this);
-    this.handleDiasDisponibleChange = this.handleDiasDisponibleChange.bind(
-      this
-    );
-    this.handlePublicoChange = this.handlePublicoChange.bind(this);
-    this.handlePublicoHover = this.handlePublicoHover.bind(this);
-    this.handlePublicoLeave = this.handlePublicoLeave.bind(this);
-    this.handlePrecioChange = this.handlePrecioChange.bind(this);
-    this.handleSubirAnuncio = this.handleSubirAnuncio.bind(this);
   }
 
-  onClose() {
+  onClose = () => {
     this.setState({ avatarPreview: "" });
   }
 
-  onCrop(preview) {
+  onCrop = (preview) => {
     this.setState({ avatarPreview: preview });
   }
 
-  onBeforeFileLoad(elem) {
+  onBeforeFileLoad = (elem) => {
     if (elem.target.files[0].size > 5242880) {
       cogoToast.error(<h5>{trans("registerFormClientes.errorImgGrande")}</h5>);
       elem.target.value = "";
     }
   }
 
-  onChangeContactImg(picture) {
+  onChangeContactImg = (picture) => {
     if (picture.length > 1) {
       picture.shift();
     }
@@ -133,7 +108,7 @@ class FormAnuncio extends React.Component {
     });
   }
 
-  handleInputChange(e) {
+  handleInputChange = (e) => {
     //La idea es recoger el nombre del componente y asignarselo al estado, algo como, this.setState({this.state[name] = e.target.value});
     var stateId = e.target.id;
     //No vamos a dejar que el usuario meta mas de 9 digitos para el telefono
@@ -142,17 +117,17 @@ class FormAnuncio extends React.Component {
     });
   }
 
-  handleAuxAddPuebloChange(e, { newValue }) {
+  handleAuxAddPuebloChange = (e, { newValue }) => {
     this.setState({
       auxAddPueblo: newValue
     });
   }
 
-  escapeRegexCharacters(str) {
+  escapeRegexCharacters = (str) => {
     return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 
-  getSuggestions(value) {
+  getSuggestions = (value) => {
     const escapedValue = this.escapeRegexCharacters(value.trim());
 
     if (escapedValue === "") {
@@ -164,11 +139,11 @@ class FormAnuncio extends React.Component {
     return municipios.filter(pueblo => regex.test(pueblo));
   }
 
-  getSuggestionValue(suggestion) {
+  getSuggestionValue = (suggestion) => {
     return suggestion;
   }
 
-  renderSuggestion(suggestion) {
+  renderSuggestion = (suggestion) => {
     return <span>{suggestion}</span>;
   }
 
@@ -184,7 +159,7 @@ class FormAnuncio extends React.Component {
     });
   };
 
-  handleAddPueblo(c, { suggestion }) {
+  handleAddPueblo = (c, { suggestion }) => {
     this.setState({
       auxAddPueblo: suggestion
     }, () => {
@@ -220,7 +195,7 @@ class FormAnuncio extends React.Component {
     
   }
 
-  handleRemovePueblo() {
+  handleRemovePueblo = () => {
     this.setState({
       ubicaciones:
         typeof this.state.ubicaciones.pop() != "undefined"
@@ -229,7 +204,7 @@ class FormAnuncio extends React.Component {
     });
   }
 
-  addDiasDisponible() {
+  addDiasDisponible = () => {
     let auxDiasDisponible = this.state.diasDisponible;
     auxDiasDisponible.push({
       dia: 0,
@@ -242,7 +217,7 @@ class FormAnuncio extends React.Component {
     });
   }
 
-  removeDiasDisponible() {
+  removeDiasDisponible = () => {
     this.setState({
       diasDisponible:
         typeof this.state.diasDisponible.pop() != "undefined"
@@ -251,7 +226,7 @@ class FormAnuncio extends React.Component {
     });
   }
 
-  handleDiasDisponibleChange(e, indice) {
+  handleDiasDisponibleChange = (e, indice) => {
     if (typeof indice == "undefined") {
       //Significa que lo que se ha cambiado es el combo de los dias
       var origen = e.target;
@@ -278,31 +253,31 @@ class FormAnuncio extends React.Component {
     }
   }
 
-  handlePublicoHover(publico) {
+  handlePublicoHover = (publico) => {
     this.setState({
       [publico]: true
     });
   }
 
-  handlePublicoLeave(publico) {
+  handlePublicoLeave = (publico) => {
     this.setState({
       [publico]: false
     });
   }
 
-  handlePublicoChange(publico) {
+  handlePublicoChange = (publico) => {
     this.setState({
       publicoCuidado: publico
     });
   }
 
-  handlePrecioChange(valor) {
+  handlePrecioChange = (valor) => {
     this.setState({
       precioCuidado: valor
     });
   }
 
-  async handleSubirAnuncio(){
+  handleSubirAnuncio = async () => {
     const { imgAnuncio, txtTitulo, precioCuidado, txtDescripcion, diasDisponible, publicoCuidado, ubicaciones } = this.state;
     const { _id, changeFormContent, email, contrasena } = this.props;
     for(let clave in this.requiredStates) {
