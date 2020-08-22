@@ -278,7 +278,8 @@
       "verStats": "Estadística",
       "visitasConLogin": "Visitas con login",
       "visitasSinLogin": "Visitas anónimas",
-      "totalVisitas": "Total visitas"
+      "totalVisitas": "Total visitas",
+      "anuncioEliminado": "El anuncio ha sido eliminado"
     },
     "cuidadorStatsForm": {
       "visitasConLogin": "Visitas con login",

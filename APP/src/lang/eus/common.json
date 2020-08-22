@@ -316,7 +316,8 @@
     "verStats": "Estadistika",
     "visitasConLogin": "Kontu dun bisitak",
     "visitasSinLogin": "Bisita anonimoak",
-    "totalVisitas": "Bisitak guztira"
+    "totalVisitas": "Bisitak guztira",
+    "anuncioEliminado": "Zaintza eskaera ezabatua izan da"
   },
   "cuidadorStatsForm": {
     "visitasConLogin": "Kontu dun bisitak",
