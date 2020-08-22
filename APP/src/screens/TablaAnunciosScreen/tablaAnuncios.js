@@ -407,10 +407,6 @@ class TablaAnuncios extends React.Component {
           {(socket) => (
             <div className="">
               <div
-                onClick={() => {
-                  this.setState({ showModalFilter: true });
-                }}
-                style={{ cursor: "pointer" }}
                 key="divFilter"
                 className="d-flex align-items-center justify-content-between mb-3 mt-3 ml-5 mr-5 p-1"
                 onMouseEnter={() => this.handleHoverFilter(true)}
@@ -419,6 +415,10 @@ class TablaAnuncios extends React.Component {
                 <div
                   style={{
                     borderRadius: 50,
+                    cursor: "pointer"
+                  }}
+                  onClick={() => {
+                    this.setState({ showModalFilter: true });
                   }}
                   className="d-flex flex-row justify-content-between align-items-center bg-success text-white p-2"
                 >
