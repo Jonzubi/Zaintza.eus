@@ -79,7 +79,13 @@ class FormAnuncio extends React.Component {
       hoverTerceraEdad: false,
       hoverNecesidadEspecial: false,
       ubicaciones: [],
-      error: false,
+      error: {
+        txtTitulo: false,
+        txtDescripcion: false,
+        diasDisponible: false,
+        ubicaciones: false,
+        publicoCuidado: false,
+      },
       isLoading: false
     };
   }
@@ -280,46 +286,89 @@ class FormAnuncio extends React.Component {
   handleSubirAnuncio = async () => {
     const { imgAnuncio, txtTitulo, precioCuidado, txtDescripcion, diasDisponible, publicoCuidado, ubicaciones } = this.state;
     const { _id, changeFormContent, email, contrasena } = this.props;
-    for(let clave in this.requiredStates) {
+    for(let clave of this.requiredStates) {
       //Hago primero la comprobacion de null ya que .length no existe en un null y peta.
-      if(this.state[this.requiredStates[clave]] === null){
+      if(this.state[clave] === null){
         cogoToast.error(
           <h5>
             {trans("registerFormCuidadores.errorRellenaTodo")} (
-            {trans(this.requiredStatesTraduc[this.requiredStates[clave]])})
+            {trans(this.requiredStatesTraduc[clave])})
           </h5>
         );
+        let { error } = this.state;
+        error[clave] = true;
         this.setState({
-          error: true
+          error: error
         });
         return;
       }
-      if(this.state[this.requiredStates[clave]].length === 0){
+      if(this.state[clave].length === 0){
         cogoToast.error(
           <h5>
             {trans("registerFormCuidadores.errorRellenaTodo")} (
-            {trans(this.requiredStatesTraduc[this.requiredStates[clave]])})
+            {trans(this.requiredStatesTraduc[clave])})
           </h5>
         );
+        let { error } = this.state;
+        error[clave] = true;
         this.setState({
-          error: true
+          error: error
         });
         return;
+      } else if (this.state.error[clave] === true) {
+        let { error } = this.state;
+        error[clave] = false;
+        this.setState({
+          error
+        });
       }
       //Hago una comporbacion diferente para los dias, para que haya elegido un dia en el combo
-      if (this.requiredStates[clave] == "diasDisponible") {
+      if (clave == "diasDisponible") {
         let error = false;
-        const diasSinElegir = diasDisponible.filter(confDia => {
-          return confDia.dia == 0 || isNaN(confDia.dia);          
+        this.state[clave].map(confDia => {
+          if (confDia.dia == 0 || isNaN(confDia.dia)) {
+            cogoToast.error(
+              <h5>{trans("registerFormCuidadores.errorDiaNoElegido")}</h5>
+            );
+            error = true;
+            return;
+          }
+          let { horaInicio, horaFin } = confDia;
+          horaInicio = horaInicio.split(':'); // Separamos horas y minutos para compararlos 
+          horaFin = horaFin.split(':'); // y decir que hora fin no sea antes que hora inicio
+
+          if (parseInt(horaInicio[0]) > parseInt(horaFin[0])){
+            // La hora de horainicio es mayor por lo que error
+            cogoToast.error(
+              <h5>{trans("registerFormCuidadores.errorDiaHoraIncorrecto")}</h5>
+            );
+            error = true;
+            return;
+          } else if(parseInt(horaInicio[0]) === parseInt(horaFin[0])){
+            if (parseInt(horaInicio[1]) >= parseInt(horaFin[1])) {
+              // Los minutos de horainicio son mayores, siendo la hora igual por lo que error
+              cogoToast.error(
+                <h5>{trans("registerFormCuidadores.errorDiaHoraIncorrecto")}</h5>
+              );
+              error = true;
+              return;
+            }
+          }
         });
-        if (diasSinElegir.length > 0) {
-          cogoToast.error(
-            <h5>{trans("registerFormCuidadores.errorDiaNoElegido")}</h5>
-          );
+        if (error) {
+          const { error } = this.state;
+          let auxError = { ...error };
+          auxError.diasDisponible = true;
           this.setState({
-            error: true
+            error: auxError
           });
           return;
+        } else if (this.state.error.diasDisponible === true) {
+          const { error } = this.state;
+          error.diasDisponible = false;
+          this.setState({
+            error: error
+          });
         }
       }
     }
@@ -369,7 +418,11 @@ class FormAnuncio extends React.Component {
   }
 
   render() {
-    const { error, diasDisponible } = this.state;
+    const {
+      error, diasDisponible, txtTitulo, txtDescripcion,
+      ubicaciones, isLoading, precioCuidado, publicoCuidado,
+      hoverNino, hoverNecesidadEspecial, hoverTerceraEdad
+    } = this.state;
     return (
       <div className="p-5">
         <div className="form-group d-flex justify-content-center position-relative">
@@ -385,14 +438,14 @@ class FormAnuncio extends React.Component {
               onChange={this.handleInputChange}
               type="text"
               className={
-                this.state.error
+                error.txtTitulo
                   ? "border border-danger form-control"
                   : "form-control"
               }
               id="txtTitulo"
               aria-describedby="txtNombreHelp"
               placeholder={i18next.t('formAnuncio.holderTitulo')}
-              value={this.state.txtTitulo}
+              value={txtTitulo}
             />
           </div>
         </div>
@@ -404,99 +457,99 @@ class FormAnuncio extends React.Component {
           <textarea
             onChange={this.handleInputChange}
             class={
-              this.state.error
+              error.txtDescripcion
                 ? "border border-danger form-control"
                 : "form-control"
             }
             rows="5"
             id="txtDescripcion"
             placeholder={i18next.t('formAnuncio.holderDescripcion')}
-            value={this.state.txtDescripcion}
+            value={txtDescripcion}
           ></textarea>
         </div>
         <div className="form-group row">
         <div className="form-group col-lg-6 col-12 d-flex flex-column">
-                  {/* Insertar dias disponibles aqui */}
-                  <span className="d-flex flex-row justify-content-between align-items-center">
-                    <FontAwesomeIcon
-                      style={{ cursor: "pointer" }}
-                      onClick={this.removeDiasDisponible}
-                      className="text-danger"
-                      icon={faMinusCircle}
-                    />
-                    <div>
-                      <FontAwesomeIcon icon={faClock} className="mr-1" />
-                      <span className="lead">
-                        {trans("registerFormCuidadores.diasDisponible")}
-                      </span>
-                      (<span className="text-danger font-weight-bold">*</span>)
+            {/* Insertar dias disponibles aqui */}
+            <span className="d-flex flex-row justify-content-between align-items-center">
+              <FontAwesomeIcon
+                style={{ cursor: "pointer" }}
+                onClick={this.removeDiasDisponible}
+                className="text-danger"
+                icon={faMinusCircle}
+              />
+              <div>
+                <FontAwesomeIcon icon={faClock} className="mr-1" />
+                <span className="lead">
+                  {trans("registerFormCuidadores.diasDisponible")}
+                </span>
+                (<span className="text-danger font-weight-bold">*</span>)
+              </div>
+              <FontAwesomeIcon
+                style={{ cursor: "pointer" }}
+                onClick={this.addDiasDisponible}
+                className="text-success"
+                icon={faPlusCircle}
+              />                    
+            </span>
+            <div className={error.diasDisponible ? "w-100 mt-2 border border-danger" : "w-100 mt-2"} id="diasDisponible">
+              {/* Aqui iran los dias dinamicamente */}
+              {diasDisponible.map((dia, indice) => {
+                return (
+                  <div className="mt-1 d-flex flex-row align-items-center justify-content-between">
+                    <select
+                      value={dia.dia}
+                      onChange={this.handleDiasDisponibleChange}
+                      className="d-inline"
+                      id={"dia" + indice}
+                    >
+                      <option>Aukeratu eguna</option>
+                      <option value="1">Astelehena</option>
+                      <option value="2">Asteartea</option>
+                      <option value="3">Asteazkena</option>
+                      <option value="4">Osteguna</option>
+                      <option value="5">Ostirala</option>
+                      <option value="6">Larunbata</option>
+                      <option value="7">Igandea</option>
+                    </select>
+                    <div className="d-flex flex-row align-items-center">
+                      <TimeInput
+                        onTimeChange={(valor) => {
+                          this.handleDiasDisponibleChange(
+                            valor,
+                            "horaInicio" + indice
+                          );
+                        }}
+                        id={"horaInicio" + indice}
+                        initTime={
+                          diasDisponible[indice].horaInicio
+                        }
+                        style={{
+                          width: 50,
+                        }}
+                        className="text-center"
+                      />
+                      -
+                      <TimeInput
+                        onTimeChange={(valor) => {
+                          this.handleDiasDisponibleChange(
+                            valor,
+                            "horaFin" + indice
+                          );
+                        }}
+                        id={"horaFin" + indice}
+                        initTime={diasDisponible[indice].horaFin}
+                        style={{
+                          width: 50,
+                        }}
+                        className="text-center"
+                      />
                     </div>
-                    <FontAwesomeIcon
-                      style={{ cursor: "pointer" }}
-                      onClick={this.addDiasDisponible}
-                      className="text-success"
-                      icon={faPlusCircle}
-                    />                    
-                  </span>
-                  <div className="w-100 mt-2" id="diasDisponible">
-                    {/* Aqui iran los dias dinamicamente */}
-                    {this.state.diasDisponible.map((dia, indice) => {
-                      return (
-                        <div className="mt-1 d-flex flex-row align-items-center justify-content-between">
-                          <select
-                            value={dia.dia}
-                            onChange={this.handleDiasDisponibleChange}
-                            className="d-inline"
-                            id={"dia" + indice}
-                          >
-                            <option>Aukeratu eguna</option>
-                            <option value="1">Astelehena</option>
-                            <option value="2">Asteartea</option>
-                            <option value="3">Asteazkena</option>
-                            <option value="4">Osteguna</option>
-                            <option value="5">Ostirala</option>
-                            <option value="6">Larunbata</option>
-                            <option value="7">Igandea</option>
-                          </select>
-                          <div className="d-flex flex-row align-items-center">
-                            <TimeInput
-                              onTimeChange={(valor) => {
-                                this.handleDiasDisponibleChange(
-                                  valor,
-                                  "horaInicio" + indice
-                                );
-                              }}
-                              id={"horaInicio" + indice}
-                              initTime={
-                                diasDisponible[indice].horaInicio
-                              }
-                              style={{
-                                width: 50,
-                              }}
-                              className="text-center"
-                            />
-                            -
-                            <TimeInput
-                              onTimeChange={(valor) => {
-                                this.handleDiasDisponibleChange(
-                                  valor,
-                                  "horaFin" + indice
-                                );
-                              }}
-                              id={"horaFin" + indice}
-                              initTime={diasDisponible[indice].horaFin}
-                              style={{
-                                width: 50,
-                              }}
-                              className="text-center"
-                            />
-                          </div>
-                        </div>
-                      );
-                    })}
                   </div>
-                </div>
-          <div className="form-group col-lg-6 col-12 d-flex flex-column">
+                );
+              })}
+            </div>
+          </div>
+          <div className={error.ubicaciones ? "form-group col-lg-6 col-12 d-flex flex-column border border-danger" : "form-group col-lg-6 col-12 d-flex flex-column"}>
             {/* Insertar ubicaciones disponibles aqui */}
             <div className="d-flex flex-row justify-content-center align-items-center">
               <FontAwesomeIcon icon={faHome} className="mr-1" />
@@ -510,7 +563,7 @@ class FormAnuncio extends React.Component {
               <PuebloAutosuggest
                 onSuggestionSelected={this.handleAddPueblo}
               />
-              {this.state.ubicaciones.length > 0 ? (
+              {ubicaciones.length > 0 ? (
                 <h5 className="mt-2 lead">
                   {trans("formAnuncio.puebloSeleccionado")}
                 </h5>
@@ -519,11 +572,11 @@ class FormAnuncio extends React.Component {
               )}
 
               <ul className="list-group">
-                {this.state.ubicaciones.map(pueblo => {
+                {ubicaciones.map(pueblo => {
                   return <li className="list-group-item">{pueblo}</li>;
                 })}
               </ul>
-              {this.state.ubicaciones.length > 0 ? (
+              {ubicaciones.length > 0 ? (
                 <a
                   onClick={this.handleRemovePueblo}
                   className="mt-4 btn btn-danger float-right text-light"
@@ -539,7 +592,7 @@ class FormAnuncio extends React.Component {
           </div>
         </div>
         <div className="form-group row">
-            <div className={this.state.error ? "form-group d-flex flex-column col-lg-6 col-12 border border-danger" : "form-group d-flex flex-column col-lg-6 col-12"}>
+            <div className={error.publicoCuidado ? "form-group d-flex flex-column col-lg-6 col-12 border border-danger" : "form-group d-flex flex-column col-lg-6 col-12"}>
               {/* Insertar publico disponibles aqui */}
               <div className="d-flex flex-row justify-content-center align-items-center">
                 <FontAwesomeIcon icon={faUsers} className="mr-1" />
@@ -559,9 +612,9 @@ class FormAnuncio extends React.Component {
                   }}
                   className="col-4 text-center p-1"
                   style={{
-                    background: this.state.publicoCuidado === 'ninos'
+                    background: publicoCuidado === 'ninos'
                       ? "#28a745"
-                      : this.state.hoverNino
+                      : hoverNino
                       ? "#545b62"
                       : ""
                   }}
@@ -583,9 +636,9 @@ class FormAnuncio extends React.Component {
                   }}
                   className="col-4 text-center p-1"
                   style={{
-                    background: this.state.publicoCuidado === 'terceraEdad'
+                    background: publicoCuidado === 'terceraEdad'
                       ? "#28a745"
-                      : this.state.hoverTerceraEdad
+                      : hoverTerceraEdad
                       ? "#545b62"
                       : ""
                   }}
@@ -607,9 +660,9 @@ class FormAnuncio extends React.Component {
                   }}
                   className="col-4 text-center p-1"
                   style={{
-                    background: this.state.publicoCuidado === 'necesidadEspecial'
+                    background: publicoCuidado === 'necesidadEspecial'
                       ? "#28a745"
-                      : this.state.hoverNecesidadEspecial
+                      : hoverNecesidadEspecial
                       ? "#545b62"
                       : ""
                   }}
@@ -628,10 +681,10 @@ class FormAnuncio extends React.Component {
                   <span className="lead">{trans("formAnuncio.precioCuidado")}</span>
               </div>
               <div className="list-group md-2">
-                {this.state.publicoCuidado !== '' ? (
+                {publicoCuidado !== '' ? (
                   <div className="list-group-item form-group text-center p-1">
                     <small>
-                      <b>{trans(`registerFormCuidadores.${this.state.publicoCuidado}`)}</b>
+                      <b>{trans(`registerFormCuidadores.${publicoCuidado}`)}</b>
                     </small>
                     <input
                       onChange={event => {
@@ -639,6 +692,7 @@ class FormAnuncio extends React.Component {
                       }}
                       className="form-control"
                       type="number"
+                      value={precioCuidado}
                       placeholder={i18next.t('formAnuncio.holderPrecio')}
                     />
                   </div>
@@ -646,11 +700,12 @@ class FormAnuncio extends React.Component {
                   <div className="list-group-item form-group text-center p-1">
                     <input
                       onChange={event => {
-                        this.handlePrecioChange( event.target.value);
+                        this.handlePrecioChange(event.target.value);
                       }}
                       className="form-control"
                       disabled
                       type="number"
+                      value={precioCuidado}
                       placeholder={i18next.t('formAnuncio.holderPrecio')}
                     />
                   </div>
@@ -659,7 +714,7 @@ class FormAnuncio extends React.Component {
             </div>
           </div>
         <div id="loaderOrButton" className="w-100 mt-5 text-center">
-            {this.state.isLoading ? (
+            {isLoading ? (
               <ClipLoader
                 color="#28a745"
               />
