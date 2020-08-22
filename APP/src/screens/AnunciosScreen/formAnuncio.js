@@ -502,14 +502,14 @@ class FormAnuncio extends React.Component {
                       className="d-inline"
                       id={"dia" + indice}
                     >
-                      <option>Aukeratu eguna</option>
-                      <option value="1">Astelehena</option>
-                      <option value="2">Asteartea</option>
-                      <option value="3">Asteazkena</option>
-                      <option value="4">Osteguna</option>
-                      <option value="5">Ostirala</option>
-                      <option value="6">Larunbata</option>
-                      <option value="7">Igandea</option>
+                      <option>{i18next.t('registerFormCuidadores.elegirDia')}</option>
+                      <option value="1">{i18next.t('registerFormCuidadores.lunes')}</option>
+                      <option value="2">{i18next.t('registerFormCuidadores.martes')}</option>
+                      <option value="3">{i18next.t('registerFormCuidadores.miercoles')}</option>
+                      <option value="4">{i18next.t('registerFormCuidadores.jueves')}</option>
+                      <option value="5">{i18next.t('registerFormCuidadores.viernes')}</option>
+                      <option value="6">{i18next.t('registerFormCuidadores.sabado')}</option>
+                      <option value="7">{i18next.t('registerFormCuidadores.domingo')}</option>
                     </select>
                     <div className="d-flex flex-row align-items-center">
                       <TimeInput
