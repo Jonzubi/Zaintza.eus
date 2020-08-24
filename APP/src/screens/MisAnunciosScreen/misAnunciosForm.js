@@ -55,6 +55,14 @@ class MisAnuncios extends React.Component {
       isOpenThreeDotLayer: [],
       visitasConLogin: 0,
       visitasSinLogin: 0,
+      error: {
+        tituloAnuncio: false,
+        descripcionAnuncio: false,
+        publicoAnuncio: false,
+        precioAnuncio: false,
+        ubicaciones: false,
+        horario: false
+      }
     };
   }
 
@@ -287,27 +295,84 @@ class MisAnuncios extends React.Component {
       precioAnuncio,
       ubicaciones,
       horario,
+      error
     } = this.state;
-
+    console.log(this.state);
+    console.log(error.tituloAnuncio);
     if (tituloAnuncio === "") {
       cogoToast.error(<h5>{trans("misAnunciosForm.tituloNoVacio")}</h5>);
+      let auxError = error;
+      auxError.tituloAnuncio = true;
+      this.setState({
+        error: auxError
+      });
       return false;
+    } else if (error.tituloAnuncio) {
+      let auxError = error;
+      auxError.tituloAnuncio = false;
+      this.setState({
+        error: auxError
+      }); 
     }
     if (descripcionAnuncio === "") {
       cogoToast.error(<h5>{trans("misAnunciosForm.descripcionNoVacio")}</h5>);
+      let auxError = error;
+      auxError.descripcionAnuncio = true;
+      this.setState({
+        error: auxError
+      });
       return false;
+    } else if (error.descripcionAnuncio) {
+      let auxError = error;
+      auxError.descripcionAnuncio = false;
+      this.setState({
+        error: auxError
+      }); 
     }
     if (precioAnuncio === "") {
       cogoToast.error(<h5>{trans("misAnunciosForm.precioNoVacio")}</h5>);
+      let auxError = error;
+      auxError.precioAnuncio = true;
+      this.setState({
+        error: auxError
+      });
       return false;
+    } else if (error.precioAnuncio) {
+      let auxError = error;
+      auxError.precioAnuncio = false;
+      this.setState({
+        error: auxError
+      }); 
     }
     if (ubicaciones.length === 0) {
       cogoToast.error(<h5>{trans("misAnunciosForm.ubicacionesNoVacio")}</h5>);
+      let auxError = error;
+      auxError.ubicaciones = true;
+      this.setState({
+        error: auxError
+      });
       return false;
+    } else if (error.ubicaciones) {
+      let auxError = error;
+      auxError.ubicaciones = false;
+      this.setState({
+        error: auxError
+      }); 
     }
     if (horario.length === 0) {
       cogoToast.error(<h5>{trans("misAnunciosForm.horarioNoVacio")}</h5>);
+      let auxError = error;
+      auxError.horario = true;
+      this.setState({
+        error: auxError
+      });
       return false;
+    } else if (error.horario) {
+      let auxError = error;
+      auxError.horario = false;
+      this.setState({
+        error: auxError
+      }); 
     }
 
     let horarioIsValid = true;
@@ -316,10 +381,42 @@ class MisAnuncios extends React.Component {
         horarioIsValid = false;
         return;
       }
+      let { horaInicio, horaFin } = dia;
+      horaInicio = horaInicio.split(':'); // Separamos horas y minutos para compararlos 
+      horaFin = horaFin.split(':'); // y decir que hora fin no sea antes que hora inicio
+
+      if (parseInt(horaInicio[0]) > parseInt(horaFin[0])){
+        // La hora de horainicio es mayor por lo que error
+        cogoToast.error(
+          <h5>{trans("registerFormCuidadores.errorDiaHoraIncorrecto")}</h5>
+        );
+        horarioIsValid = false;
+        return;
+      } else if(parseInt(horaInicio[0]) === parseInt(horaFin[0])){
+        if (parseInt(horaInicio[1]) >= parseInt(horaFin[1])) {
+          // Los minutos de horainicio son mayores, siendo la hora igual por lo que error
+          cogoToast.error(
+            <h5>{trans("registerFormCuidadores.errorDiaHoraIncorrecto")}</h5>
+          );
+          horarioIsValid = false;
+          return;
+        }
+      }
     });
     if (!horarioIsValid) {
-      cogoToast.error(<h5>{trans("misAnunciosForm.unHorarioNoElegido")}</h5>);
+      cogoToast.error(<h5>{trans("registerFormCuidadores.errorDiaHoraIncorrecto")}</h5>);
+      let auxError = error;
+      auxError.horario = true;
+      this.setState({
+        error: auxError
+      });
       return false;
+    } else if (error.horario) {
+      let auxError = error;
+      auxError.horario = false;
+      this.setState({
+        error: auxError
+      }); 
     }
 
     return true;
@@ -479,6 +576,7 @@ class MisAnuncios extends React.Component {
       visitasSinLogin,
       showModalStats,
       isLoadingStatsModal,
+      error
     } = this.state;
     return (
       <div
@@ -770,7 +868,7 @@ class MisAnuncios extends React.Component {
               style={{
                 width: 300,
               }}
-              className="mt-2 d-flex flex-column"
+              className={error.tituloAnuncio ? "mt-2 d-flex flex-column border border-danger" : "mt-2 d-flex flex-column"}
             >
               <div className="d-flex flex-row align-items-center justify-content-center">
                 <FontAwesomeIcon icon={faFileSignature} className="mr-1" />
@@ -784,7 +882,7 @@ class MisAnuncios extends React.Component {
               style={{
                 width: 300,
               }}
-              className="mt-2 d-flex flex-column"
+              className={error.descripcionAnuncio ? "mt-2 d-flex flex-column border border-danger" : "mt-2 d-flex flex-column"}
             >
               <div className="d-flex flex-row align-items-center justify-content-center">
                 <FontAwesomeIcon icon={faFileSignature} className="mr-1" />
@@ -803,7 +901,7 @@ class MisAnuncios extends React.Component {
                 style={{
                   width: 300,
                 }}
-                className="mt-2 d-flex flex-row align-items-center justify-content-between"
+                className={error.publicoAnuncio ? "mt-2 d-flex flex-row align-items-center justify-content-between border border-danger" : "mt-2 d-flex flex-row align-items-center justify-content-between"}
               >
                 <FontAwesomeIcon className="" icon={faUsers} />
                 <select
@@ -825,7 +923,7 @@ class MisAnuncios extends React.Component {
                 style={{
                   width: 300,
                 }}
-                className="mt-2 d-flex flex-row align-items-center justify-content-between"
+                className={error.precioAnuncio ? "mt-2 d-flex flex-row align-items-center justify-content-between border border-danger" : "mt-2 d-flex flex-row align-items-center justify-content-between"}
               >
                 <FontAwesomeIcon className="" icon={faEuroSign} />
                 <input
@@ -839,7 +937,7 @@ class MisAnuncios extends React.Component {
               style={{
                 width: 300,
               }}
-              className="mt-3 d-flex flex-column"
+              className={error.ubicaciones ? "mt-3 d-flex flex-column border border-danger" : "mt-3 d-flex flex-column"}
             >
               <div className="text-center">
                 <FontAwesomeIcon icon={faHome} className="mr-1" />
@@ -872,7 +970,7 @@ class MisAnuncios extends React.Component {
               style={{
                 width: 300,
               }}
-              className="d-flex flex-column"
+              className={error.horario ? "mt-3 d-flex flex-column border border-danger" : "mt-3 d-flex flex-column"}
             >
               <span className="d-flex flex-row justify-content-between align-items-center">
                 <FontAwesomeIcon

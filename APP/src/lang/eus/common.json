@@ -317,7 +317,13 @@
     "visitasConLogin": "Kontu dun bisitak",
     "visitasSinLogin": "Bisita anonimoak",
     "totalVisitas": "Bisitak guztira",
-    "anuncioEliminado": "Zaintza eskaera ezabatua izan da"
+    "anuncioEliminado": "Zaintza eskaera ezabatua izan da",
+    "anuncioActualizado": "Zaintza eskaera eguneratuta",
+    "tituloNoVacio": "Zaintza eskaeraren izenburua falta da",
+    "descripcionNoVacio": "Zaintza eskaeraren deskribapena falta da",
+    "precioNoVacio": "Zaintza eskaeraren prezioa falta da",
+    "ubicacionesNoVacio": "Sartu zaintzarako herri bat gutxienez",
+    "horarioNoVacio": "Sartu zaintzarako behar duzun ordutegia"
   },
   "cuidadorStatsForm": {
     "visitasConLogin": "Kontu dun bisitak",

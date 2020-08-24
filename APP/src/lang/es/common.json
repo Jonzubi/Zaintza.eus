@@ -279,7 +279,13 @@
       "visitasConLogin": "Visitas con login",
       "visitasSinLogin": "Visitas anónimas",
       "totalVisitas": "Total visitas",
-      "anuncioEliminado": "El anuncio ha sido eliminado"
+      "anuncioEliminado": "El anuncio ha sido eliminado",
+      "anuncioActualizado": "El anuncio ha sido actualizado",
+      "tituloNoVacio": "Introduzca el titulo del anuncio",
+      "descripcionNoVacio": "Introduzca la descripcion del anuncio",
+      "precioNoVacio": "Introduzca el precio del anuncio",
+      "ubicacionesNoVacio": "Introduzca al menos una ubicación",
+      "horarioNoVacio": "Introduzca el horario deseado para el cuidado"
     },
     "cuidadorStatsForm": {
       "visitasConLogin": "Visitas con login",
