@@ -38,8 +38,16 @@ module.exports = conexion => {
       type: String
     },
     isPublic: Boolean,
-    precioPorPublico: Map,
-    diasDisponible: [Map],
+    precioPorPublico: {
+      nino: String,
+      terceraEdad: String,
+      necesidadEspecial: String
+    },
+    diasDisponible: [{
+      dia: String,
+      horaInicio: String,
+      horaFin: String
+    }],
     valoracionMedia: Number
   });
   return conexion.model("Cuidador", cuidador, "Cuidadores");
