@@ -22,6 +22,10 @@ El proyecto de SEIM para Aplicación Web de 2º
 
 - Es necesario tener conexión a internet ya que la aplicacion accede a una base de datos en la nube.
 
+**Apuntes de la máquina OVHCloud**
+
+- He instalado con apt: git, npm, nodejs
+
 **Gastos hasta la fecha**
 
 - Compra del dominio **Zaintza.eus**: **22.98€**
