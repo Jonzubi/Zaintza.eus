@@ -1,1 +1,1 @@
-module.exports="192.168.0.13";
+module.exports="www.dev.zaintza.eus";
