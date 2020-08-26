@@ -206,10 +206,10 @@ exports.postImage = (req, res) => {
 exports.getImage = (req, res) => {
   let idImage = req.params.id;
   let avatarDirPath = __dirname.substring(0, __dirname.lastIndexOf("\\"));
-  avatarDirPath =
-    avatarDirPath.substring(0, avatarDirPath.lastIndexOf("\\")) +
-    "\\util\\imagenes\\";
-  //avatarDirPath = "/var/www/ProyectoAplicacionWeb/API/util/imagenes/";
+  // avatarDirPath =
+  //   avatarDirPath.substring(0, avatarDirPath.lastIndexOf("\\")) +
+  //   "\\util\\imagenes\\";
+  avatarDirPath = "/var/www/ProyectoAplicacionWeb/API/util/imagenes/";
   fs.readdir(avatarDirPath, (err, files) => {
     if (err) {
       res.writeHead(500, headerResponse);

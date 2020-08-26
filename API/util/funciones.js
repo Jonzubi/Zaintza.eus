@@ -18,10 +18,10 @@ exports.writeImage = (cod, b64) => {
     default:
       throw "Formato no compatible";
   }
-  let avatarDirPath = __dirname + "/imagenes/" +
-    idImage +
-    formatBase64;
-  //avatarDirPath = "/var/www/ProyectoAplicacionWeb/API/util/imagenes/" + idImage + formatBase64;
+  // let avatarDirPath = __dirname + "/imagenes/" +
+  //   idImage +
+  //   formatBase64;
+  avatarDirPath = "/var/www/ProyectoAplicacionWeb/API/util/imagenes/" + idImage + formatBase64;
 
   try {
     fs.writeFileSync(avatarDirPath, imageBase64, "base64");
