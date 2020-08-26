@@ -209,7 +209,7 @@ exports.getImage = (req, res) => {
   // avatarDirPath =
   //   avatarDirPath.substring(0, avatarDirPath.lastIndexOf("\\")) +
   //   "\\util\\imagenes\\";
-  avatarDirPath = "/var/www/ProyectoAplicacionWeb/API/util/imagenes/";
+  avatarDirPath = "/var/www/Zaintza.eus/API/util/imagenes/";
   fs.readdir(avatarDirPath, (err, files) => {
     if (err) {
       res.writeHead(500, headerResponse);
