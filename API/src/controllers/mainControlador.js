@@ -241,7 +241,7 @@ exports.getImage = (req, res) => {
           res.end();
           return;
         }
-        let noImageDirPath =  __dirname.substring(0, __dirname.lastIndexOf("\\")) + "\\assets\\noImage.png";
+        let noImageDirPath =  "/var/www/Zaintza.eus/API/src/assets/noImage.png";
         let stream = fs.createReadStream(noImageDirPath);
         res.setHeader("Content-Type", "image/png");
         stream.pipe(res);
