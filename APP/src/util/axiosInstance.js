@@ -9,7 +9,5 @@ const instance = axios.create({
   passphrase: 'jonzaintza'
 });
 
-instance.defaults.httpsAgent = new https.Agent({ rejectUnauthorized:false });
-
 export default instance;
 
