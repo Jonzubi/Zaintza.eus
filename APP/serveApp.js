@@ -1,23 +1,28 @@
 const express = require("express");
 const fs = require("fs");
-const http = require("http");
-const https = require("https");
+const app = express();
+const port = 80;
 
 fs.readFile("./build/index.html", (err, html) => {
   if (err) {
     throw err;
   }
 
-  https.createServer((req, res) => {
-    res.writeHeader(200, { "Content-Type": "text/html" });
-    res.write(html);
-    res.end();
-  }).listen(443);
-
-  http
-    .createServer(function (req, res) {
-      res.writeHead(301, { Location: "https://www.zaintza.eus" });
+  app.get("/", (req, res) => {
+    if (
+      req.get("X-Forwarded-Proto") == "https" ||
+      req.hostname == "localhost"
+    ) {
+      res.writeHeader(200, { "Content-Type": "text/html" });
+      res.write(html);
       res.end();
-    })
-    .listen(80);
+    } else if (
+      req.get("X-Forwarded-Proto") != "https" &&
+      req.get("X-Forwarded-Port") != "443"
+    ) {
+      res.redirect("https://zaintza.eus");
+    }
+  });
+
+  app.listen(port, () => console.log(`Zaintza => ${port}`));
 });
