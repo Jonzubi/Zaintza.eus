@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require('path');
 const fs = require("fs");
 const app = express();
 const port = 80;
@@ -13,9 +14,7 @@ fs.readFile("./build/index.html", (err, html) => {
       req.get("X-Forwarded-Proto") == "https" ||
       req.hostname == "localhost"
     ) {
-      res.writeHeader(200, { "Content-Type": "text/html" });
-      res.write(html);
-      res.end();
+      res.sendFile(path.join(__dirname + '/build/index.html'));
     } else if (
       req.get("X-Forwarded-Proto") != "https" &&
       req.get("X-Forwarded-Port") != "443"
