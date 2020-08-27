@@ -23,7 +23,7 @@ import ipMaquina from "../util/ipMaquinaAPI";
 import "./styles/menuPerfil.css";
 import cogoToast from "cogo-toast";
 import { trans } from "../util/funciones";
-import Axios from "axios";
+import Axios from "../util/axiosInstance";
 import ChangeLang from "../components/changeLang";
 import SocketContext from "../socketio/socket-context";
 import { setCountNotify } from "../redux/actions/notifications";

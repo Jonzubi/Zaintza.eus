@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import axios from "axios";
+import axios from "../../util/axiosInstance";
 import ipMaquina from "../../util/ipMaquinaAPI";
 import cogoToast from "cogo-toast";
 import { trans, toBase64, arrayOfFalses } from "../../util/funciones";

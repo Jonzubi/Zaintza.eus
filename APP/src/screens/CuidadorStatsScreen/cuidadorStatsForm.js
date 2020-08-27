@@ -1,5 +1,5 @@
 import React from "react";
-import Axios from "axios";
+import Axios from "../../util/axiosInstance";
 import { connect } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
 import ipMaquina from "../../util/ipMaquinaAPI";

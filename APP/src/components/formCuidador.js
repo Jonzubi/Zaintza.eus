@@ -5,7 +5,7 @@ import cogoToast from "cogo-toast";
 import { ReactDatez as Calendario } from "react-datez";
 import Avatar from "react-avatar-edit";
 import Switch from "react-switch";
-import axios from 'axios';
+import axios from '../util/axiosInstance';
 import ClipLoader from "react-spinners/ClipLoader";
 import {
   faMale,

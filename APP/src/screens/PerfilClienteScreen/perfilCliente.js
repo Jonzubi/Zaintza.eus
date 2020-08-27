@@ -7,7 +7,7 @@ import { trans } from "../../util/funciones";
 import ipMaquina from "../../util/ipMaquinaAPI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faSave, faUser, faMobileAlt, faPhoneAlt } from "@fortawesome/free-solid-svg-icons";
-import Axios from "axios";
+import Axios from "../../util/axiosInstance";
 import cogoToast from "cogo-toast";
 import ClipLoader from "react-spinners/ClipLoader";
 import i18next from "i18next";

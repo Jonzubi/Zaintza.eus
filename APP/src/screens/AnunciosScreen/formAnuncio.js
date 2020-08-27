@@ -23,7 +23,7 @@ import ipMaquina from "../../util/ipMaquinaAPI";
 import imgNecesidadEspecial from "../../util/images/genteConNecesidadesEspeciales.png";
 import imgTerceraEdad from "../../util/images/terceraEdad.png";
 import imgNino from "../../util/images/nino.png";
-import Axios from "axios";
+import Axios from "../../util/axiosInstance";
 import { changeFormContent } from "../../redux/actions/app";
 import ClipLoader from "react-spinners/ClipLoader";
 

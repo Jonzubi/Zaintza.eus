@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { trans } from "../../util/funciones";
 import { changeFormContent } from "../../redux/actions/app";
-import axios from "axios";
+import axios from "../../util/axiosInstance";
 import cogoToast from "cogo-toast";
 import ipMaquina from "../../util/ipMaquinaAPI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

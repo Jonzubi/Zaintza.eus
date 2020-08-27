@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "../../util/axiosInstance";
 import ipMaquina from "../../util/ipMaquinaAPI";
 import { connect } from "react-redux";
 import { trans, arrayOfFalses, getTodayDate } from "../../util/funciones";

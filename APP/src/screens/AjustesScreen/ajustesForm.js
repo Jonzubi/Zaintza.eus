@@ -1,7 +1,7 @@
 import React from "react";
 import cogoToast from "cogo-toast";
 import { connect } from "react-redux";
-import Axios from "axios";
+import Axios from "../../util/axiosInstance";
 import ipMaquina from "../../util/ipMaquinaAPI";
 import { saveUserSession } from "../../redux/actions/user";
 import { SetCoords } from "../../redux/actions/coords";

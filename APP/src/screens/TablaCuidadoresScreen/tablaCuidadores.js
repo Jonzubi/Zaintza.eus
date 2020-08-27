@@ -22,7 +22,7 @@ import {
   faStar,
   faMapMarkerAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import Axios from "axios";
+import Axios from "../../util/axiosInstance";
 import Modal from "react-bootstrap/Modal";
 import Collapse from "react-bootstrap/Collapse";
 import PuebloAutosuggest from "../../components/pueblosAutosuggest";

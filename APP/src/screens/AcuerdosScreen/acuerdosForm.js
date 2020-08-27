@@ -16,7 +16,7 @@ import {
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { connect } from "react-redux";
-import axios from "axios";
+import axios from "../../util/axiosInstance";
 import ipMaquina from "../../util/ipMaquinaAPI";
 import { trans, arrayOfFalses, getTodayDate } from "../../util/funciones";
 import Avatar from "react-avatar";

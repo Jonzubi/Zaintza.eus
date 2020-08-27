@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { trans, getRandomString, isValidEmail } from "../../util/funciones";
 import { saveUserSession } from "../../redux/actions/user";
 import { changeFormContent } from "../../redux/actions/app";
-import axios from "axios";
+import axios from "../../util/axiosInstance";
 import ipMaquina from "../../util/ipMaquinaAPI";
 import SocketContext from "../../socketio/socket-context";
 import ClipLoader from "react-spinners/ClipLoader";
