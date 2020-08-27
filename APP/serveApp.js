@@ -8,8 +8,8 @@ fs.readFile('./build/index.html', (err, html) => {
     throw err;
   }
   app.get('/', function(req, res) {
-    const protocol = req.protocol;
-    if (protocol === 'HTTP') {
+    const secure = req.secure;
+    if (!secure) {
       res.redirect('https://www.zaintza.eus');
       return;
     }
