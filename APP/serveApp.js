@@ -8,8 +8,8 @@ fs.readFile('./build/index.html', (err, html) => {
     throw err;
   }
   app.get('/', function(req, res) {
-    const port = req.socket.localPort;
-    if (port === 80) {
+    const protocol = req.protocol;
+    if (protocol === 'HTTP') {
       res.redirect('https://www.zaintza.eus');
       return;
     }
