@@ -113,7 +113,7 @@ class PerfilCliente extends React.Component {
     };
 
     Axios
-        .patch("http://" + ipMaquina + ":3001/api/procedures/patchCliente/" + this.props._id, formData)
+        .patch("https://" + ipMaquina + ":3001/api/procedures/patchCliente/" + this.props._id, formData)
         .then(
           resultado => {
             const { direcFoto } = resultado.data;
@@ -175,7 +175,7 @@ class PerfilCliente extends React.Component {
               height={200}
               width={200}
               src={
-                "http://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto
+                "https://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto
               }
             />
           ) : (

@@ -74,7 +74,7 @@ class MenuPerfil extends React.Component {
       return;
 
     Axios.post(
-      `http://${ipMaquina}:3001/api/procedures/getNotificationsWithIdUsuario/${idUsuario}`,
+      `https://${ipMaquina}:3001/api/procedures/getNotificationsWithIdUsuario/${idUsuario}`,
       {
         email,
         contrasena,
@@ -108,7 +108,7 @@ class MenuPerfil extends React.Component {
     ) : (
       <Avatar
         name={this.props.nombre + " " + this.props.apellido1 || ""}
-        src={"http://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto + "?isAvatar=true"}
+        src={"https://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto + "?isAvatar=true"}
         className="mx-auto"
         round={true}
         size="200"

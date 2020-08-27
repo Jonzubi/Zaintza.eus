@@ -1,7 +1,7 @@
 //GET Inicio axios
     //axios({
     //  method: "GET",
-    //  url: "http://" + ipMaquina + ":3001/api/Inicio/",
+    //  url: "https://" + ipMaquina + ":3001/api/Inicio/",
     //  headers: cabecera
     //}).then(res => {
     //  this.setState({
@@ -18,7 +18,7 @@
     //POST axios
     axios({
       method: "POST",
-      url: 'http://' + ipMaquina + ':3001/api/insertRow/cuidador',
+      url: 'https://' + ipMaquina + ':3001/api/insertRow/cuidador',
       headers: cabecera,
       data: {
         idCuidador: 3,

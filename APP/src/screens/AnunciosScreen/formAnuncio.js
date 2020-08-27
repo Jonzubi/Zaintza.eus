@@ -402,7 +402,7 @@ class FormAnuncio extends React.Component {
 
       
 
-      await Axios.post('http://' + ipMaquina + ':3001/api/procedures/postAnuncio', formData)
+      await Axios.post('https://' + ipMaquina + ':3001/api/procedures/postAnuncio', formData)
         .catch(err => {
         cogoToast.error(<h5>{trans('tablaCuidadores.errorGeneral')}</h5>)
         });

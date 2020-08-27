@@ -73,7 +73,7 @@ class MisAnuncios extends React.Component {
   getMisAnuncios = () => {
     const { idPerfil, email, contrasena } = this.props;
     axios
-      .post(`http://${ipMaquina}:3001/api/procedures/getMisAnuncios`, {
+      .post(`https://${ipMaquina}:3001/api/procedures/getMisAnuncios`, {
         idCliente: idPerfil,
         email,
         contrasena,
@@ -124,7 +124,7 @@ class MisAnuncios extends React.Component {
     const { email, contrasena } = this.props;
     axios
       .post(
-        `http://${ipMaquina}:3001/api/procedures/deleteAnuncio/${selectedAnuncio._id}`,
+        `https://${ipMaquina}:3001/api/procedures/deleteAnuncio/${selectedAnuncio._id}`,
         {
           email,
           contrasena,
@@ -454,7 +454,7 @@ class MisAnuncios extends React.Component {
 
     axios
       .patch(
-        `http://${ipMaquina}:3001/api/procedures/patchAnuncio/${selectedAnuncio._id}`,
+        `https://${ipMaquina}:3001/api/procedures/patchAnuncio/${selectedAnuncio._id}`,
         formData
       )
       .then((res) => {
@@ -527,7 +527,7 @@ class MisAnuncios extends React.Component {
         };
         axios
           .post(
-            `http://${ipMaquina}:3001/api/procedures/getAnuncioVisitas/${anuncio._id}`,
+            `https://${ipMaquina}:3001/api/procedures/getAnuncioVisitas/${anuncio._id}`,
             formData
           )
           .then((res) => {
@@ -618,7 +618,7 @@ class MisAnuncios extends React.Component {
                 size={50}
                 name={anuncio.titulo}
                 src={
-                  "http://" + ipMaquina + ":3001/api/image/" + anuncio.direcFoto
+                  "https://" + ipMaquina + ":3001/api/image/" + anuncio.direcFoto
                 }
               />
               <span

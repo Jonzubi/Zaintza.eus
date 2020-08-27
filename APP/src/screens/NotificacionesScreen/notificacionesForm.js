@@ -53,7 +53,7 @@ class NotificacionesForm extends React.Component {
 
     axios
       .post(
-        "http://" +
+        "https://" +
           ipMaquina +
           ":3001/api/procedures/getNotificacionesConUsuarios",
         {
@@ -81,7 +81,7 @@ class NotificacionesForm extends React.Component {
 
     if (!notificacion.visto) {
       await axios.patch(
-        "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
+        "https://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
         {
           visto: true,
           email,
@@ -128,7 +128,7 @@ class NotificacionesForm extends React.Component {
     //Squi estoy pillando el estado actual del acuerdo para comprobar que el acuerdo no se ha cancelado ya por el usuario.
     //Por ejemplo sui ha hecho una propuesta erronea
     let estadoAcuerdo = await axios.post(
-      "http://" +
+      "https://" +
         ipMaquina +
         ":3001/api/procedures/getAcuerdoStatus/" +
         notificacion.acuerdo._id,
@@ -144,7 +144,7 @@ class NotificacionesForm extends React.Component {
         <h5>{trans("notificacionesForm.acuerdoYaRechazado")}</h5>
       );
       await axios.patch(
-        "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
+        "https://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
         {
           show: false,
           email,
@@ -162,7 +162,7 @@ class NotificacionesForm extends React.Component {
     }
 
     await axios.patch(
-      "http://" +
+      "https://" +
         ipMaquina +
         ":3001/api/procedures/gestionarAcuerdo/" +
         acuerdo._id,
@@ -176,7 +176,7 @@ class NotificacionesForm extends React.Component {
     //Aqui se manda la notificacion con el usuario recogido anteriormente,
     //el acuerdo ha sido gestionado con un valor de aceptado o rechazado en el valorGestion
     await axios.post(
-      "http://" + ipMaquina + ":3001/api/procedures/newNotification",
+      "https://" + ipMaquina + ":3001/api/procedures/newNotification",
       {
         idUsuario: notificacion.idRemitente._id,
         idRemitente: notificacion.idUsuario,
@@ -195,7 +195,7 @@ class NotificacionesForm extends React.Component {
       idUsuario: notificacion.idRemitente._id,
     });
     await axios.patch(
-      "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
+      "https://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
       {
         show: false,
         email,
@@ -229,7 +229,7 @@ class NotificacionesForm extends React.Component {
     } = this.props;
 
     await axios.patch(
-      "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
+      "https://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
       {
         show: false,
         email,
@@ -255,7 +255,7 @@ class NotificacionesForm extends React.Component {
     } = this.props;
 
     await axios.patch(
-      "http://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
+      "https://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
       {
         show: false,
         email,
@@ -266,7 +266,7 @@ class NotificacionesForm extends React.Component {
     let estadoAcuerdo;
     if (notificacion.tipoNotificacion === "Acuerdo") {
       estadoAcuerdo = await axios.post(
-        "http://" +
+        "https://" +
           ipMaquina +
           ":3001/api/procedures/getAcuerdoStatus/" +
           notificacion.acuerdo._id,
@@ -394,7 +394,7 @@ class NotificacionesForm extends React.Component {
                               className=""
                               name={notificacion.idRemitente.idPerfil.nombre}
                               src={
-                                "http://" +
+                                "https://" +
                                 ipMaquina +
                                 ":3001/api/image/" +
                                 notificacion.idRemitente.idPerfil.direcFoto
@@ -626,7 +626,7 @@ class NotificacionesForm extends React.Component {
                         height: "auto",
                       }}
                       src={
-                        "http://" +
+                        "https://" +
                         ipMaquina +
                         ":3001/api/image/" +
                         selectedNotificacion.idRemitente.idPerfil.direcFoto

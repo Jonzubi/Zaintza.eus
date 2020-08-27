@@ -20,7 +20,7 @@ class CuidadorFormStats extends React.Component {
   componentDidMount() {
     const { email, contrasena, idPerfil } = this.props;
     Axios.post(
-      `http://${ipMaquina}:3001/api/procedures/getCuidadorVisitas/${idPerfil}`,
+      `https://${ipMaquina}:3001/api/procedures/getCuidadorVisitas/${idPerfil}`,
       {
         email,
         contrasena,

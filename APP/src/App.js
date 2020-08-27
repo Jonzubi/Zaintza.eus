@@ -20,7 +20,7 @@ import * as io from "socket.io-client";
 import ipMaquina from './util/ipMaquinaAPI';
 import { SetCoords } from './redux/actions/coords';
 
-const socket = io(`http://${ipMaquina}:3002`);
+const socket = io(`https://${ipMaquina}:3002`);
 
 
 class App extends React.Component {

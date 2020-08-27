@@ -111,7 +111,7 @@ class TablaAnuncios extends React.Component {
       () => {
         axios
           .get(
-            "http://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil",
+            "https://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil",
             {
               params: {
                 coords,
@@ -205,7 +205,7 @@ class TablaAnuncios extends React.Component {
     }
 
     let comprobAcuerdoUnico = await axios.post(
-      "http://" + ipMaquina + ":3001/api/procedures/checkIfAcuerdoExists",
+      "https://" + ipMaquina + ":3001/api/procedures/checkIfAcuerdoExists",
       {
         idCliente: anuncio.idCliente._id,
         idCuidador: idPerfil,
@@ -223,7 +223,7 @@ class TablaAnuncios extends React.Component {
     }
 
     const idUsuarioCliente = await axios.get(
-      `http://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${anuncio.idCliente._id}`
+      `https://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${anuncio.idCliente._id}`
     );
 
     let formData = {
@@ -245,7 +245,7 @@ class TablaAnuncios extends React.Component {
       () => {
         axios
           .post(
-            "http://" + ipMaquina + ":3001/api/procedures/postPropuestaAcuerdo",
+            "https://" + ipMaquina + ":3001/api/procedures/postPropuestaAcuerdo",
             formData
           )
           .then(() => {
@@ -324,7 +324,7 @@ class TablaAnuncios extends React.Component {
       () => {
         axios
           .get(
-            "http://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil",
+            "https://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil",
             {
               params: {
                 options: {
@@ -369,7 +369,7 @@ class TablaAnuncios extends React.Component {
         contrasena,
       };
       axios.post(
-        `http://${ipMaquina}:3001/api/procedures/registerAnuncioVisita/${anuncio._id}`,
+        `https://${ipMaquina}:3001/api/procedures/registerAnuncioVisita/${anuncio._id}`,
         formData
       );
     }
@@ -459,7 +459,7 @@ class TablaAnuncios extends React.Component {
                         }
                           <div
                             style={{
-                              //backgroundImage:"url(http://" + ipMaquina + ":3001/api/image/" + cuidador.direcFotoContacto + ")",
+                              //backgroundImage:"url(https://" + ipMaquina + ":3001/api/image/" + cuidador.direcFotoContacto + ")",
                               height: "300px",
                               width: "calc(100% - 20px)",
                               backgroundSize: "cover",
@@ -477,7 +477,7 @@ class TablaAnuncios extends React.Component {
                             <img
                               style={{ maxHeight: "250px", height: "auto" }}
                               src={
-                                "http://" +
+                                "https://" +
                                 ipMaquina +
                                 ":3001/api/image/" +
                                 anuncio.anuncio.direcFoto
@@ -561,7 +561,7 @@ class TablaAnuncios extends React.Component {
                             height: "auto",
                           }}
                           src={
-                            "http://" +
+                            "https://" +
                             ipMaquina +
                             ":3001/api/image/" +
                             selectedAnuncio.direcFoto

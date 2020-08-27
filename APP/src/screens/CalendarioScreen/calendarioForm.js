@@ -24,7 +24,7 @@ class CalendarioForm extends React.Component {
 
     axios
       .post(
-        "http://" + ipMaquina + ":3001/api/procedures/getAcuerdosConUsuarios",
+        "https://" + ipMaquina + ":3001/api/procedures/getAcuerdosConUsuarios",
         {
           idPerfil: idPerfil,
           tipoUsuario: tipoUsuario,

@@ -119,7 +119,7 @@ class RegisterFormCliente extends React.Component {
     }
 
     const checkIfEmailExists = await axios.get(
-      `http://${ipMaquina}:3001/api/procedures/checkIfEmailExists/${this.state.txtEmail}`
+      `https://${ipMaquina}:3001/api/procedures/checkIfEmailExists/${this.state.txtEmail}`
     );
 
     if (checkIfEmailExists.data !== "Vacio") {
@@ -145,7 +145,7 @@ class RegisterFormCliente extends React.Component {
 
     const insertedCliente = await axios
       .post(
-        "http://" + ipMaquina + ":3001/api/procedures/postNewCliente",
+        "https://" + ipMaquina + ":3001/api/procedures/postNewCliente",
         formData
       )
       .catch(err => {
@@ -162,7 +162,7 @@ class RegisterFormCliente extends React.Component {
         return;
       }
     
-      axios.post(`http://${ipMaquina}:3003/smtp/registerEmail`, {
+      axios.post(`https://${ipMaquina}:3003/smtp/registerEmail`, {
         toEmail: txtEmail,
         nombre: txtNombre,
         apellido: txtApellido1,

@@ -57,7 +57,7 @@ class LogInForm extends React.Component {
       },
       () => {
         axios
-          .get("http://" + ipMaquina + ":3001/api/procedures/getUsuarioConPerfil", {
+          .get("https://" + ipMaquina + ":3001/api/procedures/getUsuarioConPerfil", {
             params: objFiltros
           })
           .then(resultado => {
