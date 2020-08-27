@@ -1,1 +1,1 @@
-module.exports = "www.dev.zaintza.eus";
+module.exports = "www.api.zaintza.eus";
