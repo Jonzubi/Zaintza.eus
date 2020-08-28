@@ -18,5 +18,4 @@ routes(app, modelos);
 https.createServer({
   key: fs.readFileSync('./SSL/key.pem'),
   cert: fs.readFileSync('./SSL/cert.pem'),
-  passphrase: 'jonzaintza'
 }, app).listen(port, () => console.log(`[API] Escuchando en el puerto : ${port}`));
