@@ -7,7 +7,7 @@ import { trans } from "../../util/funciones";
 import ipMaquina from "../../util/ipMaquinaAPI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faSave, faUser, faMobileAlt, faPhoneAlt } from "@fortawesome/free-solid-svg-icons";
-import Axios from "axios";
+import Axios from "../../util/axiosInstance";
 import cogoToast from "cogo-toast";
 import ClipLoader from "react-spinners/ClipLoader";
 import i18next from "i18next";
@@ -113,7 +113,7 @@ class PerfilCliente extends React.Component {
     };
 
     Axios
-        .patch("http://" + ipMaquina + ":3001/api/procedures/patchCliente/" + this.props._id, formData)
+        .patch("https://" + ipMaquina + ":3001/api/procedures/patchCliente/" + this.props._id, formData)
         .then(
           resultado => {
             const { direcFoto } = resultado.data;
@@ -175,7 +175,7 @@ class PerfilCliente extends React.Component {
               height={200}
               width={200}
               src={
-                "http://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto
+                "https://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto
               }
             />
           ) : (

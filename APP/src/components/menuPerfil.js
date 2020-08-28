@@ -23,7 +23,7 @@ import ipMaquina from "../util/ipMaquinaAPI";
 import "./styles/menuPerfil.css";
 import cogoToast from "cogo-toast";
 import { trans } from "../util/funciones";
-import Axios from "axios";
+import Axios from "../util/axiosInstance";
 import ChangeLang from "../components/changeLang";
 import SocketContext from "../socketio/socket-context";
 import { setCountNotify } from "../redux/actions/notifications";
@@ -74,7 +74,7 @@ class MenuPerfil extends React.Component {
       return;
 
     Axios.post(
-      `http://${ipMaquina}:3001/api/procedures/getNotificationsWithIdUsuario/${idUsuario}`,
+      `https://${ipMaquina}:3001/api/procedures/getNotificationsWithIdUsuario/${idUsuario}`,
       {
         email,
         contrasena,
@@ -108,7 +108,7 @@ class MenuPerfil extends React.Component {
     ) : (
       <Avatar
         name={this.props.nombre + " " + this.props.apellido1 || ""}
-        src={"http://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto + "?isAvatar=true"}
+        src={"https://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto + "?isAvatar=true"}
         className="mx-auto"
         round={true}
         size="200"

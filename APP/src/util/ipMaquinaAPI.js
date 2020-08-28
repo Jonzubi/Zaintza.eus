@@ -1,1 +1,1 @@
-module.exports="www.api.zaintza.eus";
+module.exports="www.zaintza.eus";

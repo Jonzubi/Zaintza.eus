@@ -16,7 +16,7 @@ import {
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { connect } from "react-redux";
-import axios from "axios";
+import axios from "../../util/axiosInstance";
 import ipMaquina from "../../util/ipMaquinaAPI";
 import { trans, arrayOfFalses, getTodayDate } from "../../util/funciones";
 import Avatar from "react-avatar";
@@ -76,7 +76,7 @@ class AcuerdosForm extends React.Component {
 
     axios
       .post(
-        "http://" + ipMaquina + ":3001/api/procedures/getAcuerdosConUsuarios",
+        "https://" + ipMaquina + ":3001/api/procedures/getAcuerdosConUsuarios",
         {
           tipoUsuario: tipoUsuario,
           idPerfil: idPerfil,
@@ -141,7 +141,7 @@ class AcuerdosForm extends React.Component {
     const objToday = new Date();
 
     await axios.patch(
-      "http://" +
+      "https://" +
         ipMaquina +
         ":3001/api/procedures/terminarAcuerdo/" +
         acuerdo._id,
@@ -156,7 +156,7 @@ class AcuerdosForm extends React.Component {
       this.props.tipoUsuario == "Cliente" ? "idCuidador" : "idCliente";
     const idElOtro = acuerdo[buscarUsuOrCuid]._id;
     let elOtroUsu = await axios.get(
-      `http://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${idElOtro}`
+      `https://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${idElOtro}`
     );
     const notificacionData = {
       idUsuario: elOtroUsu.data,
@@ -170,7 +170,7 @@ class AcuerdosForm extends React.Component {
       contrasena,
     };
     await axios.post(
-      "http://" + ipMaquina + ":3001/api/procedures/newNotification",
+      "https://" + ipMaquina + ":3001/api/procedures/newNotification",
       notificacionData
     );
 
@@ -240,7 +240,7 @@ class AcuerdosForm extends React.Component {
         valoracionIsUploading: true,
       },
       async () => {
-        const idUsuarioAValorar = await axios.get(`http://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${selectedAcuerdo.idCuidador._id}`)
+        const idUsuarioAValorar = await axios.get(`https://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${selectedAcuerdo.idCuidador._id}`)
         const formData = {
           idUsuario: idUsuarioAValorar.data,
           idValorador: idUsuario,
@@ -251,7 +251,7 @@ class AcuerdosForm extends React.Component {
           contrasena,
           fechaValorado: moment()
         };
-        axios.post(`http://${ipMaquina}:3001/api/procedures/postNewValoracion`, formData)
+        axios.post(`https://${ipMaquina}:3001/api/procedures/postNewValoracion`, formData)
         .then(() => {
           cogoToast.success(
           <h5>{trans('acuerdosForm.valoracionEnviada')}</h5>
@@ -319,7 +319,7 @@ class AcuerdosForm extends React.Component {
                             className=""
                             name={acuerdo[laOtraPersona].nombre}
                             src={
-                              "http://" +
+                              "https://" +
                               ipMaquina +
                               ":3001/api/image/" +
                               acuerdo[laOtraPersona].direcFoto
@@ -511,7 +511,7 @@ class AcuerdosForm extends React.Component {
                                 height: "auto",
                               }}
                               src={
-                                "http://" +
+                                "https://" +
                                 ipMaquina +
                                 ":3001/api/image/" +
                                 selectedAcuerdo[laOtraPersona].direcFoto

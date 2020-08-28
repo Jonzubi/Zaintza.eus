@@ -1,5 +1,5 @@
 import React from "react";
-import Axios from "axios";
+import Axios from "../../util/axiosInstance";
 import { connect } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
 import ipMaquina from "../../util/ipMaquinaAPI";
@@ -20,7 +20,7 @@ class CuidadorFormStats extends React.Component {
   componentDidMount() {
     const { email, contrasena, idPerfil } = this.props;
     Axios.post(
-      `http://${ipMaquina}:3001/api/procedures/getCuidadorVisitas/${idPerfil}`,
+      `https://${ipMaquina}:3001/api/procedures/getCuidadorVisitas/${idPerfil}`,
       {
         email,
         contrasena,

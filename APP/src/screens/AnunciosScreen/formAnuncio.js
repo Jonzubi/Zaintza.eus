@@ -23,7 +23,7 @@ import ipMaquina from "../../util/ipMaquinaAPI";
 import imgNecesidadEspecial from "../../util/images/genteConNecesidadesEspeciales.png";
 import imgTerceraEdad from "../../util/images/terceraEdad.png";
 import imgNino from "../../util/images/nino.png";
-import Axios from "axios";
+import Axios from "../../util/axiosInstance";
 import { changeFormContent } from "../../redux/actions/app";
 import ClipLoader from "react-spinners/ClipLoader";
 
@@ -402,7 +402,7 @@ class FormAnuncio extends React.Component {
 
       
 
-      await Axios.post('http://' + ipMaquina + ':3001/api/procedures/postAnuncio', formData)
+      await Axios.post('https://' + ipMaquina + ':3001/api/procedures/postAnuncio', formData)
         .catch(err => {
         cogoToast.error(<h5>{trans('tablaCuidadores.errorGeneral')}</h5>)
         });

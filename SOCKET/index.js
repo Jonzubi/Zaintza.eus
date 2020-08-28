@@ -1,6 +1,10 @@
 const app = require('express')();
-const http = require('http').createServer(app);
-const io = require('socket.io')(http);
+const fs = require('fs');
+const https = require('https').createServer({
+    key: fs.readFileSync('./SSL/key.pem'),
+    cert: fs.readFileSync('./SSL/cert.pem')
+}, app);
+const io = require('socket.io')(https);
 const port = 3002;
 const conexion = require('../API/util/bdConnection');
 const modelos = require('../API/util/requireAllModels')(conexion);
@@ -42,7 +46,7 @@ io.on('connection', (socket) => {
     });
 })
 
-http.listen(port, () => {
+https.listen(port, () => {
     console.log(`[SOCKET] Escuchando el puerto: ${port}`);
 });
 

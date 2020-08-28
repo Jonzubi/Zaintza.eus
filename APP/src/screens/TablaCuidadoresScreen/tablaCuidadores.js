@@ -22,7 +22,7 @@ import {
   faStar,
   faMapMarkerAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import Axios from "axios";
+import Axios from "../../util/axiosInstance";
 import Modal from "react-bootstrap/Modal";
 import Collapse from "react-bootstrap/Collapse";
 import PuebloAutosuggest from "../../components/pueblosAutosuggest";
@@ -92,7 +92,7 @@ class Tabla extends React.Component {
       },
       () => {
         Axios.get(
-          "http://" +
+          "https://" +
             ipMaquina +
             ":3001/api/procedures/getCuidadoresConValoraciones",
           {
@@ -392,7 +392,7 @@ class Tabla extends React.Component {
     if (idCliente !== idPerfilCuidador) {
       //Significa que no nos estamos viendo a nosotros mismo como cuidador, asi que hay que registrar la visita
       Axios.post(
-        `http://${ipMaquina}:3001/api/procedures/registerCuidadorVisita/${idPerfilCuidador}`,
+        `https://${ipMaquina}:3001/api/procedures/registerCuidadorVisita/${idPerfilCuidador}`,
         {
           email,
           contrasena,
@@ -401,7 +401,7 @@ class Tabla extends React.Component {
     }
 
     Axios.get(
-      `http://${ipMaquina}:3001/api/procedures/getEmailWithIdPerfil/${idPerfilCuidador}`
+      `https://${ipMaquina}:3001/api/procedures/getEmailWithIdPerfil/${idPerfilCuidador}`
     )
       .then((email) => {
         const response = email.data;
@@ -441,7 +441,7 @@ class Tabla extends React.Component {
     }
 
     let comprobAcuerdoUnico = await Axios.post(
-      "http://" + ipMaquina + ":3001/api/procedures/checkIfAcuerdoExists",
+      "https://" + ipMaquina + ":3001/api/procedures/checkIfAcuerdoExists",
       {
         idCliente,
         idCuidador: selectedCuidador._id,
@@ -549,12 +549,12 @@ class Tabla extends React.Component {
     };
 
     Axios.post(
-      "http://" + ipMaquina + ":3001/api/procedures/newAcuerdo",
+      "https://" + ipMaquina + ":3001/api/procedures/newAcuerdo",
       formData
     )
       .then((resultado) => {
         Axios.get(
-          "http://" +
+          "https://" +
             ipMaquina +
             ":3001/api/procedures/getIdUsuarioConIdPerfil/" +
             this.state.selectedCuidador._id
@@ -568,7 +568,7 @@ class Tabla extends React.Component {
             contrasena,
           };
           Axios.post(
-            "http://" + ipMaquina + ":3001/api/procedures/newNotification",
+            "https://" + ipMaquina + ":3001/api/procedures/newNotification",
             notificacionData
           ).then((notif) => {
             this.setState({
@@ -626,7 +626,7 @@ class Tabla extends React.Component {
       },
       () => {
         Axios.get(
-          "http://" +
+          "https://" +
             ipMaquina +
             ":3001/api/procedures/getCuidadoresConValoraciones",
           {
@@ -714,10 +714,10 @@ class Tabla extends React.Component {
 
   loadValoracionesData = async (cuidador) => {
     const idUsuarioDelCuidador = await Axios.get(
-      `http://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${cuidador._id}`
+      `https://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${cuidador._id}`
     );
     const valoraciones = await Axios.get(
-      `http://${ipMaquina}:3001/api/procedures/getValoracionesDelCuidador/${idUsuarioDelCuidador.data}`
+      `https://${ipMaquina}:3001/api/procedures/getValoracionesDelCuidador/${idUsuarioDelCuidador.data}`
     );
 
     this.setState({
@@ -822,7 +822,7 @@ class Tabla extends React.Component {
                         }
                         <div
                           style={{
-                            //backgroundImage:"url(http://" + ipMaquina + ":3001/api/image/" + cuidador.direcFotoContacto + ")",
+                            //backgroundImage:"url(https://" + ipMaquina + ":3001/api/image/" + cuidador.direcFotoContacto + ")",
                             height: "300px",
                             width: "calc(100% - 20px)",
                             backgroundSize: "cover",
@@ -840,7 +840,7 @@ class Tabla extends React.Component {
                           <img
                             style={{ maxHeight: "250px", height: "auto" }}
                             src={
-                              "http://" +
+                              "https://" +
                               ipMaquina +
                               ":3001/api/image/" +
                               cuidador.cuidador.direcFotoContacto
@@ -1019,7 +1019,7 @@ class Tabla extends React.Component {
                           height: "auto",
                         }}
                         src={
-                          "http://" +
+                          "https://" +
                           ipMaquina +
                           ":3001/api/image/" +
                           vSelectedCuidador.direcFotoContacto
@@ -1549,7 +1549,7 @@ class Tabla extends React.Component {
                               valoracion.idValorador.idPerfil.apellido1
                             }
                             src={
-                              "http://" +
+                              "https://" +
                               ipMaquina +
                               ":3001/api/image/" +
                               valoracion.idValorador.idPerfil.direcFoto
