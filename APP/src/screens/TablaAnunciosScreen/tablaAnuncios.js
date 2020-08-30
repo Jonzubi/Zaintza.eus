@@ -490,7 +490,7 @@ class TablaAnuncios extends React.Component {
                             </h5>
                             <p
                               className="card-text"
-                              style={{ maxHeight: "75px", overflow: "hidden" }}
+                              style={{ maxHeight: "75px", overflow: "hidden", whiteSpace: 'pre-line' }}
                             >
                               {anuncio.anuncio.descripcion}
                             </p>
