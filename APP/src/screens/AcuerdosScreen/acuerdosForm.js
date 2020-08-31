@@ -490,7 +490,7 @@ class AcuerdosForm extends React.Component {
                         <ModalHeader closeButton>
                           <h5>{trans("acuerdosForm.acuerdo")}</h5>
                         </ModalHeader>
-                        <ModalBody className="d-flex flex-column justify-content-between align-items-center">
+                        <ModalBody className="d-flex flex-column align-items-center">
                           <div
                             style={{
                               width: "calc(100% - 20px)",
@@ -541,7 +541,7 @@ class AcuerdosForm extends React.Component {
                             style={{
                               width: 300,
                             }}
-                            className="mt-3 d-flex flex-column"
+                            className="mt-5 d-flex flex-column"
                           >
                             <div className="d-flex flex-row align-items-center justify-content-center">
                               <FontAwesomeIcon
@@ -575,6 +575,7 @@ class AcuerdosForm extends React.Component {
                             style={{
                               width: 300,
                             }}
+                            className="mt-3"
                           >
                             <div className="text-center">
                               <FontAwesomeIcon icon={faHome} className="mr-1" />
@@ -601,6 +602,7 @@ class AcuerdosForm extends React.Component {
                             style={{
                               width: 300,
                             }}
+                            className="mt-3"
                           >
                             <div className="text-center">
                               <FontAwesomeIcon
