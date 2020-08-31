@@ -1096,14 +1096,14 @@ class FormCuidador extends React.Component {
                           className="d-inline"
                           id={"dia" + indice}
                         >
-                          <option>{i18next.t('registerFormCuidadores.elegirDia')}</option>
-                          <option value="1">{i18next.t('registerFormCuidadores.lunes')}</option>
-                          <option value="2">{i18next.t('registerFormCuidadores.martes')}</option>
-                          <option value="3">{i18next.t('registerFormCuidadores.miercoles')}</option>
-                          <option value="4">{i18next.t('registerFormCuidadores.jueves')}</option>
-                          <option value="5">{i18next.t('registerFormCuidadores.viernes')}</option>
-                          <option value="6">{i18next.t('registerFormCuidadores.sabado')}</option>
-                          <option value="7">{i18next.t('registerFormCuidadores.domingo')}</option>
+                          <option>{i18next.t('dropDownDias.elegeDia')}</option>
+                          <option value="1">{i18next.t('dropDownDias.lunes')}</option>
+                          <option value="2">{i18next.t('dropDownDias.martes')}</option>
+                          <option value="3">{i18next.t('dropDownDias.miercoles')}</option>
+                          <option value="4">{i18next.t('dropDownDias.jueves')}</option>
+                          <option value="5">{i18next.t('dropDownDias.viernes')}</option>
+                          <option value="6">{i18next.t('dropDownDias.sabado')}</option>
+                          <option value="7">{i18next.t('dropDownDias.domingo')}</option>
                         </select>
                         <div className="d-flex flex-row align-items-center">
                           <TimeInput
