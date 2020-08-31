@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: 100%">
   <head>
     <title>Zaintza - Zain gaitezen / Cuidémonos</title>
     <!-- Required meta tags -->
@@ -8,8 +8,13 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
     <style>
       body {
+        height: 100%;
         margin: 0;
         padding: 0;
         font-family: “Helvetica Neue”, Helvetica, Arial, sans-serif;
@@ -22,8 +27,8 @@
       }
       #content {
         text-align: center;
-        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
-        border-radius: .25rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        border-radius: 0.25rem;
         margin-top: 5%;
       }
       #boton {
@@ -47,22 +52,46 @@
         line-height: 1.5;
         border-radius: 0.25rem;
         transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-        border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+          border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
         text-decoration: none;
+      }
+
+      .maintainContent {
+        padding: 5px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+      
+      p {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
       }
     </style>
   </head>
   <body>
     <div id="banner">
-      <div style="padding: 5px;">
-        <h1 style="margin-top: 0;margin-bottom: 0;">Zaintza</h1>
-        <h5 style="margin-top: 0;margin-bottom: 0;">BETA</h5>
-      </div>      
+      <div style="padding: 5px">
+        <h1 style="margin-top: 0; margin-bottom: 0">Zaintza</h1>
+        <h5 style="margin-top: 0; margin-bottom: 0">BETA</h5>
+      </div>
     </div>
-    <div style="padding: 5px;">
-      <p><b>Zaintza.eus</b> mantentze-lanetan dago. Saiatu berriro geroago, barkatu eragozpenak</p>
-      <p><b>Zaintza.eus</b> está en mantenimiento. Pruebe otra vez más tarde, disculpen las molestias</p>
+    <div class="maintainContent">
+      <p><span class="iconify" ></span>
+        <i class="material-icons" style="margin-right: 5px;">build</i>
+        <b>Zaintza.eus</b> mantentze-lanetan dago. Saiatu berriro geroago,
+        barkatu eragozpenak
+        <i class="material-icons" style="margin-left: 5px;">build</i>
+      </p>
+      <p>
+        <i class="material-icons" style="margin-right: 5px;">build</i>
+        <b>Zaintza.eus</b> está en mantenimiento. Pruebe otra vez más tarde,
+        disculpen las molestias
+        <i class="material-icons" style="margin-left: 5px;">build</i>
+      </p>
     </div>
-    
   </body>
 </html>
