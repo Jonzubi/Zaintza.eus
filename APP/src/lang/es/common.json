@@ -301,6 +301,10 @@
     "customImageUploader": {
       "maxMegaBytes": "Máximo: 10MB",
       "suggestedDimension": "Dimensión recomendada (288x300)"
+    },
+    "sexo": {
+      "hombre": "Hombre",
+      "mujer": "Mujer"
     }
   }
   

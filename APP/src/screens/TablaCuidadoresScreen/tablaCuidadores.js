@@ -1068,9 +1068,9 @@ class Tabla extends React.Component {
                       <FontAwesomeIcon className="mr-5" icon={faVenusMars} />
                       <div>
                         <span>
-                          {vSelectedCuidador.sexo == "M"
-                            ? "Gizonezkoa"
-                            : "Emakumezkoa"}
+                          {vSelectedCuidador.sexo === "M"
+                            ? trans('sexo.hombre')
+                            : trans('sexo.mujer')
                         </span>
                       </div>
                     </div>

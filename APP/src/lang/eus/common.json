@@ -341,5 +341,9 @@
     "suggestedDimension": "Gomendaturiko dimentsioa (288x300)",
     "chooseContactImage": "Aukeratu irudi bat",
     "chooseAnotherImage": "Aukeratu beste irudi bat"
+  },
+  "sexo": {
+    "hombre": "Gizonezkoa",
+    "mujer": "Emakumezkoa"
   }
 }
