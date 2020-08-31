@@ -1070,7 +1070,7 @@ class Tabla extends React.Component {
                         <span>
                           {vSelectedCuidador.sexo === "M"
                             ? trans('sexo.hombre')
-                            : trans('sexo.mujer')
+                            : trans('sexo.mujer')}
                         </span>
                       </div>
                     </div>
