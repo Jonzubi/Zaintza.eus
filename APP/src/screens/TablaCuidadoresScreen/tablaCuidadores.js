@@ -1127,7 +1127,12 @@ class Tabla extends React.Component {
                         </span>
                       </div>
 
-                      <span className="">{vSelectedCuidador.descripcion}</span>
+                      <span 
+                        className="" 
+                        style={{
+                          whiteSpace: 'pre-wrap'
+                        }}
+                      >{vSelectedCuidador.descripcion}</span>
                     </div>
                     <div
                       style={{
