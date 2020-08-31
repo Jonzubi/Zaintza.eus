@@ -620,6 +620,7 @@ class NotificacionesForm extends React.Component {
                     alt="Imagen no disponible"
                   >
                     <img
+                      alt="Avatar del contacto"
                       style={{
                         minHeight: "150px",
                         maxHeight: "150px",

@@ -838,6 +838,7 @@ class Tabla extends React.Component {
                           alt="Imagen no disponible"
                         >
                           <img
+                            alt="Foto contacto cuidador"
                             style={{ maxHeight: "250px", height: "auto" }}
                             src={
                               "https://" +
@@ -1013,6 +1014,7 @@ class Tabla extends React.Component {
                       alt="Imagen no disponible"
                     >
                       <img
+                        alt="Foto contacto del cuidador"
                         style={{
                           minHeight: "300px",
                           maxHeight: "300px",

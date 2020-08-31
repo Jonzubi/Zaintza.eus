@@ -172,6 +172,7 @@ class PerfilCliente extends React.Component {
         <div className="d-flex flex-row align-items-center justify-content-center mb-2">
           {!this.state.isEditing ? (
             <img
+              alt="Avatar perfil"
               height={200}
               width={200}
               src={

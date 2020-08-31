@@ -475,6 +475,7 @@ class TablaAnuncios extends React.Component {
                             alt="Imagen no disponible"
                           >
                             <img
+                              alt="Foto de contacto del anuncio"
                               style={{ maxHeight: "250px", height: "auto" }}
                               src={
                                 "https://" +
@@ -555,6 +556,7 @@ class TablaAnuncios extends React.Component {
                         alt="Imagen no disponible"
                       >
                         <img
+                          alt="Foto de contacto del anuncio"
                           style={{
                             minHeight: "300px",
                             maxHeight: "300px",

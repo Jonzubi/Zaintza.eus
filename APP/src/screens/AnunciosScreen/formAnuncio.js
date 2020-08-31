@@ -619,7 +619,7 @@ class FormAnuncio extends React.Component {
                       : ""
                   }}
                 >
-                  <img src={imgNino} className="w-100 h-100" />
+                  <img src={imgNino} className="w-100 h-100" alt="Haurra / Niño"/>
                   <small className="font-weight-bold">
                     {trans("registerFormCuidadores.ninos")}
                   </small>
@@ -643,7 +643,7 @@ class FormAnuncio extends React.Component {
                       : ""
                   }}
                 >
-                  <img src={imgTerceraEdad} className="w-100 h-100" />
+                  <img src={imgTerceraEdad} className="w-100 h-100" alt="Adinekoa / Tercera edad"/>
                   <small className="font-weight-bold">
                     {trans("registerFormCuidadores.terceraEdad")}
                   </small>
@@ -667,7 +667,7 @@ class FormAnuncio extends React.Component {
                       : ""
                   }}
                 >
-                  <img src={imgNecesidadEspecial} className="w-100 h-100" />
+                  <img src={imgNecesidadEspecial} className="w-100 h-100" alt="Behar bereziak / Necesidad especial"/>
                   <small className="font-weight-bold">
                     {trans("registerFormCuidadores.necesidadEspecial")}
                   </small>

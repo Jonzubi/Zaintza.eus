@@ -732,6 +732,7 @@ class FormCuidador extends React.Component {
                 <div className="d-flex justify-content-center">
                   {isProfileView && !isEditing && direcFoto.length > 0 ? (
                     <img
+                      alt="Avatar del cuidador"
                       height={200}
                       width={200}
                       src={
@@ -791,6 +792,7 @@ class FormCuidador extends React.Component {
                     >
                       <img
                         style={{ maxHeight: "250px", height: "auto" }}
+                        alt="Foto de contacto del cuidador"
                         src={
                           "https://" +
                           ipMaquina +
@@ -1226,7 +1228,7 @@ class FormCuidador extends React.Component {
                       cursor: !isProfileView || isEditing ? "pointer" : "no-drop"
                     }}
                   >
-                    <img src={imgNino} className="w-100 h-100" />
+                    <img src={imgNino} className="w-100 h-100" alt="Haurra / Niño"/>
                     <small className="font-weight-bold">
                       {trans("registerFormCuidadores.ninos")}
                     </small>
@@ -1257,7 +1259,7 @@ class FormCuidador extends React.Component {
                       cursor: !isProfileView || isEditing ? "pointer" : "no-drop"
                     }}
                   >
-                    <img src={imgTerceraEdad} className="w-100 h-100" />
+                    <img src={imgTerceraEdad} className="w-100 h-100" alt="Adinekoa / Tercera edad"/>
                     <small className="font-weight-bold">
                       {trans("registerFormCuidadores.terceraEdad")}
                     </small>
@@ -1288,7 +1290,7 @@ class FormCuidador extends React.Component {
                       cursor: !isProfileView || isEditing ? "pointer" : "no-drop"
                     }}
                   >
-                    <img src={imgNecesidadEspecial} className="w-100 h-100" />
+                    <img src={imgNecesidadEspecial} className="w-100 h-100" alt="Behar berezia / Necesidad especial"/>
                     <small className="font-weight-bold">
                       {trans("registerFormCuidadores.necesidadEspecial")}
                     </small>
