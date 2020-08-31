@@ -1096,7 +1096,7 @@ class FormCuidador extends React.Component {
                           className="d-inline"
                           id={"dia" + indice}
                         >
-                          <option>{i18next.t('dropDownDias.elegeDia')}</option>
+                          <option>{i18next.t('dropDownDias.eligeDia')}</option>
                           <option value="1">{i18next.t('dropDownDias.lunes')}</option>
                           <option value="2">{i18next.t('dropDownDias.martes')}</option>
                           <option value="3">{i18next.t('dropDownDias.miercoles')}</option>
