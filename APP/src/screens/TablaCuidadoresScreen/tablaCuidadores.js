@@ -501,6 +501,28 @@ class Tabla extends React.Component {
             error = true;
             return;
           }
+
+          let { horaInicio, horaFin } = confDia;
+          horaInicio = horaInicio.split(':'); // Separamos horas y minutos para compararlos 
+          horaFin = horaFin.split(':'); // y decir que hora fin no sea antes que hora inicio
+
+          if (parseInt(horaInicio[0]) > parseInt(horaFin[0])){
+            // La hora de horainicio es mayor por lo que error
+            cogoToast.error(
+              <h5>{trans("registerFormCuidadores.errorDiaHoraIncorrecto")}</h5>
+            );
+            error = true;
+            return;
+          } else if(parseInt(horaInicio[0]) === parseInt(horaFin[0])){
+            if (parseInt(horaInicio[1]) >= parseInt(horaFin[1])) {
+              // Los minutos de horainicio son mayores, siendo la hora igual por lo que error
+              cogoToast.error(
+                <h5>{trans("registerFormCuidadores.errorDiaHoraIncorrecto")}</h5>
+              );
+              error = true;
+              return;
+            }
+          }
         });
         if (error) {
           this.setState({
@@ -1341,14 +1363,14 @@ class Tabla extends React.Component {
                                     className="d-inline"
                                     id={"dia" + indice}
                                   >
-                                    <option>Aukeratu eguna</option>
-                                    <option value="1">Astelehena</option>
-                                    <option value="2">Asteartea</option>
-                                    <option value="3">Asteazkena</option>
-                                    <option value="4">Osteguna</option>
-                                    <option value="5">Ostirala</option>
-                                    <option value="6">Larunbata</option>
-                                    <option value="7">Igandea</option>
+                                    <option>{i18next.t('dropDownDias.elegeDia')}</option>
+                                    <option value="1">{i18next.t('dropDownDias.lunes')}</option>
+                                    <option value="2">{i18next.t('dropDownDias.martes')}</option>
+                                    <option value="3">{i18next.t('dropDownDias.miercoles')}</option>
+                                    <option value="4">{i18next.t('dropDownDias.jueves')}</option>
+                                    <option value="5">{i18next.t('dropDownDias.viernes')}</option>
+                                    <option value="6">{i18next.t('dropDownDias.sabado')}</option>
+                                    <option value="7">{i18next.t('dropDownDias.domingo')}</option>
                                   </select>
                                   <div className="d-flex flex-row align-items-center">
                                     <TimeInput
