@@ -18,6 +18,7 @@ app.get("/sitemap.xml", (req, res) => {
   res.sendFile(path.join(__dirname, '/sitemap.xml'));
 });
 app.get("*", (req, res) => {
+  res.writeHead(404);
   res.sendFile(path.join(__dirname, '/notFound.html'));
 })
 
