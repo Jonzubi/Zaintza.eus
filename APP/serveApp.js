@@ -11,6 +11,9 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname + "/developing.html"))
   });
 });
+app.get("/robots.txt", (req, res) => {
+  res.sendFile(path.join(__dirname, 'robots.txt'));
+});
 
 https.createServer({
   key: fs.readFileSync('./src/SSL/key.pem'),
