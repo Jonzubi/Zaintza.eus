@@ -25,6 +25,7 @@ El proyecto de SEIM para Aplicación Web de 2º
 **Apuntes de la máquina OVHCloud**
 
 - He instalado con apt: git, npm, nodejs
+- Puerto SSH: **22022**
 
 **Gastos hasta la fecha**
 
