@@ -774,15 +774,7 @@ class Tabla extends React.Component {
       ) : (
         <em>Definitu gabe</em>
       );
-    const traducDias = [
-      "Astelehena",
-      "Asteartea",
-      "Asteazkena",
-      "Osteguna",
-      "Ostirala",
-      "Larunbata",
-      "Igandea",
-    ];
+    const traducDias = (dia) => dia === "7" ? trans(`dias.dia_0`) : trans(`dias.dia_${dia}`); 
 
     return (
       <BottomScrollListener onBottom={this.onScreenBottom}>
@@ -1202,7 +1194,7 @@ class Tabla extends React.Component {
                           vSelectedCuidador.diasDisponible.map((dia) => {
                             return (
                               <div className="d-flex flex-row justify-content-between">
-                                <span>{traducDias[dia.dia - 1]}</span>
+                                <span>{traducDias(dia.dia)}</span>
                                 <span>
                                   {dia.horaInicio + " - " + dia.horaFin}
                                 </span>
