@@ -33,4 +33,4 @@ El proyecto de SEIM para Aplicación Web de 2º
 - Marca registrada **ZAINTZA** (10 AÑOS): **614.97€**
 - Licencia **Google Play Store**: **20,86€**
 
-**TOTAL**: **646.15€**
+**TOTAL**: **667.01€**
