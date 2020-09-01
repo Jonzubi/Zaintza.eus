@@ -820,7 +820,12 @@ class Tabla extends React.Component {
                 this.state.buscado ? (
                   this.state.jsonCuidadores.map((cuidador, indice) => {
                     return (
-                      <div className="card w-20 m-4" style={{ width: "18rem" }}>
+                      <div
+                        className="card w-20 m-4"
+                        style={{ width: "18rem" }}
+                        itemScope
+                        itemType="http://schema.org/Person"
+                      >
                         {cuidador.distancia !== undefined ? 
                           <div
                             className="card-header d-flex flex-row align-items-center justify-content-center"
@@ -852,6 +857,7 @@ class Tabla extends React.Component {
                           alt="Imagen no disponible"
                         >
                           <img
+                            itemProp="image"
                             alt="Foto contacto cuidador"
                             style={{ maxHeight: "250px", height: "auto" }}
                             src={
@@ -889,7 +895,7 @@ class Tabla extends React.Component {
                           </span>
                         </div>
                         <div className="card-body">
-                          <h5 className="card-title mt-2">
+                          <h5 className="card-title mt-2" itemProp="name">
                             {cuidador.cuidador.nombre +
                               " " +
                               cuidador.cuidador.apellido1}
@@ -897,6 +903,7 @@ class Tabla extends React.Component {
                           <p
                             className="card-text"
                             style={{ maxHeight: "75px", overflow: "hidden", whiteSpace: 'pre-line' }}
+                            itemProp="description"
                           >
                             {cuidador.cuidador.descripcion}
                           </p>
@@ -1013,7 +1020,11 @@ class Tabla extends React.Component {
                   <ModalHeader closeLabel="Itxi" closeButton>
                     <h5>{trans("tablaCuidadores.cuidador")}</h5>
                   </ModalHeader>
-                  <ModalBody className="d-flex flex-column justify-content-between align-items-center">
+                  <ModalBody
+                    className="d-flex flex-column justify-content-between align-items-center"
+                    itemScope
+                    itemType="http://schema.org/Person"
+                  >
                     <div
                       style={{
                         width: "calc(100% - 20px)",
@@ -1028,6 +1039,7 @@ class Tabla extends React.Component {
                       alt="Imagen no disponible"
                     >
                       <img
+                        itemProp="image"
                         alt="Foto contacto del cuidador"
                         style={{
                           minHeight: "300px",
@@ -1050,8 +1062,8 @@ class Tabla extends React.Component {
                     >
                       <FontAwesomeIcon className="mr-5" icon={faUser} />
                       <div>
-                        <span>{vSelectedCuidador.nombre} </span>
-                        <span>
+                        <span itemProp="name">{vSelectedCuidador.nombre} </span>
+                        <span itemProp="familyName">
                           {vSelectedCuidador.apellido1 +
                             " " +
                             vSelectedCuidador.apellido2}
@@ -1065,7 +1077,7 @@ class Tabla extends React.Component {
                       className="d-flex flex-row align-items-center justify-content-between"
                     >
                       <FontAwesomeIcon className="mr-5" icon={faCalendarAlt} />
-                      <span>
+                      <span itemProp="birthDate">
                         {fechaNacCuidador.getFullYear() +
                           "/" +
                           (fechaNacCuidador.getMonth() + 1) +
@@ -1081,7 +1093,7 @@ class Tabla extends React.Component {
                     >
                       <FontAwesomeIcon className="mr-5" icon={faVenusMars} />
                       <div>
-                        <span>
+                        <span itemProp="gender">
                           {vSelectedCuidador.sexo === "M"
                             ? trans('sexo.hombre')
                             : trans('sexo.mujer')}
@@ -1096,7 +1108,7 @@ class Tabla extends React.Component {
                     >
                       <FontAwesomeIcon className="mr-5" icon={faAt} />
                       <div>
-                        <span>{vSelectedCuidador.email}</span>
+                        <span itemProp="email">{vSelectedCuidador.email}</span>
                       </div>
                     </div>
                     <div
@@ -1107,7 +1119,7 @@ class Tabla extends React.Component {
                     >
                       <FontAwesomeIcon className="mr-5" icon={faMobileAlt} />
                       <div>
-                        <span>{telefonoMovilCuidador}</span>
+                        <span itemProp="telephone">{telefonoMovilCuidador}</span>
                       </div>
                     </div>
                     <div
@@ -1121,7 +1133,7 @@ class Tabla extends React.Component {
                         icon={faPhoneSquareAlt}
                       />
                       <div>
-                        <span>{telefonoFijoCuidador}</span>
+                        <span itemProp="telephone">{telefonoFijoCuidador}</span>
                       </div>
                     </div>
                     <div
@@ -1142,7 +1154,8 @@ class Tabla extends React.Component {
                       </div>
 
                       <span 
-                        className="" 
+                        className=""
+                        itemProp="description"
                         style={{
                           whiteSpace: 'pre-wrap'
                         }}
