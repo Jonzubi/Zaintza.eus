@@ -7,7 +7,7 @@ const fs = require('fs');
 
 app.use(express.static(path.join(__dirname, 'build')));
 app.get("/", (req, res) => {
-  if (req.host !== 'www.zaintza.eus') {
+  if (req.host === 'zaintza.eus') {
     res.writeHead(301,
       {Location: 'https://www.zaintza.eus'}
     );
