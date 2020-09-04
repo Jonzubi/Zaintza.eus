@@ -319,7 +319,9 @@
     },
     "customImageUploader": {
       "maxMegaBytes": "Máximo: 10MB",
-      "suggestedDimension": "Dimensión recomendada (288x300)"
+      "suggestedDimension": "Dimensión recomendada (288x300)",
+      "chooseContactImage": "Elige una imagen",
+      "chooseAnotherImage": "Cambiar imagen"
     },
     "sexo": {
       "hombre": "Hombre",
