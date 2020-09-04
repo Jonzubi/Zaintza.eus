@@ -94,7 +94,7 @@ exports.getAcuerdosConUsuarios = async (req, res, modelos) => {
   acuerdos = acuerdos.filter((acuerdo) => {
     const { estadoAcuerdo, origenAcuerdo } = acuerdo;
     if (estadoAcuerdo === 0) {
-      if (origenAcuerdo === tipoUsuario) {
+      if (origenAcuerdo !== tipoUsuario) {
         return false;
       }
     }
