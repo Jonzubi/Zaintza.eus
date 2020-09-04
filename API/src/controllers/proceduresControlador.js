@@ -77,7 +77,7 @@ exports.getAcuerdosConUsuarios = async (req, res, modelos) => {
     filtrosConsulta.estadoAcuerdo = estadoAcuerdo;
   }
 
-  const acuerdos = await modeloAcuerdos
+  let acuerdos = await modeloAcuerdos
     .find(filtrosConsulta)
     .populate(columnaLaOtraPersona)
     .catch((err) => {
