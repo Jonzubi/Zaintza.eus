@@ -77,20 +77,32 @@ exports.getAcuerdosConUsuarios = async (req, res, modelos) => {
     filtrosConsulta.estadoAcuerdo = estadoAcuerdo;
   }
 
-  modeloAcuerdos
+  const acuerdos = await modeloAcuerdos
     .find(filtrosConsulta)
     .populate(columnaLaOtraPersona)
-    .then((respuesta) => {
-      res.writeHead(200, headerResponse);
-      res.write(JSON.stringify(respuesta));
-      res.end();
-    })
     .catch((err) => {
       console.log(err);
       res.writeHead(500, headerResponse);
       res.write(JSON.stringify(err));
       res.end();
+      return;
     });
+  /**
+   * Filtro los acuerdos para que en caso de que un usuario tenga que aceptar un acuerdo no le aparezca en acuerdosFrom
+   * Ya que en acuerdosForm si aparece en pendiente pone que lo tiene que aceptar el otro
+   */
+  acuerdos = acuerdos.filter((acuerdo) => {
+    const { estadoAcuerdo, origenAcuerdo } = acuerdo;
+    if (estadoAcuerdo === 0) {
+      if (origenAcuerdo === tipoUsuario) {
+        return false;
+      }
+    }
+    return true;
+  })
+  res.writeHead(200, headerResponse);
+  res.write(JSON.stringify(acuerdos));
+  res.end();
 };
 
 exports.getNotificacionesConUsuarios = async (req, res, modelos) => {
