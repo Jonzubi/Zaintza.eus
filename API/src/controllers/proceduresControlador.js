@@ -1841,7 +1841,7 @@ exports.postNewValoracion = async (req, res, modelos) => {
   }
 
   //Por ultimo registrar la valoracion para el idUsuario
-  modeloValoracion({
+  const valoracion = await modeloValoracion({
     idUsuario,
     idValorador,
     idAcuerdo,
@@ -1850,18 +1850,38 @@ exports.postNewValoracion = async (req, res, modelos) => {
     fechaValorado,
   })
     .save()
-    .then((doc) => {
-      res.writeHead(200, headerResponse);
-      res.write(JSON.stringify(doc));
-    })
     .catch((err) => {
       console.log(err);
       res.writeHead(500, headerResponse);
       res.write(JSON.stringify(err));
-    })
-    .finally((fin) => {
       res.end();
+      return;
     });
+  
+  /**
+   * Mandar notificacion al usuario
+   */
+  const modeloNotificacion = modelos.notificacion;
+  await modeloNotificacion({
+    idUsuario,
+    idRemitente: idValorador,
+    tipoNotificacion: "Valoracion",
+    visto: false,
+    valoracion: valor,
+    valoracionDetalle: comentario,
+    dateEnvioNotificacion: Date.now()
+  })
+    .save()
+    .catch((err) => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+      res.end();
+      return;
+    });
+  res.writeHead(500, headerResponse);
+  res.write(JSON.stringify(valoracion));
+  res.end();
 };
 
 exports.getValoracionesDelCuidador = async (req, res, modelos) => {

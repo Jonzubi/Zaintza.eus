@@ -231,7 +231,7 @@ class AcuerdosForm extends React.Component {
     });
   };
 
-  handleEnviarValoracion = async () => {
+  handleEnviarValoracion = async (socket) => {
     const { valoracionDetalle, valoracionValue, selectedAcuerdo } = this.state;
     const { idUsuario, email, contrasena } = this.props;
 
@@ -253,6 +253,9 @@ class AcuerdosForm extends React.Component {
         };
         axios.post(`https://${ipMaquina}:3001/api/procedures/postNewValoracion`, formData)
         .then(() => {
+          socket.emit('notify', {
+            idUsuario: idUsuarioAValorar.data
+          });
           cogoToast.success(
           <h5>{trans('acuerdosForm.valoracionEnviada')}</h5>
           )
@@ -719,7 +722,7 @@ class AcuerdosForm extends React.Component {
                             <ClipLoader color="#28a745" />
                           ) : (
                             <button
-                              onClick={() => this.handleEnviarValoracion()}
+                              onClick={() => this.handleEnviarValoracion(socket)}
                               className="btn btn-success"
                             >
                               {trans("acuerdosForm.enviarValoracion")}

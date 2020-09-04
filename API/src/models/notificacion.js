@@ -31,6 +31,9 @@ module.exports = conexion => {
     //Este es si el acuerdo ha sido aceptado o rechazado en el caso de
     //que la notificacion sea una decision de un usuario en una notificacion
     valorGestion: Boolean,
+    //Valoracion es si la notificacion es de tipo valoracion, llegara un valor con la cantidad de estrellas
+    valoracion: Number,
+    valoracionDetalle: String,
     dateEnvioNotificacion: {
       type: Date,
       required: true

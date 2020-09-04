@@ -15,6 +15,7 @@ import {
   faCheck,
   faTimes,
   faExclamation,
+  faAward,
 } from "@fortawesome/free-solid-svg-icons";
 import { Collapse } from "react-collapse";
 import Avatar from "react-avatar";
@@ -27,7 +28,7 @@ import Modal from "react-bootstrap/Modal";
 import ModalHeader from "react-bootstrap/ModalHeader";
 import ModalBody from "react-bootstrap/ModalBody";
 import ModalFooter from "react-bootstrap/ModalFooter";
-import moment from 'moment';
+import moment from "moment";
 
 class NotificacionesForm extends React.Component {
   componentDidMount() {
@@ -338,6 +339,8 @@ class NotificacionesForm extends React.Component {
             {trans("notificacionesForm.otraPersonaAcuerdoRechazado")}
           </span>
         );
+      case "Valoracion":
+        return <span>{trans("notificacionesForm.valoracionRecibido")}</span>;
 
       default:
         return <span>ERROR</span>;
@@ -410,7 +413,9 @@ class NotificacionesForm extends React.Component {
                           </div>
                         </div>
                         <small className="">
-                          {moment(notificacion.dateEnvioNotificacion).format('YYYY/MM/DD HH:mm')}
+                          {moment(notificacion.dateEnvioNotificacion).format(
+                            "YYYY/MM/DD HH:mm"
+                          )}
                         </small>
                         <div>
                           <FontAwesomeIcon
@@ -734,7 +739,10 @@ class NotificacionesForm extends React.Component {
                         </div>
                         <div className="">
                           {selectedNotificacion.acuerdo.pueblo.map((pueblo) => (
-                            <span>{pueblo}</span>
+                            <span>
+                              {pueblo}
+                              <br />
+                            </span>
                           ))}
                         </div>
                       </div>
@@ -762,6 +770,52 @@ class NotificacionesForm extends React.Component {
                             </div>
                           )
                         )}
+                      </div>
+                    </div>
+                  ) : selectedNotificacion.tipoNotificacion === "Valoracion" ? (
+                    <div
+                      className="mt-5 d-flex flex-column"
+                      style={{
+                        width: 300,
+                      }}
+                    >
+                      <div className="d-flex flex-row align-items-center justify-content-start">
+                        <FontAwesomeIcon
+                          size={"2x"}
+                          icon={faAward}
+                          className="mr-2"
+                        />
+                        <span
+                          style={{
+                            fontSize: 20,
+                          }}
+                          className="font-weight-bold"
+                        >
+                          {trans("notificacionesForm.valoracion")}:
+                        </span>
+                        <span>{selectedNotificacion.valoracion}</span>
+                        <FontAwesomeIcon
+                          icon={faStar}
+                          style={{
+                            color: "yellow",
+                          }}
+                        />
+                      </div>
+                      <div className="d-flex flex-row align-items-center justify-content-start">
+                        <FontAwesomeIcon
+                          size={"2x"}
+                          icon={faFileSignature}
+                          className="mr-2"
+                        />
+                        <span
+                          style={{
+                            fontSize: 20,
+                          }}
+                          className="font-weight-bold"
+                        >
+                          {trans("notificacionesForm.comentario")}:
+                        </span>
+                        <span>{selectedNotificacion.valoracionDetalle}</span>
                       </div>
                     </div>
                   ) : null}
