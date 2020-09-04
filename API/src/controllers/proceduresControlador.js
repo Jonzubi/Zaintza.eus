@@ -1879,7 +1879,7 @@ exports.postNewValoracion = async (req, res, modelos) => {
       res.end();
       return;
     });
-  res.writeHead(500, headerResponse);
+  res.writeHead(200, headerResponse);
   res.write(JSON.stringify(valoracion));
   res.end();
 };

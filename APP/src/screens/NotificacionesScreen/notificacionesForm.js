@@ -16,6 +16,7 @@ import {
   faTimes,
   faExclamation,
   faAward,
+  faStar
 } from "@fortawesome/free-solid-svg-icons";
 import { Collapse } from "react-collapse";
 import Avatar from "react-avatar";
@@ -779,7 +780,7 @@ class NotificacionesForm extends React.Component {
                         width: 300,
                       }}
                     >
-                      <div className="d-flex flex-row align-items-center justify-content-start">
+                      <div className="d-flex flex-row align-items-center justify-content-center">
                         <FontAwesomeIcon
                           size={"2x"}
                           icon={faAward}
@@ -791,9 +792,15 @@ class NotificacionesForm extends React.Component {
                           }}
                           className="font-weight-bold"
                         >
-                          {trans("notificacionesForm.valoracion")}:
+                          {trans("notificacionesForm.tipoValoracion")}:
                         </span>
-                        <span>{selectedNotificacion.valoracion}</span>
+                        
+                      </div>
+                      <div className="mt-3 d-flex flex-row align-items-center justify-content-center">
+                      <span style={{
+                        fontSize: 15,
+                        marginRight: 5
+                      }}>{selectedNotificacion.valoracion}</span>
                         <FontAwesomeIcon
                           icon={faStar}
                           style={{
@@ -801,7 +808,8 @@ class NotificacionesForm extends React.Component {
                           }}
                         />
                       </div>
-                      <div className="d-flex flex-row align-items-center justify-content-start">
+                      
+                      <div className="mt-3 d-flex flex-row align-items-center justify-content-center">
                         <FontAwesomeIcon
                           size={"2x"}
                           icon={faFileSignature}
@@ -815,8 +823,13 @@ class NotificacionesForm extends React.Component {
                         >
                           {trans("notificacionesForm.comentario")}:
                         </span>
-                        <span>{selectedNotificacion.valoracionDetalle}</span>
                       </div>
+                      <div className="mt-3" style={{
+                        maxWidth: 300,
+                        whiteSpace: 'pre-wrap'
+                      }}>
+                        {selectedNotificacion.valoracionDetalle}
+                      </div>                      
                     </div>
                   ) : null}
                 </ModalBody>
