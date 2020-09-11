@@ -9,7 +9,8 @@ const {
 const headerResponse = require("../../util/headerResponse");
 const ipMaquina = require("../../util/ipMaquina");
 const handlebars = require("handlebars");
-const moment = require("moment-timezone");
+const momentTimezone = require("moment-timezone");
+const moment = require('moment');
 const { coordsMunicipios } = require('../../util/municipiosCoords');
 
 const getKmFromCoords = function (lat1, lon1, lat2, lon2) {
@@ -1537,7 +1538,7 @@ exports.registerAnuncioVisita = async (req, res, modelos) => {
   const formData = {
     idAnuncio,
     idUsuario: usuario ? usuario._id : null,
-    fechaVisto: moment().tz("Europe/Madrid").valueOf(),
+    fechaVisto: momentTimezone().tz("Europe/Madrid").valueOf(),
   };
 
   const modeloAnuncioVisita = modelos.anuncioVisita;
@@ -1630,7 +1631,7 @@ exports.registerCuidadorVisita = async (req, res, modelos) => {
   const formData = {
     idCuidador,
     idUsuario: usuario ? usuario._id : null,
-    fechaVisto: moment().tz("Europe/Madrid").valueOf(),
+    fechaVisto: momentTimezone().tz("Europe/Madrid").valueOf(),
   };
 
   const modeloCuidadorVisita = modelos.cuidadorVisita;
@@ -1958,4 +1959,25 @@ exports.patchMaxDistance = async (req, res, modelos) => {
     res.write(JSON.stringify(ajuste));
     res.end();
   }
+}
+
+exports.banUser = async (req, res, modelos) => {
+  const { idCuidador, banDays, banType } = req.body;
+
+  const modeloUsuario = modelos.usuario;
+
+  switch(banType) {
+    case 'cuidador':
+      const foundUser = await modeloUsuario.findOne({ idPerfil: idCuidador });
+      modeloUsuario.findByIdAndUpdate(foundUser._id, {
+        bannedUntilDate: moment().add(banDays, 'days').toDate()
+      });
+      res.writeHead(200, headerResponse);
+      res.end();
+    default:
+      res.writeHead(400, headerResponse);
+      res.write('Wrong banType');
+      res.end();
+  }
+  
 }

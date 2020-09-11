@@ -44,6 +44,20 @@ io.on('connection', (socket) => {
         usuariosLogueados = usuariosLogueados.filter(item => item.socketId !== socket.id);
         printDataOnConsole();
     });
+
+    socket.on('kickBanned', async ({ idCuidador, banDays }) => {
+        const modeloUsuario = modelos.usuario;
+        const foundUser = await modeloUsuario.findOne({
+          idPerfil: idCuidador
+        });
+
+        if (foundUser !== null) {
+          const kickUser = usuariosLogueados.find((ul) => ul.idUsuario === foundUser._id);
+          if (kickUser !== undefined) {
+            io.to(`${kickUser.socketId}`).emit('banned', banDays);
+          }
+        }
+    })
 })
 
 https.listen(port, () => {

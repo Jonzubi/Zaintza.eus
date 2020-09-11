@@ -326,6 +326,9 @@
     "sexo": {
       "hombre": "Hombre",
       "mujer": "Mujer"
+    },
+    "ban": {
+      "banned": "Has sido baneado: {{dias}} días"
     }
   }
   

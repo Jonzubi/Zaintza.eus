@@ -348,5 +348,8 @@
   "sexo": {
     "hombre": "Gizonezkoa",
     "mujer": "Emakumezkoa"
+  },
+  "ban": {
+    "banned": "{{dias}} egunerako konturako sarrera kendu zaizu"
   }
 }
