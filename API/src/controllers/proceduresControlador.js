@@ -1969,6 +1969,12 @@ exports.banUser = async (req, res, modelos) => {
   switch(banType) {
     case 'cuidador':
       const foundUser = await modeloUsuario.findOne({ idPerfil: idCuidador });
+      if (!foundUser) {
+        res.writeHead(400, headerResponse);
+        res.write('No user found');
+        res.end();
+        return;
+      }
       modeloUsuario.findByIdAndUpdate(foundUser._id, {
         bannedUntilDate: moment().add(banDays, 'days').toDate()
       });
