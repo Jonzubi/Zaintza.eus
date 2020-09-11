@@ -1974,10 +1974,12 @@ exports.banUser = async (req, res, modelos) => {
       });
       res.writeHead(200, headerResponse);
       res.end();
+      return;
     default:
       res.writeHead(400, headerResponse);
       res.write('Wrong banType');
       res.end();
+      return;
   }
   
 }
