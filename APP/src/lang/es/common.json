@@ -29,7 +29,8 @@
       "sesionCerrada": "Sesión cerrada con éxito",
       "datosIncorrectos": "El nombre de usuario o contraseña es incorrecto",
       "errorConexion": "Hay problemas de conexión",
-      "servidorNoDisponible": "El servidor no responde"
+      "servidorNoDisponible": "El servidor no responde",
+      "baneado": "Has sido baneado hasta {{fecha}}"
     },
     "tablaCuidadores": {
       "noData": "No hay datos",

@@ -8,8 +8,8 @@ import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import { saveUserSession } from "../redux/actions/user";
 import { toogleModal } from "../redux/actions/modalRegistrarse";
 import { trans } from "../util/funciones";
+import moment from 'moment';
 import i18n from "i18next";
-import { translate } from "react-i18next";
 import SocketContext from "../socketio/socket-context";
 import ClipLoader from "react-spinners/ClipLoader";
 import i18next from "i18next";
@@ -129,7 +129,18 @@ class LogInForm extends React.Component {
             }
           })
           .catch((err) => {
-            console.log(err);
+            if (err.response.status === 401) {
+              const { bannedUntilDate } = err.response.data;
+              cogoToast.error(
+                <h5>{i18next.t('notificaciones.baneado', {
+                  fecha: moment(bannedUntilDate).format('YYYY-MM-DD')
+                })}</h5>
+              );
+              this.setState({
+                isLoading: false,
+              });
+              return;
+            }
             cogoToast.error(<h5>{trans("notificaciones.errorConexion")}</h5>);
             this.setState({
               isLoading: false,
