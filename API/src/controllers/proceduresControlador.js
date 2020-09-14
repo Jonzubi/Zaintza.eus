@@ -1975,7 +1975,7 @@ exports.banUser = async (req, res, modelos) => {
         res.end();
         return;
       }
-      modeloUsuario.findByIdAndUpdate(foundUser._id, {
+      await modeloUsuario.findByIdAndUpdate(foundUser._id, {
         bannedUntilDate: moment().add(banDays, 'days').toDate()
       });
       res.writeHead(200, headerResponse);
