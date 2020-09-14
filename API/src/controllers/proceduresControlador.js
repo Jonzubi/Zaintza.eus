@@ -182,6 +182,12 @@ exports.getUsuarioConPerfil = async (req, res, modelos) => {
           populate: "idPerfil",
         })
         .then((respuesta) => {
+          if (moment().isBefore(moment(respuesta.idUsuario.bannedUntilDate))) {
+            res.writeHead(401, headerResponse);
+            res.write(JSON.stringify(respuesta));
+            res.end();
+            return;
+          }
           res.writeHead(200, headerResponse);
           res.write(JSON.stringify(respuesta));
           res.end();
@@ -197,6 +203,12 @@ exports.getUsuarioConPerfil = async (req, res, modelos) => {
         .findOne(filtros)
         .populate("idPerfil")
         .then((respuesta) => {
+          if (moment().isBefore(moment(respuesta.bannedUntilDate))) {
+            res.writeHead(401, headerResponse);
+            res.write(JSON.stringify(respuesta));
+            res.end();
+            return;
+          }
           res.writeHead(200, headerResponse);
           res.write(JSON.stringify(respuesta));
           res.end();
