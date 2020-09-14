@@ -29,7 +29,7 @@ import i18next from 'i18next';
 const socket = io(`https://${ipMaquina}:3002`);
 
 socket.on('banned', (dias) => {
-  const { idUsuario, resetMaxDistance, initializeUserSession, changeFormContent, resetMaxDistance } = this.props;
+  const { idUsuario, resetMaxDistance, initializeUserSession, changeFormContent } = this.props;
 
     initializeUserSession();
     resetMaxDistance();
