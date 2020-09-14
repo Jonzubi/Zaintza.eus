@@ -22,7 +22,7 @@ import ipMaquina from './util/ipMaquinaAPI';
 import { toogleMenuPerfil } from "./redux/actions/menuPerfil";
 import { initializeUserSession } from "./redux/actions/user";
 import { changeFormContent } from "./redux/actions/app";
-import { ResetMaxDistance } from '../redux/actions/coords';
+import { ResetMaxDistance } from './redux/actions/coords';
 import { SetCoords } from './redux/actions/coords';
 import i18next from 'i18next';
 
