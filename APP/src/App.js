@@ -26,23 +26,25 @@ import { ResetMaxDistance } from './redux/actions/coords';
 import { SetCoords } from './redux/actions/coords';
 import i18next from 'i18next';
 
-const socket = io(`https://${ipMaquina}:3002`);
-
-socket.on('banned', (dias) => {
-  const { idUsuario, resetMaxDistance, initializeUserSession, changeFormContent } = this.props;
-
-    initializeUserSession();
-    resetMaxDistance();
-    changeFormContent("tabla");
-    toogleMenuPerfil(false);
-    socket.emit("logout", {
-      idUsuario: idUsuario,
-    });
-  cogoToast.warn(<h5>{i18next.t('ban.banned', { dias })}</h5>)
-});
-
-
 class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.socket = io(`https://${ipMaquina}:3002`);
+
+    socket.on('banned', (dias) => {
+      const { idUsuario, resetMaxDistance, initializeUserSession, changeFormContent } = this.props;
+    
+      initializeUserSession();
+      resetMaxDistance();
+      changeFormContent("tabla");
+      toogleMenuPerfil(false);
+      socket.emit("logout", {
+        idUsuario: idUsuario,
+      });
+      cogoToast.warn(<h5>{i18next.t('ban.banned', { dias })}</h5>)
+    });
+  }
 
   componentDidMount() {
     const { setCoords } = this.props;

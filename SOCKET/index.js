@@ -54,7 +54,7 @@ io.on('connection', (socket) => {
         });
 
         if (foundUser !== null) {
-          const kickUser = usuariosLogueados.find((ul) => ul.idUsuario === foundUser._id);
+          const kickUser = usuariosLogueados.find((ul) => ul.idUsuario === foundUser._id.toString());
           if (kickUser !== undefined) {
             io.to(`${kickUser.socketId}`).emit('banned', banDays);
           }
