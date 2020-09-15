@@ -2,6 +2,6 @@ const log = require('simple-node-logger').createSimpleFileLogger({
   logFilePath: '../Logs/errorLog.log'
 })
 
-export const writeError = (content) => {
+exports.writeError = (content) => {
   log.info(content);
 }
