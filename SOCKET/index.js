@@ -8,6 +8,7 @@ const io = require('socket.io')(https);
 const port = 3002;
 const conexion = require('../API/util/bdConnection');
 const modelos = require('../API/util/requireAllModels')(conexion);
+const { writeError } = require('./utils/funciones');
 
 let usuariosConectados = [];
 let usuariosLogueados = [];
@@ -46,6 +47,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('kickBanned', async ({ idCuidador, banDays }) => {
+        writeError({ idCuidador, banDays });
         const modeloUsuario = modelos.usuario;
         const foundUser = await modeloUsuario.findOne({
           idPerfil: idCuidador
