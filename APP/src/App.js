@@ -32,14 +32,14 @@ class App extends React.Component {
     super(props);
     this.socket = io(`https://${ipMaquina}:3002`);
 
-    socket.on('banned', (dias) => {
+    this.socket.on('banned', (dias) => {
       const { idUsuario, resetMaxDistance, initializeUserSession, changeFormContent } = this.props;
     
       initializeUserSession();
       resetMaxDistance();
       changeFormContent("tabla");
       toogleMenuPerfil(false);
-      socket.emit("logout", {
+      this.socket.emit("logout", {
         idUsuario: idUsuario,
       });
       cogoToast.warn(<h5>{i18next.t('ban.banned', { dias })}</h5>)
@@ -93,7 +93,7 @@ class App extends React.Component {
   render() {
     const AppContent = this.getContent.bind(this);
     return (
-      <SocketContext.Provider value={socket}>
+      <SocketContext.Provider value={this.socket}>
         <div>
           <MenuPerfil />
           <div id="outer-container" className="w-100">
