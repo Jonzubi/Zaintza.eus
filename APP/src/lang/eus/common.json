@@ -31,7 +31,8 @@
     "datosIncorrectos": "Erabiltzaile izena edo pasahitza ez da zuzena...",
     "errorConexion": "Konektatzeko arazaoak daude...",
     "servidorNoDisponible": "Zerbitzariak ez du erantzuten",
-    "errorGeneral":"Arazo bat gertatu da"
+    "errorGeneral":"Arazo bat gertatu da",
+    "baneado": "Sarrera debekatuta {{fecha}} arte"
   },
   "tablaCuidadores": {
     "noData": "Ez dago daturik",
@@ -348,5 +349,8 @@
   "sexo": {
     "hombre": "Gizonezkoa",
     "mujer": "Emakumezkoa"
+  },
+  "ban": {
+    "banned": "{{dias}} egunerako konturako sarrera kendu zaizu"
   }
 }

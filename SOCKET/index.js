@@ -8,6 +8,7 @@ const io = require('socket.io')(https);
 const port = 3002;
 const conexion = require('../API/util/bdConnection');
 const modelos = require('../API/util/requireAllModels')(conexion);
+const { writeError } = require('./utils/funciones');
 
 let usuariosConectados = [];
 let usuariosLogueados = [];
@@ -44,6 +45,21 @@ io.on('connection', (socket) => {
         usuariosLogueados = usuariosLogueados.filter(item => item.socketId !== socket.id);
         printDataOnConsole();
     });
+
+    socket.on('kickBanned', async ({ idCuidador, banDays }) => {
+        writeError({ idCuidador, banDays });
+        const modeloUsuario = modelos.usuario;
+        const foundUser = await modeloUsuario.findOne({
+          idPerfil: idCuidador
+        });
+
+        if (foundUser !== null) {
+          const kickUser = usuariosLogueados.find((ul) => ul.idUsuario === foundUser._id.toString());
+          if (kickUser !== undefined) {
+            io.to(`${kickUser.socketId}`).emit('banned', banDays);
+          }
+        }
+    })
 })
 
 https.listen(port, () => {

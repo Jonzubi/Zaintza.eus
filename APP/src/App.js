@@ -1,4 +1,5 @@
 import React from "react";
+import cogoToast from 'cogo-toast';
 import MenuPerfil from "./components/menuPerfil";
 import Cabecera from "./components/header";
 import SlideTab from "./components/slideTab";
@@ -18,12 +19,32 @@ import CuidadorStatsForm from "./screens/CuidadorStatsScreen/cuidadorStatsForm";
 import SocketContext from "./socketio/socket-context";
 import * as io from "socket.io-client";
 import ipMaquina from './util/ipMaquinaAPI';
+import { toogleMenuPerfil } from "./redux/actions/menuPerfil";
+import { initializeUserSession } from "./redux/actions/user";
+import { changeFormContent } from "./redux/actions/app";
+import { ResetMaxDistance } from './redux/actions/coords';
 import { SetCoords } from './redux/actions/coords';
-
-const socket = io(`https://${ipMaquina}:3002`);
-
+import i18next from 'i18next';
 
 class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.socket = io(`https://${ipMaquina}:3002`);
+
+    this.socket.on('banned', (dias) => {
+      const { idUsuario, resetMaxDistance, initializeUserSession, changeFormContent } = this.props;
+    
+      initializeUserSession();
+      resetMaxDistance();
+      changeFormContent("tabla");
+      toogleMenuPerfil(false);
+      this.socket.emit("logout", {
+        idUsuario: idUsuario,
+      });
+      cogoToast.warn(<h5>{i18next.t('ban.banned', { dias })}</h5>)
+    });
+  }
 
   componentDidMount() {
     const { setCoords } = this.props;
@@ -72,7 +93,7 @@ class App extends React.Component {
   render() {
     const AppContent = this.getContent.bind(this);
     return (
-      <SocketContext.Provider value={socket}>
+      <SocketContext.Provider value={this.socket}>
         <div>
           <MenuPerfil />
           <div id="outer-container" className="w-100">
@@ -94,7 +115,11 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  setCoords: payload => dispatch(SetCoords(payload))
+  setCoords: payload => dispatch(SetCoords(payload)),
+  toogleMenuPerfil: (payload) => dispatch(toogleMenuPerfil(payload)),
+  initializeUserSession: () => dispatch(initializeUserSession()),
+  changeFormContent: (form) => dispatch(changeFormContent(form)),
+  resetMaxDistance: () => dispatch(ResetMaxDistance())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
