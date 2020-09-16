@@ -1974,30 +1974,39 @@ exports.patchMaxDistance = async (req, res, modelos) => {
 }
 
 exports.banUser = async (req, res, modelos) => {
-  const { idCuidador, banDays, banType } = req.body;
+  const { idCuidador, banDays } = req.body;
 
   const modeloUsuario = modelos.usuario;
-
-  switch(banType) {
-    case 'cuidador':
-      const foundUser = await modeloUsuario.findOne({ idPerfil: idCuidador });
-      if (!foundUser) {
-        res.writeHead(400, headerResponse);
-        res.write('No user found');
-        res.end();
-        return;
-      }
-      await modeloUsuario.findByIdAndUpdate(foundUser._id, {
-        bannedUntilDate: moment().add(banDays, 'days').toDate()
-      });
-      res.writeHead(200, headerResponse);
-      res.end();
-      return;
-    default:
-      res.writeHead(400, headerResponse);
-      res.write('Wrong banType');
-      res.end();
-      return;
+  const foundUser = await modeloUsuario.findOne({ idPerfil: idCuidador });
+  if (!foundUser) {
+    res.writeHead(400, headerResponse);
+    res.write('No user found');
+    res.end();
+    return;
   }
-  
+  await modeloUsuario.findByIdAndUpdate(foundUser._id, {
+    bannedUntilDate: moment().add(banDays, 'days').toDate()
+  });
+  res.writeHead(200, headerResponse);
+  res.end();
+  return;  
+}
+
+exports.unBanUser = async (req, res, modelos) => {
+  const { idCuidador } = req.body;
+
+  const modeloUsuario = modelos.usuario;
+  const foundUser = await modeloUsuario.findOne({ idPerfil: idCuidador });
+  if (!foundUser) {
+    res.writeHead(400, headerResponse);
+    res.write('No user found');
+    res.end();
+    return;
+  }
+  await modeloUsuario.findByIdAndUpdate(foundUser._id, {
+    bannedUntilDate: moment().subtract(1, 'days').toDate()
+  });
+  res.writeHead(200, headerResponse);
+  res.end();
+  return;  
 }
