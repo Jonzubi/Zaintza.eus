@@ -2028,3 +2028,26 @@ exports.deleteCuidadorImg = async (req, res, modelos) => {
   res.writeHead(200, headerResponse);
   res.end();
 }
+
+exports.isUserBanned = async (req, res, modelos) => {
+  const { idPerfil } = req.params;
+
+  const modeloUsuario = modelos.usuario;
+  const foundUser = await modeloUsuario.findOne({ idPerfil });
+  if (!foundUser) {
+    res.writeHead(400, headerResponse);
+    res.write('No user found');
+    res.end();
+    return;
+  }
+
+  if (moment().isBefore(foundUser.bannedUntilDate)) {
+    res.writeHead(200, headerResponse);
+    res.write('true');
+    res.end();
+  } else {
+    res.writeHead(200, headerResponse);
+    res.write('false');
+    res.end();
+  }
+}
