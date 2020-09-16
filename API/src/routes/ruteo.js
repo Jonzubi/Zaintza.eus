@@ -79,6 +79,8 @@ module.exports = (app, modelos) => {
   app.route("/api/procedures/banUser").post((req, res) => proceduresControlador.banUser(req, res, modelos));
 
   app.route("/api/procedures/unBanUser").post((req, res) => proceduresControlador.unBanUser(req, res, modelos));
+
+  app.route("/api/procedures/deleteCuidadorImg").post((req, res) => proceduresControlador.deleteCuidadorImg(req, res, modelos));
   
   app.route("/Inicio/").get(mainControlador.inicio);
 

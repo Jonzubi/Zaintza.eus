@@ -2010,3 +2010,21 @@ exports.unBanUser = async (req, res, modelos) => {
   res.end();
   return;  
 }
+
+exports.deleteCuidadorImg = async (req, res, modelos) => {
+  const { idCuidador } = req.body;
+
+  const modeloCuidador = modelos.cuidador;
+
+  await modeloCuidador.findByIdAndUpdate(idCuidador, {
+    direcFotoContacto: 'noImage'
+  })
+    .catch(() => {
+      res.writeHead(500, headerResponse);
+      res.write('Couldnt update img');
+      res.end();
+      return;
+    });
+  res.writeHead(200, headerResponse);
+  res.end();
+}
