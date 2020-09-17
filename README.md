@@ -34,5 +34,6 @@ El proyecto de SEIM para Aplicación Web de 2º
 - Marca registrada **ZAINTZA** (10 AÑOS): **614.97€**
 - Licencia **Google Play Store**: **20.86€**
 - VPS de **OVH Cloud** (Agosto): **11.13€**
+- OVH renovación de no se que: **2.23€**
 
-**TOTAL**: **678.14€**
+**TOTAL**: **680.37€**
