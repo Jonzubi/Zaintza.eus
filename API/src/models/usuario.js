@@ -30,7 +30,8 @@ module.exports = conexion => {
       required: true
     },
     bannedUntilDate: {
-      type: Date
+      type: Date,
+      default: Date.now()
     }
   });
 
