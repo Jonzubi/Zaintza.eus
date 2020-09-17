@@ -3,7 +3,6 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const port = 3003;
-const https = require("https");
 const fs = require("fs");
 
 app.use(cors());
