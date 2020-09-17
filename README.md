@@ -35,5 +35,6 @@ El proyecto de SEIM para Aplicación Web de 2º
 - Licencia **Google Play Store**: **20.86€**
 - VPS de **OVH Cloud** (Agosto): **11.13€**
 - OVH renovación de no se que: **2.23€**
+- Email MX 5 OVH: **6.05€**
 
-**TOTAL**: **680.37€**
+**TOTAL**: **686.42€**
