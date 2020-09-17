@@ -1,5 +1,5 @@
 const fs = require("fs");
-const templatesFolder = __dirname.substring(0, __dirname.lastIndexOf("\\")) + "\\src\\templates\\";
+const templatesFolder = '/var/www/Zaintza.eus/API/src/templates/';
 exports.writeImage = (cod, b64) => {
   let idImage = cod;
   let imageBase64 = b64.split(",")[1];
