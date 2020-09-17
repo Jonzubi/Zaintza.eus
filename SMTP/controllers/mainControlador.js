@@ -7,7 +7,8 @@ const fromEmail = require("../util/smtpEmail");
 const ipMaquina = require("../util/ipMaquinaAPI");
 
 const transporter = nodemailer.createTransport({
-  host: 'SMTP:SSL0.OVH.NET',
+  host: 'ssl0.ovh.net',
+  secure: true,
   port: 465,
   auth: {
     user: fromEmail,
