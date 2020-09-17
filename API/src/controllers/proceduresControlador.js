@@ -11,6 +11,7 @@ const ipMaquina = require("../../util/ipMaquina");
 const handlebars = require("handlebars");
 const momentTimezone = require("moment-timezone");
 const moment = require('moment');
+const { adminToken } = require('../../util/adminToken');
 const { coordsMunicipios } = require('../../util/municipiosCoords');
 
 const getKmFromCoords = function (lat1, lon1, lat2, lon2) {
@@ -1974,7 +1975,14 @@ exports.patchMaxDistance = async (req, res, modelos) => {
 }
 
 exports.banUser = async (req, res, modelos) => {
-  const { idCuidador, banDays } = req.body;
+  const { idCuidador, banDays, token } = req.body;
+
+  if (token !== adminToken) {
+    res.writeHead(400, headerResponse);
+    res.write('No authorization');
+    res.end();
+    return;
+  }
 
   const modeloUsuario = modelos.usuario;
   const foundUser = await modeloUsuario.findOne({ idPerfil: idCuidador });
@@ -1993,7 +2001,14 @@ exports.banUser = async (req, res, modelos) => {
 }
 
 exports.unBanUser = async (req, res, modelos) => {
-  const { idCuidador } = req.body;
+  const { idCuidador, token } = req.body;
+  
+  if (token !== adminToken) {
+    res.writeHead(400, headerResponse);
+    res.write('No authorization');
+    res.end();
+    return;
+  }
 
   const modeloUsuario = modelos.usuario;
   const foundUser = await modeloUsuario.findOne({ idPerfil: idCuidador });
@@ -2012,7 +2027,14 @@ exports.unBanUser = async (req, res, modelos) => {
 }
 
 exports.deleteCuidadorImg = async (req, res, modelos) => {
-  const { idCuidador } = req.body;
+  const { idCuidador, token } = req.body;
+  
+  if (token !== adminToken) {
+    res.writeHead(400, headerResponse);
+    res.write('No authorization');
+    res.end();
+    return;
+  }
 
   const modeloCuidador = modelos.cuidador;
 
