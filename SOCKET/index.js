@@ -46,11 +46,11 @@ io.on('connection', (socket) => {
         printDataOnConsole();
     });
 
-    socket.on('kickBanned', async ({ idCuidador, banDays }) => {
-        writeError({ idCuidador, banDays });
+    socket.on('kickBanned', async ({ idPerfil, banDays }) => {
+        writeError({ idPerfil, banDays });
         const modeloUsuario = modelos.usuario;
         const foundUser = await modeloUsuario.findOne({
-          idPerfil: idCuidador
+          idPerfil
         });
 
         if (foundUser !== null) {
