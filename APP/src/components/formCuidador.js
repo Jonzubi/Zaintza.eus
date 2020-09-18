@@ -1418,8 +1418,8 @@ class FormCuidador extends React.Component {
                     type="button"
                     className="w-100 btn btn-success"
                   >
-                    {trans("perfilCliente.guardarCambios")}
-                    <FontAwesomeIcon className="ml-1" icon={faSave} />
+                    {isProfileView ? trans("perfilCliente.guardarCambios") : trans("registerFormCuidadores.registrarse")}
+                    {isProfileView ? <FontAwesomeIcon className="ml-1" icon={faSave} /> : null }
                   </button>
                 )}
               </div>

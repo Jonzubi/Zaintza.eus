@@ -44,7 +44,7 @@ class LogInForm extends React.Component {
 
   async handleLogIn(socket) {
     console.log(socket);
-    const { changeLang, setMaxDistance } = this.props;
+    const { changeLang, setMaxDistance, changeFormContent } = this.props;
     const vEmail = this.state.txtEmail;
     const vContrasena = this.state.txtContrasena;
     var objFiltros = {
@@ -113,6 +113,7 @@ class LogInForm extends React.Component {
               });
 
               this.props.toogleMenuPerfil(false);
+              changeFormContent('tabla');
               cogoToast.success(
                 <h5>{trans("notificaciones.sesionIniciada")}</h5>
               );
