@@ -1720,8 +1720,8 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
     cuidadoresFilter.ubicaciones = filterUbicacion;
   }
   console.log(filterCategoria);
-  const objFilterCategoria = JSON.parse(filterCategoria);
-  if (objFilterCategoria !== undefined) {
+  if (filterCategoria !== undefined) {
+    const objFilterCategoria = JSON.parse(filterCategoria);
     Object.keys(objFilterCategoria).forEach(category => {
       console.log(`objFilterCategoria[${category}]`, objFilterCategoria[category]);
       console.log(`objFilterCategoria[${category}] === true`, objFilterCategoria[category] === true);
