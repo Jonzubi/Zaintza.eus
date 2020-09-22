@@ -1720,11 +1720,12 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
     cuidadoresFilter.ubicaciones = filterUbicacion;
   }
   console.log(filterCategoria);
-  if (filterCategoria !== undefined) {
-    Object.keys(filterCategoria).forEach(category => {
-      console.log(`filterCategoria[${category}]`, filterCategoria[category]);
-      console.log(`filterCategoria[${category}] === true`, filterCategoria[category] === true);
-      if (filterCategoria[category] === true) {
+  const objFilterCategoria = JSON.parse(filterCategoria);
+  if (objFilterCategoria !== undefined) {
+    Object.keys(objFilterCategoria).forEach(category => {
+      console.log(`objFilterCategoria[${category}]`, objFilterCategoria[category]);
+      console.log(`objFilterCategoria[${category}] === true`, objFilterCategoria[category] === true);
+      if (objFilterCategoria[category] === true) {
         cuidadoresFilter[`publicoDisponible.${category}`] = true;
       }
     })
