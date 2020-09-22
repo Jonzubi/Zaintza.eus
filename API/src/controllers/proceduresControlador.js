@@ -1721,11 +1721,17 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
   }
   if (filterCategoria !== undefined) {
     const objFilterCategoria = JSON.parse(filterCategoria);
+    const auxCategoryFilter = [];
     Object.keys(objFilterCategoria).forEach(category => {
       if (objFilterCategoria[category] === true) {
-        cuidadoresFilter[`publicoDisponible.${category}`] = true;
+        let auxFilterObj = {};
+        auxFilterObj[`publicoDisponible.${category}`] = true;
+        auxCategoryFilter.push(auxFilterObj);
       }
-    })
+    });
+    if (auxCategoryFilter.length > 0) {
+      cuidadoresFilter.$or = auxCategoryFilter;
+    }
   }
   const cuidadores = await modeloCuidadores.find(
     cuidadoresFilter,
