@@ -692,6 +692,11 @@ class Tabla extends React.Component {
         jsonCuidadores: {},
         buscado: false,
         auxFilterPueblo: "",
+        auxFilterCategoria: {
+          nino: false,
+          terceraEdad: false,
+          necesidadEspecial: false
+        }
       },
       () => {
         this.refrescarCuidadores();
@@ -1559,6 +1564,7 @@ class Tabla extends React.Component {
                           <input
                             type="checkbox"
                             value={auxFilterCategoria.nino}
+                            checked={auxFilterCategoria.nino}
                             onChange={() => this.handleFilterCategoriaChange('nino')}
                           />
                         </div>
@@ -1567,6 +1573,7 @@ class Tabla extends React.Component {
                           <input
                             type="checkbox"
                             value={auxFilterCategoria.terceraEdad}
+                            checked={auxFilterCategoria.terceraEdad}
                             onChange={() => this.handleFilterCategoriaChange('terceraEdad')}
                           />
                         </div>
@@ -1575,6 +1582,7 @@ class Tabla extends React.Component {
                           <input
                             type="checkbox"
                             value={auxFilterCategoria.necesidadEspecial}
+                            checked={auxFilterCategoria.necesidadEspecial}
                             onChange={() => this.handleFilterCategoriaChange('necesidadEspecial')}
                           />
                         </div>
