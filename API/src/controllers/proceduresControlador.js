@@ -1722,6 +1722,8 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
   console.log(filterCategoria);
   if (filterCategoria !== undefined) {
     Object.keys(filterCategoria).forEach(category => {
+      console.log(`filterCategoria[${category}]`, filterCategoria[category]);
+      console.log(`filterCategoria[${category}] === true`, filterCategoria[category] === true);
       if (filterCategoria[category] === true) {
         cuidadoresFilter[`publicoDisponible.${category}`] = true;
       }
