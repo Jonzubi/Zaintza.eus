@@ -21,6 +21,7 @@ import {
   faFileSignature,
   faStar,
   faMapMarkerAlt,
+  faUsers
 } from "@fortawesome/free-solid-svg-icons";
 import Axios from "../../util/axiosInstance";
 import Modal from "react-bootstrap/Modal";
@@ -169,6 +170,11 @@ class Tabla extends React.Component {
       ],
       txtDescripcion: "",
       auxFilterPueblo: "",
+      auxFilterCategoria: {
+        nino: false,
+        terceraEdad: false,
+        necesidadEspecial: false
+      },
       isFiltering: false,
     };
 
@@ -631,7 +637,7 @@ class Tabla extends React.Component {
   }
 
   handleApplyFilters = () => {
-    const { auxFilterPueblo, requiredCards } = this.state;
+    const { auxFilterPueblo, requiredCards, auxFilterCategoria } = this.state;
 
     let objFiltros = {
       isPublic: true,
@@ -655,6 +661,7 @@ class Tabla extends React.Component {
             params: {
               requiredCards,
               filterUbicacion: auxFilterPueblo,
+              filterCategoria: auxFilterCategoria
             },
           }
         )
@@ -748,6 +755,16 @@ class Tabla extends React.Component {
     });
   };
 
+  handleFilterCategoriaChange = (categoria) => {
+    const { auxFilterCategoria } = this.state;
+    const aux = { ...auxFilterCategoria };
+
+    aux[categoria] = !aux[categoria];
+    this.setState({
+      auxFilterCategoria: aux
+    });
+  }
+
   render() {
     const {
       showModalFilter,
@@ -759,6 +776,7 @@ class Tabla extends React.Component {
       valoracionesIsLoading,
       jsonValoraciones,
       showModalValoraciones,
+      auxFilterCategoria
     } = this.state;
     const vSelectedCuidador = this.state.selectedCuidador;
     const fechaNacCuidador = new Date(vSelectedCuidador.fechaNacimiento);
@@ -1518,22 +1536,50 @@ class Tabla extends React.Component {
                     <h5>Filtrar</h5>
                   </ModalHeader>
                   <ModalBody className="d-flex flex-column justify-content-between align-items-stretch">
-                    <div className="d-flex flex-row align-items-center justify-content-between">
-                      <div className="d-flex align-items-center">
-                        <FontAwesomeIcon
-                          className="text-success mr-2"
-                          icon={faHome}
-                        />
-                        <PuebloAutosuggest
-                          onSuggestionSelected={this.handleFilterPuebloSelected}
-                        />
+                    <div>
+                      <div className="d-flex flex-row align-items-center justify-content-between">
+                        <div className="d-flex align-items-center">
+                          <FontAwesomeIcon
+                            className="text-success mr-2"
+                            icon={faHome}
+                          />
+                          <PuebloAutosuggest
+                            onSuggestionSelected={this.handleFilterPuebloSelected}
+                          />
+                        </div>
+                        {auxFilterPueblo !== "" ? (
+                          <span className="ml-2 font-weight-bold">
+                            {auxFilterPueblo}
+                          </span>
+                        ) : null}
                       </div>
-                      {auxFilterPueblo !== "" ? (
-                        <span className="ml-2 font-weight-bold">
-                          {auxFilterPueblo}
-                        </span>
-                      ) : null}
-                    </div>
+                      <div className="d-flex flex-row align-items-center justify-content-between mt-5">
+                        <div className="d-flex flex-column align-items-center">
+                          <span>{i18next.t('tablaCuidadores.ninos')}</span>
+                          <input
+                            type="checkbox"
+                            value={auxFilterCategoria.nino}
+                            onChange={() => this.handleFilterCategoriaChange('nino')}
+                          />
+                        </div>
+                        <div className="d-flex flex-column align-items-center">
+                          <span>{i18next.t('tablaCuidadores.terceraEdad')}</span>
+                          <input
+                            type="checkbox"
+                            value={auxFilterCategoria.terceraEdad}
+                            onChange={() => this.handleFilterCategoriaChange('terceraEdad')}
+                          />
+                        </div>
+                        <div className="d-flex flex-column align-items-center">
+                          <span>{i18next.t('tablaCuidadores.necesidadEspecial')}</span>
+                          <input
+                            type="checkbox"
+                            value={auxFilterCategoria.necesidadEspecial}
+                            onChange={() => this.handleFilterCategoriaChange('necesidadEspecial')}
+                          />
+                        </div>
+                      </div>
+                    </div>                    
                     <div className="d-flex flex-row justify-content-between">
                       <Button
                         onClick={this.handleApplyFilters}

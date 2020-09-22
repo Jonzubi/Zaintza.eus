@@ -1710,7 +1710,7 @@ exports.getCuidadorVisitas = async (req, res, modelos) => {
 };
 
 exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
-  const { requiredCards, filterUbicacion, coords, maxDistance } = req.query;
+  const { requiredCards, filterUbicacion, filterCategoria, coords, maxDistance } = req.query;
   const modeloCuidadores = modelos.cuidador;
   const resultado = [];
   let cuidadoresFilter = {
@@ -1718,6 +1718,13 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
   };
   if(filterUbicacion !== undefined){
     cuidadoresFilter.ubicaciones = filterUbicacion;
+  }
+  if (filterCategoria !== undefined) {
+    Object.keys(filterCategoria).forEach(category => {
+      if (filterCategoria[category]) {
+        cuidadoresFilter[`publicoDisponible.${category}`] = true;
+      }
+    })
   }
   const cuidadores = await modeloCuidadores.find(
     cuidadoresFilter,

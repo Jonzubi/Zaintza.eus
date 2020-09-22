@@ -29,7 +29,11 @@ module.exports = conexion => {
       type: [String],
       required: true
     },
-    publicoDisponible: Map,
+    publicoDisponible: {
+      nino: Boolean,
+      terceraEdad: Boolean,
+      necesidadEspecial: Boolean
+    },
     telefonoMovil: {
       type: String,
       required: true

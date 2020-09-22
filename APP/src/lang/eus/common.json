@@ -75,7 +75,8 @@
     "descripcionPropuesta": "Idatzi zure proposamenaren deskribapen zehatza...",
     "cuidador": "Zaintzailea",
     "valoraciones": "Balorazioak",
-    "distancia": "Distantzia: {{distancia}} Km-tara"
+    "distancia": "Distantzia: {{distancia}} Km-tara",
+    "eligeCategoria": "Aukeratu kategoria"
   },
   "registerFormCuidadores": {
     "avatar": "Avatarra",

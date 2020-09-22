@@ -71,7 +71,8 @@
       "acuerdoExistente": "Tienes un acuerdo activo con este cuidador",
       "filtrar": "Filtrar",
       "descripcionPropuesta": "Escribe la descripción detallada de tu propuesta...",
-      "distancia": "Distancia: A {{distancia}} KM"
+      "distancia": "Distancia: A {{distancia}} KM",
+      "eligeCategoria": "Elige una categoría"
     },
     "registerFormCuidadores": {
       "avatar": "Avatar",
