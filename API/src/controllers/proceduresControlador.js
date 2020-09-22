@@ -1719,6 +1719,7 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
   if(filterUbicacion !== undefined && filterUbicacion.length > 0){
     cuidadoresFilter.ubicaciones = filterUbicacion;
   }
+  console.log(filterCategoria);
   if (filterCategoria !== undefined) {
     Object.keys(filterCategoria).forEach(category => {
       if (filterCategoria[category] === true) {
