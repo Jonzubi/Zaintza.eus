@@ -1719,18 +1719,14 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
   if(filterUbicacion !== undefined && filterUbicacion.length > 0){
     cuidadoresFilter.ubicaciones = filterUbicacion;
   }
-  console.log(filterCategoria);
   if (filterCategoria !== undefined) {
     const objFilterCategoria = JSON.parse(filterCategoria);
     Object.keys(objFilterCategoria).forEach(category => {
-      console.log(`objFilterCategoria[${category}]`, objFilterCategoria[category]);
-      console.log(`objFilterCategoria[${category}] === true`, objFilterCategoria[category] === true);
       if (objFilterCategoria[category] === true) {
         cuidadoresFilter[`publicoDisponible.${category}`] = true;
       }
     })
   }
-  console.log(cuidadoresFilter);
   const cuidadores = await modeloCuidadores.find(
     cuidadoresFilter,
     null,
