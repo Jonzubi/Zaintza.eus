@@ -1716,7 +1716,7 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
   let cuidadoresFilter = {
     isPublic: true
   };
-  if(filterUbicacion !== undefined){
+  if(filterUbicacion !== undefined && filterUbicacion.length > 0){
     cuidadoresFilter.ubicaciones = filterUbicacion;
   }
   if (filterCategoria !== undefined) {
