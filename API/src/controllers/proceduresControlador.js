@@ -1726,6 +1726,7 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
       }
     })
   }
+  console.log(cuidadoresFilter);
   const cuidadores = await modeloCuidadores.find(
     cuidadoresFilter,
     null,
