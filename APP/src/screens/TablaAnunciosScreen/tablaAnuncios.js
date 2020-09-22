@@ -770,14 +770,17 @@ class TablaAnuncios extends React.Component {
                   <h5>Filtrar</h5>
                 </ModalHeader>
                 <ModalBody className="d-flex flex-column justify-content-between align-items-stretch">
-                  <div className="d-flex flex-row align-items-center justify-content-center">
-                    <FontAwesomeIcon
+                  <div className="d-flex flex-row align-items-center justify-content-between">
+                    <div className="d-flex align-items-center">
+                      <FontAwesomeIcon
                       className="text-success mr-2"
                       icon={faHome}
-                    />
-                    <PuebloAutosuggest
-                      onSuggestionSelected={this.handleFilterPuebloSelected}
-                    />
+                      />
+                      <PuebloAutosuggest
+                        onSuggestionSelected={this.handleFilterPuebloSelected}
+                      />
+                    </div>
+                    
                     {auxFilterPueblo !== "" ? (
                       <span className="ml-2 font-weight-bold">
                         {auxFilterPueblo}
