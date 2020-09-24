@@ -638,6 +638,14 @@ class Tabla extends React.Component {
 
   handleApplyFilters = () => {
     const { auxFilterPueblo, requiredCards, auxFilterCategoria } = this.state;
+    const { latitud, longitud, maxDistance } = this.props;
+    let coords = null;
+    if (latitud !== 0 && longitud !== 0) {
+      coords = {
+        latitud,
+        longitud,
+      };
+    }
 
     let objFiltros = {
       isPublic: true,
@@ -661,7 +669,8 @@ class Tabla extends React.Component {
             params: {
               requiredCards,
               filterUbicacion: auxFilterPueblo,
-              filterCategoria: auxFilterCategoria
+              filterCategoria: auxFilterCategoria,
+              coords: auxFilterPueblo === "" ? coords : null
             },
           }
         )
