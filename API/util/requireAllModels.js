@@ -19,6 +19,7 @@ module.exports = conexion => {
     modelos.anuncioVisita = require("../src/models/anuncioVisita")(conexion);
     modelos.cuidadorVisita = require("../src/models/cuidadorVisita")(conexion);
     modelos.valoracion = require("../src/models/valoracion")(conexion);
+    modelos.conexion = require('../src/models/conexion')(conexion);
 
     return modelos;
 }

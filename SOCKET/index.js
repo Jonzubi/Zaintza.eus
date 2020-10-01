@@ -14,6 +14,7 @@ let usuariosConectados = [];
 let usuariosLogueados = [];
 
 io.on('connection', (socket) => {
+    registrarConexion(socket, 'IN');
 
     usuariosConectados.push({
         socketId: socket.id
@@ -41,6 +42,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
+        registrarConexion(socket, 'OUT');
         usuariosConectados = usuariosConectados.filter(item => item.socketId !== socket.id);
         usuariosLogueados = usuariosLogueados.filter(item => item.socketId !== socket.id);
         printDataOnConsole();
@@ -75,4 +77,15 @@ const printDataOnConsole = () => {
     console.log("USUARIOS LOGUEADOS");
     console.log("-------------------");
     console.log(usuariosLogueados);
+}
+
+const registrarConexion = async (socket, inOut) => {
+    const modeloConexion = modelos.conexion;
+    const conexion = new modeloConexion({
+        fechaConexion: Date.now(),
+        inOut,
+        socketId: socket.id,
+        ip: socket.conn.remoteAddress
+    });
+    conexion.save();
 }
