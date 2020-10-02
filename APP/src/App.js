@@ -26,6 +26,7 @@ import { ResetMaxDistance } from './redux/actions/coords';
 import { SetCoords } from './redux/actions/coords';
 import i18next from 'i18next';
 import CookieConsent from './components/CookieConsent';
+import AvisoLegal from './screens/AvisoLegalScreen/avisoLegal';
 
 class App extends React.Component {
 
@@ -86,6 +87,8 @@ class App extends React.Component {
         return <MisAnuncios />;
       case "stats":
         return <CuidadorStatsForm />;
+      case "avisoLegal":
+        return <AvisoLegal />;
       default:
         return <h5>Bad gateway</h5>
     }
