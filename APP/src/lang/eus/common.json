@@ -354,5 +354,10 @@
   },
   "ban": {
     "banned": "{{dias}} egunerako konturako sarrera kendu zaizu"
+  },
+  "cookies": {
+    "avisoCookies": "Webgune honek cookieak erabiltzen ditu erabiltzaileen esperientzia hobetzeko.",
+    "aceptar": "Onartu",
+    "denegar": "Ukatu"
   }
 }

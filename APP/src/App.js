@@ -25,6 +25,7 @@ import { changeFormContent } from "./redux/actions/app";
 import { ResetMaxDistance } from './redux/actions/coords';
 import { SetCoords } from './redux/actions/coords';
 import i18next from 'i18next';
+import CookieConsent from './components/CookieConsent';
 
 class App extends React.Component {
 
@@ -95,6 +96,7 @@ class App extends React.Component {
     return (
       <SocketContext.Provider value={this.socket}>
         <div>
+          <CookieConsent />
           <MenuPerfil />
           <div id="outer-container" className="w-100">
             <Cabecera />

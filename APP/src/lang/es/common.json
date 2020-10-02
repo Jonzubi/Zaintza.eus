@@ -332,6 +332,11 @@
     },
     "ban": {
       "banned": "Has sido baneado: {{dias}} días"
+    },
+    "cookies": {
+      "avisoCookies": "Este sitio web utiliza cookies para mejorar la experiencia del usuario.",
+      "aceptar": "Aceptar",
+      "denegar": "Denegar"
     }
   }
   
