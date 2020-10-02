@@ -141,8 +141,6 @@ class FormCuidador extends React.Component {
       avatarSrc: "",
       avatarPreview: "",
       imgContact: null,
-      hoverSexoM: false,
-      hoverSexoF: false,
       isLoading: false,
       auxAddPueblo: "",
       hoverNino: false,
@@ -214,14 +212,6 @@ class FormCuidador extends React.Component {
     this.setState({
       txtSexo: sex,
     });
-  };
-
-  handleSexHover = (sex) => {
-    this.setState({ [sex]: true });
-  };
-
-  handleSexLeave = (sex) => {
-    this.setState({ [sex]: false });
   };
 
   handleEdit = () => {
@@ -702,8 +692,6 @@ class FormCuidador extends React.Component {
       txtMovil,
       txtSexo,
       txtTelefFijo,
-      hoverSexoM,
-      hoverSexoF,
       txtEmail,
       txtContrasena,
       diasDisponible,
@@ -902,73 +890,30 @@ class FormCuidador extends React.Component {
                   value={txtFechaNacimiento}
                 />
               </div>
-              <div className="d-lg-none d-inline col-12 mt-3">
+              <div className={error.txtSexo ? "col-lg-6 col-12 mt-3 border border-danger" : "col-lg-6 col-12 mt-3"}>
+                <div>
                 <FontAwesomeIcon icon={faVenusMars} className="mr-1" />
                 <span>{trans("registerFormCuidadores.sexo")}</span> (
                 <span className="text-danger">*</span>)
-              </div>
-              <div
-                className={
-                  error.txtSexo
-                    ? "col-lg-3 col-6 text-center p-1 border border-danger mt-3"
-                    : "col-lg-3 col-6 text-center p-1 mt-3"
-                }
-                onClick={() =>
-                  !isProfileView || isEditing ? this.handleSexChange("M") : null
-                }
-                onMouseEnter={() =>
-                  !isProfileView || isEditing
-                    ? this.handleSexHover("hoverSexoM")
-                    : null
-                }
-                onMouseLeave={() =>
-                  !isProfileView || isEditing
-                    ? this.handleSexLeave("hoverSexoM")
-                    : null
-                }
-                id="txtSexM"
-                style={{
-                  borderRadius: "8px",
-                  cursor: !isProfileView || isEditing ? "pointer" : "no-drop",
-                  boxShadow: "0 0.125rem 0.25rem rgba(0,0,0,.075)",
-                  background:
-                    txtSexo == "M" ? "#28a745" : hoverSexoM ? "#545b62" : "",
-                  color: txtSexo == "M" || hoverSexoM ? "white" : "black",
-                }}
-              >
-                <FontAwesomeIcon className="fa-5x" icon={faMale} />
-              </div>
-              <div
-                className={
-                  error.txtSexo
-                    ? "col-lg-3 col-6 text-center p-1 border border-danger mt-3"
-                    : "col-lg-3 col-6 text-center p-1 mt-3"
-                }
-                id="txtSexF"
-                onClick={() =>
-                  !isProfileView || isEditing ? this.handleSexChange("F") : null
-                }
-                onMouseEnter={() =>
-                  !isProfileView || isEditing
-                    ? this.handleSexHover("hoverSexoF")
-                    : null
-                }
-                onMouseLeave={() =>
-                  !isProfileView || isEditing
-                    ? this.handleSexLeave("hoverSexoF")
-                    : null
-                }
-                style={{
-                  borderRadius: "8px",
-                  cursor: !isProfileView || isEditing ? "pointer" : "no-drop",
-                  boxShadow: "0 0.125rem 0.25rem rgba(0,0,0,.075)",
-                  background:
-                    txtSexo == "F" ? "#28a745" : hoverSexoF ? "#545b62" : "",
-                  color: txtSexo == "F" || hoverSexoF ? "white" : "black",
-                }}
-              >
-                <FontAwesomeIcon className="fa-5x" icon={faFemale} />
-              </div>
+                </div><br />
+                <div className=" d-flex flex-row justify-content-between">
+                  <div>
+                    <input type="radio" id="male" name="gender" value="male" onClick={() =>
+                  !isProfileView || isEditing ? this.handleSexChange("M") : null} />
+                    <label className="ml-1" for="male">{trans('sexo.hombre')}</label>
+                  </div>
+                  <div>
+                    <input type="radio" id="female" name="gender" value="female" onClick={() =>
+                  !isProfileView || isEditing ? this.handleSexChange("F") : null}/>
+                    <label className="ml-1" for="female">{trans('sexo.mujer')}</label>
+                  </div>
+                  <div>
+                    <input type="radio" id="other" name="gender" value="other" onClick={() =>
+                  !isProfileView || isEditing ? this.handleSexChange("X") : null} />
+                    <label className="ml-1" for="other">{trans('sexo.otro')}</label>
+                  </div>  
+                </div>
+              </div>              
             </div>
             {/* Tercera fila */}
             <div className="row">

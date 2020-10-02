@@ -349,7 +349,8 @@
   },
   "sexo": {
     "hombre": "Gizonezkoa",
-    "mujer": "Emakumezkoa"
+    "mujer": "Emakumezkoa",
+    "otro": "Beste bat"
   },
   "ban": {
     "banned": "{{dias}} egunerako konturako sarrera kendu zaizu"
