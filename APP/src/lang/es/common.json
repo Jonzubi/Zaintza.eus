@@ -333,7 +333,7 @@
     "ban": {
       "banned": "Has sido baneado: {{dias}} días"
     },
-    "Cookies": {
+    "cookies": {
       "avisoCookies": "Con el fin de ofrecerte un servicio mejor, esta web utiliza cookies. Al continuar navegando por el sitio, aceptas el uso de estas. Puede encontrar más detalles en nuestro ",
       "linkAvisoLegal": "aviso legal",
       "aceptar": "Aceptar",
