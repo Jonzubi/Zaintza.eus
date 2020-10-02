@@ -36,5 +36,6 @@ El proyecto de SEIM para Aplicación Web de 2º
 - VPS de **OVH Cloud** (Agosto): **11.13€**
 - **OVH** renovación de no se que: **2.23€**
 - Email **MX 5 OVH**: **6.05€**
+- VPS de **OVH Cloud** (Septiembre): **11.13€**
 
-**TOTAL**: **686.42€**
+**TOTAL**: **697.55€**
