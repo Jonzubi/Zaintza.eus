@@ -22,12 +22,14 @@ io.on('connection', (socket) => {
     printDataOnConsole()
 
     socket.on('login', (loggedData) => {
+        registrarLogin(socket.id, loggedData.idUsuario, 'IN');
         usuariosLogueados.push(Object.assign({socketId: socket.id}, loggedData));
         io.to(`${socket.id}`).emit('notifyReceived');
         printDataOnConsole()
     });
 
     socket.on('logout', ({ idUsuario }) => {
+        registrarLogin(socket.id, idUsuario, 'OUT');
         usuariosLogueados = usuariosLogueados.filter(item => item.idUsuario !== idUsuario);
         printDataOnConsole();
     });
@@ -88,4 +90,15 @@ const registrarConexion = async (socket, inOut) => {
         ip: socket.conn.remoteAddress
     });
     conexion.save();
+}
+
+const registrarLogin = async (socketId, idUsuario, inOut) => {
+    const modeloLogin = modelos.login;
+    const login = new modeloLogin({
+        idUsuario,
+        socketId,
+        fechaLogin: Date.now(),
+        inOut
+    });
+    login.save();
 }
