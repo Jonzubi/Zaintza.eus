@@ -37,5 +37,6 @@ El proyecto de SEIM para Aplicación Web de 2º
 - **OVH** renovación de no se que: **2.23€**
 - Email **MX 5 OVH**: **6.05€**
 - VPS de **OVH Cloud** (Septiembre): **11.13€**
+- Ley de **RGPD** (Basquekide): **242.00€**
 
-**TOTAL**: **697.55€**
+**TOTAL**: **939.55€**
