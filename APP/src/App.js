@@ -27,6 +27,7 @@ import { SetCoords } from './redux/actions/coords';
 import i18next from 'i18next';
 import CookieConsent from './components/CookieConsent';
 import AvisoLegal from './screens/AvisoLegalScreen/avisoLegal';
+import Footer from './components/footer';
 
 class App extends React.Component {
 
@@ -108,6 +109,7 @@ class App extends React.Component {
             }} />
             <AppContent />
             <ModalRegistrarse />
+            <Footer />
           </div>
         </div>
       </SocketContext.Provider>

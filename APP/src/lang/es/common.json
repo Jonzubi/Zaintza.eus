@@ -388,6 +388,9 @@
       "pVerInfoPorFavor": "Por favor, consulte las instrucciones y manuales de su navegador para ampliar esta información. Nuestra web utiliza dos tipos de 'cookies' diferentes:",
       "pCookiePubli": "Utilizadas para personalizar la publicidad que nuestro sitio web le proporciona, según los contenidos vistos y la frecuencia con que se muestren los anuncios.",
       "pMoreInfo": "Para más información sobre el uso de 'cookies', puede revisar la documentación publicada en las guías de la agencia Española de Protección de Datos"
+    },
+    "footer": {
+      "privacidad": "Política de privacidad y Protección de Datos" 
     }
   }
   

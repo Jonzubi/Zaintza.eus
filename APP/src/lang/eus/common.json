@@ -409,5 +409,8 @@
     "pVerInfoPorFavor": "Informazio gehiago lortzeko, ikusi zure nabigatzailearen argibideak eta eskuliburuak. Gure webguneak bi 'cookie' mota desberdin erabiltzen ditu:",
     "pCookiePubli": "Gure webguneak eskaintzen duen publizitatea pertsonalizatzeko erabiltzen dira, ikusitako edukiaren arabera eta iragarkiak agertzen diren maiztasunaren arabera.",
     "pMoreInfo": "'Cookieak' erabiltzeari buruzko informazio gehiago lortzeko, Datuak Babesteko Espainiako Agentziaren gidetan argitaratutakoa berrikusi dezakezu."
+  },
+  "footer": {
+    "privacidad": "Pribatutasun politika"
   }
 }
