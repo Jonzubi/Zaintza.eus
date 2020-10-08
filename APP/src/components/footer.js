@@ -11,20 +11,13 @@ const Footer = () => {
     dispatch(changeFormContent("avisoLegal"));
   };
 
-  let footerStyle = {
-    background: colors.grey,
-    fontSize: 11
-  };
-  if (isMobile) {
-    footerStyle = Object.assign({}, footerStyle, {
-      position: 'absolute',
-      bottom: 0,
-      width: '100%'
-    })
-  }
+
   return (
     <div
-      style={footerStyle}
+      style={{
+        background: colors.grey,
+        fontSize: 11
+      }}
       className="d-flex flex-row align-itesm-center justify-content-center p-1 text-white"
     >
       <span
