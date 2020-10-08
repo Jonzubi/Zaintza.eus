@@ -20,17 +20,7 @@ module.exports = (conexion) => {
       required: true,
       enum: ["IN", "OUT"], //In para conexion OUT para desconexion
     },
-    device: {
-      isBrowser: Boolean,
-      browserMajorVersion: String,
-      browserFullVersion: String,
-      browserName: String,
-      engineName: String,
-      engineVersion: String,
-      osName: String,
-      osVersion: String,
-      userAgent: String,
-    },
+    device: Map,
   });
 
   return conexion.model("Conexion", modeloConexion, "Conexiones");
