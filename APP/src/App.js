@@ -3,7 +3,7 @@ import cogoToast from 'cogo-toast';
 import MenuPerfil from "./components/menuPerfil";
 import Cabecera from "./components/header";
 import SlideTab from "./components/slideTab";
-import { deviceDetect } from 'react-device-detect';
+import { isMobile, osName } from 'react-device-detect';
 import RegisterFormCuidador from "./screens/RegisterCuidadorScreen/registerFormCuidador";
 import RegisterFormCliente from "./screens/RegisterClienteScreen/registerFormCliente";
 import PerfilCuidador from "./screens/PerfilCuidadorScreen/perfilCuidador";
@@ -35,7 +35,10 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.socket = io(`https://${ipMaquina}:3002`, {
-      query: `deviceData=${JSON.stringify(deviceDetect())}`
+      query: `deviceData=${JSON.stringify({
+        isMobile,
+        osName
+      })}`
     });
 
     this.socket.on('banned', (dias) => {
