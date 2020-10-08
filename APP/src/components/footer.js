@@ -17,7 +17,7 @@ const Footer = () => {
   };
   if (isMobile) {
     footerStyle = Object.assign({}, footerStyle, {
-      position: 'relative',
+      position: 'absolute',
       bottom: 0,
       width: '100%'
     })
