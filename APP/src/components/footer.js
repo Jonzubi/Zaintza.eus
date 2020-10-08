@@ -14,6 +14,9 @@ const Footer = () => {
       style={{
         background: colors.grey,
         fontSize: 11,
+        position: 'absolute',
+        bottom: 0,
+        width: '100%'
       }}
       className="d-flex flex-row align-itesm-center justify-content-center p-1 text-white"
     >
