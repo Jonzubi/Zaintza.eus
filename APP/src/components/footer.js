@@ -10,7 +10,9 @@ const Footer = () => {
   const handleAvisoLegalClick = () => {
     dispatch(changeFormContent("avisoLegal"));
   };
-
+  const handlePrivacidadClick = () => {
+    dispatch(changeFormContent("privacidad"))
+  }
 
   return (
     <div
@@ -31,6 +33,7 @@ const Footer = () => {
       </span>
       |
       <span
+        onClick={handlePrivacidadClick}
         className="ml-1"
         style={{
           cursor: "pointer",

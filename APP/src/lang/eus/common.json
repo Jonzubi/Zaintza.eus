@@ -413,5 +413,20 @@
   },
   "footer": {
     "privacidad": "Pribatutasun politika"
+  },
+  "privacidadScreen": {
+    "privacidad":"Pribatutasun politika",
+    "responsable": "Responsable",
+    "txtResponsable": "JON ZUBIZARRETA ITURRIA",
+    "finalidad": "Xedea",
+    "txtFinalidad": "Inprimakiaren bidez jasotako eskaera/informazioa kudeatzea, interesdunak eskatuta.",
+    "legitimacion": "Legitimazioa",
+    "txtLegitimacion": "Interesdunaren baimena.",
+    "destinatarios": "Hartzaileak",
+    "txtDestinatarios": "Ez da inolako daturik transferituko hirugarreni, legezko betebeharra ez bada.",
+    "derechos": "Eskubideak",
+    "txtDerechos": "Interesdunari buruzko datu pertsonaletarako sarbidea eskatzeko eskubidea, Datu horien zuzenketa edo ezabaketa eskatzeko eskubidea, Tratamenduaren mugaketa eskatzeko eskubidea, Tratamenduari uko egiteko eskubidea, Datuen eramangarritasun-eskubidea.",
+    "infoAdicional": "Informazio gehigarria",
+    "txtInfoAdicional": "Datuen Babesari buruzko informazio osagarria eta zehatza gure egoitzan kontsulta dezakezu."
   }
 }

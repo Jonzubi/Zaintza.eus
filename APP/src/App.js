@@ -15,6 +15,7 @@ import NotificacionesForm from "./screens/NotificacionesScreen/notificacionesFor
 import CalendarioForm from "./screens/CalendarioScreen/calendarioForm";
 import FormAnuncio from "./screens/AnunciosScreen/formAnuncio";
 import Ajustes from "./screens/AjustesScreen/ajustesForm";
+import PrivacidadScreen from './screens/PrivacidadScreen/privacidadScreen';
 import MisAnuncios from "./screens/MisAnunciosScreen/misAnunciosForm";
 import CuidadorStatsForm from "./screens/CuidadorStatsScreen/cuidadorStatsForm";
 import SocketContext from "./socketio/socket-context";
@@ -96,6 +97,8 @@ class App extends React.Component {
         return <CuidadorStatsForm />;
       case "avisoLegal":
         return <AvisoLegal />;
+      case "privacidad":
+        return <PrivacidadScreen />;
       default:
         return <h5>Bad gateway</h5>
     }

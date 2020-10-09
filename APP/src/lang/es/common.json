@@ -407,6 +407,21 @@
     },
     "footer": {
       "privacidad": "Política de privacidad y Protección de Datos" 
+    },
+    "privacidadScreen": {
+      "privacidad":"Política de privacidad y Protección de Datos",
+      "responsable": "Responsable",
+      "txtResponsable": "JON ZUBIZARRETA ITURRIA",
+      "finalidad": "Finalidad",
+      "txtFinalidad": "Gestionar la petición/información recibida a través del formulario",
+      "legitimacion": "Legitimación",
+      "txtLegitimacion": "Consentimiento del interesado",
+      "destinatarios": "Destinatarios",
+      "txtDestinatarios": "No se cederán datos a terceros, salvo obligación legal",
+      "derechos": "Derechos",
+      "txtDerechos": "Acceder, rectificar y suprimir los datos, así como otros derechos, como se explica en la información adicional.",
+      "infoAdicional": "Información adicional",
+      "txtInfoAdicional": "Puede consultar la información adicional y detallada sobre Protección de Datos en nuestra sede social."
     }
   }
   
