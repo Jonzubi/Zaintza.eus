@@ -21,7 +21,7 @@ import {
   faFileSignature,
   faStar,
   faMapMarkerAlt,
-  faUsers
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import Axios from "../../util/axiosInstance";
 import Modal from "react-bootstrap/Modal";
@@ -59,7 +59,7 @@ const mapStateToProps = (state) => {
     latitud: state.coords.latitud,
     longitud: state.coords.longitud,
     maxDistance: state.coords.maxDistance,
-    nowLang: state.app.nowLang
+    nowLang: state.app.nowLang,
   };
 };
 
@@ -173,7 +173,7 @@ class Tabla extends React.Component {
       auxFilterCategoria: {
         nino: false,
         terceraEdad: false,
-        necesidadEspecial: false
+        necesidadEspecial: false,
       },
       isFiltering: false,
     };
@@ -509,21 +509,23 @@ class Tabla extends React.Component {
           }
 
           let { horaInicio, horaFin } = confDia;
-          horaInicio = horaInicio.split(':'); // Separamos horas y minutos para compararlos 
-          horaFin = horaFin.split(':'); // y decir que hora fin no sea antes que hora inicio
+          horaInicio = horaInicio.split(":"); // Separamos horas y minutos para compararlos
+          horaFin = horaFin.split(":"); // y decir que hora fin no sea antes que hora inicio
 
-          if (parseInt(horaInicio[0]) > parseInt(horaFin[0])){
+          if (parseInt(horaInicio[0]) > parseInt(horaFin[0])) {
             // La hora de horainicio es mayor por lo que error
             cogoToast.error(
               <h5>{trans("registerFormCuidadores.errorDiaHoraIncorrecto")}</h5>
             );
             error = true;
             return;
-          } else if(parseInt(horaInicio[0]) === parseInt(horaFin[0])){
+          } else if (parseInt(horaInicio[0]) === parseInt(horaFin[0])) {
             if (parseInt(horaInicio[1]) >= parseInt(horaFin[1])) {
               // Los minutos de horainicio son mayores, siendo la hora igual por lo que error
               cogoToast.error(
-                <h5>{trans("registerFormCuidadores.errorDiaHoraIncorrecto")}</h5>
+                <h5>
+                  {trans("registerFormCuidadores.errorDiaHoraIncorrecto")}
+                </h5>
               );
               error = true;
               return;
@@ -670,7 +672,7 @@ class Tabla extends React.Component {
               requiredCards,
               filterUbicacion: auxFilterPueblo,
               filterCategoria: auxFilterCategoria,
-              coords: auxFilterPueblo === "" ? coords : null
+              coords: auxFilterPueblo === "" ? coords : null,
             },
           }
         )
@@ -704,8 +706,8 @@ class Tabla extends React.Component {
         auxFilterCategoria: {
           nino: false,
           terceraEdad: false,
-          necesidadEspecial: false
-        }
+          necesidadEspecial: false,
+        },
       },
       () => {
         this.refrescarCuidadores();
@@ -775,9 +777,9 @@ class Tabla extends React.Component {
 
     aux[categoria] = !aux[categoria];
     this.setState({
-      auxFilterCategoria: aux
+      auxFilterCategoria: aux,
     });
-  }
+  };
 
   render() {
     const {
@@ -790,7 +792,7 @@ class Tabla extends React.Component {
       valoracionesIsLoading,
       jsonValoraciones,
       showModalValoraciones,
-      auxFilterCategoria
+      auxFilterCategoria,
     } = this.state;
     const vSelectedCuidador = this.state.selectedCuidador;
     const fechaNacCuidador = new Date(vSelectedCuidador.fechaNacimiento);
@@ -806,7 +808,8 @@ class Tabla extends React.Component {
       ) : (
         <em>Definitu gabe</em>
       );
-    const traducDias = (dia) => dia === "7" ? trans(`dias.dia_0`) : trans(`dias.dia_${dia}`); 
+    const traducDias = (dia) =>
+      dia === "7" ? trans(`dias.dia_0`) : trans(`dias.dia_${dia}`);
 
     return (
       <BottomScrollListener onBottom={this.onScreenBottom}>
@@ -858,19 +861,19 @@ class Tabla extends React.Component {
                         itemScope
                         itemType="http://schema.org/Person"
                       >
-                        {cuidador.distancia !== undefined ? 
-                          <div
-                            className="card-header d-flex flex-row align-items-center justify-content-center"
-                          >
-                            <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-1" />
-                            <span>{i18next.t('tablaCuidadores.distancia', {
-                              distancia: cuidador.distancia
-                            })}
+                        {cuidador.distancia !== undefined ? (
+                          <div className="card-header d-flex flex-row align-items-center justify-content-center">
+                            <FontAwesomeIcon
+                              icon={faMapMarkerAlt}
+                              className="mr-1"
+                            />
+                            <span>
+                              {i18next.t("tablaCuidadores.distancia", {
+                                distancia: cuidador.distancia,
+                              })}
                             </span>
                           </div>
-                          : 
-                          null
-                        }
+                        ) : null}
                         <div
                           style={{
                             //backgroundImage:"url(https://" + ipMaquina + ":3001/api/image/" + cuidador.direcFotoContacto + ")",
@@ -934,7 +937,11 @@ class Tabla extends React.Component {
                           </h5>
                           <p
                             className="card-text"
-                            style={{ maxHeight: "75px", overflow: "hidden", whiteSpace: 'pre-line' }}
+                            style={{
+                              maxHeight: "75px",
+                              overflow: "hidden",
+                              whiteSpace: "pre-line",
+                            }}
                             itemProp="description"
                           >
                             {cuidador.cuidador.descripcion}
@@ -1127,11 +1134,10 @@ class Tabla extends React.Component {
                       <div>
                         <span itemProp="gender">
                           {vSelectedCuidador.sexo === "M"
-                            ? trans('sexo.hombre')
-                            : vSelectedCuidador.sexo === "F" 
-                            ? trans('sexo.mujer')
-                            : trans('sexo.otro')
-                          }
+                            ? trans("sexo.hombre")
+                            : vSelectedCuidador.sexo === "F"
+                            ? trans("sexo.mujer")
+                            : trans("sexo.otro")}
                         </span>
                       </div>
                     </div>
@@ -1154,7 +1160,9 @@ class Tabla extends React.Component {
                     >
                       <FontAwesomeIcon className="mr-5" icon={faMobileAlt} />
                       <div>
-                        <span itemProp="telephone">{telefonoMovilCuidador}</span>
+                        <span itemProp="telephone">
+                          {telefonoMovilCuidador}
+                        </span>
                       </div>
                     </div>
                     <div
@@ -1188,13 +1196,15 @@ class Tabla extends React.Component {
                         </span>
                       </div>
 
-                      <span 
+                      <span
                         className=""
                         itemProp="description"
                         style={{
-                          whiteSpace: 'pre-wrap'
+                          whiteSpace: "pre-wrap",
                         }}
-                      >{vSelectedCuidador.descripcion}</span>
+                      >
+                        {vSelectedCuidador.descripcion}
+                      </span>
                     </div>
                     <div
                       style={{
@@ -1403,14 +1413,30 @@ class Tabla extends React.Component {
                                     className="d-inline"
                                     id={"dia" + indice}
                                   >
-                                    <option>{i18next.t('dropDownDias.eligeDia')}</option>
-                                    <option value="1">{i18next.t('dropDownDias.lunes')}</option>
-                                    <option value="2">{i18next.t('dropDownDias.martes')}</option>
-                                    <option value="3">{i18next.t('dropDownDias.miercoles')}</option>
-                                    <option value="4">{i18next.t('dropDownDias.jueves')}</option>
-                                    <option value="5">{i18next.t('dropDownDias.viernes')}</option>
-                                    <option value="6">{i18next.t('dropDownDias.sabado')}</option>
-                                    <option value="7">{i18next.t('dropDownDias.domingo')}</option>
+                                    <option>
+                                      {i18next.t("dropDownDias.eligeDia")}
+                                    </option>
+                                    <option value="1">
+                                      {i18next.t("dropDownDias.lunes")}
+                                    </option>
+                                    <option value="2">
+                                      {i18next.t("dropDownDias.martes")}
+                                    </option>
+                                    <option value="3">
+                                      {i18next.t("dropDownDias.miercoles")}
+                                    </option>
+                                    <option value="4">
+                                      {i18next.t("dropDownDias.jueves")}
+                                    </option>
+                                    <option value="5">
+                                      {i18next.t("dropDownDias.viernes")}
+                                    </option>
+                                    <option value="6">
+                                      {i18next.t("dropDownDias.sabado")}
+                                    </option>
+                                    <option value="7">
+                                      {i18next.t("dropDownDias.domingo")}
+                                    </option>
                                   </select>
                                   <div className="d-flex flex-row align-items-center">
                                     <TimeInput
@@ -1561,7 +1587,9 @@ class Tabla extends React.Component {
                             icon={faHome}
                           />
                           <PuebloAutosuggest
-                            onSuggestionSelected={this.handleFilterPuebloSelected}
+                            onSuggestionSelected={
+                              this.handleFilterPuebloSelected
+                            }
                           />
                         </div>
                         {auxFilterPueblo !== "" ? (
@@ -1572,34 +1600,46 @@ class Tabla extends React.Component {
                       </div>
                       <div className="d-flex flex-row align-items-center justify-content-between mt-5">
                         <div className="d-flex flex-column align-items-center">
-                          <span>{i18next.t('tablaCuidadores.ninos')}</span>
+                          <span>{i18next.t("tablaCuidadores.ninos")}</span>
                           <input
                             type="checkbox"
                             value={auxFilterCategoria.nino}
                             checked={auxFilterCategoria.nino}
-                            onChange={() => this.handleFilterCategoriaChange('nino')}
+                            onChange={() =>
+                              this.handleFilterCategoriaChange("nino")
+                            }
                           />
                         </div>
                         <div className="d-flex flex-column align-items-center">
-                          <span>{i18next.t('tablaCuidadores.terceraEdad')}</span>
+                          <span>
+                            {i18next.t("tablaCuidadores.terceraEdad")}
+                          </span>
                           <input
                             type="checkbox"
                             value={auxFilterCategoria.terceraEdad}
                             checked={auxFilterCategoria.terceraEdad}
-                            onChange={() => this.handleFilterCategoriaChange('terceraEdad')}
+                            onChange={() =>
+                              this.handleFilterCategoriaChange("terceraEdad")
+                            }
                           />
                         </div>
                         <div className="d-flex flex-column align-items-center">
-                          <span>{i18next.t('tablaCuidadores.necesidadEspecial')}</span>
+                          <span>
+                            {i18next.t("tablaCuidadores.necesidadEspecial")}
+                          </span>
                           <input
                             type="checkbox"
                             value={auxFilterCategoria.necesidadEspecial}
                             checked={auxFilterCategoria.necesidadEspecial}
-                            onChange={() => this.handleFilterCategoriaChange('necesidadEspecial')}
+                            onChange={() =>
+                              this.handleFilterCategoriaChange(
+                                "necesidadEspecial"
+                              )
+                            }
                           />
                         </div>
                       </div>
-                    </div>                    
+                    </div>
                     <div className="d-flex flex-row justify-content-between">
                       <Button
                         onClick={this.handleApplyFilters}
@@ -1646,15 +1686,19 @@ class Tabla extends React.Component {
                         >
                           <Avatar
                             name={
-                              valoracion.idValorador.idPerfil.nombre +
-                              " " +
-                              valoracion.idValorador.idPerfil.apellido1
+                              !valoracion.esAnonimo
+                                ? valoracion.idValorador.idPerfil.nombre +
+                                  " " +
+                                  valoracion.idValorador.idPerfil.apellido1
+                                : i18next.t("tablaCuidadores.anonimo")
                             }
                             src={
                               "https://" +
                               ipMaquina +
                               ":3001/api/image/" +
-                              valoracion.idValorador.idPerfil.direcFoto
+                              !valoracion.esAnonimo
+                                ? valoracion.idValorador.idPerfil.direcFoto
+                                : "noImage"
                             }
                             size={50}
                             round={true}
@@ -1671,9 +1715,11 @@ class Tabla extends React.Component {
                                 )}
                               </small>
                               <span className="blockquote-footer">
-                                {valoracion.idValorador.idPerfil.nombre +
-                                  " " +
-                                  valoracion.idValorador.idPerfil.apellido1}
+                                {!valoracion.esAnonimo
+                                  ? valoracion.idValorador.idPerfil.nombre +
+                                    " " +
+                                    valoracion.idValorador.idPerfil.apellido1
+                                  : i18next.t("tablaCuidadores.anonimo")}
                               </span>
                             </div>
                           </div>

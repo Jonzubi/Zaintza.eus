@@ -1810,6 +1810,7 @@ exports.postNewValoracion = async (req, res, modelos) => {
     email,
     contrasena,
     fechaValorado,
+    esAnonimo
   } = req.body;
 
   //Primero validar que el idValorador(El que envia esta peticion) es autentico
@@ -1876,6 +1877,7 @@ exports.postNewValoracion = async (req, res, modelos) => {
     valor,
     comentario,
     fechaValorado,
+    esAnonimo
   })
     .save()
     .catch((err) => {

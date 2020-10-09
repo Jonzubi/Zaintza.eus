@@ -72,7 +72,8 @@
       "filtrar": "Filtrar",
       "descripcionPropuesta": "Escribe la descripción detallada de tu propuesta...",
       "distancia": "Distancia: A {{distancia}} KM",
-      "eligeCategoria": "Elige una categoría"
+      "eligeCategoria": "Elige una categoría",
+      "anonimo": "Anónimo"
     },
     "registerFormCuidadores": {
       "avatar": "Avatar",
@@ -171,7 +172,22 @@
       "aceptadoAcuerdo": "Tienes un acuerdo activo",
       "rechazadoAcuerdo": "El acuerdo ya esta terminado",
       "terminarAcuerdo": "Terminar acuerdo", 
-      "acuerdoTerminado": "El acuerdo ha sido terminado"
+      "acuerdoTerminado": "El acuerdo ha sido terminado",
+      "acuerdo": "Acuerdo",
+      "verAcuerdo": "Ver acuerdo",
+      "askTerminarAcuerdo": "Estás seguro de terminar el acuerdo?",
+      "titulo": "Titulo",
+      "descripcion": "Descripción",
+      "horario" :"Horario de cuidado",
+      "pueblos": "Pueblo/s",
+      "si": "Si",
+      "no": "No",
+      "estado": "Estado",
+      "enviarValoracion": "Enviar valoración",
+      "valorarCuidador": "Valoración del 1 al 5 del cuidador",
+      "detalles": "Detalles",
+      "valoracionEnviada": "Valoración enviada",
+      "valoracionAnonima": "Enviar como anónimo"
     },
     "notificacionesForm":{
       "propuestaAcuerdo": "Te ha enviado una propuesta de acuerdo",

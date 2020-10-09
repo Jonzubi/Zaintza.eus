@@ -28,6 +28,12 @@ module.exports = (conexion) => {
     },
     comentario: String,
     fechaValorado: Date,
+    // Una valoración se puede hacer de forma anónima o no
+    esAnonimo: {
+      type: Boolean,
+      required: true,
+      default: false
+    }
   });
 
   return conexion.model("Valoracion", valoracion, "Valoraciones");

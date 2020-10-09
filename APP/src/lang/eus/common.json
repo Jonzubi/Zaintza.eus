@@ -76,7 +76,8 @@
     "cuidador": "Zaintzailea",
     "valoraciones": "Balorazioak",
     "distancia": "Distantzia: {{distancia}} Km-tara",
-    "eligeCategoria": "Aukeratu kategoria"
+    "eligeCategoria": "Aukeratu kategoria",
+    "anonimo": "Anonimoa"
   },
   "registerFormCuidadores": {
     "avatar": "Avatarra",
@@ -191,8 +192,8 @@
     "enviarValoracion": "Bidali balorazioa",
     "valorarCuidador": "Eman 1etik 5era zaintzaileari buruz duzun iritzia",
     "detalles": "Xehetasunak",
-    "valoracionEnviada": "Balorazioa bidalia"
-
+    "valoracionEnviada": "Balorazioa bidalia",
+    "valoracionAnonima": "Anonimoki bidali"
   },
   "notificacionesForm":{
     "propuestaAcuerdo": "-k akordio proposamena bidali dizu",

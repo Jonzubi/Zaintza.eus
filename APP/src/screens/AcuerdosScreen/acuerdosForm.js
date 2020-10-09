@@ -62,6 +62,7 @@ class AcuerdosForm extends React.Component {
       valoracionValue: 3,
       valoracionDetalle: "",
       valoracionIsUploading: false,
+      valoracionEsAnonimo: false
     };
 
     this.handleToogleCollapseAcuerdo = this.handleToogleCollapseAcuerdo.bind(
@@ -232,7 +233,7 @@ class AcuerdosForm extends React.Component {
   };
 
   handleEnviarValoracion = async (socket) => {
-    const { valoracionDetalle, valoracionValue, selectedAcuerdo } = this.state;
+    const { valoracionDetalle, valoracionValue, selectedAcuerdo, valoracionEsAnonimo } = this.state;
     const { idUsuario, email, contrasena } = this.props;
 
     this.setState(
@@ -249,7 +250,8 @@ class AcuerdosForm extends React.Component {
           comentario: valoracionDetalle,
           email,
           contrasena,
-          fechaValorado: moment()
+          fechaValorado: moment(),
+          esAnonimo: valoracionEsAnonimo
         };
         axios.post(`https://${ipMaquina}:3001/api/procedures/postNewValoracion`, formData)
         .then(() => {
@@ -275,6 +277,13 @@ class AcuerdosForm extends React.Component {
     );
   };
 
+  handleValoracionEsAnonimoChange = () => {
+    const { valoracionEsAnonimo } = this.state;
+    this.setState({
+      valoracionEsAnonimo: !valoracionEsAnonimo
+    });
+  }
+
   render() {
     const {
       isLoading,
@@ -287,6 +296,7 @@ class AcuerdosForm extends React.Component {
       valoracionDetalle,
       valoracionValue,
       valoracionIsUploading,
+      valoracionEsAnonimo
     } = this.state;
     const { tipoUsuario } = this.props;
     const laOtraPersona =
@@ -716,6 +726,16 @@ class AcuerdosForm extends React.Component {
                             value={valoracionDetalle}
                             onChange={this.handleValoracionDetalleChange}
                           />
+                          <div className="d-flex flex-row">
+                            <input
+                              value={valoracionEsAnonimo}
+                              checked={valoracionEsAnonimo}
+                              onChange={this.handleValoracionEsAnonimoChange}
+                              className="mt-3"
+                            />
+                            <label className="ml-1">{trans('acuerdosForm.valoracionAnonima')}</label>
+                          </div>
+                          
                         </ModalBody>
                         <ModalFooter className="d-flex flex-row align-items-center justify-content-center">
                           {valoracionIsUploading ? (
