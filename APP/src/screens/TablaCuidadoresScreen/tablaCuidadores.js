@@ -1696,9 +1696,9 @@ class Tabla extends React.Component {
                               "https://" +
                               ipMaquina +
                               ":3001/api/image/" +
-                              !valoracion.esAnonimo
+                              (!valoracion.esAnonimo
                                 ? valoracion.idValorador.idPerfil.direcFoto
-                                : "noImage"
+                                : "noImage")
                             }
                             size={50}
                             round={true}
