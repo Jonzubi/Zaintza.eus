@@ -726,8 +726,9 @@ class AcuerdosForm extends React.Component {
                             value={valoracionDetalle}
                             onChange={this.handleValoracionDetalleChange}
                           />
-                          <div className="d-flex flex-row">
+                          <div className="d-flex flex-row align-items-center justify-content-center">
                             <input
+                              type="checkbox"
                               value={valoracionEsAnonimo}
                               checked={valoracionEsAnonimo}
                               onChange={this.handleValoracionEsAnonimoChange}
