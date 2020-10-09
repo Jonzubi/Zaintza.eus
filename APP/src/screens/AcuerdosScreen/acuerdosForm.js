@@ -726,15 +726,15 @@ class AcuerdosForm extends React.Component {
                             value={valoracionDetalle}
                             onChange={this.handleValoracionDetalleChange}
                           />
-                          <div className="d-flex flex-row align-items-center justify-content-center">
+                          <div className="my-2 d-flex flex-row align-items-center justify-content-center">
                             <input
                               type="checkbox"
                               value={valoracionEsAnonimo}
                               checked={valoracionEsAnonimo}
                               onChange={this.handleValoracionEsAnonimoChange}
-                              className="mt-3"
+                              className=""
                             />
-                            <label className="ml-1">{trans('acuerdosForm.valoracionAnonima')}</label>
+                            <span className="ml-1">{trans('acuerdosForm.valoracionAnonima')}</span>
                           </div>
                           
                         </ModalBody>
