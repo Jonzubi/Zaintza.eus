@@ -14,6 +14,7 @@ const AceptarCookies = () => {
   }
   return (
     <CookieConsent
+      debug
       location="bottom"
       buttonText={i18next.t("cookies.aceptar")}
       declineButtonText={i18next.t("cookies.denegar")}
