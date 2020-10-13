@@ -5,7 +5,7 @@ import cogoToast from "cogo-toast";
 import { ReactDatez as Calendario } from "react-datez";
 import Avatar from "react-avatar-edit";
 import Switch from "react-switch";
-import axios from '../util/axiosInstance';
+import axios from "../util/axiosInstance";
 import ClipLoader from "react-spinners/ClipLoader";
 import {
   faMale,
@@ -147,6 +147,7 @@ class FormCuidador extends React.Component {
       hoverTerceraEdad: false,
       hoverNecesidadEspecial: false,
       suggestionsPueblos: [],
+      terminosAceptados: false,
       error: {
         txtNombre: false,
         txtEmail: false,
@@ -157,7 +158,7 @@ class FormCuidador extends React.Component {
         ubicaciones: false,
         txtDescripcion: false,
         imgContact: false,
-        diasDisponible: false
+        diasDisponible: false,
       },
     };
   }
@@ -220,76 +221,74 @@ class FormCuidador extends React.Component {
     });
   };
 
-  
   removeDiasDisponible = () => {
     const { isEditing } = this.state;
     const { isProfileView } = this.props;
-    if (isProfileView && !isEditing)
-    return;
+    if (isProfileView && !isEditing) return;
     this.setState({
       diasDisponible:
-      typeof this.state.diasDisponible.pop() != "undefined"
-      ? this.state.diasDisponible
-      : []
+        typeof this.state.diasDisponible.pop() != "undefined"
+          ? this.state.diasDisponible
+          : [],
     });
-  }
-  
+  };
+
   addDiasDisponible = () => {
     const { isEditing } = this.state;
     const { isProfileView } = this.props;
-    if (isProfileView && !isEditing){
+    if (isProfileView && !isEditing) {
       return;
     }
     let auxDiasDisponible = this.state.diasDisponible;
     auxDiasDisponible.push({
       dia: 0,
       horaInicio: "00:00",
-      horaFin: "00:00"
+      horaFin: "00:00",
     });
-    
+
     this.setState({
-      diasDisponible: auxDiasDisponible
+      diasDisponible: auxDiasDisponible,
     });
-  }
-  
+  };
+
   handleDiasDisponibleChange = (e, indice) => {
     if (typeof indice == "undefined") {
       //Significa que lo que se ha cambiado es el combo de los dias
       var origen = e.target;
       var indice = parseInt(origen.id.substr(origen.id.length - 1));
       var valor = origen.value;
-      
+
       let auxDiasDisponible = this.state.diasDisponible;
       auxDiasDisponible[indice]["dia"] = valor;
-      
+
       this.setState({
-        diasDisponible: auxDiasDisponible
+        diasDisponible: auxDiasDisponible,
       });
     } else {
       //Significa que ha cambiado la hora, no se sabe si inicio o fin, eso esta en "indice"
       let atributo = indice.substr(0, indice.length - 1);
       indice = indice.substr(indice.length - 1);
-      
+
       let auxDiasDisponible = this.state.diasDisponible;
       auxDiasDisponible[indice][atributo] = e;
-      
+
       this.setState({
-        diasDisponible: auxDiasDisponible
+        diasDisponible: auxDiasDisponible,
       });
     }
-  }
-  
+  };
+
   handleAddPueblo = (c, { suggestion }) => {
     const { ubicaciones } = this.state;
     this.setState(
       {
-        auxAddPueblo: suggestion
+        auxAddPueblo: suggestion,
       },
       () => {
         const { auxAddPueblo } = this.state;
         let pueblo = auxAddPueblo;
         if (pueblo == "") return;
-        
+
         if (!municipios.includes(pueblo)) {
           cogoToast.error(
             <h5>
@@ -298,7 +297,7 @@ class FormCuidador extends React.Component {
           );
           return;
         }
-        
+
         for (var clave in ubicaciones) {
           if (ubicaciones[clave] == pueblo) {
             cogoToast.error(
@@ -312,56 +311,53 @@ class FormCuidador extends React.Component {
         ubicaciones.push(pueblo);
         this.setState({
           ubicaciones: ubicaciones,
-          auxAddPueblo: ""
+          auxAddPueblo: "",
         });
       }
-      );
-    }
-    
-    handleRemovePueblo = () => {
-      const { ubicaciones } = this.state;
-      this.setState({
-        ubicaciones:
-        typeof ubicaciones.pop() != "undefined"
-        ? ubicaciones
-        : []
-      });
-    }
-    
-    handlePublicoHover = (publico) => {
-      this.setState({
-        [publico]: true
-      });
-    }
-    
-    handlePublicoLeave = (publico) => {
-      this.setState({
-        [publico]: false
+    );
+  };
+
+  handleRemovePueblo = () => {
+    const { ubicaciones } = this.state;
+    this.setState({
+      ubicaciones: typeof ubicaciones.pop() != "undefined" ? ubicaciones : [],
     });
-  }
-  
+  };
+
+  handlePublicoHover = (publico) => {
+    this.setState({
+      [publico]: true,
+    });
+  };
+
+  handlePublicoLeave = (publico) => {
+    this.setState({
+      [publico]: false,
+    });
+  };
+
   handlePublicoChange = (publico) => {
     let auxPublicoDisponible = this.state.publicoDisponible;
     auxPublicoDisponible[publico] = !auxPublicoDisponible[publico];
     this.setState({
-      publicoDisponible: auxPublicoDisponible
+      publicoDisponible: auxPublicoDisponible,
     });
-  }
-  
+  };
+
   handlePrecioChange = (atributo, valor) => {
     let auxPrecioPublico = this.state.precioPorPublico;
     auxPrecioPublico[atributo] = valor;
     this.setState({
-      precioPorPublico: auxPrecioPublico
+      precioPorPublico: auxPrecioPublico,
     });
-  }
-  
+  };
+
   handleIsPublicChange = (valor) => {
     this.setState({
-      isPublic: valor
+      isPublic: valor,
     });
-  }
-  
+  };
+
   handleGuardarCambios = async () => {
     // TODO handle guardar cambios
     for (var clave in this.state) {
@@ -369,7 +365,7 @@ class FormCuidador extends React.Component {
       //Hago una comporbacion diferente para los dias, para que haya elegido un dia en el combo
       if (clave == "diasDisponible") {
         let error = false;
-        this.state[clave].map(confDia => {
+        this.state[clave].map((confDia) => {
           if (confDia.dia == 0 || isNaN(confDia.dia)) {
             cogoToast.error(
               <h5>{trans("registerFormCuidadores.errorDiaNoElegido")}</h5>
@@ -378,21 +374,23 @@ class FormCuidador extends React.Component {
             return;
           }
           let { horaInicio, horaFin } = confDia;
-          horaInicio = horaInicio.split(':'); // Separamos horas y minutos para compararlos 
-          horaFin = horaFin.split(':'); // y decir que hora fin no sea antes que hora inicio
+          horaInicio = horaInicio.split(":"); // Separamos horas y minutos para compararlos
+          horaFin = horaFin.split(":"); // y decir que hora fin no sea antes que hora inicio
 
-          if (parseInt(horaInicio[0]) > parseInt(horaFin[0])){
+          if (parseInt(horaInicio[0]) > parseInt(horaFin[0])) {
             // La hora de horainicio es mayor por lo que error
             cogoToast.error(
               <h5>{trans("registerFormCuidadores.errorDiaHoraIncorrecto")}</h5>
             );
             error = true;
             return;
-          } else if(parseInt(horaInicio[0]) === parseInt(horaFin[0])){
+          } else if (parseInt(horaInicio[0]) === parseInt(horaFin[0])) {
             if (parseInt(horaInicio[1]) >= parseInt(horaFin[1])) {
               // Los minutos de horainicio son mayores, siendo la hora igual por lo que error
               cogoToast.error(
-                <h5>{trans("registerFormCuidadores.errorDiaHoraIncorrecto")}</h5>
+                <h5>
+                  {trans("registerFormCuidadores.errorDiaHoraIncorrecto")}
+                </h5>
               );
               error = true;
               return;
@@ -404,39 +402,41 @@ class FormCuidador extends React.Component {
           let auxError = { ...error };
           auxError.diasDisponible = true;
           this.setState({
-            error: auxError
+            error: auxError,
           });
           return;
         } else if (this.state.error.diasDisponible === true) {
           const { error } = this.state;
           error.diasDisponible = false;
           this.setState({
-            error: error
+            error: error,
           });
         }
       }
       // Comprobamos que haya metido al menos una categoria de cuidado
-      if (clave === 'publicoDisponible') {
+      if (clave === "publicoDisponible") {
         const { publicoDisponible } = this.state;
 
-        const publicoSeleccionado = Object.keys(publicoDisponible).find(publico => publicoDisponible[publico]);
+        const publicoSeleccionado = Object.keys(publicoDisponible).find(
+          (publico) => publicoDisponible[publico]
+        );
         const { error } = this.state;
-        if (!publicoSeleccionado) {          
+        if (!publicoSeleccionado) {
           let auxError = { ...error };
           auxError.publicoDisponible = true;
           this.setState({
-            error: auxError
+            error: auxError,
           });
           cogoToast.error(
             <h5>
-              {trans('registerFormCuidadores.errorPublicoNoSeleccionado')}
+              {trans("registerFormCuidadores.errorPublicoNoSeleccionado")}
             </h5>
           );
           return;
         } else if (error.publicoDisponible === true) {
           error.publicoDisponible = false;
           this.setState({
-            error: error
+            error: error,
           });
         }
       }
@@ -444,27 +444,31 @@ class FormCuidador extends React.Component {
       const { isProfileView } = this.props;
       const { imgContact } = this.state;
 
-      if (clave === 'imgContact') {
-          if (!isProfileView && imgContact === null) {
+      if (clave === "imgContact") {
+        if (!isProfileView && imgContact === null) {
           const { error } = this.state;
           let auxError = { ...error };
           auxError.imgContact = true;
           this.setState({
-            error: auxError
+            error: auxError,
           });
 
-          cogoToast.error(<h5>{trans("registerFormCuidadores.errorRellenaTodo")} (
-            {trans('registerFormCuidadores.imgContact')})</h5>);      
+          cogoToast.error(
+            <h5>
+              {trans("registerFormCuidadores.errorRellenaTodo")} (
+              {trans("registerFormCuidadores.imgContact")})
+            </h5>
+          );
           return;
-          } else if (this.state.error.imgContact === true) {
-            const { error } = this.state;
-            error.imgContact = false;
-            this.setState({
-              error: error
-            });
-          }
+        } else if (this.state.error.imgContact === true) {
+          const { error } = this.state;
+          error.imgContact = false;
+          this.setState({
+            error: error,
+          });
+        }
       }
-      
+
       // La comprobacion genérica para los demás
       if (this.requiredStates.includes(clave)) {
         let auxError = this.state.error;
@@ -477,17 +481,17 @@ class FormCuidador extends React.Component {
           );
           auxError[clave] = true;
           this.setState({
-            error: auxError
+            error: auxError,
           });
           return;
         } else if (auxError[clave] === true) {
           // Esto es por si el usuario ha rellenado una informacion que le faltaba previamente y ahora ya no hay error
           auxError[clave] = false;
           this.setState({
-            error: auxError
+            error: auxError,
           });
         }
-      }      
+      }
     }
 
     // Comprobamos que el email sea valido sintacticamente
@@ -496,21 +500,17 @@ class FormCuidador extends React.Component {
     if (!isProfileView) {
       const { txtEmail } = this.state;
       let { error } = this.state;
-      if(!isValidEmail(txtEmail)) {
-        cogoToast.error(
-          <h5>
-            {trans('commonErrors.invalidEmail')}
-          </h5>
-        );      
+      if (!isValidEmail(txtEmail)) {
+        cogoToast.error(<h5>{trans("commonErrors.invalidEmail")}</h5>);
         error.txtEmail = true;
         this.setState({
-          error: error
-        })
+          error: error,
+        });
         return;
       } else if (error.txtEmail) {
         error.txtEmail = false;
         this.setState({
-          error: error
+          error: error,
         });
       }
 
@@ -519,16 +519,18 @@ class FormCuidador extends React.Component {
       );
 
       if (checkIfEmailExists.data !== "Vacio") {
-        cogoToast.error(<h5>{trans("registerFormCuidadores.emailExistente")}</h5>);
+        cogoToast.error(
+          <h5>{trans("registerFormCuidadores.emailExistente")}</h5>
+        );
         error.txtEmail = true;
         this.setState({
-          error: error
-        })
+          error: error,
+        });
         return;
       } else if (error.txtEmail) {
         error.txtEmail = false;
         this.setState({
-          error: error
+          error: error,
         });
       }
     }
@@ -563,15 +565,10 @@ class FormCuidador extends React.Component {
       publicoDisponible,
       precioPorPublico,
       txtEmail,
-      txtContrasena
+      txtContrasena,
     } = this.state;
 
-    const {
-      email,
-      contrasena,
-      _idUsuario,
-      changeFormContent
-    } = this.props;
+    const { email, contrasena, _idUsuario, changeFormContent } = this.props;
 
     if (!isProfileView) {
       const validationToken = getRandomString(30);
@@ -595,7 +592,7 @@ class FormCuidador extends React.Component {
         email: txtEmail,
         contrasena: txtContrasena,
         tipoUsuario: "Cuidador",
-        validationToken
+        validationToken,
       };
 
       const insertedCuidador = await axios
@@ -603,9 +600,9 @@ class FormCuidador extends React.Component {
           "https://" + ipMaquina + ":3001/api/procedures/postNewCuidador",
           formData
         )
-        .catch(err => {
+        .catch((err) => {
           this.setState({
-            isLoading: false
+            isLoading: false,
           });
           cogoToast.error(
             <h5>{trans("registerFormCuidadores.errorGeneral")}</h5>
@@ -613,19 +610,19 @@ class FormCuidador extends React.Component {
           return;
         });
 
-        if (insertedCuidador === undefined) {
-          //Si entra aqui el servidor a tenido un error
-          //Por ahora ese error seria un duplicado de email
-          return;
-        }
+      if (insertedCuidador === undefined) {
+        //Si entra aqui el servidor a tenido un error
+        //Por ahora ese error seria un duplicado de email
+        return;
+      }
 
-        changeFormContent("tabla");
+      changeFormContent("tabla");
 
       axios.post(`https://${ipMaquina}:3003/smtp/registerEmail`, {
         toEmail: txtEmail,
         nombre: txtNombre,
         apellido: txtApellido1,
-        validationToken
+        validationToken,
       });
 
       cogoToast.success(
@@ -643,8 +640,8 @@ class FormCuidador extends React.Component {
         apellido2: txtApellido2,
         fechaNacimiento: txtFechaNacimiento,
         sexo: txtSexo,
-        imgContactB64: imgContactB64,//Los cambios son // Ahora mandare las imagenes en B64 a la API para guardarlo en un paso
-        avatarPreview: avatarPreview,//Estas dos lineas //
+        imgContactB64: imgContactB64, //Los cambios son // Ahora mandare las imagenes en B64 a la API para guardarlo en un paso
+        avatarPreview: avatarPreview, //Estas dos lineas //
         descripcion: txtDescripcion,
         ubicaciones: ubicaciones,
         publicoDisponible: publicoDisponible,
@@ -655,29 +652,47 @@ class FormCuidador extends React.Component {
         diasDisponible: diasDisponible,
         email,
         contrasena,
-        idUsuario: _idUsuario
+        idUsuario: _idUsuario,
       };
-  
-      axios.patch(
-        "https://" + ipMaquina + ":3001/api/procedures/patchCuidador/" + this.props._id,
-        formData
-      )
-        .then(res => {
+
+      axios
+        .patch(
+          "https://" +
+            ipMaquina +
+            ":3001/api/procedures/patchCuidador/" +
+            this.props._id,
+          formData
+        )
+        .then((res) => {
           const { direcFoto, direcFotoContacto } = res.data;
-          this.props.saveUserSession(Object.assign({}, formData, {direcFoto: direcFoto, direcFotoContacto: direcFotoContacto}));
-          cogoToast.success(<h5>{trans("perfilCliente.datosActualizados")}</h5>);
+          this.props.saveUserSession(
+            Object.assign({}, formData, {
+              direcFoto: direcFoto,
+              direcFotoContacto: direcFotoContacto,
+            })
+          );
+          cogoToast.success(
+            <h5>{trans("perfilCliente.datosActualizados")}</h5>
+          );
         })
-        .catch(err => {
+        .catch((err) => {
           cogoToast.error(<h5>{trans("perfilCliente.errorGeneral")}</h5>);
         })
         .finally(() => {
           changeFormContent("tabla");
           this.setState({
-            isLoading: false
+            isLoading: false,
           });
         });
-    }    
+    }
   };
+
+  handleTerminosAceptadosChange = () => {
+    const { terminosAceptados } = this.state;
+    this.setState({
+      terminosAceptados: !terminosAceptados
+    });
+  }
 
   render() {
     const {
@@ -702,9 +717,10 @@ class FormCuidador extends React.Component {
       hoverNino,
       hoverTerceraEdad,
       precioPorPublico,
-      isPublic
+      isPublic,
+      terminosAceptados
     } = this.state;
-    const { direcFoto, isProfileView } = this.props;
+    const { direcFoto, isProfileView, nowLang } = this.props;
     return (
       <SocketContext.Consumer>
         {(socket) => (
@@ -756,12 +772,12 @@ class FormCuidador extends React.Component {
               >
                 <div className="d-flex justify-content-lg-start justify-content-center align-items-center mb-lg-0 mb-2 mt-lg-0 mt-2">
                   <FontAwesomeIcon icon={faPortrait} className="mr-1" />
-                  <span className="mr-1">{trans("registerFormCuidadores.fotoContacto")}</span>
-                  {!isProfileView ?       
-                    (<span className="text-danger font-weight-bold">*</span>)
-                    : 
-                    null
-                  }
+                  <span className="mr-1">
+                    {trans("registerFormCuidadores.fotoContacto")}
+                  </span>
+                  {!isProfileView ? (
+                    <span className="text-danger font-weight-bold">*</span>
+                  ) : null}
                 </div>
                 <div className="d-flex justify-content-center">
                   {isProfileView && !isEditing ? (
@@ -890,30 +906,70 @@ class FormCuidador extends React.Component {
                   value={txtFechaNacimiento}
                 />
               </div>
-              <div className={error.txtSexo ? "col-lg-6 col-12 mt-3 border border-danger" : "col-lg-6 col-12 mt-3"}>
+              <div
+                className={
+                  error.txtSexo
+                    ? "col-lg-6 col-12 mt-3 border border-danger"
+                    : "col-lg-6 col-12 mt-3"
+                }
+              >
                 <div>
-                <FontAwesomeIcon icon={faVenusMars} className="mr-1" />
-                <span>{trans("registerFormCuidadores.sexo")}</span> (
-                <span className="text-danger">*</span>)
-                </div><br />
+                  <FontAwesomeIcon icon={faVenusMars} className="mr-1" />
+                  <span>{trans("registerFormCuidadores.sexo")}</span> (
+                  <span className="text-danger">*</span>)
+                </div>
+                <br />
                 <div className=" d-flex flex-row justify-content-between">
                   <div>
-                    <input type="radio" id="male" name="gender" value="male" onClick={() =>
-                  !isProfileView || isEditing ? this.handleSexChange("M") : null} />
-                    <label className="ml-1" for="male">{trans('sexo.hombre')}</label>
+                    <input
+                      type="radio"
+                      id="male"
+                      name="gender"
+                      value="male"
+                      onClick={() =>
+                        !isProfileView || isEditing
+                          ? this.handleSexChange("M")
+                          : null
+                      }
+                    />
+                    <label className="ml-1" for="male">
+                      {trans("sexo.hombre")}
+                    </label>
                   </div>
                   <div>
-                    <input type="radio" id="female" name="gender" value="female" onClick={() =>
-                  !isProfileView || isEditing ? this.handleSexChange("F") : null}/>
-                    <label className="ml-1" for="female">{trans('sexo.mujer')}</label>
+                    <input
+                      type="radio"
+                      id="female"
+                      name="gender"
+                      value="female"
+                      onClick={() =>
+                        !isProfileView || isEditing
+                          ? this.handleSexChange("F")
+                          : null
+                      }
+                    />
+                    <label className="ml-1" for="female">
+                      {trans("sexo.mujer")}
+                    </label>
                   </div>
                   <div>
-                    <input type="radio" id="other" name="gender" value="other" onClick={() =>
-                  !isProfileView || isEditing ? this.handleSexChange("X") : null} />
-                    <label className="ml-1" for="other">{trans('sexo.otro')}</label>
-                  </div>  
+                    <input
+                      type="radio"
+                      id="other"
+                      name="gender"
+                      value="other"
+                      onClick={() =>
+                        !isProfileView || isEditing
+                          ? this.handleSexChange("X")
+                          : null
+                      }
+                    />
+                    <label className="ml-1" for="other">
+                      {trans("sexo.otro")}
+                    </label>
+                  </div>
                 </div>
-              </div>              
+              </div>
             </div>
             {/* Tercera fila */}
             <div className="row">
@@ -990,7 +1046,10 @@ class FormCuidador extends React.Component {
                 />
               </div>
               <div className="col-lg-6 col-12 mt-3">
-                <FontAwesomeIcon icon={faPhoneSquareAlt} className="mr-1 mt-3" />
+                <FontAwesomeIcon
+                  icon={faPhoneSquareAlt}
+                  className="mr-1 mt-3"
+                />
                 <span className="" htmlFor="txtTelefono">
                   {trans("registerFormCuidadores.telefFijo")}
                 </span>
@@ -1000,7 +1059,9 @@ class FormCuidador extends React.Component {
                   class="form-control"
                   disabled={!isProfileView || isEditing ? null : "disabled"}
                   id="txtTelefFijo"
-                  placeholder={`${i18next.t('registerFormCuidadores.telefFijo')}...`}
+                  placeholder={`${i18next.t(
+                    "registerFormCuidadores.telefFijo"
+                  )}...`}
                   value={txtTelefFijo}
                 />
               </div>
@@ -1013,7 +1074,11 @@ class FormCuidador extends React.Component {
                   <FontAwesomeIcon
                     style={{ cursor: "pointer" }}
                     onClick={this.removeDiasDisponible}
-                    className={!isProfileView || (isEditing && diasDisponible.length > 0) ? "text-danger" : "text-secondary"}
+                    className={
+                      !isProfileView || (isEditing && diasDisponible.length > 0)
+                        ? "text-danger"
+                        : "text-secondary"
+                    }
                     icon={faMinusCircle}
                   />
                   <div>
@@ -1025,11 +1090,22 @@ class FormCuidador extends React.Component {
                   <FontAwesomeIcon
                     style={{ cursor: "pointer" }}
                     onClick={this.addDiasDisponible}
-                    className={!isProfileView || isEditing ? "text-success" : "text-secondary"}
+                    className={
+                      !isProfileView || isEditing
+                        ? "text-success"
+                        : "text-secondary"
+                    }
                     icon={faPlusCircle}
-                  />                    
+                  />
                 </span>
-                <div className={ error.diasDisponible ? "w-100 mt-2 border border-danger" : "w-100 mt-2"} id="diasDisponible">
+                <div
+                  className={
+                    error.diasDisponible
+                      ? "w-100 mt-2 border border-danger"
+                      : "w-100 mt-2"
+                  }
+                  id="diasDisponible"
+                >
                   {/* Aqui iran los dias dinamicamente */}
                   {diasDisponible.map((dia, indice) => {
                     return (
@@ -1041,14 +1117,28 @@ class FormCuidador extends React.Component {
                           className="d-inline"
                           id={"dia" + indice}
                         >
-                          <option>{i18next.t('dropDownDias.eligeDia')}</option>
-                          <option value="1">{i18next.t('dropDownDias.lunes')}</option>
-                          <option value="2">{i18next.t('dropDownDias.martes')}</option>
-                          <option value="3">{i18next.t('dropDownDias.miercoles')}</option>
-                          <option value="4">{i18next.t('dropDownDias.jueves')}</option>
-                          <option value="5">{i18next.t('dropDownDias.viernes')}</option>
-                          <option value="6">{i18next.t('dropDownDias.sabado')}</option>
-                          <option value="7">{i18next.t('dropDownDias.domingo')}</option>
+                          <option>{i18next.t("dropDownDias.eligeDia")}</option>
+                          <option value="1">
+                            {i18next.t("dropDownDias.lunes")}
+                          </option>
+                          <option value="2">
+                            {i18next.t("dropDownDias.martes")}
+                          </option>
+                          <option value="3">
+                            {i18next.t("dropDownDias.miercoles")}
+                          </option>
+                          <option value="4">
+                            {i18next.t("dropDownDias.jueves")}
+                          </option>
+                          <option value="5">
+                            {i18next.t("dropDownDias.viernes")}
+                          </option>
+                          <option value="6">
+                            {i18next.t("dropDownDias.sabado")}
+                          </option>
+                          <option value="7">
+                            {i18next.t("dropDownDias.domingo")}
+                          </option>
                         </select>
                         <div className="d-flex flex-row align-items-center">
                           <TimeInput
@@ -1060,9 +1150,7 @@ class FormCuidador extends React.Component {
                               );
                             }}
                             id={"horaInicio" + indice}
-                            initTime={
-                              diasDisponible[indice].horaInicio
-                            }
+                            initTime={diasDisponible[indice].horaInicio}
                             style={{
                               width: 50,
                             }}
@@ -1088,15 +1176,16 @@ class FormCuidador extends React.Component {
                       </div>
                     );
                   })}
-                </div>                
+                </div>
               </div>
-              <div className={error.ubicaciones ? "col border border-danger" : "col"}>
+              <div
+                className={
+                  error.ubicaciones ? "col border border-danger" : "col"
+                }
+              >
                 <span className="d-flex flex-row justify-content-center align-items-center mt-3">
                   <FontAwesomeIcon icon={faHome} className="mr-1" />
-                  <span
-                    htmlFor="txtAddPueblos"
-                    className="lead"
-                  >
+                  <span htmlFor="txtAddPueblos" className="lead">
                     {trans("registerFormCuidadores.pueblosDisponible")}
                   </span>{" "}
                   (<span className="text-danger font-weight-bold">*</span>)
@@ -1115,7 +1204,7 @@ class FormCuidador extends React.Component {
                   )}
 
                   <ul className="list-group">
-                    {ubicaciones.map(pueblo => {
+                    {ubicaciones.map((pueblo) => {
                       return <li className="list-group-item">{pueblo}</li>;
                     })}
                   </ul>
@@ -1141,7 +1230,13 @@ class FormCuidador extends React.Component {
             {/* Fin cuarta fila */}
             {/* Inicio quinta fila */}
             <div className="row">
-              <div className={ error.publicoDisponible ? "col-lg-6 col-12 d-flex flex-column mt-3 border border-danger" : "col-lg-6 col-12 d-flex flex-column mt-3"}>
+              <div
+                className={
+                  error.publicoDisponible
+                    ? "col-lg-6 col-12 d-flex flex-column mt-3 border border-danger"
+                    : "col-lg-6 col-12 d-flex flex-column mt-3"
+                }
+              >
                 <span className="d-flex flex-row justify-content-center align-items-center">
                   <FontAwesomeIcon icon={faUsers} className="mr-1" />
                   <span className="lead">
@@ -1151,7 +1246,9 @@ class FormCuidador extends React.Component {
                 <div className="row md-2">
                   <div
                     onClick={() =>
-                      !isProfileView || isEditing ? this.handlePublicoChange("nino") : null
+                      !isProfileView || isEditing
+                        ? this.handlePublicoChange("nino")
+                        : null
                     }
                     onMouseEnter={() =>
                       !isProfileView || isEditing
@@ -1170,10 +1267,15 @@ class FormCuidador extends React.Component {
                         : hoverNino
                         ? "#545b62"
                         : "",
-                      cursor: !isProfileView || isEditing ? "pointer" : "no-drop"
+                      cursor:
+                        !isProfileView || isEditing ? "pointer" : "no-drop",
                     }}
                   >
-                    <img src={imgNino} className="w-100 h-100" alt="Haurra / Niño"/>
+                    <img
+                      src={imgNino}
+                      className="w-100 h-100"
+                      alt="Haurra / Niño"
+                    />
                     <small className="font-weight-bold">
                       {trans("registerFormCuidadores.ninos")}
                     </small>
@@ -1201,10 +1303,15 @@ class FormCuidador extends React.Component {
                         : hoverTerceraEdad
                         ? "#545b62"
                         : "",
-                      cursor: !isProfileView || isEditing ? "pointer" : "no-drop"
+                      cursor:
+                        !isProfileView || isEditing ? "pointer" : "no-drop",
                     }}
                   >
-                    <img src={imgTerceraEdad} className="w-100 h-100" alt="Adinekoa / Tercera edad"/>
+                    <img
+                      src={imgTerceraEdad}
+                      className="w-100 h-100"
+                      alt="Adinekoa / Tercera edad"
+                    />
                     <small className="font-weight-bold">
                       {trans("registerFormCuidadores.terceraEdad")}
                     </small>
@@ -1232,10 +1339,15 @@ class FormCuidador extends React.Component {
                         : hoverNecesidadEspecial
                         ? "#545b62"
                         : "",
-                      cursor: !isProfileView || isEditing ? "pointer" : "no-drop"
+                      cursor:
+                        !isProfileView || isEditing ? "pointer" : "no-drop",
                     }}
                   >
-                    <img src={imgNecesidadEspecial} className="w-100 h-100" alt="Behar berezia / Necesidad especial"/>
+                    <img
+                      src={imgNecesidadEspecial}
+                      className="w-100 h-100"
+                      alt="Behar berezia / Necesidad especial"
+                    />
                     <small className="font-weight-bold">
                       {trans("registerFormCuidadores.necesidadEspecial")}
                     </small>
@@ -1245,7 +1357,9 @@ class FormCuidador extends React.Component {
               <div className="col-lg-6 col-12 mt-5">
                 <span className="d-flex flex-row justify-content-center align-items-center">
                   <FontAwesomeIcon icon={faEuroSign} className="mr-1" />
-                  <span className="lead">{trans("registerFormCuidadores.precioPorPublico")}:</span>
+                  <span className="lead">
+                    {trans("registerFormCuidadores.precioPorPublico")}:
+                  </span>
                 </span>
                 <div className="list-group md-2">
                   <div className="list-group-item text-center p-1">
@@ -1253,7 +1367,7 @@ class FormCuidador extends React.Component {
                       <b>{trans("registerFormCuidadores.ninos")}</b>
                     </small>
                     <input
-                      onChange={event => {
+                      onChange={(event) => {
                         this.handlePrecioChange("nino", event.target.value);
                       }}
                       className="form-control"
@@ -1264,7 +1378,9 @@ class FormCuidador extends React.Component {
                       }
                       value={precioPorPublico.nino}
                       type="number"
-                      placeholder={`${i18next.t('registerFormCuidadores.holderPrecio')}`}
+                      placeholder={`${i18next.t(
+                        "registerFormCuidadores.holderPrecio"
+                      )}`}
                     />
                   </div>
                   <div className="list-group-item text-center p-1">
@@ -1272,8 +1388,11 @@ class FormCuidador extends React.Component {
                       <b>{trans("registerFormCuidadores.terceraEdad")}</b>
                     </small>
                     <input
-                      onChange={event => {
-                        this.handlePrecioChange("terceraEdad", event.target.value);
+                      onChange={(event) => {
+                        this.handlePrecioChange(
+                          "terceraEdad",
+                          event.target.value
+                        );
                       }}
                       disabled={
                         !isEditing && isProfileView
@@ -1283,7 +1402,9 @@ class FormCuidador extends React.Component {
                       value={precioPorPublico.terceraEdad}
                       className="form-control"
                       type="number"
-                      placeholder={`${i18next.t('registerFormCuidadores.holderPrecio')}`}
+                      placeholder={`${i18next.t(
+                        "registerFormCuidadores.holderPrecio"
+                      )}`}
                     />
                   </div>
                   <div className="list-group-item text-center p-1">
@@ -1291,7 +1412,7 @@ class FormCuidador extends React.Component {
                       <b>{trans("registerFormCuidadores.necesidadEspecial")}</b>
                     </small>
                     <input
-                      onChange={event => {
+                      onChange={(event) => {
                         this.handlePrecioChange(
                           "necesidadEspecial",
                           event.target.value
@@ -1305,7 +1426,9 @@ class FormCuidador extends React.Component {
                       value={precioPorPublico.necesidadEspecial}
                       className="form-control"
                       type="number"
-                      placeholder={`${i18next.t('registerFormCuidadores.holderPrecio')}`}
+                      placeholder={`${i18next.t(
+                        "registerFormCuidadores.holderPrecio"
+                      )}`}
                     />
                   </div>
                 </div>
@@ -1328,7 +1451,9 @@ class FormCuidador extends React.Component {
                 disabled={!isEditing && isProfileView}
                 rows="5"
                 id="txtDescripcion"
-                placeholder={`${i18next.t('registerFormCuidadores.descripcion')}...`}
+                placeholder={`${i18next.t(
+                  "registerFormCuidadores.descripcion"
+                )}...`}
                 value={txtDescripcion}
               ></textarea>
             </div>
@@ -1342,6 +1467,48 @@ class FormCuidador extends React.Component {
               <br />
               <small>{trans("registerFormCuidadores.publicarAuto")}</small>
             </div>
+            {!isProfileView ? (
+              <div className="mt-3 d-flex flex-row align-items-center">
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  checked={terminosAceptados}
+                  onClick={this.handleTerminosAceptadosChange}
+                  id="isPublic"
+                />
+                {nowLang === "es" ? (
+                  <>
+                    <span className="mr-1">
+                      {trans("tablaCuidadores.heLeidoTerminos")}
+                    </span>
+                    <span
+                      style={{
+                        color: "blue",
+                        textDecoration: "underline",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {trans("tablaCuidadores.linkHeLeidoTerminos")}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span
+                      style={{
+                        color: "blue",
+                        textDecoration: "underline",
+                        cursor: "pointer",
+                      }}
+                      className="mr-1"
+                    >
+                      {trans("tablaCuidadores.linkHeLeidoTerminos")}
+                    </span>
+                    <span>{trans("tablaCuidadores.heLeidoTerminos")}</span>
+                  </>
+                )}
+              </div>
+            ) : null}
+
             <div id="loaderOrButton" className="row mt-5">
               <div className="col-12">
                 {isProfileView && !isEditing ? (
@@ -1362,9 +1529,14 @@ class FormCuidador extends React.Component {
                     onClick={() => this.handleGuardarCambios()}
                     type="button"
                     className="w-100 btn btn-success"
+                    disabled={!terminosAceptados || (isProfileView && isEditing)}
                   >
-                    {isProfileView ? trans("perfilCliente.guardarCambios") : trans("registerFormCuidadores.registrarse")}
-                    {isProfileView ? <FontAwesomeIcon className="ml-1" icon={faSave} /> : null }
+                    {isProfileView
+                      ? trans("perfilCliente.guardarCambios")
+                      : trans("registerFormCuidadores.registrarse")}
+                    {isProfileView ? (
+                      <FontAwesomeIcon className="ml-1" icon={faSave} />
+                    ) : null}
                   </button>
                 )}
               </div>
@@ -1402,11 +1574,12 @@ const mapStateToProps = (state) => ({
   precioPorPublico: Object.assign({}, state.user.precioPorPublico),
   email: state.user.email,
   contrasena: state.user.contrasena,
+  nowLang: state.app.nowLang,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   saveUserSession: (user) => dispatch(saveUserSession(user)),
-  changeFormContent: form => dispatch(changeFormContent(form)),
+  changeFormContent: (form) => dispatch(changeFormContent(form)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormCuidador);

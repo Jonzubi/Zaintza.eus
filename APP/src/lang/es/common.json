@@ -73,7 +73,9 @@
       "descripcionPropuesta": "Escribe la descripción detallada de tu propuesta...",
       "distancia": "Distancia: A {{distancia}} KM",
       "eligeCategoria": "Elige una categoría",
-      "anonimo": "Anónimo"
+      "anonimo": "Anónimo",
+      "heLeidoTerminos": "He leído y acepto los",
+      "linkHeLeidoTerminos": "términos de uso"
     },
     "registerFormCuidadores": {
       "avatar": "Avatar",
