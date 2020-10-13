@@ -108,15 +108,21 @@ class App extends React.Component {
     const AppContent = this.getContent.bind(this);
     return (
       <SocketContext.Provider value={this.socket}>
-        <div>
+        <div className="h-100">
           <CookieConsent />
           <MenuPerfil />
-          <div id="outer-container" className="w-100">
+          <div id="outer-container" className="h-100 w-100">
             <Cabecera />
             <div style={{
               height: 80
             }} />
-            <AppContent />
+            <div
+              style={{
+                minHeight: 'calc(100vh - 104px)'
+              }}
+            >
+              <AppContent />
+            </div>            
             <ModalRegistrarse />
             <Footer />
           </div>

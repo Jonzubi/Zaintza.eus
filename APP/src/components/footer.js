@@ -20,7 +20,7 @@ const Footer = () => {
         background: colors.grey,
         fontSize: 11
       }}
-      className="d-flex flex-row align-itesm-center justify-content-center p-1 text-white"
+      className="d-flex flex-row align-items-center justify-content-center p-1 text-white"
     >
       <span
         onClick={handleAvisoLegalClick}
