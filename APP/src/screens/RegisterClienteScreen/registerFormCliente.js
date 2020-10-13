@@ -20,6 +20,10 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
+const mapStateToProps = state => ({
+  nowLang: state.app.nowLang,
+})
+
 class RegisterFormCliente extends React.Component {
   constructor(props) {
     super(props);
@@ -33,6 +37,7 @@ class RegisterFormCliente extends React.Component {
       txtMovil: "",
       txtFijo: "",
       isLoading: false,
+      terminosAceptados: false,
       error: {
         txtNombre: false,
         txtEmail: false,
@@ -180,7 +185,16 @@ class RegisterFormCliente extends React.Component {
     this.props.changeFormContent("tabla");
   }
 
+  handleTerminosAceptadosChange = () => {
+    const { terminosAceptados } = this.state;
+    this.setState({
+      terminosAceptados: !terminosAceptados
+    });
+  }
+  
   render() {
+    const { terminosAceptados } = this.state;
+    const { nowLang, changeFormContent } = this.props;
     return (
       <SocketContext.Consumer>
         {socket => (
@@ -350,6 +364,48 @@ class RegisterFormCliente extends React.Component {
                 />
               </div>
             </div>
+
+            <div className="mt-3 d-flex flex-row align-items-center">
+              <input
+                type="checkbox"
+                className="mr-1"
+                checked={terminosAceptados}
+                onClick={this.handleTerminosAceptadosChange}
+                id="isPublic"
+              />
+              {nowLang === "es" ? (
+                <>
+                  <span className="mr-1">
+                    {trans("tablaCuidadores.heLeidoTerminos")}
+                  </span>
+                  <span
+                    onClick={() => changeFormContent("avisoLegal")}
+                    style={{
+                      color: "blue",
+                      textDecoration: "underline",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {trans("tablaCuidadores.linkHeLeidoTerminos")}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span
+                    onClick={() => changeFormContent("avisoLegal")}
+                    style={{
+                      color: "blue",
+                      textDecoration: "underline",
+                      cursor: "pointer",
+                    }}
+                    className="mr-1"
+                  >
+                    {trans("tablaCuidadores.linkHeLeidoTerminos")}
+                  </span>
+                  <span>{trans("tablaCuidadores.heLeidoTerminos")}</span>
+                </>
+              )}
+            </div>
             <div id="loaderOrButton" className="w-100 mt-5 text-center">
               {this.state.isLoading ? (
                 <ClipLoader color="#28a745" />
@@ -358,6 +414,7 @@ class RegisterFormCliente extends React.Component {
                   onClick={() => this.handleRegistrarse(socket)}
                   type="button"
                   className="w-100 btn btn-success "
+                  disabled={!terminosAceptados}
                 >
                   {trans("registerFormClientes.registrarse")}
                 </button>
@@ -370,4 +427,4 @@ class RegisterFormCliente extends React.Component {
   }
 }
 
-export default connect(null, mapDispatchToProps)(RegisterFormCliente);
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterFormCliente);

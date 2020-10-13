@@ -720,7 +720,7 @@ class FormCuidador extends React.Component {
       isPublic,
       terminosAceptados
     } = this.state;
-    const { direcFoto, isProfileView, nowLang } = this.props;
+    const { direcFoto, isProfileView, nowLang, changeFormContent } = this.props;
     return (
       <SocketContext.Consumer>
         {(socket) => (
@@ -1482,6 +1482,7 @@ class FormCuidador extends React.Component {
                       {trans("tablaCuidadores.heLeidoTerminos")}
                     </span>
                     <span
+                      onClick={() => changeFormContent("avisoLegal")}
                       style={{
                         color: "blue",
                         textDecoration: "underline",
@@ -1494,6 +1495,7 @@ class FormCuidador extends React.Component {
                 ) : (
                   <>
                     <span
+                      onClick={() => changeFormContent("avisoLegal")}
                       style={{
                         color: "blue",
                         textDecoration: "underline",
