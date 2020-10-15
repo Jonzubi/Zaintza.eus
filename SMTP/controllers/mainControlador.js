@@ -7,7 +7,9 @@ const fromEmail = require("../util/smtpEmail");
 const ipMaquina = require("../util/ipMaquinaAPI");
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: 'ssl0.ovh.net',
+  secure: true,
+  port: 465,
   auth: {
     user: fromEmail,
     pass: pswd

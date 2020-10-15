@@ -15,6 +15,12 @@ module.exports = conexion => {
     modelos.usuario = require("../src/models/usuario")(conexion);
     modelos.historicousuario = require("../src/models/historicousuario")(conexion);
     modelos.ajuste = require("../src/models/ajustes")(conexion);
+    modelos.invalidRequest = require("../src/models/invalidRequest")(conexion);
+    modelos.anuncioVisita = require("../src/models/anuncioVisita")(conexion);
+    modelos.cuidadorVisita = require("../src/models/cuidadorVisita")(conexion);
+    modelos.valoracion = require("../src/models/valoracion")(conexion);
+    modelos.conexion = require('../src/models/conexion')(conexion);
+    modelos.login = require('../src/models/logins')(conexion);
 
     return modelos;
 }

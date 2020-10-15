@@ -1,4 +1,4 @@
-# ProyectoAplicacionWeb
+# ZAINTZA.EUS
 El proyecto de SEIM para Aplicación Web de 2º
 
 **Herramientas necesarias para descargar y ejecutar el proyecto:**
@@ -21,3 +21,23 @@ El proyecto de SEIM para Aplicación Web de 2º
 **Notas**
 
 - Es necesario tener conexión a internet ya que la aplicacion accede a una base de datos en la nube.
+
+**Apuntes de la máquina OVHCloud**
+
+- He instalado con apt: git, npm, nodejs
+- Puerto SSH: **22022**
+
+**Gastos hasta la fecha**
+
+- Compra del dominio **Zaintza.eus**: **22.98€**
+- Prueba **AWS** en el despliegue de la aplicación: **8.20€**
+- Marca registrada **ZAINTZA** (10 AÑOS): **614.97€**
+- Licencia **Google Play Store**: **20.86€**
+- VPS de **OVH Cloud** (Agosto): **11.13€**
+- **OVH** renovación de no se que: **2.23€**
+- Email **MX 5 OVH**: **6.05€**
+- VPS de **OVH Cloud** (Septiembre): **11.13€**
+- Ley de **RGPD** (Basquekide): **242.00€**
+- VPS de **OVH Cloud** (Octubre): **11.13€**
+
+**TOTAL**: **950.68€**

@@ -28,6 +28,10 @@ module.exports = conexion => {
     validationToken: {
       type: String,
       required: true
+    },
+    bannedUntilDate: {
+      type: Date,
+      default: Date.now()
     }
   });
 

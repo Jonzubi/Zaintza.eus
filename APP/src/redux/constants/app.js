@@ -1,0 +1,2 @@
+export const CHANGE_FORM_CONTENT = "CHANGE_FORM_CONTENT"
+export const CHANGE_LANG = "CHANGE_LANG";

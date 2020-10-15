@@ -8,9 +8,9 @@ module.exports = (app, modelos) => {
 
   app.route("/api/image/:id").get((req, res) => mainControlador.getImage(req, res));
 
-  app.route("/api/procedures/getAcuerdosConUsuarios").get((req, res) => proceduresControlador.getAcuerdosConUsuarios(req, res, modelos));
+  app.route("/api/procedures/getAcuerdosConUsuarios").post((req, res) => proceduresControlador.getAcuerdosConUsuarios(req, res, modelos));
 
-  app.route("/api/procedures/getNotificacionesConUsuarios").get((req, res) => proceduresControlador.getNotificacionesConUsuarios(req, res, modelos));
+  app.route("/api/procedures/getNotificacionesConUsuarios").post((req, res) => proceduresControlador.getNotificacionesConUsuarios(req, res, modelos));
 
   app.route("/api/procedures/getUsuarioConPerfil").get((req, res) => proceduresControlador.getUsuarioConPerfil(req, res, modelos));
 
@@ -31,6 +31,58 @@ module.exports = (app, modelos) => {
   app.route("/api/procedures/patchPredLang/:id").post((req, res) => proceduresControlador.patchPredLang(req, res, modelos));
 
   app.route("/api/procedures/confirmarEmail").get((req, res) => proceduresControlador.confirmarEmail(req, res, modelos));
+
+  app.route("/api/procedures/getEmailWithIdPerfil/:idPerfil").get((req, res) => proceduresControlador.getEmailWithIdPerfil(req, res, modelos));
+
+  app.route("/api/procedures/getNotificationsWithIdUsuario/:idUsuario").post((req, res) => proceduresControlador.getNotificationsWithIdUsuario(req, res, modelos));
+
+  app.route("/api/procedures/getIdUsuarioConIdPerfil/:idPerfil").get((req, res) => proceduresControlador.getIdUsuarioConIdPerfil(req, res, modelos));
+
+  app.route("/api/procedures/patchPassword/:idUsuario").patch((req, res) => proceduresControlador.patchPassword(req, res, modelos));
+
+  app.route("/api/procedures/checkIfEmailExists/:email").get((req, res) => proceduresControlador.checkIfEmailExists(req, res, modelos));
+
+  app.route("/api/procedures/newNotification").post((req, res) => proceduresControlador.newNotification(req, res, modelos));
+
+  app.route("/api/procedures/getAcuerdoStatus/:idAcuerdo").post((req, res) => proceduresControlador.getAcuerdoStatus(req, res, modelos));
+
+  app.route("/api/procedures/terminarAcuerdo/:idAcuerdo").patch((req, res) => proceduresControlador.terminarAcuerdo(req, res, modelos));
+
+  app.route("/api/procedures/gestionarAcuerdo/:idAcuerdo").patch((req, res) => proceduresControlador.gestionarAcuerdo(req, res, modelos));
+
+  app.route("/api/procedures/checkIfAcuerdoExists").post((req, res) => proceduresControlador.checkIfAcuerdoExists(req, res, modelos));
+
+  app.route("/api/procedures/newAcuerdo").post((req, res) => proceduresControlador.newAcuerdo(req, res, modelos));
+
+  app.route("/api/procedures/getMisAnuncios").post((req, res) => proceduresControlador.getMisAnuncios(req, res, modelos));
+
+  app.route("/api/procedures/patchAnuncio/:idAnuncio").patch((req, res) => proceduresControlador.patchAnuncio(req, res, modelos));
+
+  app.route("/api/procedures/deleteAnuncio/:idAnuncio").post((req, res) => proceduresControlador.deleteAnuncio(req, res, modelos))
+
+  app.route("/api/procedures/registerAnuncioVisita/:idAnuncio").post((req, res) => proceduresControlador.registerAnuncioVisita(req, res, modelos));
+
+  app.route("/api/procedures/getAnuncioVisitas/:idAnuncio").post((req, res) => proceduresControlador.getAnuncioVisitas(req, res, modelos));
+
+  app.route("/api/procedures/registerCuidadorVisita/:idCuidador").post((req, res) => proceduresControlador.registerCuidadorVisita(req, res, modelos));
+
+  app.route("/api/procedures/getCuidadorVisitas/:idCuidador").post((req, res) => proceduresControlador.getCuidadorVisitas(req, res, modelos));
+
+  app.route("/api/procedures/getCuidadoresConValoraciones").get((req, res) => proceduresControlador.getCuidadoresConValoraciones(req, res, modelos));
+
+  app.route("/api/procedures/postNewValoracion").post((req, res) => proceduresControlador.postNewValoracion(req, res, modelos));
+
+  app.route("/api/procedures/getValoracionesDelCuidador/:idUsuario").get((req, res) => proceduresControlador.getValoracionesDelCuidador(req, res, modelos));
+
+  app.route("/api/procedures/patchMaxDistance/:id").patch((req, res) => proceduresControlador.patchMaxDistance(req, res, modelos));
+
+  app.route("/api/procedures/banUser").post((req, res) => proceduresControlador.banUser(req, res, modelos));
+
+  app.route("/api/procedures/unBanUser").post((req, res) => proceduresControlador.unBanUser(req, res, modelos));
+
+  app.route("/api/procedures/deleteCuidadorImg").post((req, res) => proceduresControlador.deleteCuidadorImg(req, res, modelos));
+
+  app.route("/api/procedures/isUserBanned/:idPerfil").get((req, res) => proceduresControlador.isUserBanned(req, res, modelos));
   
   app.route("/Inicio/").get(mainControlador.inicio);
 

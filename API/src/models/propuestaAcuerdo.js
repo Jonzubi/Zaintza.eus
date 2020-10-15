@@ -4,7 +4,11 @@ module.exports = conexion => {
   var propuestaAcuerdo = new Schema({
     idCuidador: String,
     idCliente: String,
-    diasDisponible: Map,
+    diasDisponible: {
+      dia: String,
+      horaInicio: String,
+      horaFin: String
+    },
     estadoPropuesta: Number,
     caducidad: Date,
     datePropuesta: Date

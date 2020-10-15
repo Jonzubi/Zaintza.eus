@@ -17,18 +17,28 @@ module.exports = (conexion) => {
             required: true
         },
         horario: {
-            type: [Map],
+            type: [{
+                dia: String,
+                horaInicio: String,
+                horaFin: String
+            }],
             required: true
         },
         pueblo: {
-            type: String,
+            type: [String],
             required: true
         },
         publico: {
             type: String,
-            required: true
+            required: true,
+            enum: ['ninos', 'terceraEdad', 'necesidadEspecial']
         },
-        precio: String
+        precio: String,
+        show: {
+            type: Boolean,
+            required: true,
+            default: true
+        }
     });
 
     return conexion.model("Anuncio", anuncio, "Anuncios");

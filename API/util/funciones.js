@@ -1,4 +1,5 @@
 const fs = require("fs");
+const templatesFolder = '/var/www/Zaintza.eus/API/src/templates/';
 exports.writeImage = (cod, b64) => {
   let idImage = cod;
   let imageBase64 = b64.split(",")[1];
@@ -17,10 +18,10 @@ exports.writeImage = (cod, b64) => {
     default:
       throw "Formato no compatible";
   }
-  let avatarDirPath = __dirname + "/imagenes/" +
-    idImage +
-    formatBase64;
-  //avatarDirPath = "/var/www/ProyectoAplicacionWeb/API/util/imagenes/" + idImage + formatBase64;
+  // let avatarDirPath = __dirname + "/imagenes/" +
+  //   idImage +
+  //   formatBase64;
+  avatarDirPath = "/var/www/Zaintza.eus/API/util/imagenes/" + idImage + formatBase64;
 
   try {
     fs.writeFileSync(avatarDirPath, imageBase64, "base64");
@@ -99,3 +100,34 @@ exports.getRandomString = length => {
     return output;
   
   };
+
+  exports.readHTMLFile = (fileName, callback) => {
+    fs.readFile(templatesFolder + fileName + ".html", {encoding: 'utf-8'}, function (err, html) {
+        if (err) {
+            throw err;
+            callback(err);
+        }
+        else {
+            callback(null, html);
+        }
+    });
+  };
+
+  exports.shuffleArray = (array) => {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+  }

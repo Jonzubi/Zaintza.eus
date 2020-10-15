@@ -14,7 +14,11 @@ module.exports = (conexion) => {
       ref: 'Cliente'
     },
     diasAcordados: {
-      type: [Map],
+      type: [{
+        dia: String,
+        horaInicio: String,
+        horaFin: String
+      }],
       required: true
     },
     tituloAcuerdo: {

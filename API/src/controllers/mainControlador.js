@@ -2,7 +2,51 @@ const headerResponse = require("../../util/headerResponse");
 const fs = require("fs");
 const { writeImage } = require("../../util/funciones");
 
-exports.get = function(req, res, modelos) {
+const modelosPermitidos = ["cuidador", "anuncio"];
+
+const isValidRequest = async (req, res, modelos) => {
+  const tabla = req.params.tabla;
+  if (!modelosPermitidos.includes(tabla)) {
+    // La idea de esta condicion es que si se hace una peticion a una tabla que no es licita, 
+    //si se quiere modificar cierto registro se deje mediante la verificacion del usuario al que pertenece el registro
+    if (req.params.id !== undefined) {
+      const { email, contrasena } = req.body;
+      const id = req.params.id;
+      const modelo = modelos[tabla];
+      const modeloBuscado = await modelo.findById(id)
+                              .populate("idUsuario");
+      if (modeloBuscado.idUsuario.email === email && modeloBuscado.idUsuario.contrasena === contrasena){
+        return true;
+      }
+      //Si la contraseña o el email no coinciden entrara en el codigo de abajo como una peticion ilicita
+    }
+    const invalidRequestModel = modelos.invalidRequest;    
+    const ipAddress = req.connection.remoteAddress;
+    const requestMethod = req.method;
+    const formData = {
+      errorCode: 405,
+      ipAddress,
+      requestMethod,
+      errorMsg: `Intento de intrusion a ${req.originalUrl}`,
+      requestParams: req.params,
+      requestQuery: req.query,
+      requestBody: req.body,
+      date: new Date()
+    }
+    console.log(formData);
+    const invalidRequestConfigurado = new invalidRequestModel(formData);
+    invalidRequestConfigurado.save();
+    res.writeHead(405, headerResponse);
+    res.write(`La IP: ${ipAddress} ha sido registrada por una operacion no lÃ­cita`);
+    res.end();
+
+    return false;
+  }
+
+  return true;
+}
+
+exports.get = async (req, res, modelos) => {
   let tabla = req.params.tabla;
   let id = req.params.id;
   //La idea es en query mandar un string columnas = "nombre apellido1 apellido2" asi se lo incrusto directo a la query
@@ -14,6 +58,11 @@ exports.get = function(req, res, modelos) {
   }
   if (typeof req.query.options !== 'undefined') {
     objOptions = JSON.parse(req.query.options);
+  }
+  //Trozo de codigo que comprueba que lo que se hace es licito
+  const isValid = await isValidRequest(req, res, modelos);
+  if(!isValid) {
+    return;
   }
 
   let modelo = modelos[tabla];
@@ -53,7 +102,7 @@ exports.get = function(req, res, modelos) {
   }
 };
 
-exports.insert = function(req, res, modelos) {
+exports.insert = async (req, res, modelos) => {
   let tabla = req.params.tabla;
   let modelo = modelos[tabla];
 
@@ -61,6 +110,12 @@ exports.insert = function(req, res, modelos) {
     res.writeHead(500, headerResponse);
     res.send("MODELO IS UNDEFINED");
     res.end();
+    return;
+  }
+
+  //Trozo de codigo que comprueba que lo que se hace es licito
+  const isValid = await isValidRequest(req, res, modelos);
+  if(!isValid) {
     return;
   }
 
@@ -82,7 +137,13 @@ exports.insert = function(req, res, modelos) {
     });
 };
 
-exports.update = function(req, res, modelos) {
+exports.update = async (req, res, modelos) => {
+  //Trozo de codigo que comprueba que lo que se hace es licito
+  const isValid = await isValidRequest(req, res, modelos);
+  if(!isValid) {
+    return;
+  }
+
   let tabla = req.params.tabla;
   let id = req.params.id;
   let modelo = modelos[tabla];
@@ -103,6 +164,11 @@ exports.update = function(req, res, modelos) {
 };
 
 exports.delete = async (req, res, modelos) => {
+  //Trozo de codigo que comprueba que lo que se hace es licito
+  const isValid = await isValidRequest(req, res, modelos);
+  if(!isValid) {
+    return;
+  }
   let tabla = req.params.tabla;
   let id = req.params.id;
   let modelo = modelos[tabla];
@@ -140,10 +206,10 @@ exports.postImage = (req, res) => {
 exports.getImage = (req, res) => {
   let idImage = req.params.id;
   let avatarDirPath = __dirname.substring(0, __dirname.lastIndexOf("\\"));
-  avatarDirPath =
-    avatarDirPath.substring(0, avatarDirPath.lastIndexOf("\\")) +
-    "\\util\\imagenes\\";
-  //avatarDirPath = "/var/www/ProyectoAplicacionWeb/API/util/imagenes/";
+  // avatarDirPath =
+  //   avatarDirPath.substring(0, avatarDirPath.lastIndexOf("\\")) +
+  //   "\\util\\imagenes\\";
+  avatarDirPath = "/var/www/Zaintza.eus/API/util/imagenes/";
   fs.readdir(avatarDirPath, (err, files) => {
     if (err) {
       res.writeHead(500, headerResponse);
@@ -170,8 +236,15 @@ exports.getImage = (req, res) => {
         }
       });
       if (!found) {
-        res.write("Vacio");
-        res.end();
+        const { isAvatar } = req.query;
+        if (isAvatar) {
+          res.end();
+          return;
+        }
+        let noImageDirPath =  "/var/www/Zaintza.eus/API/src/assets/noImage.png";
+        let stream = fs.createReadStream(noImageDirPath);
+        res.setHeader("Content-Type", "image/png");
+        stream.pipe(res);
       }
     }
   });

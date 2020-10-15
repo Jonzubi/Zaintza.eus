@@ -1,0 +1,34 @@
+//GET Inicio axios
+    //axios({
+    //  method: "GET",
+    //  url: "https://" + ipMaquina + ":3001/api/Inicio/",
+    //  headers: cabecera
+    //}).then(res => {
+    //  this.setState({
+    //    respuesta: res.data,
+    //    hecho:true
+    //  });
+    //}).catch(err => {
+    //  this.setState({
+    //    respuesta: err.message,
+    //    hecho:false
+    //  });
+    //});
+
+    //POST axios
+    axios({
+      method: "POST",
+      url: 'https://' + ipMaquina + ':3001/api/insertRow/cuidador',
+      headers: cabecera,
+      data: {
+        idCuidador: 3,
+        nombre: "Telmooooo"
+      }
+    }).then(res => {
+        this.setState({
+          respuesta: res.data,
+          hecho: true
+        });
+    }).catch(err => {
+        this.setState({ respuesta: err.message, hecho: "ERROR" });
+    });

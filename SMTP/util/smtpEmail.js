@@ -1,1 +1,1 @@
-module.exports = "jonzubi97@gmail.com";
+module.exports = "noreply@zaintza.eus";

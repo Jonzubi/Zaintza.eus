@@ -29,14 +29,29 @@ module.exports = conexion => {
       type: [String],
       required: true
     },
-    publicoDisponible: Map,
-    telefono: {
-      type: Map,
+    publicoDisponible: {
+      nino: Boolean,
+      terceraEdad: Boolean,
+      necesidadEspecial: Boolean
+    },
+    telefonoMovil: {
+      type: String,
       required: true
     },
+    telefonoFijo: {
+      type: String
+    },
     isPublic: Boolean,
-    precioPorPublico: Map,
-    diasDisponible: [Map],
+    precioPorPublico: {
+      nino: String,
+      terceraEdad: String,
+      necesidadEspecial: String
+    },
+    diasDisponible: [{
+      dia: String,
+      horaInicio: String,
+      horaFin: String
+    }],
     valoracionMedia: Number
   });
   return conexion.model("Cuidador", cuidador, "Cuidadores");
