@@ -33,6 +33,7 @@ import PuebloAutosuggest from "../../components/pueblosAutosuggest";
 import Button from "react-bootstrap/Button";
 import ClipLoader from "react-spinners/ClipLoader";
 import SocketContext from "../../socketio/socket-context";
+import NoData from "../../components/noData";
 
 const mapStateToProps = (state) => {
   return {
@@ -511,14 +512,14 @@ class TablaAnuncios extends React.Component {
                       );
                     })
                   ) : (
-                    <small
+                    <div
                       style={{
                         height: "70vh",
                       }}
-                      className="d-flex align-items-center justify-content-center text-danger"
+                      className="d-flex align-items-center"
                     >
-                      {trans("tablaCuidadores.noData")}
-                    </small>
+                      <NoData />
+                    </div>
                   )
                 ) : (
                   <div

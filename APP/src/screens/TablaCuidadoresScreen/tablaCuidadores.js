@@ -48,6 +48,7 @@ import i18next from "i18next";
 import Rating from "react-rating";
 import Avatar from "react-avatar";
 import moment from "moment";
+import NoData from '../../components/noData';
 
 const mapStateToProps = (state) => {
   return {
@@ -1041,14 +1042,14 @@ class Tabla extends React.Component {
                     <ClipLoader color="#28a745" />
                   </div>
                 ) : (
-                  <small
+                  <div
                     style={{
                       height: "70vh",
                     }}
-                    className="d-flex align-items-center justify-content-center text-danger"
+                    className="d-flex align-items-center"
                   >
-                    {trans("tablaCuidadores.noData")}
-                  </small>
+                    <NoData />
+                  </div>
                 )}
 
                 <Modal
