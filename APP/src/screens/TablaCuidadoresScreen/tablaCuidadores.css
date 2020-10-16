@@ -22,3 +22,13 @@
   .modalCustomClass{
     max-width: 500px;
   }
+
+  .cardHoverAnimation {
+    cursor: pointer;
+    transition: all 0.3s;
+    width: 18rem;
+  }
+
+  .cardHoverAnimation:hover {
+    background-color: rgba(0, 0, 0, 0.07);
+  }

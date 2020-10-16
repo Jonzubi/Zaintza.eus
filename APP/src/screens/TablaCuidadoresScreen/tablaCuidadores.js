@@ -48,7 +48,7 @@ import i18next from "i18next";
 import Rating from "react-rating";
 import Avatar from "react-avatar";
 import moment from "moment";
-import NoData from '../../components/noData';
+import NoData from "../../components/noData";
 
 const mapStateToProps = (state) => {
   return {
@@ -857,8 +857,8 @@ class Tabla extends React.Component {
                   this.state.jsonCuidadores.map((cuidador, indice) => {
                     return (
                       <div
-                        className="card w-20 m-4"
-                        style={{ width: "18rem" }}
+                        onClick={() => this.handleViewCuidador(cuidador.cuidador)}
+                        className="card w-20 m-4 cardHoverAnimation"
                         itemScope
                         itemType="http://schema.org/Person"
                       >
@@ -904,7 +904,20 @@ class Tabla extends React.Component {
                             }
                           />
                         </div>
-                        <div className="d-flex flex-row align-items-center justify-content-center">
+                        <div
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            this.setState(
+                              {
+                                selectedCuidador: cuidador.cuidador,
+                                showModalValoraciones: true,
+                                valoracionesIsLoading: true,
+                              },
+                              () => this.loadValoracionesData(cuidador.cuidador)
+                            );
+                          }}
+                          className="d-flex flex-row align-items-center justify-content-center"
+                        >
                           <Rating
                             readonly
                             initialRating={this.getValoracionesMedia(
