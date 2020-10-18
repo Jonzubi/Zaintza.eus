@@ -32,7 +32,7 @@ class HeaderChangeLang extends React.Component {
     const { nowLang } = this.props;
     return (
       <div>
-        <FontAwesomeIcon className="text-white mr-2" icon={faGlobe} />
+        <FontAwesomeIcon className="mr-2" icon={faGlobe} />
         <span
           style={{
             cursor: "pointer",
@@ -41,11 +41,11 @@ class HeaderChangeLang extends React.Component {
           onMouseEnter={() => this.handleLangHover("eus")}
           onMouseLeave={() => this.handleLangHover("")}
           onClick={() => this.handleLangChange("eus")}
-          className={nowLang === "eus" ? "text-success mr-2" : "text-white mr-2"}
+          className={nowLang === "eus" ? "text-success mr-2 font-weight-bold" : "mr-2"}
         >
           EUS
         </span>
-        <span className="text-white mr-2">|</span>
+        <span className="mr-2">|</span>
         <span
           style={{
             cursor: "pointer",
@@ -54,7 +54,7 @@ class HeaderChangeLang extends React.Component {
           onMouseEnter={() => this.handleLangHover("es")}
           onMouseLeave={() => this.handleLangHover("")}
           onClick={() => this.handleLangChange("es")}
-          className={nowLang === "es" ? "text-success" : "text-white"}
+          className={nowLang === "es" ? "text-success font-weight-bold" : ""}
         >
           ES
         </span>
