@@ -15,6 +15,7 @@ import ipMaquina from "../util/ipMaquinaAPI";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { trans } from "../util/funciones";
+import logo from '../util/images/Logo.png';
 
 const MapDispachToProps = (dispatch) => {
   return {
@@ -38,7 +39,7 @@ class Header extends React.Component {
     return this.props.direcFoto == "" ? (
       <FontAwesomeIcon
         size="3x"
-        style={{ cursor: "pointer", color: "white" }}
+        style={{ cursor: "pointer"}}
         onClick={() => this.props.toogleMenuPerfil(true)}
         icon={faUserCircle}
       />
@@ -49,7 +50,7 @@ class Header extends React.Component {
         size={50}
         round={true}
         onClick={() => this.props.toogleMenuPerfil(true)}
-        style={{ cursor: "pointer", color: "white" }}
+        style={{ cursor: "pointer"}}
       />
     );
   }
@@ -69,9 +70,9 @@ class Header extends React.Component {
     } = this.props;
     return (
       <div
-        style={{ background: "#343a40" }}
+        style={{ boxShadow: '0 .125rem .25rem rgba(0,0,0,.075)' }}
         id="headRoom"
-        className="d-flex flex-row align-items-center p-1 justify-content-between fixed-top"
+        className="d-flex flex-row align-items-center p-1 justify-content-between fixed-top bg-white"
       >
         <a
           href="#"
@@ -81,24 +82,7 @@ class Header extends React.Component {
           className="d-flex flex-column"
           style={{ textDecoration: "none" }}
         >
-          {window.innerWidth > 768 ?
-            <>
-              <h1 className="text-light mb-0">Zaintza</h1>
-              <span className="d-flex flex-row justify-content-end align-items-center font-weight-bold text-light">BETA</span>
-            </>
-            :
-            <>
-              <h4 className="text-light mb-0">Zaintza</h4>
-              <span
-                className="d-flex flex-row justify-content-end align-items-center font-weight-bold text-light"
-                style={{
-                  fontSize: 10
-                }}
-              >
-                BETA
-              </span>
-            </>
-          }
+          <img src={logo} alt="logo"  width={164} height={80} />
         </a>
         <div className="d-flex flex-row align-items-center">
           {tipoUsuario === "Cliente" ? (
@@ -114,7 +98,7 @@ class Header extends React.Component {
                 style={{
                   cursor: 'pointer'
                 }}
-                className="mr-5 d-none d-sm-inline text-white"
+                className="mr-5 d-none d-sm-inline "
                 icon={faUpload}
                 onClick={() => changeFormContent("formAnuncio")}
               />
@@ -138,7 +122,7 @@ class Header extends React.Component {
                 }
               >
                 <div>
-                  <FontAwesomeIcon icon={faBell} className="text-white" />
+                  <FontAwesomeIcon icon={faBell} className="" />
                   {countNotifies > 0 ? (
                     <span className="badge badge-primary rounded-circle ml-1">
                       {countNotifies}

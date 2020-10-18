@@ -7,6 +7,7 @@ import TablaAnuncios from "../screens/TablaAnunciosScreen/tablaAnuncios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserMd, faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import {trans} from "../util/funciones";
+import { colors } from '../util/colors';
 
 class SlideTab extends React.Component {
   constructor(props){
@@ -32,12 +33,17 @@ class SlideTab extends React.Component {
     const { index } = this.state;
     return (
       <div>
-        <Tabs value={index} centered onChange={this.handleChange}>
+        <Tabs value={index} centered onChange={this.handleChange} TabIndicatorProps={{
+          style: {
+            backgroundColor: colors.green
+          }
+        }}>
           <Tab
             style={{ outline: "none" }}
             className="w-50"
             icon={<FontAwesomeIcon icon={faUserMd} />}
             label={trans('slideTab.cuidadores')}
+
           />
           <Tab
             style={{ outline: "none" }}
