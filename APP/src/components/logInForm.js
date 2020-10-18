@@ -14,6 +14,9 @@ import SocketContext from "../socketio/socket-context";
 import ClipLoader from "react-spinners/ClipLoader";
 import i18next from "i18next";
 import { SetMaxDistance } from "../redux/actions/coords";
+import { Checkbox, InputAdornment, TextField } from '@material-ui/core';
+import { EmailRounded, Lock } from '@material-ui/icons';
+import { colors } from '../util/colors';
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -177,74 +180,83 @@ class LogInForm extends React.Component {
         {(socket) => {
           this.socket = socket;
           return (
-            <form className="">
-              <div>
-                <label htmlFor="txtEmail">{trans("loginForm.email")}</label>
-
-                <input
-                  onKeyDown={this.handleKeyDown}
-                  onChange={this.handleInputChange}
-                  type="email"
-                  className="form-control"
-                  id="txtEmail"
-                  aria-describedby="emailHelp"
-                  placeholder={i18next.t("loginForm.insertEmail")}
-                  value={this.state.txtEmail}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="txtContrasena">
-                  {trans("loginForm.contrasena")}
-                </label>
-                <input
-                  onKeyDown={this.handleKeyDown}
-                  onChange={this.handleInputChange}
-                  type="password"
-                  className="form-control"
-                  id="txtContrasena"
-                  placeholder={i18next.t("loginForm.holderContrasena")}
-                  value={this.state.txtContrasena}
-                />
-              </div>
-              <div className="form-group form-check">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="chkRecordarme"
-                  checked={this.state.chkRecordarme}
-                  onChange={() => this.toogleChkRecordarme()}
-                />
-                <label className="form-check-label" htmlFor="chkRecordarme">
+            <div
+              className="d-flex flex-column mt-5 p-5"
+              style={{ boxShadow: '0 .5rem 1rem rgba(0,0,0,.15)' }}>
+              <TextField
+                onKeyDown={this.handleKeyDown}
+                onChange={this.handleInputChange}
+                className="mt-4"
+                id="txtEmail"
+                aria-describedby="emailHelp"
+                label={i18next.t("loginForm.insertEmail")}
+                value={this.state.txtEmail}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <EmailRounded style={{ fill: colors.green }} />
+                    </InputAdornment>
+                  )
+                }}
+              />
+              <TextField
+                onKeyDown={this.handleKeyDown}
+                onChange={this.handleInputChange}
+                className="mt-4"
+                type="password"
+                id="txtContrasena"
+                label={i18next.t("loginForm.holderContrasena")}
+                value={this.state.txtContrasena}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Lock style={{ fill: colors.green }} />
+                    </InputAdornment>
+                  )
+                }}
+              />
+              <div
+                className="mt-4 text-center">
+                <label htmlFor="chkRecordarme">
                   {trans("loginForm.recordarme")}
                 </label>
+                <Checkbox
+                  color="primary"
+                  id="chkRecordarme"
+                  checked={this.state.chkRecordarme}
+                  onChange={() => this.toogleChkRecordarme()} />
               </div>
+
               {this.state.isLoading ? (
-                <ClipLoader color="#28a745" />
-              ) : (
-                <div className="d-flex align-items-center justify-content-between mt-3">
-                  <button
-                    onClick={() => this.handleLogIn(socket)}
-                    name="btnLogIn"
-                    type="button"
-                    className="btn btn-light flex-fill"
-                  >
-                    {trans("loginForm.iniciarSesion")}
-                  </button>
-                  <div className="col-2"></div>
-                  <button
-                    onClick={() => {
-                      this.props.toogleModal(true);
-                      this.props.toogleMenuPerfil(false);
-                    }}
-                    name="btnRegistrar"
-                    type="button"
-                    className="btn btn-success flex-fill"
-                  >
-                    {trans("loginForm.registrarse")}
-                  </button>
+                <div className="text-center"><ClipLoader color="#28a745" />
                 </div>
-              )}
-            </form>
+
+              ) : (
+                  <div className="d-flex align-items-center justify-content-between mt-3">
+                    <button
+                      onClick={() => this.handleLogIn(socket)}
+                      style={{ backgroundColor: colors.lightGrey }}
+                      name="btnLogIn"
+                      type="button"
+                      className="btn flex-fill"
+                    >
+                      {trans("loginForm.iniciarSesion")}
+                    </button>
+                    <div className="col-2"></div>
+                    <button
+                      onClick={() => {
+                        this.props.toogleModal(true);
+                        this.props.toogleMenuPerfil(false);
+                      }}
+                      name="btnRegistrar"
+                      type="button"
+                      className="btn btn-success flex-fill"
+                    >
+                      {trans("loginForm.registrarse")}
+                    </button>
+                  </div>
+                )}
+            </div>
           );
         }}
       </SocketContext.Consumer>

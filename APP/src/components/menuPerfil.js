@@ -28,6 +28,9 @@ import ChangeLang from "../components/changeLang";
 import SocketContext from "../socketio/socket-context";
 import { setCountNotify } from "../redux/actions/notifications";
 import { ResetMaxDistance } from '../redux/actions/coords';
+import { Badge, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { Person, CalendarToday, Drafts, BarChart, Notifications, Settings, Publish } from '@material-ui/icons';
+import Logo from '../util/images/Logo.png';
 
 const mapStateToProps = (state) => {
   return {
@@ -97,23 +100,21 @@ class MenuPerfil extends React.Component {
     this.handleClickAjustes = this.handleClickAjustes.bind(this);
   }
 
-  getAvatar() {
+  getAvatar = () => {
     return this.props.direcFoto == "" ? (
-      <FontAwesomeIcon
-        size="10x"
-        className="mx-auto"
-        icon={faUserCircle}
-        style={{ color: "white" }}
-      />
+      <div className="w-100 text-center">
+        <img width={256} height={125} src={Logo} alt="logo" />
+      </div>
+
     ) : (
-      <Avatar
-        name={this.props.nombre + " " + this.props.apellido1 || ""}
-        src={"https://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto + "?isAvatar=true"}
-        className="mx-auto"
-        round={true}
-        size="200"
-      />
-    );
+        <Avatar
+          name={this.props.nombre + " " + this.props.apellido1 || ""}
+          src={"https://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto + "?isAvatar=true"}
+          className="mx-auto"
+          round={true}
+          size="200"
+        />
+      );
   }
 
   handleClickPerfil() {
@@ -178,7 +179,7 @@ class MenuPerfil extends React.Component {
     toogleMenuPerfil(false);
   };
 
-  getMenuContent() {
+  getMenuContent = () => {
     if (!this.props.tipoUsuario) {
       return <LogInForm />;
     } else {
@@ -193,80 +194,37 @@ class MenuPerfil extends React.Component {
             const { countNotifies, tipoUsuario } = this.props;
 
             return (
-              <div id="menu-perfil-content" className="w-100">
-                <div
-                  id="menu-perfil-opciones"
-                  className="btn-group-vertical w-100 mt-5"
-                >
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => this.handleClickPerfil()}
-                  >
-                    <FontAwesomeIcon icon={faUser} className="float-left" />
-                    {trans("menuPerfil.perfil")}
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => this.handleClickCalendario()}
-                  >
-                    <FontAwesomeIcon
-                      icon={faCalendarAlt}
-                      className="float-left"
-                    />
-                    {trans("menuPerfil.calendario")}
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => this.handleClickAcuerdos()}
-                  >
-                    <FontAwesomeIcon icon={faComments} className="float-left" />
-                    {trans("menuPerfil.contratos")}
-                  </button>
-                  {tipoUsuario === "Cliente" ? (
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      onClick={() => this.handleClickAnuncios()}
-                    >
-                      <FontAwesomeIcon icon={faUpload} className="float-left" />
-                      {trans("menuPerfil.misAnuncios")}
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      onClick={() => this.handleClickStats()}
-                    >
-                      <FontAwesomeIcon icon={faChartBar} className="float-left" />
-                      {trans("menuPerfil.stats")}
-                    </button>
-                  )}
+              <List style={{ marginTop: '3rem' }}>
+                <ListItem button onClick={() => this.handleClickPerfil()}>
+                  <ListItemIcon><Person /></ListItemIcon>
+                  <ListItemText primary={trans("menuPerfil.perfil")} />
+                </ListItem>
+                <ListItem button onClick={() => this.handleClickCalendario()}>
+                  <ListItemIcon><CalendarToday /></ListItemIcon>
+                  <ListItemText primary={trans("menuPerfil.calendario")} />
+                </ListItem>
+                <ListItem button onClick={() => this.handleClickAcuerdos()}>
+                  <ListItemIcon><Drafts /></ListItemIcon>
+                  <ListItemText primary={trans("menuPerfil.contratos")} />
+                </ListItem>
+                {tipoUsuario === "Cliente" ? (
+                  <ListItem button onClick={() => this.handleClickAnuncios()}>
+                    <ListItemIcon><Publish /></ListItemIcon>
+                    <ListItemText primary={trans("menuPerfil.misAnuncios")} />
+                  </ListItem>) : (
+                    <ListItem button onClick={() => this.handleClickStats()}>
+                      <ListItemIcon><BarChart /></ListItemIcon>
+                      <ListItemText primary={trans("menuPerfil.stats")} />
+                    </ListItem>)}
 
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => this.handleClickNotificaciones()}
-                  >
-                    <FontAwesomeIcon icon={faBell} className="float-left" />
-                    {trans("menuPerfil.notificaciones")}
-                    {countNotifies > 0 ? (
-                      <span className="badge badge-light ml-2">
-                        {countNotifies}
-                      </span>
-                    ) : null}
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => this.handleClickAjustes()}
-                  >
-                    <FontAwesomeIcon icon={faCogs} className="float-left" />
-                    {trans("menuPerfil.ajustes")}
-                  </button>
-                </div>
+                <ListItem button onClick={() => this.handleClickNotificaciones()}>
+                  <ListItemIcon><Badge color="primary" badgeContent={countNotifies}><Notifications /></Badge></ListItemIcon>
+                  <ListItemText primary={trans("menuPerfil.notificaciones")} />
+                </ListItem>
+                <ListItem button onClick={() => this.handleClickAjustes()}>
+                  <ListItemIcon><Settings /></ListItemIcon>
+                  <ListItemText primary={trans("menuPerfil.ajustes")} />
+                </ListItem>
                 <button
                   type="button"
                   className="mt-5 w-100 btn btn-danger"
@@ -278,7 +236,7 @@ class MenuPerfil extends React.Component {
                   />
                   {trans("menuPerfil.salir")}
                 </button>
-              </div>
+              </List>
             );
           }}
         </SocketContext.Consumer>
@@ -287,40 +245,28 @@ class MenuPerfil extends React.Component {
   }
 
   render() {
+    const { toogleMenuPerfil, isOpened } = this.props;
     const IconAvatar = this.getAvatar.bind(this);
     const MenuContent = this.getMenuContent.bind(this);
     return (
-      <BurgerMenu
-        customBurgerIcon={false}
-        customCrossIcon={
-          <FontAwesomeIcon
-            className="bg-transparent text-light"
-            icon={faTimes}
-          />
-        }
-        outerContainerId={"outer-container"}
-        onStateChange={(state) => {
-          this.props.toogleMenuPerfil(state.isOpen);
-        }}
-        className="text-center"
-        isOpen={this.props.isOpened}
-        pageWrapId={"outer-container"}
-        right
-        styles={{ background: "#343a40" }}
+      <Drawer
+        onClose={() => toogleMenuPerfil(false)}
+        open={isOpened}
+        anchor={"right"}
       >
         <div
           style={{
             outline: "none",
           }}
-          className="d-flex flex-column justify-content-between h-100"
+          className="d-flex flex-column h-100 p-5"
         >
           <IconAvatar />
           <MenuContent />
-          <div className="d-none d-sm-inline">
+          <div className="d-flex flex-column h-100 justify-content-end">
             <ChangeLang />
           </div>
         </div>
-      </BurgerMenu>
+      </Drawer>
     );
   }
 }
