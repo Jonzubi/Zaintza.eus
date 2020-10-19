@@ -203,7 +203,7 @@ class CalendarioForm extends React.Component {
     return isLoading ? (
       <div
         style={{
-          height: "calc(100vh - 80px)",
+          minHeight: "calc(100vh - 80px)",
         }}
         className="d-flex align-items-center justify-content-center"
       >

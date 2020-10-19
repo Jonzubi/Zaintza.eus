@@ -367,13 +367,13 @@ class NotificacionesForm extends React.Component {
             }
             onClick={() => this.closeOpenedOptionsDiv()}
             style={{
-              height: "calc(100vh - 80px)",
+              minminHeight: "calc(100vh - 80px)",
             }}
           >
             {isLoading ? (
               <div
                 style={{
-                  height: "calc(100vh - 80px)",
+                  minminHeight: "calc(100vh - 80px)",
                 }}
                 className="d-flex align-items-center justify-content-center"
               >
@@ -591,7 +591,7 @@ class NotificacionesForm extends React.Component {
             ) : (
               <div
                 style={{
-                  height: "calc(100vh - 80px)",
+                  minHeight: "calc(100vh - 80px)",
                 }}
                 className="d-flex align-items-center justify-content-center"
               >

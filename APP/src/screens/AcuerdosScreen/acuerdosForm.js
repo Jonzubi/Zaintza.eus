@@ -307,14 +307,14 @@ class AcuerdosForm extends React.Component {
           <div
             onClick={() => this.closeOpenedOptionsDiv()}
             style={{
-              height: "calc(100vh - 80px)",
+              minHeight: "calc(100vh - 80px)",
             }}
             className={jsonAcuerdos.length > 0 ? "p-lg-5 p-2" : "p-0"}
           >
             {isLoading ? (
               <div
                 style={{
-                  height: "calc(100vh - 80px)",
+                  minHeight: "calc(100vh - 80px)",
                 }}
                 className="d-flex align-items-center justify-content-center"
               >
@@ -758,7 +758,7 @@ class AcuerdosForm extends React.Component {
             ) : (
               <div
                 style={{
-                  height: "calc(100vh - 80px)",
+                  minHeight: "calc(100vh - 80px)",
                 }}
                 className="d-flex align-items-center justify-content-center"
               >

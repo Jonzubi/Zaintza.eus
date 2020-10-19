@@ -582,14 +582,14 @@ class MisAnuncios extends React.Component {
       <div
         onClick={() => this.closeOpenedOptionsDiv()}
         style={{
-          height: "calc(100vh - 80px)",
+          minHeight: "calc(100vh - 80px)",
         }}
         className={isLoading ? "p-0" : "p-lg-5 p-2"}
       >
         {isLoading ? (
           <div
             style={{
-              height: "calc(100vh - 80px)",
+              minHeight: "calc(100vh - 80px)",
             }}
             className="d-flex align-items-center justify-content-center"
           >
@@ -598,7 +598,7 @@ class MisAnuncios extends React.Component {
         ) : jsonAnuncios.length === 0 ? (
           <div
             style={{
-              height: "calc(100vh - 80px)",
+              minHeight: "calc(100vh - 80px)",
             }}
             className="d-flex align-items-center justify-content-center"
           >
