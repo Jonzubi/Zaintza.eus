@@ -1,20 +1,5 @@
 import React from "react";
-import { slide as BurgerMenu } from "react-burger-menu";
-import Avatar from "react-avatar";
 import LogInForm from "./logInForm";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTimes,
-  faUserCircle,
-  faUser,
-  faCalendarAlt,
-  faComments,
-  faBell,
-  faCogs,
-  faSignOutAlt,
-  faUpload,
-  faChartBar,
-} from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
 import { initializeUserSession } from "../redux/actions/user";
@@ -27,10 +12,28 @@ import Axios from "../util/axiosInstance";
 import ChangeLang from "../components/changeLang";
 import SocketContext from "../socketio/socket-context";
 import { setCountNotify } from "../redux/actions/notifications";
-import { ResetMaxDistance } from '../redux/actions/coords';
-import { Badge, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import { Person, CalendarToday, Drafts, BarChart, Notifications, Settings, Publish, Close } from '@material-ui/icons';
-import Logo from '../util/images/Logo.png';
+import { ResetMaxDistance } from "../redux/actions/coords";
+import {
+  Badge,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@material-ui/core";
+import {
+  Person,
+  CalendarToday,
+  Drafts,
+  BarChart,
+  Notifications,
+  Settings,
+  Publish,
+  Close,
+  ExitToApp,
+} from "@material-ui/icons";
+import Logo from "../util/images/Logo.png";
+import { colors } from "../util/colors";
 
 const mapStateToProps = (state) => {
   return {
@@ -56,7 +59,7 @@ const mapDispatchToProps = (dispatch) => {
     initializeUserSession: () => dispatch(initializeUserSession()),
     changeFormContent: (form) => dispatch(changeFormContent(form)),
     setCountNotify: (payload) => dispatch(setCountNotify(payload)),
-    resetMaxDistance: () => dispatch(ResetMaxDistance())
+    resetMaxDistance: () => dispatch(ResetMaxDistance()),
   };
 };
 
@@ -105,17 +108,8 @@ class MenuPerfil extends React.Component {
       <div className="w-100 text-center">
         <img width={256} height={125} src={Logo} alt="logo" />
       </div>
-
-    ) : (
-        <Avatar
-          name={this.props.nombre + " " + this.props.apellido1 || ""}
-          src={"https://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto + "?isAvatar=true"}
-          className="mx-auto"
-          round={true}
-          size="200"
-        />
-      );
-  }
+    ) : null;
+  };
 
   handleClickPerfil() {
     const tipoUsuario = this.props.tipoUsuario;
@@ -194,58 +188,74 @@ class MenuPerfil extends React.Component {
             const { countNotifies, tipoUsuario } = this.props;
 
             return (
-              <List style={{ marginTop: '3rem' }}>
+              <List style={{ width: 250 }}>
                 <ListItem button onClick={() => this.handleClickPerfil()}>
-                  <ListItemIcon><Person /></ListItemIcon>
+                  <ListItemIcon>
+                    <Person />
+                  </ListItemIcon>
                   <ListItemText primary={trans("menuPerfil.perfil")} />
                 </ListItem>
                 <ListItem button onClick={() => this.handleClickCalendario()}>
-                  <ListItemIcon><CalendarToday /></ListItemIcon>
+                  <ListItemIcon>
+                    <CalendarToday />
+                  </ListItemIcon>
                   <ListItemText primary={trans("menuPerfil.calendario")} />
                 </ListItem>
                 <ListItem button onClick={() => this.handleClickAcuerdos()}>
-                  <ListItemIcon><Drafts /></ListItemIcon>
+                  <ListItemIcon>
+                    <Drafts />
+                  </ListItemIcon>
                   <ListItemText primary={trans("menuPerfil.contratos")} />
                 </ListItem>
                 {tipoUsuario === "Cliente" ? (
                   <ListItem button onClick={() => this.handleClickAnuncios()}>
-                    <ListItemIcon><Publish /></ListItemIcon>
+                    <ListItemIcon>
+                      <Publish />
+                    </ListItemIcon>
                     <ListItemText primary={trans("menuPerfil.misAnuncios")} />
-                  </ListItem>) : (
-                    <ListItem button onClick={() => this.handleClickStats()}>
-                      <ListItemIcon><BarChart /></ListItemIcon>
-                      <ListItemText primary={trans("menuPerfil.stats")} />
-                    </ListItem>)}
+                  </ListItem>
+                ) : (
+                  <ListItem button onClick={() => this.handleClickStats()}>
+                    <ListItemIcon>
+                      <BarChart />
+                    </ListItemIcon>
+                    <ListItemText primary={trans("menuPerfil.stats")} />
+                  </ListItem>
+                )}
 
-                <ListItem button onClick={() => this.handleClickNotificaciones()}>
-                  <ListItemIcon><Badge color="primary" badgeContent={countNotifies}><Notifications /></Badge></ListItemIcon>
+                <ListItem
+                  button
+                  onClick={() => this.handleClickNotificaciones()}
+                >
+                  <ListItemIcon>
+                    <Badge color="primary" badgeContent={countNotifies}>
+                      <Notifications />
+                    </Badge>
+                  </ListItemIcon>
                   <ListItemText primary={trans("menuPerfil.notificaciones")} />
                 </ListItem>
                 <ListItem button onClick={() => this.handleClickAjustes()}>
-                  <ListItemIcon><Settings /></ListItemIcon>
+                  <ListItemIcon>
+                    <Settings />
+                  </ListItemIcon>
                   <ListItemText primary={trans("menuPerfil.ajustes")} />
                 </ListItem>
-                <button
-                  type="button"
-                  className="mt-5 w-100 btn btn-danger"
-                  onClick={() => this.handleLogOut()}
-                >
-                  <FontAwesomeIcon
-                    className="mt-1 float-left"
-                    icon={faSignOutAlt}
-                  />
-                  {trans("menuPerfil.salir")}
-                </button>
+                <ListItem button onClick={() => this.handleLogOut()}>
+                  <ListItemIcon>
+                    <ExitToApp style={{ fill: colors.red }} />
+                  </ListItemIcon>
+                  <ListItemText primary={trans("menuPerfil.salir")} />
+                </ListItem>
               </List>
             );
           }}
         </SocketContext.Consumer>
       );
     }
-  }
+  };
 
   render() {
-    const { toogleMenuPerfil, isOpened } = this.props;
+    const { toogleMenuPerfil, isOpened, tipoUsuario } = this.props;
     const IconAvatar = this.getAvatar.bind(this);
     const MenuContent = this.getMenuContent.bind(this);
     return (
@@ -256,7 +266,7 @@ class MenuPerfil extends React.Component {
       >
         <div
           className="d-flex flex-row justify-content-end p-3"
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: "pointer" }}
         >
           <Close onClick={() => toogleMenuPerfil(false)} />
         </div>
@@ -264,7 +274,11 @@ class MenuPerfil extends React.Component {
           style={{
             outline: "none",
           }}
-          className="d-flex flex-column h-100 p-5"
+          className={
+            !tipoUsuario
+              ? "d-flex flex-column h-100 p-5"
+              : "d-flex flex-column h-100"
+          }
         >
           <IconAvatar />
           <MenuContent />
