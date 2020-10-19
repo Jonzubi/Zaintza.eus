@@ -29,7 +29,7 @@ import SocketContext from "../socketio/socket-context";
 import { setCountNotify } from "../redux/actions/notifications";
 import { ResetMaxDistance } from '../redux/actions/coords';
 import { Badge, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import { Person, CalendarToday, Drafts, BarChart, Notifications, Settings, Publish } from '@material-ui/icons';
+import { Person, CalendarToday, Drafts, BarChart, Notifications, Settings, Publish, Close } from '@material-ui/icons';
 import Logo from '../util/images/Logo.png';
 
 const mapStateToProps = (state) => {
@@ -254,6 +254,12 @@ class MenuPerfil extends React.Component {
         open={isOpened}
         anchor={"right"}
       >
+        <div
+          className="d-flex flex-row justify-content-end p-3"
+          style={{ cursor: 'pointer' }}
+        >
+          <Close onClick={() => toogleMenuPerfil(false)} />
+        </div>
         <div
           style={{
             outline: "none",
