@@ -3,6 +3,7 @@ import i18n from "i18next";
 import { connect } from "react-redux";
 import ipMaquina from "../util/ipMaquinaAPI";
 import { changeLang } from "../redux/actions/app";
+import { colors } from '../util/colors';
 
 class ChangeLang extends React.Component {
   componentDidUpdate(prevProps) {
@@ -37,9 +38,10 @@ class ChangeLang extends React.Component {
   render() {
     const { nowLang } = this.props;
     return (
-      <div className="dropdown pb-1">
+      <div className="dropdown">
         <button
-          className="btn btn-light dropdown-toggle w-100"
+          className="btn dropdown-toggle w-100"
+          style={{ backgroundColor: colors.lightGrey }}
           type="button"
           id="dropdownMenuButton"
           data-toggle="dropdown"

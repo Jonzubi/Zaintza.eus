@@ -1,14 +1,13 @@
-import {TOOGLE_MENUPERFIL} from "../constants/menuPerfil";
+import { TOOGLE_MENUPERFIL } from "../constants/menuPerfil";
 
 const initialState = {
-        isOpened : false      
+    isOpened: false
 };
 
-function reducer(state = initialState, action){
-    switch (action.type){
+function reducer(state = initialState, action) {
+    switch (action.type) {
         case TOOGLE_MENUPERFIL:
-            const auxIsOpened = typeof action.payload != "undefined" ? action.payload : !state.isOpened;
-            return Object.assign({},state,{isOpened:auxIsOpened});
+            return Object.assign({}, state, { isOpened: !state.isOpened });
         default:
             return state;
     }
