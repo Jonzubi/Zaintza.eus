@@ -49,7 +49,7 @@ class CuidadorFormStats extends React.Component {
             ? {}
             : {
                 boxShadow: "0 0.125rem 0.25rem rgba(0,0,0,.075)",
-                height: "calc(100vh - 80px)"
+                minHeight: "calc(100vh - 80px)"
               }
         }
         className={isLoading ? "p-0" : "p-lg-5 p-2"}
@@ -58,7 +58,7 @@ class CuidadorFormStats extends React.Component {
           <div
             className="d-flex align-items-center justify-content-center"
             style={{
-              height: "calc(100vh - 80px)",
+              minHeight: "calc(100vh - 80px)",
             }}
           >
             <ClipLoader color="#28a745" />
