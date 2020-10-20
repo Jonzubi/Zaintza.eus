@@ -70,9 +70,13 @@ class Header extends React.Component {
     } = this.props;
     return (
       <div
-        style={{ boxShadow: '0 .125rem .25rem rgba(0,0,0,.075)' }}
+        style={{
+          boxShadow: '0 .125rem .25rem rgba(0,0,0,.075)',
+          paddingLeft: 15,
+          paddingRight: 15
+        }}
         id="headRoom"
-        className="d-flex flex-row align-items-center p-1 justify-content-between fixed-top bg-white"
+        className="d-flex flex-row align-items-center justify-content-between fixed-top bg-white"
       >
         <a
           href="#"

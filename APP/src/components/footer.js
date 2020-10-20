@@ -25,7 +25,7 @@ const Footer = () => {
     >
       <span
         onClick={handleAvisoLegalClick}
-        className="mr-1"
+        className="mr-1 footerLinks"
         style={{
           cursor: "pointer",
         }}
@@ -35,7 +35,7 @@ const Footer = () => {
       |
       <span
         onClick={handlePrivacidadClick}
-        className="ml-1"
+        className="ml-1 footerLinks"
         style={{
           cursor: "pointer",
         }}
