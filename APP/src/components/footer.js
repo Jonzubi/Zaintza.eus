@@ -18,9 +18,10 @@ const Footer = () => {
     <div
       style={{
         background: colors.grey,
-        fontSize: 11
+        fontSize: 11,
+        boxShadow: '0 -.125rem .25rem rgba(0,0,0,.075)'
       }}
-      className="d-flex flex-row align-items-center justify-content-center p-1 text-white"
+      className="d-flex flex-row align-items-center justify-content-center p-2 bg-white"
     >
       <span
         onClick={handleAvisoLegalClick}
