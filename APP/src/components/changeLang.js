@@ -3,7 +3,7 @@ import i18n from "i18next";
 import { connect } from "react-redux";
 import ipMaquina from "../util/ipMaquinaAPI";
 import { changeLang } from "../redux/actions/app";
-import { colors } from '../util/colors';
+import { colors } from "../util/colors";
 
 class ChangeLang extends React.Component {
   componentDidUpdate(prevProps) {
@@ -13,7 +13,7 @@ class ChangeLang extends React.Component {
     }
   }
 
-  getLangTraducido = code => {
+  getLangTraducido = (code) => {
     switch (code) {
       case "eus":
         return "Euskara(EUS)";
@@ -28,7 +28,7 @@ class ChangeLang extends React.Component {
     return Object.keys(i18n.services.resourceStore.data);
   };
 
-  handleChangeLanguage = lang => {
+  handleChangeLanguage = (lang) => {
     const { changeLang } = this.props;
     i18n.changeLanguage(lang);
 
@@ -40,8 +40,8 @@ class ChangeLang extends React.Component {
     return (
       <div className="dropdown">
         <button
-          className="btn dropdown-toggle w-100"
-          style={{ backgroundColor: colors.lightGrey }}
+          className="btn dropdown-toggle w-100 text-white"
+          style={{ backgroundColor: colors.green }}
           type="button"
           id="dropdownMenuButton"
           data-toggle="dropdown"
@@ -54,7 +54,7 @@ class ChangeLang extends React.Component {
           className="dropdown-menu w-100 text-center"
           aria-labelledby="dropdownMenuButton"
         >
-          {this.getAllLang().map(lang => {
+          {this.getAllLang().map((lang) => {
             return (
               <a
                 className="dropdown-item btn w-100"
@@ -70,13 +70,13 @@ class ChangeLang extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   idLangPred: state.user.idLangPred,
-  nowLang: state.app.nowLang
+  nowLang: state.app.nowLang,
 });
 
-const mapDispatchToProps = dispatch => ({
-  changeLang: (payload) => dispatch(changeLang(payload))
+const mapDispatchToProps = (dispatch) => ({
+  changeLang: (payload) => dispatch(changeLang(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChangeLang);

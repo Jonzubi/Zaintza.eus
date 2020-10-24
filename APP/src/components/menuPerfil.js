@@ -266,9 +266,8 @@ class MenuPerfil extends React.Component {
       >
         <div
           className="d-flex flex-row justify-content-end p-3"
-          style={{ cursor: "pointer" }}
         >
-          <Close onClick={() => toogleMenuPerfil(false)} />
+          <Close style={{ cursor: "pointer" }} onClick={() => toogleMenuPerfil(false)} />
         </div>
         <div
           style={{
