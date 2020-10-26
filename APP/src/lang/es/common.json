@@ -424,6 +424,12 @@
       "txtDerechos": "Acceder, rectificar y suprimir los datos, así como otros derechos, como se explica en la información adicional.",
       "infoAdicional": "Información adicional",
       "txtInfoAdicional": "Puede consultar la información adicional y detallada sobre Protección de Datos en nuestra sede social."
+    },
+    "modalRegistrarse": {
+      "titulo": "Registrarse",
+      "content": "Registrarse como cliente o como cuidador?",
+      "comoCliente": "Cliente",
+      "comoCuidador": "Cuidador"
     }
   }
   

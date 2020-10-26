@@ -430,5 +430,11 @@
     "txtDerechos": "Interesdunari buruzko datu pertsonaletarako sarbidea eskatzeko eskubidea, Datu horien zuzenketa edo ezabaketa eskatzeko eskubidea, Tratamenduaren mugaketa eskatzeko eskubidea, Tratamenduari uko egiteko eskubidea, Datuen eramangarritasun-eskubidea.",
     "infoAdicional": "Informazio gehigarria",
     "txtInfoAdicional": "Datuen Babesari buruzko informazio osagarria eta zehatza gure egoitzan kontsulta dezakezu."
+  },
+  "modalRegistrarse": {
+    "titulo": "Izen ematea",
+    "content": "Nola nahiko zenuke izena eman, guraso gisa ala zaintzaile gisa?",
+    "comoCliente": "Bezero gisa",
+    "comoCuidador": "Zaintzaile gisa"
   }
 }
