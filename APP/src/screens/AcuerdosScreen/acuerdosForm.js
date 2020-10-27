@@ -50,6 +50,7 @@ const mapStateToProps = (state) => {
     tipoUsuario: state.user.tipoUsuario,
     email: state.user.email,
     contrasena: state.user.contrasena,
+    nowLang: state.app.nowLang,
   };
 };
 
