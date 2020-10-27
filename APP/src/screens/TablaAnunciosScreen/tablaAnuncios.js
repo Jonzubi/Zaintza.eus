@@ -441,7 +441,7 @@ class TablaAnuncios extends React.Component {
                     jsonAnuncios.map((anuncio, indice) => {
                       return (
                         <div
-                        onClick={() => { this.handleViewAnuncio(anuncio.anuncio); }}
+                          onClick={() => { this.handleViewAnuncio(anuncio.anuncio); }}
                           className="card w-20 m-4 cardHoverAnimation"
                         >
                         {anuncio.distancia !== undefined && anuncio.distancia !== false ? 
