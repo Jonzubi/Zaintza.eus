@@ -365,7 +365,13 @@ class NotificacionesForm extends React.Component {
     return jsonNotificaciones.map((notificacion, indice) => {
       return (
         <>
-          <ListItem>
+          <ListItem button onClick={() => {
+            this.setState({
+              selectedNotificacion: notificacion,
+              showModalNotificacion: true,
+            });
+            this.handleMarcarComoVisto(jsonNotificaciones[indice]);
+          }}>
             <ListItemAvatar>
               <Badge color="primary" badgeContent={!notificacion.visto ? i18next.t('notificacionesForm.nuevo') : 0}>
                 <Avatar
@@ -382,17 +388,6 @@ class NotificacionesForm extends React.Component {
               )}`}
             />
             <ListItemSecondaryAction>
-              <IconButton
-                onClick={() => {
-                  this.setState({
-                    selectedNotificacion: notificacion,
-                    showModalNotificacion: true,
-                  });
-                  this.handleMarcarComoVisto(jsonNotificaciones[indice]);
-                }}
-              >
-                <Visibility style={{ color: colors.green }} />
-              </IconButton>
               <IconButton
                 onClick={() => {
                   this.setState({
