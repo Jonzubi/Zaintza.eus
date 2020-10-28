@@ -16,6 +16,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { trans } from "../util/funciones";
 import logo from '../util/images/Logo.png';
+import protocol from '../util/protocol';
 
 const MapDispachToProps = (dispatch) => {
   return {
@@ -46,7 +47,7 @@ class Header extends React.Component {
     ) : (
       <Avatar
         name={this.props.nombre + " " + this.props.apellido1}
-        src={"https://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto + "?isAvatar=true"}
+        src={`${protocol}://${ipMaquina}:3001/api/image/${this.props.direcFoto}?isAvatar=true`}
         size={50}
         round={true}
         onClick={() => this.props.toogleMenuPerfil(true)}

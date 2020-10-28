@@ -34,6 +34,7 @@ import Button from "react-bootstrap/Button";
 import ClipLoader from "react-spinners/ClipLoader";
 import SocketContext from "../../socketio/socket-context";
 import NoData from "../../components/noData";
+import protocol from "../../util/protocol";
 
 const mapStateToProps = (state) => {
   return {
@@ -112,7 +113,7 @@ class TablaAnuncios extends React.Component {
       () => {
         axios
           .get(
-            "https://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil",
+            `${protocol}://${ipMaquina}:3001/api/procedures/getAnunciosConPerfil`,
             {
               params: {
                 coords,
@@ -206,7 +207,7 @@ class TablaAnuncios extends React.Component {
     }
 
     let comprobAcuerdoUnico = await axios.post(
-      "https://" + ipMaquina + ":3001/api/procedures/checkIfAcuerdoExists",
+      `${protocol}://${ipMaquina}:3001/api/procedures/checkIfAcuerdoExists`,
       {
         idCliente: anuncio.idCliente._id,
         idCuidador: idPerfil,
@@ -224,7 +225,7 @@ class TablaAnuncios extends React.Component {
     }
 
     const idUsuarioCliente = await axios.get(
-      `https://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${anuncio.idCliente._id}`
+      `${protocol}://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${anuncio.idCliente._id}`
     );
 
     let formData = {
@@ -246,7 +247,7 @@ class TablaAnuncios extends React.Component {
       () => {
         axios
           .post(
-            "https://" + ipMaquina + ":3001/api/procedures/postPropuestaAcuerdo",
+            `${protocol}://${ipMaquina}:3001/api/procedures/postPropuestaAcuerdo`,
             formData
           )
           .then(() => {
@@ -325,7 +326,7 @@ class TablaAnuncios extends React.Component {
       () => {
         axios
           .get(
-            "https://" + ipMaquina + ":3001/api/procedures/getAnunciosConPerfil",
+            `${protocol}://${ipMaquina}:3001/api/procedures/getAnunciosConPerfil`,
             {
               params: {
                 options: {
@@ -370,7 +371,7 @@ class TablaAnuncios extends React.Component {
         contrasena,
       };
       axios.post(
-        `https://${ipMaquina}:3001/api/procedures/registerAnuncioVisita/${anuncio._id}`,
+        `${protocol}://${ipMaquina}:3001/api/procedures/registerAnuncioVisita/${anuncio._id}`,
         formData
       );
     }
@@ -477,12 +478,7 @@ class TablaAnuncios extends React.Component {
                             <img
                               alt="Foto de contacto del anuncio"
                               style={{ maxHeight: "250px", height: "auto" }}
-                              src={
-                                "https://" +
-                                ipMaquina +
-                                ":3001/api/image/" +
-                                anuncio.anuncio.direcFoto
-                              }
+                              src={`${protocol}://${ipMaquina}:3001/api/image/${anuncio.anuncio.direcFoto}`}
                             />
                           </div>
                           <div className="card-body">
@@ -562,12 +558,7 @@ class TablaAnuncios extends React.Component {
                             maxHeight: "300px",
                             height: "auto",
                           }}
-                          src={
-                            "https://" +
-                            ipMaquina +
-                            ":3001/api/image/" +
-                            selectedAnuncio.direcFoto
-                          }
+                          src={`${protocol}://${ipMaquina}:3001/api/image/${selectedAnuncio.direcFoto}`}
                         />
                       </div>
                       <div

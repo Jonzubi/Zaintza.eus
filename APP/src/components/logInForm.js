@@ -17,6 +17,7 @@ import { SetMaxDistance } from "../redux/actions/coords";
 import { Checkbox, InputAdornment, TextField } from '@material-ui/core';
 import { EmailRounded, Lock } from '@material-ui/icons';
 import { colors } from '../util/colors';
+import protocol from '../util/protocol';
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -62,7 +63,7 @@ class LogInForm extends React.Component {
       () => {
         axios
           .get(
-            "https://" + ipMaquina + ":3001/api/procedures/getUsuarioConPerfil",
+            `${protocol}://${ipMaquina}:3001/api/procedures/getUsuarioConPerfil`,
             {
               params: objFiltros,
             }

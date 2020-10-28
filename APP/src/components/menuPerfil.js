@@ -34,6 +34,7 @@ import {
 } from "@material-ui/icons";
 import Logo from "../util/images/Logo.png";
 import { colors } from "../util/colors";
+import protocol from '../util/protocol';
 
 const mapStateToProps = (state) => {
   return {
@@ -80,7 +81,7 @@ class MenuPerfil extends React.Component {
       return;
 
     Axios.post(
-      `https://${ipMaquina}:3001/api/procedures/getNotificationsWithIdUsuario/${idUsuario}`,
+      `${protocol}://${ipMaquina}:3001/api/procedures/getNotificationsWithIdUsuario/${idUsuario}`,
       {
         email,
         contrasena,

@@ -10,6 +10,7 @@ import i18n from "i18next";
 import i18next from "i18next";
 import Slider from '@material-ui/core/Slider';
 import { SetMaxDistance } from '../../redux/actions/coords';
+import protocol from '../../util/protocol';
 
 class AjustesForm extends React.Component {
   constructor(props) {
@@ -35,7 +36,7 @@ class AjustesForm extends React.Component {
     const { idUsuario, email, contrasena } = this.props;
 
     Axios.post(
-      "https://" + ipMaquina + ":3001/api/procedures/patchPredLang/" + idUsuario,
+      `${protocol}://${ipMaquina}:3001/api/procedures/patchPredLang/${idUsuario}`,
       {
         idLangPred: langChosen,
         email,
@@ -90,7 +91,7 @@ class AjustesForm extends React.Component {
     }
 
     Axios.patch(
-      "https://" + ipMaquina + ":3001/api/procedures/patchPassword/" + idUsuario, {
+      `${protocol}://${ipMaquina}:3001/api/procedures/patchPassword/${idUsuario}`, {
         email,
         contrasena: txtActualPassword,
         newPassword: txtNewPassword
@@ -129,7 +130,7 @@ class AjustesForm extends React.Component {
     const { maxDistance } = this.state;
     const { idUsuario, setMaxDistance, email, contrasena } = this.props;
     Axios
-      .patch(`https://${ipMaquina}:3001/api/procedures/patchMaxDistance/${idUsuario}`, {
+      .patch(`${protocol}://${ipMaquina}:3001/api/procedures/patchMaxDistance/${idUsuario}`, {
         email,
         contrasena,
         maxDistance

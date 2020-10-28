@@ -39,6 +39,7 @@ import {
 } from '@material-ui/core';
 import { InsertChart, Create, Delete } from '@material-ui/icons';
 import { colors } from '../../util/colors';
+import protocol from '../../util/protocol';
 class MisAnuncios extends React.Component {
   constructor(props) {
     super(props);
@@ -79,7 +80,7 @@ class MisAnuncios extends React.Component {
   getMisAnuncios = () => {
     const { idPerfil, email, contrasena } = this.props;
     axios
-      .post(`https://${ipMaquina}:3001/api/procedures/getMisAnuncios`, {
+      .post(`${protocol}://${ipMaquina}:3001/api/procedures/getMisAnuncios`, {
         idCliente: idPerfil,
         email,
         contrasena,
@@ -130,7 +131,7 @@ class MisAnuncios extends React.Component {
     const { email, contrasena } = this.props;
     axios
       .post(
-        `https://${ipMaquina}:3001/api/procedures/deleteAnuncio/${selectedAnuncio._id}`,
+        `${protocol}://${ipMaquina}:3001/api/procedures/deleteAnuncio/${selectedAnuncio._id}`,
         {
           email,
           contrasena,
@@ -460,7 +461,7 @@ class MisAnuncios extends React.Component {
 
     axios
       .patch(
-        `https://${ipMaquina}:3001/api/procedures/patchAnuncio/${selectedAnuncio._id}`,
+        `${protocol}://${ipMaquina}:3001/api/procedures/patchAnuncio/${selectedAnuncio._id}`,
         formData
       )
       .then((res) => {
@@ -533,7 +534,7 @@ class MisAnuncios extends React.Component {
         };
         axios
           .post(
-            `https://${ipMaquina}:3001/api/procedures/getAnuncioVisitas/${anuncio._id}`,
+            `${protocol}://${ipMaquina}:3001/api/procedures/getAnuncioVisitas/${anuncio._id}`,
             formData
           )
           .then((res) => {
@@ -569,7 +570,7 @@ class MisAnuncios extends React.Component {
         <>
           <ListItem style={{ paddingRight: '144px' }}>
             <ListItemAvatar>
-              <Avatar alt="avatar" src={`https://${ipMaquina}:3001/api/image/${anuncio.direcFoto}`} />
+              <Avatar alt="avatar" src={`${protocol}://${ipMaquina}:3001/api/image/${anuncio.direcFoto}`} />
             </ListItemAvatar>
             <ListItemText
               primary={`${anuncio.titulo}`}

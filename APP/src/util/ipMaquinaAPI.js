@@ -1,1 +1,1 @@
-module.exports="www.zaintza.eus";
+module.exports = process.env.NODE_ENV !== 'development' ? "www.zaintza.eus" : "localhost";

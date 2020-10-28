@@ -11,6 +11,7 @@ import Axios from "../../util/axiosInstance";
 import cogoToast from "cogo-toast";
 import ClipLoader from "react-spinners/ClipLoader";
 import i18next from "i18next";
+import protocol from '../../util/protocol';
 
 const mapStateToProps = state => {
   //Aqui van los especialitos de los undefined
@@ -113,7 +114,7 @@ class PerfilCliente extends React.Component {
     };
 
     Axios
-        .patch("https://" + ipMaquina + ":3001/api/procedures/patchCliente/" + this.props._id, formData)
+        .patch(`${protocol}://${ipMaquina}:3001/api/procedures/patchCliente/${this.props._id}`, formData)
         .then(
           resultado => {
             const { direcFoto } = resultado.data;
@@ -175,9 +176,7 @@ class PerfilCliente extends React.Component {
               alt="Avatar perfil"
               height={200}
               width={200}
-              src={
-                "https://" + ipMaquina + ":3001/api/image/" + this.props.direcFoto
-              }
+              src={`${protocol}://${ipMaquina}:3001/api/image/${this.props.direcFoto}`}
             />
           ) : (
             <Avatar

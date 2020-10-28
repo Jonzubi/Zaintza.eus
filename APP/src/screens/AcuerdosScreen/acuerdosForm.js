@@ -33,6 +33,7 @@ import {
 } from "@material-ui/core";
 import { Visibility, Delete } from "@material-ui/icons";
 import { colors } from "../../util/colors";
+import protocol from '../../util/protocol';
 
 const mapStateToProps = (state) => {
   return {
@@ -80,7 +81,7 @@ class AcuerdosForm extends React.Component {
 
     axios
       .post(
-        "https://" + ipMaquina + ":3001/api/procedures/getAcuerdosConUsuarios",
+        `${protocol}://${ipMaquina}:3001/api/procedures/getAcuerdosConUsuarios`,
         {
           tipoUsuario: tipoUsuario,
           idPerfil: idPerfil,
@@ -145,10 +146,7 @@ class AcuerdosForm extends React.Component {
     const objToday = new Date();
 
     await axios.patch(
-      "https://" +
-        ipMaquina +
-        ":3001/api/procedures/terminarAcuerdo/" +
-        acuerdo._id,
+      `${protocol}://${ipMaquina}:3001/api/procedures/terminarAcuerdo/${acuerdo._id}`,
       {
         whoAmI: tipoUsuario,
         email,
@@ -160,7 +158,7 @@ class AcuerdosForm extends React.Component {
       this.props.tipoUsuario == "Cliente" ? "idCuidador" : "idCliente";
     const idElOtro = acuerdo[buscarUsuOrCuid]._id;
     let elOtroUsu = await axios.get(
-      `https://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${idElOtro}`
+      `${protocol}://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${idElOtro}`
     );
     const notificacionData = {
       idUsuario: elOtroUsu.data,
@@ -174,7 +172,7 @@ class AcuerdosForm extends React.Component {
       contrasena,
     };
     await axios.post(
-      "https://" + ipMaquina + ":3001/api/procedures/newNotification",
+      `${protocol}://${ipMaquina}:3001/api/procedures/newNotification`,
       notificacionData
     );
 
@@ -250,7 +248,7 @@ class AcuerdosForm extends React.Component {
       },
       async () => {
         const idUsuarioAValorar = await axios.get(
-          `https://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${selectedAcuerdo.idCuidador._id}`
+          `${protocol}://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${selectedAcuerdo.idCuidador._id}`
         );
         const formData = {
           idUsuario: idUsuarioAValorar.data,
@@ -265,7 +263,7 @@ class AcuerdosForm extends React.Component {
         };
         axios
           .post(
-            `https://${ipMaquina}:3001/api/procedures/postNewValoracion`,
+            `${protocol}://${ipMaquina}:3001/api/procedures/postNewValoracion`,
             formData
           )
           .then(() => {
@@ -324,7 +322,7 @@ class AcuerdosForm extends React.Component {
             <ListItemAvatar>
               <Avatar
                 alt="avatar"
-                src={`https://${ipMaquina}:3001/api/image/${laOtra.direcFoto}`}
+                src={`${protocol}://${ipMaquina}:3001/api/image/${laOtra.direcFoto}`}
               />
             </ListItemAvatar>
             <ListItemText
@@ -440,12 +438,7 @@ class AcuerdosForm extends React.Component {
                         maxHeight: "150px",
                         height: "auto",
                       }}
-                      src={
-                        "https://" +
-                        ipMaquina +
-                        ":3001/api/image/" +
-                        selectedAcuerdo[laOtraPersona].direcFoto
-                      }
+                      src={`${protocol}://${ipMaquina}:3001/api/image/${selectedAcuerdo[laOtraPersona].direcFoto}`}
                     />
                     <div className="mt-2">
                       <span className="mr-2">

@@ -45,6 +45,7 @@ import { getRandomString, toBase64 } from "../util/funciones";
 import { changeFormContent } from "../redux/actions/app";
 import "react-datez/dist/css/react-datez.css";
 import "./styles/registerFormCuidador.css";
+import protocol from '../util/protocol';
 
 class FormCuidador extends React.Component {
   constructor(props) {
@@ -515,7 +516,7 @@ class FormCuidador extends React.Component {
       }
 
       const checkIfEmailExists = await axios.get(
-        `https://${ipMaquina}:3001/api/procedures/checkIfEmailExists/${txtEmail}`
+        `${protocol}://${ipMaquina}:3001/api/procedures/checkIfEmailExists/${txtEmail}`
       );
 
       if (checkIfEmailExists.data !== "Vacio") {
@@ -597,7 +598,7 @@ class FormCuidador extends React.Component {
 
       const insertedCuidador = await axios
         .post(
-          "https://" + ipMaquina + ":3001/api/procedures/postNewCuidador",
+          `${protocol}://${ipMaquina}:3001/api/procedures/postNewCuidador`,
           formData
         )
         .catch((err) => {
@@ -618,7 +619,7 @@ class FormCuidador extends React.Component {
 
       changeFormContent("tabla");
 
-      axios.post(`https://${ipMaquina}:3003/smtp/registerEmail`, {
+      axios.post(`${protocol}://${ipMaquina}:3003/smtp/registerEmail`, {
         toEmail: txtEmail,
         nombre: txtNombre,
         apellido: txtApellido1,
@@ -657,10 +658,7 @@ class FormCuidador extends React.Component {
 
       axios
         .patch(
-          "https://" +
-            ipMaquina +
-            ":3001/api/procedures/patchCuidador/" +
-            this.props._id,
+          `${protocol}://${ipMaquina}:3001/api/procedures/patchCuidador/${this.props._id}`,
           formData
         )
         .then((res) => {
@@ -740,7 +738,7 @@ class FormCuidador extends React.Component {
                       height={200}
                       width={200}
                       src={
-                        "https://" + ipMaquina + ":3001/api/image/" + direcFoto
+                        `${protocol}://${ipMaquina}:3001/api/image/${direcFoto}`
                       }
                     />
                   ) : (
@@ -797,12 +795,7 @@ class FormCuidador extends React.Component {
                       <img
                         style={{ maxHeight: "250px", height: "auto" }}
                         alt="Foto de contacto del cuidador"
-                        src={
-                          "https://" +
-                          ipMaquina +
-                          ":3001/api/image/" +
-                          this.props.direcFotoContacto
-                        }
+                        src={`${protocol}://${ipMaquina}:3001/api/image/${this.props.direcFotoContacto}`}
                       />
                     </div>
                   ) : (

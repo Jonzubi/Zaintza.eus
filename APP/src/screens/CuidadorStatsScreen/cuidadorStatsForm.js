@@ -7,6 +7,7 @@ import cogoToast from "cogo-toast";
 import { trans } from "../../util/funciones";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
+import protocol from '../../util/protocol';
 
 class CuidadorFormStats extends React.Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class CuidadorFormStats extends React.Component {
   componentDidMount() {
     const { email, contrasena, idPerfil } = this.props;
     Axios.post(
-      `https://${ipMaquina}:3001/api/procedures/getCuidadorVisitas/${idPerfil}`,
+      `${protocol}://${ipMaquina}:3001/api/procedures/getCuidadorVisitas/${idPerfil}`,
       {
         email,
         contrasena,

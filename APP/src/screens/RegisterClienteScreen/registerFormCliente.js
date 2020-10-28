@@ -12,6 +12,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faAt, faKey, faMobileAlt, faPhoneAlt } from "@fortawesome/free-solid-svg-icons";
 import i18next from "i18next";
+import protocol from "../../util/protocol";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -124,7 +125,7 @@ class RegisterFormCliente extends React.Component {
     }
 
     const checkIfEmailExists = await axios.get(
-      `https://${ipMaquina}:3001/api/procedures/checkIfEmailExists/${this.state.txtEmail}`
+      `${protocol}://${ipMaquina}:3001/api/procedures/checkIfEmailExists/${this.state.txtEmail}`
     );
 
     if (checkIfEmailExists.data !== "Vacio") {
@@ -150,7 +151,7 @@ class RegisterFormCliente extends React.Component {
 
     const insertedCliente = await axios
       .post(
-        "https://" + ipMaquina + ":3001/api/procedures/postNewCliente",
+        `${protocol}://${ipMaquina}:3001/api/procedures/postNewCliente`,
         formData
       )
       .catch(err => {
@@ -167,7 +168,7 @@ class RegisterFormCliente extends React.Component {
         return;
       }
     
-      axios.post(`https://${ipMaquina}:3003/smtp/registerEmail`, {
+      axios.post(`${protocol}://${ipMaquina}:3003/smtp/registerEmail`, {
         toEmail: txtEmail,
         nombre: txtNombre,
         apellido: txtApellido1,
