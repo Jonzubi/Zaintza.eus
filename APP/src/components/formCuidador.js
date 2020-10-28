@@ -923,6 +923,8 @@ class FormCuidador extends React.Component {
                   <div>
                     <input
                       type="radio"
+                      disabled={isProfileView && !isEditing}
+                      checked={txtSexo === 'M'}
                       id="male"
                       name="gender"
                       value="male"
@@ -939,6 +941,8 @@ class FormCuidador extends React.Component {
                   <div>
                     <input
                       type="radio"
+                      checked={txtSexo === 'F'}
+                      disabled={isProfileView && !isEditing}
                       id="female"
                       name="gender"
                       value="female"
@@ -955,6 +959,8 @@ class FormCuidador extends React.Component {
                   <div>
                     <input
                       type="radio"
+                      checked={txtSexo === 'X'}
+                      disabled={isProfileView && !isEditing}
                       id="other"
                       name="gender"
                       value="other"
