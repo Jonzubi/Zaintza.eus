@@ -7,8 +7,6 @@ import { trans, toBase64, arrayOfFalses } from "../../util/funciones";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faPen,
-  faTrashAlt,
   faSave,
   faUsers,
   faEuroSign,
@@ -17,11 +15,8 @@ import {
   faClock,
   faPlusCircle,
   faFileSignature,
-  faEllipsisV,
-  faChartBar,
   faEye,
 } from "@fortawesome/free-solid-svg-icons";
-import Avatar from "react-avatar";
 import Modal from "react-bootstrap/Modal";
 import ModalBody from "react-bootstrap/ModalBody";
 import ModalFooter from "react-bootstrap/ModalFooter";
@@ -32,7 +27,18 @@ import TimeInput from "../../components/customTimeInput";
 import "./modalRegistrarse.css";
 import "./misAnunciosForm.css";
 import ModalHeader from "react-bootstrap/ModalHeader";
-
+import {
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Divider,
+  Avatar,
+  ListItemSecondaryAction,
+  IconButton,
+} from '@material-ui/core';
+import { InsertChart, Create, Delete } from '@material-ui/icons';
+import { colors } from '../../util/colors';
 class MisAnuncios extends React.Component {
   constructor(props) {
     super(props);
@@ -557,6 +563,40 @@ class MisAnuncios extends React.Component {
     }
   };
 
+  renderAnuncios = (jsonAnuncios) => {
+    return jsonAnuncios.map((anuncio, index) => {
+      return (
+        <>
+          <ListItem>
+            <ListItemAvatar>
+              <Avatar alt="avatar" src={`https://${ipMaquina}:3001/api/image/${anuncio.direcFoto}`} />
+            </ListItemAvatar>
+            <ListItemText
+              primary={`${anuncio.titulo}`}
+              secondary={`${anuncio.descripcion}`}
+            />
+            <ListItemSecondaryAction>
+              <IconButton onClick={() => this.handleShowStats(anuncio)}>
+                <InsertChart color="primary" />
+              </IconButton>
+              <IconButton onClick={() => this.handleEditAnuncio(anuncio)}>
+                <Create style={{ color: colors.green}} />
+              </IconButton>
+              <IconButton onClick={() =>
+              this.setState({
+                showModalDeleteAnuncio: true,
+                selectedAnuncio: anuncio,
+              })}>
+                <Delete style={{ color: colors.red }} />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+          <Divider />
+        </>
+      )
+    })
+  }
+
   render() {
     const {
       isLoading,
@@ -571,7 +611,6 @@ class MisAnuncios extends React.Component {
       tituloAnuncio,
       descripcionAnuncio,
       isUploading,
-      isOpenThreeDotLayer,
       visitasConLogin,
       visitasSinLogin,
       showModalStats,
@@ -584,7 +623,6 @@ class MisAnuncios extends React.Component {
         style={{
           minHeight: "calc(100vh - 80px)",
         }}
-        className={isLoading ? "p-0" : "p-lg-5 p-2"}
       >
         {isLoading ? (
           <div
@@ -607,152 +645,9 @@ class MisAnuncios extends React.Component {
             </small>
           </div>
         ) : (
-          jsonAnuncios.map((anuncio, index) => (
-            <div
-              style={{
-                boxShadow: "0 0.125rem 0.25rem rgba(0,0,0,.075)",
-              }}
-              className="p-1 d-flex flex-row align-items-center justify-content-between"
-            >
-              <Avatar
-                size={50}
-                name={anuncio.titulo}
-                src={
-                  "https://" + ipMaquina + ":3001/api/image/" + anuncio.direcFoto
-                }
-              />
-              <span
-                style={{
-                  width: 200,
-                }}
-                className="font-weight-bold"
-              >
-                {anuncio.titulo.length > 20
-                  ? anuncio.titulo.substring(0, 20) + " ..."
-                  : anuncio.titulo}
-              </span>
-              <span
-                style={{
-                  width: 400,
-                }}
-                className="d-lg-inline d-none"
-              >
-                {anuncio.descripcion.length > 50
-                  ? anuncio.descripcion.substring(0, 50) + " ..."
-                  : anuncio.descripcion}
-              </span>
-              <div className="d-md-inline d-none">
-                <FontAwesomeIcon
-                  style={{
-                    cursor: "pointer",
-                  }}
-                  onClick={() => this.handleShowStats(anuncio)}
-                  icon={faChartBar}
-                  className="text-primary mr-md-5 mr-2"
-                />
-                <FontAwesomeIcon
-                  style={{
-                    cursor: "pointer",
-                  }}
-                  onClick={() => this.handleEditAnuncio(anuncio)}
-                  icon={faPen}
-                  className="text-success mr-md-5 mr-2"
-                />
-                <FontAwesomeIcon
-                  style={{
-                    cursor: "pointer",
-                  }}
-                  icon={faTrashAlt}
-                  className="text-danger"
-                  onClick={() =>
-                    this.setState({
-                      showModalDeleteAnuncio: true,
-                      selectedAnuncio: anuncio,
-                    })
-                  }
-                />
-              </div>
-              <div className="d-md-none d-inline">
-                <FontAwesomeIcon
-                  style={{
-                    cursor: "pointer",
-                  }}
-                  icon={faEllipsisV}
-                  onClick={() => this.handleClickOptions(index)}
-                />
-                <div
-                  style={{
-                    position: "absolute",
-                    width: 200,
-                    right: 10,
-                    backgroundColor: "white",
-                    boxShadow: "0 0.125rem 0.25rem rgba(0,0,0,.075)",
-                  }}
-                  className={
-                    isOpenThreeDotLayer[index]
-                      ? "d-flex flex-column rounded border"
-                      : "d-none"
-                  }
-                >
-                  <div
-                    style={{
-                      cursor: "pointer",
-                    }}
-                    className="threeDotsMenu p-1 d-flex flex-row align-items-center justify-content-between"
-                    onClick={() => {
-                      this.handleShowStats(anuncio);
-                      this.handleClickOptions(index);
-                    }}
-                  >
-                    <span className="mr-5">
-                      {trans("misAnunciosForm.verStats")}
-                    </span>
-                    <FontAwesomeIcon
-                      className="text-primary"
-                      icon={faChartBar}
-                    />
-                  </div>
-                  <div
-                    style={{
-                      cursor: "pointer",
-                    }}
-                    className="threeDotsMenu p-1 d-flex flex-row align-items-center justify-content-between"
-                    onClick={() => {
-                      this.handleEditAnuncio(anuncio);
-                      this.handleClickOptions(index);
-                    }}
-                  >
-                    <span className="mr-5">
-                      {trans("misAnunciosForm.editar")}
-                    </span>
-                    <FontAwesomeIcon className="text-success" icon={faPen} />
-                  </div>
-                  <div
-                    style={{
-                      cursor: "pointer",
-                    }}
-                    className="threeDotsMenu p-1 d-flex flex-row align-items-center justify-content-between"
-                    onClick={() => {
-                      this.setState({
-                        showModalDeleteAnuncio: true,
-                        selectedAnuncio: anuncio,
-                      });
-                      this.handleClickOptions(index);
-                    }}
-                  >
-                    <span className="mr-5">
-                      {trans("misAnunciosForm.eliminar")}
-                    </span>
-                    <FontAwesomeIcon
-                      className="text-danger"
-                      icon={faTrashAlt}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))
-        )}
+          <List>
+            {this.renderAnuncios(jsonAnuncios)}
+          </List>)}
         <Modal
           className="modalRegistrarse"
           show={showModalDeleteAnuncio}
