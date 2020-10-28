@@ -567,7 +567,7 @@ class MisAnuncios extends React.Component {
     return jsonAnuncios.map((anuncio, index) => {
       return (
         <>
-          <ListItem>
+          <ListItem style={{ paddingRight: '144px' }}>
             <ListItemAvatar>
               <Avatar alt="avatar" src={`https://${ipMaquina}:3001/api/image/${anuncio.direcFoto}`} />
             </ListItemAvatar>
