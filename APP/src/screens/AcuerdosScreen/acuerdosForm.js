@@ -1,20 +1,11 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCaretDown,
-  faCircle,
-  faUserMd,
-  faCity,
   faFileSignature,
   faStar,
   faHome,
   faClock,
-  faEye,
-  faEllipsisV,
-  faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
 import { connect } from "react-redux";
 import axios from "../../util/axiosInstance";
 import ipMaquina from "../../util/ipMaquinaAPI";
@@ -324,7 +315,12 @@ class AcuerdosForm extends React.Component {
       }
       return (
         <>
-          <ListItem>
+          <ListItem button onClick={() => {
+            this.setState({
+              selectedAcuerdo: acuerdo,
+              showAcuerdoModal: true,
+            });
+          }}>
             <ListItemAvatar>
               <Avatar
                 alt="avatar"
@@ -336,18 +332,6 @@ class AcuerdosForm extends React.Component {
               secondary={subtitulo}
             />
             <ListItemSecondaryAction>
-              <IconButton
-                edge="end"
-                aria-label="comments"
-                onClick={() => {
-                  this.setState({
-                    selectedAcuerdo: acuerdo,
-                    showAcuerdoModal: true,
-                  });
-                }}
-              >
-                <Visibility style={{ color: colors.green }} />
-              </IconButton>
               <IconButton
                 edge="end"
                 aria-label="comments"
