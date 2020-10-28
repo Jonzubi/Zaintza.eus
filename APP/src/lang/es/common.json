@@ -221,7 +221,8 @@
       "decisionAcuerdoRechazar": "Estas seguro de rechazar el acuerdo?",
       "askDeleteNotificacion": "Estas seguro de eliminar la notificación? Si la notificación es una propuesta de acuerdo será rechazada.",
       "valoracionRecibido": "Has recibido una valoración",
-      "comentario": "Comentario"
+      "comentario": "Comentario",
+      "nuevo": "Nuevo"
     },
     "formAnuncio":{
       "titulo": "Titulo",

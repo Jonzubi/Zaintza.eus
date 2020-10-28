@@ -227,7 +227,8 @@
     "decisionAcuerdoRechazar": "Ziur akordioa ukatu nahi duzula?",
     "askDeleteNotificacion": "Ziur abisua ezabatu nahi duzula? Akordio proposamen motako abisua bada ezeztatua izango da.",
     "valoracionRecibido": "Balorazio bat jaso duzu",
-    "comentario": "Iruzkina"
+    "comentario": "Iruzkina",
+    "nuevo": "Berria"
   },
   "formAnuncio":{
     "titulo": "Izenburua",
