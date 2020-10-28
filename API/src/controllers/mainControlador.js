@@ -1,5 +1,6 @@
 const headerResponse = require("../../util/headerResponse");
 const fs = require("fs");
+const path = require('path');
 const { writeImage } = require("../../util/funciones");
 
 const modelosPermitidos = ["cuidador", "anuncio"];
@@ -206,10 +207,12 @@ exports.postImage = (req, res) => {
 exports.getImage = (req, res) => {
   let idImage = req.params.id;
   let avatarDirPath = __dirname.substring(0, __dirname.lastIndexOf("\\"));
-  // avatarDirPath =
-  //   avatarDirPath.substring(0, avatarDirPath.lastIndexOf("\\")) +
-  //   "\\util\\imagenes\\";
-  avatarDirPath = "/var/www/Zaintza.eus/API/util/imagenes/";
+  if (process.env.NODE_ENV.includes("production")) {
+    avatarDirPath = "/var/www/Zaintza.eus/API/util/imagenes/";
+  } else {
+    avatarDirPath = path.join(__dirname, '/../../util/imagenes/');
+  }
+  
   fs.readdir(avatarDirPath, (err, files) => {
     if (err) {
       res.writeHead(500, headerResponse);
@@ -241,7 +244,12 @@ exports.getImage = (req, res) => {
           res.end();
           return;
         }
-        let noImageDirPath =  "/var/www/Zaintza.eus/API/src/assets/noImage.png";
+        let noImageDirPath = "";
+        if (process.env.NODE_ENV.includes("production")) {
+          noImageDirPath = "/var/www/Zaintza.eus/API/src/assets/noImage.png"
+        } else {
+          noImageDirPath = path.join(__dirname, '/../assets/noImage.png');
+        }
         let stream = fs.createReadStream(noImageDirPath);
         res.setHeader("Content-Type", "image/png");
         stream.pipe(res);

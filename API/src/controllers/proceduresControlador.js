@@ -310,6 +310,7 @@ exports.postNewCuidador = async (req, res, modelos) => {
     telefonoMovil,
     telefonoFijo,
     imgContactB64,
+    imgAvatarB64,
     avatarPreview,
     validationToken,
   } = req.body;
@@ -345,10 +346,10 @@ exports.postNewCuidador = async (req, res, modelos) => {
   //Empezaremos con las fotos, comporbando que el campo opcional avatar se haya enviado o no
   //Pongo el codAvatar aqui ya que hay que insertarlo en la base de datos por si se ha definido
   let codAvatar;
-  if (avatarPreview.length > 0) {
+  if (imgAvatarB64.length > 0) {
     //Se ha elegido una imagen para el perfil
     codAvatar = getRandomString(20);
-    writeImage(codAvatar, avatarPreview);
+    writeImage(codAvatar, imgAvatarB64);
   }
   //Se manda la foto de contacto
   let codContactImg = getRandomString(20);
@@ -511,7 +512,7 @@ exports.patchCuidador = async (req, res, modelos) => {
     ubicaciones,
     telefonoMovil,
     imgContactB64,
-    avatarPreview,
+    imgAvatarB64,
   } = req.body;
   const { id } = req.params;
 
@@ -554,9 +555,9 @@ exports.patchCuidador = async (req, res, modelos) => {
 
   let codAvatar;
   let formData = Object.assign({}, req.body);
-  if (avatarPreview.length > 0) {
+  if (imgAvatarB64.length > 0) {
     codAvatar = getRandomString(20);
-    writeImage(codAvatar, avatarPreview);
+    writeImage(codAvatar, imgAvatarB64);
     formData.direcFoto = codAvatar;
   }
   let codContactImg;

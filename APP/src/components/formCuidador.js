@@ -45,6 +45,7 @@ import { getRandomString, toBase64 } from "../util/funciones";
 import { changeFormContent } from "../redux/actions/app";
 import "react-datez/dist/css/react-datez.css";
 import "./styles/registerFormCuidador.css";
+import protocol from '../util/protocol';
 
 class FormCuidador extends React.Component {
   constructor(props) {
@@ -141,6 +142,7 @@ class FormCuidador extends React.Component {
       avatarSrc: "",
       avatarPreview: "",
       imgContact: null,
+      imgAvatar: null,
       isLoading: false,
       auxAddPueblo: "",
       hoverNino: false,
@@ -200,6 +202,15 @@ class FormCuidador extends React.Component {
     }
     this.setState({
       imgContact: picture,
+    });
+  };
+
+  onChangeAvatarImg = (picture) => {
+    if (picture.length > 1) {
+      picture.shift();
+    }
+    this.setState({
+      imgAvatar: picture,
     });
   };
 
@@ -496,7 +507,7 @@ class FormCuidador extends React.Component {
 
     // Comprobamos que el email sea valido sintacticamente
     const { isProfileView } = this.props;
-    const { isEditing, imgContact } = this.state;
+    const { isEditing, imgContact, imgAvatar } = this.state;
     if (!isProfileView) {
       const { txtEmail } = this.state;
       let { error } = this.state;
@@ -515,7 +526,7 @@ class FormCuidador extends React.Component {
       }
 
       const checkIfEmailExists = await axios.get(
-        `https://${ipMaquina}:3001/api/procedures/checkIfEmailExists/${txtEmail}`
+        `${protocol}://${ipMaquina}:3001/api/procedures/checkIfEmailExists/${txtEmail}`
       );
 
       if (checkIfEmailExists.data !== "Vacio") {
@@ -539,12 +550,22 @@ class FormCuidador extends React.Component {
 
     /* Empezamos con la subida de datos */
     let imgContactB64 = "";
+    let imgAvatarB64 = "";
 
     if (!isProfileView || (isEditing && imgContact !== null)) {
       imgContactB64 = await toBase64(imgContact[0]);
     }
 
+    if (!isProfileView || (isEditing && imgAvatar !== null)) {
+      imgAvatarB64 = await toBase64(imgAvatar[0]);
+    }
+
     if (imgContactB64 instanceof Error) {
+      cogoToast.error(<h5>{trans("registerFormCuidadores.errorImagen")}</h5>);
+      return;
+    }
+
+    if (imgAvatarB64 instanceof Error) {
       cogoToast.error(<h5>{trans("registerFormCuidadores.errorImagen")}</h5>);
       return;
     }
@@ -578,7 +599,7 @@ class FormCuidador extends React.Component {
         apellido1: txtApellido1,
         apellido2: txtApellido2,
         sexo: txtSexo,
-        avatarPreview: avatarPreview,
+        imgAvatarB64: imgAvatarB64,
         imgContactB64: imgContactB64,
         descripcion: txtDescripcion,
         telefonoMovil: txtMovil,
@@ -597,7 +618,7 @@ class FormCuidador extends React.Component {
 
       const insertedCuidador = await axios
         .post(
-          "https://" + ipMaquina + ":3001/api/procedures/postNewCuidador",
+          `${protocol}://${ipMaquina}:3001/api/procedures/postNewCuidador`,
           formData
         )
         .catch((err) => {
@@ -618,7 +639,7 @@ class FormCuidador extends React.Component {
 
       changeFormContent("tabla");
 
-      axios.post(`https://${ipMaquina}:3003/smtp/registerEmail`, {
+      axios.post(`${protocol}://${ipMaquina}:3003/smtp/registerEmail`, {
         toEmail: txtEmail,
         nombre: txtNombre,
         apellido: txtApellido1,
@@ -641,7 +662,7 @@ class FormCuidador extends React.Component {
         fechaNacimiento: txtFechaNacimiento,
         sexo: txtSexo,
         imgContactB64: imgContactB64, //Los cambios son // Ahora mandare las imagenes en B64 a la API para guardarlo en un paso
-        avatarPreview: avatarPreview, //Estas dos lineas //
+        imgAvatarB64: imgAvatarB64, //Estas dos lineas //
         descripcion: txtDescripcion,
         ubicaciones: ubicaciones,
         publicoDisponible: publicoDisponible,
@@ -657,10 +678,7 @@ class FormCuidador extends React.Component {
 
       axios
         .patch(
-          "https://" +
-            ipMaquina +
-            ":3001/api/procedures/patchCuidador/" +
-            this.props._id,
+          `${protocol}://${ipMaquina}:3001/api/procedures/patchCuidador/${this.props._id}`,
           formData
         )
         .then((res) => {
@@ -737,28 +755,14 @@ class FormCuidador extends React.Component {
                   {isProfileView && !isEditing && direcFoto.length > 0 ? (
                     <img
                       alt="Avatar del cuidador"
-                      height={200}
-                      width={200}
+                      style={{ maxHeight: "250px", height: "auto" }}
                       src={
-                        "https://" + ipMaquina + ":3001/api/image/" + direcFoto
+                        `${protocol}://${ipMaquina}:3001/api/image/${direcFoto}`
                       }
                     />
                   ) : (
-                    <Avatar
-                      label={i18next.t("registerFormCuidadores.eligeAvatar")}
-                      labelStyle={{
-                        fontSize: "15px",
-                        fontWeight: "bold",
-                        cursor: "pointer",
-                        width: "100%",
-                        height: "100%",
-                      }}
-                      height={200}
-                      width={200}
-                      onCrop={this.onCrop}
-                      onClose={this.onClose}
-                      onBeforeFileLoad={this.onBeforeFileLoad}
-                      src={avatarSrc}
+                    <ContactImageUploader
+                      onImageChoose={this.onChangeAvatarImg}
                     />
                   )}
                 </div>
@@ -797,12 +801,7 @@ class FormCuidador extends React.Component {
                       <img
                         style={{ maxHeight: "250px", height: "auto" }}
                         alt="Foto de contacto del cuidador"
-                        src={
-                          "https://" +
-                          ipMaquina +
-                          ":3001/api/image/" +
-                          this.props.direcFotoContacto
-                        }
+                        src={`${protocol}://${ipMaquina}:3001/api/image/${this.props.direcFotoContacto}`}
                       />
                     </div>
                   ) : (
@@ -1537,7 +1536,7 @@ class FormCuidador extends React.Component {
                     onClick={() => this.handleGuardarCambios()}
                     type="button"
                     className="w-100 btn btn-success"
-                    disabled={!terminosAceptados || (isProfileView && isEditing)}
+                    disabled={(!isProfileView && !terminosAceptados)}
                   >
                     {isProfileView
                       ? trans("perfilCliente.guardarCambios")

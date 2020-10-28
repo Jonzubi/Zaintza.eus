@@ -6,6 +6,7 @@ import axios from "../../util/axiosInstance";
 import moment from "moment";
 import ClipLoader from "react-spinners/ClipLoader";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import protocol from '../../util/protocol';
 
 const mapStateToProps = (state) => {
   return {
@@ -24,7 +25,7 @@ class CalendarioForm extends React.Component {
 
     axios
       .post(
-        "https://" + ipMaquina + ":3001/api/procedures/getAcuerdosConUsuarios",
+        `${protocol}://${ipMaquina}:3001/api/procedures/getAcuerdosConUsuarios`,
         {
           idPerfil: idPerfil,
           tipoUsuario: tipoUsuario,

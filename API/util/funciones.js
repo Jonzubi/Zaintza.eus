@@ -1,4 +1,6 @@
 const fs = require("fs");
+const path = require('path');
+
 const templatesFolder = '/var/www/Zaintza.eus/API/src/templates/';
 exports.writeImage = (cod, b64) => {
   let idImage = cod;
@@ -21,7 +23,15 @@ exports.writeImage = (cod, b64) => {
   // let avatarDirPath = __dirname + "/imagenes/" +
   //   idImage +
   //   formatBase64;
-  avatarDirPath = "/var/www/Zaintza.eus/API/util/imagenes/" + idImage + formatBase64;
+  let avatarDirPath = "";
+  
+  if (process.env.NODE_ENV.includes("production")) {
+    avatarDirPath = "/var/www/Zaintza.eus/API/util/imagenes/" + idImage + formatBase64;
+  } else {
+    avatarDirPath = `${path.join(__dirname, 'imagenes')}/${idImage}${formatBase64}`;
+  }
+
+
 
   try {
     fs.writeFileSync(avatarDirPath, imageBase64, "base64");

@@ -26,6 +26,7 @@ import imgNino from "../../util/images/nino.png";
 import Axios from "../../util/axiosInstance";
 import { changeFormContent } from "../../redux/actions/app";
 import ClipLoader from "react-spinners/ClipLoader";
+import protocol from '../../util/protocol';
 
 const mapStateToProps = state => {
   return {
@@ -402,7 +403,7 @@ class FormAnuncio extends React.Component {
 
       
 
-      await Axios.post('https://' + ipMaquina + ':3001/api/procedures/postAnuncio', formData)
+      await Axios.post(`${protocol}://${ipMaquina}:3001/api/procedures/postAnuncio`, formData)
         .catch(err => {
         cogoToast.error(<h5>{trans('tablaCuidadores.errorGeneral')}</h5>)
         });

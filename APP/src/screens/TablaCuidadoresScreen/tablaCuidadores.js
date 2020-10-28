@@ -49,6 +49,7 @@ import Rating from "react-rating";
 import Avatar from "react-avatar";
 import moment from "moment";
 import NoData from "../../components/noData";
+import protocol from "../../util/protocol";
 
 const mapStateToProps = (state) => {
   return {
@@ -94,9 +95,7 @@ class Tabla extends React.Component {
       },
       () => {
         Axios.get(
-          "https://" +
-            ipMaquina +
-            ":3001/api/procedures/getCuidadoresConValoraciones",
+          `${protocol}://${ipMaquina}:3001/api/procedures/getCuidadoresConValoraciones`,
           {
             params: {
               requiredCards: !isBottom ? requiredCards : requiredCards + 100,
@@ -399,7 +398,7 @@ class Tabla extends React.Component {
     if (idCliente !== idPerfilCuidador) {
       //Significa que no nos estamos viendo a nosotros mismo como cuidador, asi que hay que registrar la visita
       Axios.post(
-        `https://${ipMaquina}:3001/api/procedures/registerCuidadorVisita/${idPerfilCuidador}`,
+        `${protocol}://${ipMaquina}:3001/api/procedures/registerCuidadorVisita/${idPerfilCuidador}`,
         {
           email,
           contrasena,
@@ -408,7 +407,7 @@ class Tabla extends React.Component {
     }
 
     Axios.get(
-      `https://${ipMaquina}:3001/api/procedures/getEmailWithIdPerfil/${idPerfilCuidador}`
+      `${protocol}://${ipMaquina}:3001/api/procedures/getEmailWithIdPerfil/${idPerfilCuidador}`
     )
       .then((email) => {
         const response = email.data;
@@ -448,7 +447,7 @@ class Tabla extends React.Component {
     }
 
     let comprobAcuerdoUnico = await Axios.post(
-      "https://" + ipMaquina + ":3001/api/procedures/checkIfAcuerdoExists",
+      `${protocol}://${ipMaquina}:3001/api/procedures/checkIfAcuerdoExists`,
       {
         idCliente,
         idCuidador: selectedCuidador._id,
@@ -580,15 +579,12 @@ class Tabla extends React.Component {
     };
 
     Axios.post(
-      "https://" + ipMaquina + ":3001/api/procedures/newAcuerdo",
+      `http${protocol}://${ipMaquina}:3001/api/procedures/newAcuerdo`,
       formData
     )
       .then((resultado) => {
         Axios.get(
-          "https://" +
-            ipMaquina +
-            ":3001/api/procedures/getIdUsuarioConIdPerfil/" +
-            this.state.selectedCuidador._id
+          `${protocol}://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${this.state.selectedCuidador._id}`
         ).then((usuario) => {
           let notificacionData = {
             idUsuario: usuario.data,
@@ -599,7 +595,7 @@ class Tabla extends React.Component {
             contrasena,
           };
           Axios.post(
-            "https://" + ipMaquina + ":3001/api/procedures/newNotification",
+            `${protocol}://${ipMaquina}:3001/api/procedures/newNotification`,
             notificacionData
           ).then((notif) => {
             this.setState({
@@ -665,9 +661,7 @@ class Tabla extends React.Component {
       },
       () => {
         Axios.get(
-          "https://" +
-            ipMaquina +
-            ":3001/api/procedures/getCuidadoresConValoraciones",
+          `${protocol}://${ipMaquina}:3001/api/procedures/getCuidadoresConValoraciones`,
           {
             params: {
               requiredCards,
@@ -760,10 +754,10 @@ class Tabla extends React.Component {
 
   loadValoracionesData = async (cuidador) => {
     const idUsuarioDelCuidador = await Axios.get(
-      `https://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${cuidador._id}`
+      `${protocol}://${ipMaquina}:3001/api/procedures/getIdUsuarioConIdPerfil/${cuidador._id}`
     );
     const valoraciones = await Axios.get(
-      `https://${ipMaquina}:3001/api/procedures/getValoracionesDelCuidador/${idUsuarioDelCuidador.data}`
+      `${protocol}://${ipMaquina}:3001/api/procedures/getValoracionesDelCuidador/${idUsuarioDelCuidador.data}`
     );
 
     this.setState({
@@ -896,12 +890,7 @@ class Tabla extends React.Component {
                             itemProp="image"
                             alt="Foto contacto cuidador"
                             style={{ maxHeight: "250px", height: "auto" }}
-                            src={
-                              "https://" +
-                              ipMaquina +
-                              ":3001/api/image/" +
-                              cuidador.cuidador.direcFotoContacto
-                            }
+                            src={`${protocol}://${ipMaquina}:3001/api/image/${cuidador.cuidador.direcFotoContacto}`}
                           />
                         </div>
                         <div
@@ -1099,12 +1088,7 @@ class Tabla extends React.Component {
                           maxHeight: "300px",
                           height: "auto",
                         }}
-                        src={
-                          "https://" +
-                          ipMaquina +
-                          ":3001/api/image/" +
-                          vSelectedCuidador.direcFotoContacto
-                        }
+                        src={`${protocol}://${ipMaquina}:3001/api/image/${vSelectedCuidador.direcFotoContacto}`}
                       />
                     </div>
                     <div
@@ -1706,14 +1690,7 @@ class Tabla extends React.Component {
                                   valoracion.idValorador.idPerfil.apellido1
                                 : i18next.t("tablaCuidadores.anonimo")
                             }
-                            src={
-                              "https://" +
-                              ipMaquina +
-                              ":3001/api/image/" +
-                              (!valoracion.esAnonimo
-                                ? valoracion.idValorador.idPerfil.direcFoto
-                                : "noImage")
-                            }
+                            src={`${protocol}://${ipMaquina}:3001/api/image/${(!valoracion.esAnonimo ? valoracion.idValorador.idPerfil.direcFoto : "noImage")}`}
                             size={50}
                             round={true}
                           />

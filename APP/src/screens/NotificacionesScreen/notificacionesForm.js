@@ -43,6 +43,7 @@ import {
 import { Visibility, Delete } from "@material-ui/icons";
 import { colors } from "../../util/colors";
 import i18next from 'i18next';
+import protocol from '../../util/protocol';
 
 class NotificacionesForm extends React.Component {
   componentDidMount() {
@@ -68,9 +69,7 @@ class NotificacionesForm extends React.Component {
 
     axios
       .post(
-        "https://" +
-          ipMaquina +
-          ":3001/api/procedures/getNotificacionesConUsuarios",
+        `${protocol}://${ipMaquina}:3001/api/procedures/getNotificacionesConUsuarios`,
         {
           idUsuario: idUsuario,
           email,
@@ -96,7 +95,7 @@ class NotificacionesForm extends React.Component {
 
     if (!notificacion.visto) {
       await axios.patch(
-        "https://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
+        `${protocol}://${ipMaquina}:3001/api/notificacion/${notificacion._id}`,
         {
           visto: true,
           email,
@@ -143,10 +142,7 @@ class NotificacionesForm extends React.Component {
     //Squi estoy pillando el estado actual del acuerdo para comprobar que el acuerdo no se ha cancelado ya por el usuario.
     //Por ejemplo sui ha hecho una propuesta erronea
     let estadoAcuerdo = await axios.post(
-      "https://" +
-        ipMaquina +
-        ":3001/api/procedures/getAcuerdoStatus/" +
-        notificacion.acuerdo._id,
+      `${protocol}://${ipMaquina}:3001/api/procedures/getAcuerdoStatus/${notificacion.acuerdo._id}`,
       {
         whoAmI: tipoUsuario,
         email,
@@ -159,7 +155,7 @@ class NotificacionesForm extends React.Component {
         <h5>{trans("notificacionesForm.acuerdoYaRechazado")}</h5>
       );
       await axios.patch(
-        "https://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
+        `${protocol}://${ipMaquina}:3001/api/notificacion/${notificacion._id}`,
         {
           show: false,
           email,
@@ -177,10 +173,7 @@ class NotificacionesForm extends React.Component {
     }
 
     await axios.patch(
-      "https://" +
-        ipMaquina +
-        ":3001/api/procedures/gestionarAcuerdo/" +
-        acuerdo._id,
+      `${protocol}://${ipMaquina}:3001/api/procedures/gestionarAcuerdo/${acuerdo._id}`,
       {
         estadoAcuerdo: ifAccept ? 1 : 2, //Si Accept es true acepta el acuerdo mandando un 1 a la BD, si no un 2
         email,
@@ -191,7 +184,7 @@ class NotificacionesForm extends React.Component {
     //Aqui se manda la notificacion con el usuario recogido anteriormente,
     //el acuerdo ha sido gestionado con un valor de aceptado o rechazado en el valorGestion
     await axios.post(
-      "https://" + ipMaquina + ":3001/api/procedures/newNotification",
+      `${protocol}://${ipMaquina}:3001/api/procedures/newNotification`,
       {
         idUsuario: notificacion.idRemitente._id,
         idRemitente: notificacion.idUsuario,
@@ -210,7 +203,7 @@ class NotificacionesForm extends React.Component {
       idUsuario: notificacion.idRemitente._id,
     });
     await axios.patch(
-      "https://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
+      `${protocol}://${ipMaquina}:3001/api/notificacion/${notificacion._id}`,
       {
         show: false,
         email,
@@ -244,7 +237,7 @@ class NotificacionesForm extends React.Component {
     } = this.props;
 
     await axios.patch(
-      "https://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
+      `${protocol}://${ipMaquina}:3001/api/notificacion/${notificacion._id}`,
       {
         show: false,
         email,
@@ -270,7 +263,7 @@ class NotificacionesForm extends React.Component {
     } = this.props;
 
     await axios.patch(
-      "https://" + ipMaquina + ":3001/api/notificacion/" + notificacion._id,
+      `${protocol}://${ipMaquina}:3001/api/notificacion/${notificacion._id}`,
       {
         show: false,
         email,
@@ -281,10 +274,7 @@ class NotificacionesForm extends React.Component {
     let estadoAcuerdo;
     if (notificacion.tipoNotificacion === "Acuerdo") {
       estadoAcuerdo = await axios.post(
-        "https://" +
-          ipMaquina +
-          ":3001/api/procedures/getAcuerdoStatus/" +
-          notificacion.acuerdo._id,
+        `${protocol}://${ipMaquina}:3001/api/procedures/getAcuerdoStatus/${notificacion.acuerdo._id}`,
         {
           whoAmI: tipoUsuario,
           email,
@@ -376,7 +366,7 @@ class NotificacionesForm extends React.Component {
               <Badge color="primary" badgeContent={!notificacion.visto ? i18next.t('notificacionesForm.nuevo') : 0}>
                 <Avatar
                   alt="avatar"
-                  src={`https://${ipMaquina}:3001/api/image/${notificacion.idRemitente.idPerfil.direcFoto}`}
+                  src={`${protocol}://${ipMaquina}:3001/api/image/${notificacion.idRemitente.idPerfil.direcFoto}`}
                 />
               </Badge>
               
@@ -480,12 +470,7 @@ class NotificacionesForm extends React.Component {
                         maxHeight: "150px",
                         height: "auto",
                       }}
-                      src={
-                        "https://" +
-                        ipMaquina +
-                        ":3001/api/image/" +
-                        selectedNotificacion.idRemitente.idPerfil.direcFoto
-                      }
+                      src={`${protocol}://${ipMaquina}:3001/api/image/${selectedNotificacion.idRemitente.idPerfil.direcFoto}`}
                     />
                   </div>
                   <div
