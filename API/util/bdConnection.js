@@ -3,7 +3,7 @@ const pwdAtlas = require("./mongoDBAtlasPWD");
 
 //MODO PRODUCTION
 let uri = `mongodb+srv://admin:${pwdAtlas}@cluster0-sfybj.mongodb.net/zaintza?retryWrites=true&w=majority`;
-
+console.log(process.env.NODE_ENV);
 // MODO DEV
 if (process.env.NODE_ENV.includes("production")) {
   uri = `mongodb+srv://admin:${pwdAtlas}@cluster0.6boix.mongodb.net/zaintza?retryWrites=true&w=majority`;
