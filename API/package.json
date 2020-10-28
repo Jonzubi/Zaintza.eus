@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "set NODE_ENV=production && nodemon server.js",
-    "start:local": "set NODE_ENV=local && nodemon server.js"
+    "start": "cross-env NODE_ENV=production nodemon server.js",
+    "start:local": "cross-env NODE_ENV=local nodemon server.js"
   },
   "author": "Jon Zubizarreta",
   "license": "ISC",
@@ -20,5 +20,8 @@
     "mongoose": "^5.8.6",
     "nodemon": "^1.19.2",
     "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.2"
   }
 }
