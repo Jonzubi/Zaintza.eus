@@ -142,6 +142,7 @@ class FormCuidador extends React.Component {
       avatarSrc: "",
       avatarPreview: "",
       imgContact: null,
+      imgAvatar: null,
       isLoading: false,
       auxAddPueblo: "",
       hoverNino: false,
@@ -201,6 +202,15 @@ class FormCuidador extends React.Component {
     }
     this.setState({
       imgContact: picture,
+    });
+  };
+
+  onChangeAvatarImg = (picture) => {
+    if (picture.length > 1) {
+      picture.shift();
+    }
+    this.setState({
+      imgAvatar: picture,
     });
   };
 
@@ -497,7 +507,7 @@ class FormCuidador extends React.Component {
 
     // Comprobamos que el email sea valido sintacticamente
     const { isProfileView } = this.props;
-    const { isEditing, imgContact } = this.state;
+    const { isEditing, imgContact, imgAvatar } = this.state;
     if (!isProfileView) {
       const { txtEmail } = this.state;
       let { error } = this.state;
@@ -540,12 +550,22 @@ class FormCuidador extends React.Component {
 
     /* Empezamos con la subida de datos */
     let imgContactB64 = "";
+    let imgAvatarB64 = "";
 
     if (!isProfileView || (isEditing && imgContact !== null)) {
       imgContactB64 = await toBase64(imgContact[0]);
     }
 
+    if (!isProfileView || (isEditing && imgAvatar !== null)) {
+      imgAvatarB64 = await toBase64(imgAvatar[0]);
+    }
+
     if (imgContactB64 instanceof Error) {
+      cogoToast.error(<h5>{trans("registerFormCuidadores.errorImagen")}</h5>);
+      return;
+    }
+
+    if (imgAvatarB64 instanceof Error) {
       cogoToast.error(<h5>{trans("registerFormCuidadores.errorImagen")}</h5>);
       return;
     }
@@ -579,7 +599,7 @@ class FormCuidador extends React.Component {
         apellido1: txtApellido1,
         apellido2: txtApellido2,
         sexo: txtSexo,
-        avatarPreview: avatarPreview,
+        imgAvatarB64: imgAvatarB64,
         imgContactB64: imgContactB64,
         descripcion: txtDescripcion,
         telefonoMovil: txtMovil,
@@ -735,28 +755,14 @@ class FormCuidador extends React.Component {
                   {isProfileView && !isEditing && direcFoto.length > 0 ? (
                     <img
                       alt="Avatar del cuidador"
-                      height={200}
-                      width={200}
+                      style={{ maxHeight: "250px", height: "auto" }}
                       src={
                         `${protocol}://${ipMaquina}:3001/api/image/${direcFoto}`
                       }
                     />
                   ) : (
-                    <Avatar
-                      label={i18next.t("registerFormCuidadores.eligeAvatar")}
-                      labelStyle={{
-                        fontSize: "15px",
-                        fontWeight: "bold",
-                        cursor: "pointer",
-                        width: "100%",
-                        height: "100%",
-                      }}
-                      height={200}
-                      width={200}
-                      onCrop={this.onCrop}
-                      onClose={this.onClose}
-                      onBeforeFileLoad={this.onBeforeFileLoad}
-                      src={avatarSrc}
+                    <ContactImageUploader
+                      onImageChoose={this.onChangeAvatarImg}
                     />
                   )}
                 </div>

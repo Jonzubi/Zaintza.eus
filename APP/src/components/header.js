@@ -1,5 +1,4 @@
 import React from "react";
-import Avatar from "react-avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUserCircle,
@@ -17,6 +16,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { trans } from "../util/funciones";
 import logo from '../util/images/Logo.png';
 import protocol from '../util/protocol';
+import { Avatar } from '@material-ui/core';
 
 const MapDispachToProps = (dispatch) => {
   return {
@@ -48,8 +48,6 @@ class Header extends React.Component {
       <Avatar
         name={this.props.nombre + " " + this.props.apellido1}
         src={`${protocol}://${ipMaquina}:3001/api/image/${this.props.direcFoto}?isAvatar=true`}
-        size={50}
-        round={true}
         onClick={() => this.props.toogleMenuPerfil(true)}
         style={{ cursor: "pointer"}}
       />
