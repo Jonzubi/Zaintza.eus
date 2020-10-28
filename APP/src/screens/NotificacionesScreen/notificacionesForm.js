@@ -16,10 +16,9 @@ import {
   faTimes,
   faExclamation,
   faAward,
-  faStar
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { Collapse } from "react-collapse";
-import Avatar from "react-avatar";
 import cogoToast from "cogo-toast";
 import { setCountNotify } from "../../redux/actions/notifications";
 import SocketContext from "../../socketio/socket-context";
@@ -30,6 +29,20 @@ import ModalHeader from "react-bootstrap/ModalHeader";
 import ModalBody from "react-bootstrap/ModalBody";
 import ModalFooter from "react-bootstrap/ModalFooter";
 import moment from "moment";
+import {
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Divider,
+  Avatar,
+  ListItemSecondaryAction,
+  IconButton,
+  Badge,
+} from "@material-ui/core";
+import { Visibility, Delete } from "@material-ui/icons";
+import { colors } from "../../util/colors";
+import i18next from 'i18next';
 
 class NotificacionesForm extends React.Component {
   componentDidMount() {
@@ -348,6 +361,56 @@ class NotificacionesForm extends React.Component {
     }
   };
 
+  renderNotificaciones = (jsonNotificaciones) => {
+    return jsonNotificaciones.map((notificacion, indice) => {
+      return (
+        <>
+          <ListItem>
+            <ListItemAvatar>
+              <Badge color="primary" badgeContent={!notificacion.visto ? i18next.t('notificacionesForm.nuevo') : 0}>
+                <Avatar
+                  alt="avatar"
+                  src={`https://${ipMaquina}:3001/api/image/${notificacion.idRemitente.idPerfil.direcFoto}`}
+                />
+              </Badge>
+              
+            </ListItemAvatar>
+            <ListItemText
+              primary={`${notificacion.idRemitente.idPerfil.nombre} ${notificacion.idRemitente.idPerfil.apellido1}`}
+              secondary={`${moment(notificacion.dateEnvioNotificacion).format(
+                "YYYY/MM/DD HH:mm"
+              )}`}
+            />
+            <ListItemSecondaryAction>
+              <IconButton
+                onClick={() => {
+                  this.setState({
+                    selectedNotificacion: notificacion,
+                    showModalNotificacion: true,
+                  });
+                  this.handleMarcarComoVisto(jsonNotificaciones[indice]);
+                }}
+              >
+                <Visibility style={{ color: colors.green }} />
+              </IconButton>
+              <IconButton
+                onClick={() => {
+                  this.setState({
+                    showModalDeleteNotificacion: true,
+                    selectedNotificacion: notificacion,
+                  });
+                }}
+              >
+                <Delete style={{ color: colors.red }} />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+          <Divider />
+        </>
+      );
+    });
+  };
+
   render() {
     const {
       isLoading,
@@ -362,9 +425,6 @@ class NotificacionesForm extends React.Component {
       <SocketContext.Consumer>
         {(socket) => (
           <div
-            className={
-              this.state.jsonNotificaciones.length !== 0 ? "p-lg-5 p-2" : "p-0"
-            }
             onClick={() => this.closeOpenedOptionsDiv()}
             style={{
               minminHeight: "calc(100vh - 80px)",
@@ -379,215 +439,8 @@ class NotificacionesForm extends React.Component {
               >
                 <ClipLoader color="#28a745" />
               </div>
-            ) : this.state.jsonNotificaciones.length !== 0 ? (
-              this.state.jsonNotificaciones.map((notificacion, indice) => {
-                return (
-                  <div className="w-100 card mt-2 mb-2">
-                    <div className="card-header">
-                      <div className="d-flex flex-row align-items-center justify-content-between">
-                        <div className="">
-                          <div className="d-flex align-items-center">
-                            {!notificacion.visto ? (
-                              <FontAwesomeIcon
-                                icon={faExclamation}
-                                className="mr-1"
-                              />
-                            ) : null}
-                            <Avatar
-                              size={50}
-                              className=""
-                              name={notificacion.idRemitente.idPerfil.nombre}
-                              src={
-                                "https://" +
-                                ipMaquina +
-                                ":3001/api/image/" +
-                                notificacion.idRemitente.idPerfil.direcFoto
-                              }
-                            />
-                            <div className="ml-3">
-                              <span className="font-weight-bold">
-                                {notificacion.idRemitente.idPerfil.nombre +
-                                  " " +
-                                  notificacion.idRemitente.idPerfil.apellido1}
-                              </span>{" "}
-                            </div>
-                          </div>
-                        </div>
-                        <small className="">
-                          {moment(notificacion.dateEnvioNotificacion).format(
-                            "YYYY/MM/DD HH:mm"
-                          )}
-                        </small>
-                        <div>
-                          <FontAwesomeIcon
-                            style={{
-                              cursor: "pointer",
-                            }}
-                            icon={faEllipsisV}
-                            onClick={() => this.handleClickOptions(indice)}
-                          />
-                          <div
-                            style={{
-                              position: "absolute",
-                              width: 200,
-                              right: 10,
-                              backgroundColor: "white",
-                              boxShadow: "0 0.125rem 0.25rem rgba(0,0,0,.075)",
-                              zIndex: 2,
-                            }}
-                            className={
-                              isOpenThreeDotLayer[indice]
-                                ? "d-flex flex-column rounded border"
-                                : "d-none"
-                            }
-                          >
-                            <div
-                              style={{
-                                cursor: "pointer",
-                              }}
-                              className="threeDotsMenu p-1 d-flex flex-row align-items-center justify-content-between"
-                              onClick={() => {
-                                this.setState({
-                                  selectedNotificacion: notificacion,
-                                  showModalNotificacion: true,
-                                });
-                                this.handleClickOptions(indice);
-                                this.handleMarcarComoVisto(
-                                  jsonNotificaciones[indice]
-                                );
-                              }}
-                            >
-                              <span className="mr-5">
-                                {trans("notificacionesForm.verNotificacion")}
-                              </span>
-                              <FontAwesomeIcon
-                                className="text-success"
-                                icon={faEye}
-                              />
-                            </div>
-                            <div
-                              className="threeDotsMenu p-1 d-flex flex-row align-items-center justify-content-between"
-                              onClick={() => {
-                                this.setState({});
-                                this.handleClickOptions(indice);
-                                this.setState({
-                                  showModalDeleteNotificacion: true,
-                                  selectedNotificacion: notificacion,
-                                });
-                              }}
-                              style={{ cursor: "pointer" }}
-                            >
-                              <span className="">
-                                {trans(
-                                  "notificacionesForm.eliminarNotificacion"
-                                )}
-                              </span>
-                              <FontAwesomeIcon
-                                className="text-danger"
-                                icon={faTrashAlt}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <Collapse
-                      className="card-body"
-                      isOpened={this.state.notificacionesCollapseState[indice]}
-                    >
-                      <div className="p-2">
-                        {notificacion.tipoNotificacion == "Acuerdo" ? (
-                          <div>
-                            <span className="display-4">
-                              {notificacion.acuerdo.tituloAcuerdo}
-                            </span>
-                            <hr />
-                            <div className="p-5 font-weight-bold text-center">
-                              {notificacion.acuerdo.descripcionAcuerdo}
-                            </div>
-                            <div className="row">
-                              <div className="col-6 text-center">
-                                <span>
-                                  {trans("notificacionesForm.pueblos")}
-                                </span>
-                                <hr />
-                                <ul className="list-group">
-                                  {typeof notificacion.acuerdo.pueblo.map !=
-                                  "undefined"
-                                    ? notificacion.acuerdo.pueblo.map(
-                                        (pueblo) => {
-                                          return (
-                                            <li className="list-group-item font-weight-bold">
-                                              {pueblo}
-                                            </li>
-                                          );
-                                        }
-                                      )
-                                    : null}
-                                </ul>
-                              </div>
-                              <div className="col-6 text-center">
-                                <span>{trans("notificacionesForm.dias")}</span>
-                                <hr />
-                                <ul className="list-group">
-                                  {typeof notificacion.acuerdo.diasAcordados
-                                    .map != "undefined"
-                                    ? notificacion.acuerdo.diasAcordados.map(
-                                        (dia) => {
-                                          return (
-                                            <li className="list-group-item">
-                                              <span className="font-weight-bold">
-                                                {this.traducirDia(dia.dia) +
-                                                  ": "}
-                                              </span>
-                                              <span>
-                                                {dia.horaInicio +
-                                                  " - " +
-                                                  dia.horaFin}
-                                              </span>
-                                            </li>
-                                          );
-                                        }
-                                      )
-                                    : null}
-                                </ul>
-                              </div>
-                            </div>
-                            <div className="row mt-5 ml-0 mr-0">
-                              <button
-                                onClick={() =>
-                                  this.handleGestionarPropuesta(
-                                    notificacion,
-                                    indice,
-                                    true,
-                                    socket
-                                  )
-                                }
-                                className="btn btn-success col-6"
-                              >
-                                {trans("notificacionesForm.aceptarAcuerdo")}
-                              </button>
-                              <button
-                                onClick={() =>
-                                  this.handleGestionarPropuesta(
-                                    notificacion,
-                                    indice,
-                                    false,
-                                    socket
-                                  )
-                                }
-                                className="btn btn-danger col-6"
-                              >
-                                {trans("notificacionesForm.rechazarAcuerdo")}
-                              </button>
-                            </div>
-                          </div>
-                        ) : null}
-                      </div>
-                    </Collapse>
-                  </div>
-                );
-              })
+            ) : jsonNotificaciones.length !== 0 ? (
+              <List>{this.renderNotificaciones(jsonNotificaciones)}</List>
             ) : (
               <div
                 style={{
@@ -794,13 +647,16 @@ class NotificacionesForm extends React.Component {
                         >
                           {trans("notificacionesForm.tipoValoracion")}:
                         </span>
-                        
                       </div>
                       <div className="mt-3 d-flex flex-row align-items-center justify-content-center">
-                      <span style={{
-                        fontSize: 15,
-                        marginRight: 5
-                      }}>{selectedNotificacion.valoracion}</span>
+                        <span
+                          style={{
+                            fontSize: 15,
+                            marginRight: 5,
+                          }}
+                        >
+                          {selectedNotificacion.valoracion}
+                        </span>
                         <FontAwesomeIcon
                           icon={faStar}
                           style={{
@@ -808,7 +664,7 @@ class NotificacionesForm extends React.Component {
                           }}
                         />
                       </div>
-                      
+
                       <div className="mt-3 d-flex flex-row align-items-center justify-content-center">
                         <FontAwesomeIcon
                           size={"2x"}
@@ -824,12 +680,15 @@ class NotificacionesForm extends React.Component {
                           {trans("notificacionesForm.comentario")}:
                         </span>
                       </div>
-                      <div className="mt-3" style={{
-                        maxWidth: 300,
-                        whiteSpace: 'pre-wrap'
-                      }}>
+                      <div
+                        className="mt-3"
+                        style={{
+                          maxWidth: 300,
+                          whiteSpace: "pre-wrap",
+                        }}
+                      >
                         {selectedNotificacion.valoracionDetalle}
-                      </div>                      
+                      </div>
                     </div>
                   ) : null}
                 </ModalBody>
@@ -962,6 +821,7 @@ const mapStateToProps = (state) => {
     countNotifies: state.notification.countNotifies,
     email: state.user.email,
     contrasena: state.user.contrasena,
+    nowLang: state.app.nowLang,
   };
 };
 
