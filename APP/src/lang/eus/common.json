@@ -176,9 +176,9 @@
     "headerInformacion": "Akordio informazioa",
     "headerEstado": "Egoera",
     "noData": "Ez duzu akordiorik oraindik",
-    "esperandoAcuerdo": "-k akordioa onartu zain...",
-    "aceptadoAcuerdo": "-rekin akordio aktibo bat duzu",
-    "rechazadoAcuerdo": "-rekin akordioa bukaturik dago",
+    "esperandoAcuerdo": "[ONARTU ZAIN] Akordioa onartu zain...",
+    "aceptadoAcuerdo": "[AKTIBOA] Akordio aktibo bat duzu",
+    "rechazadoAcuerdo": "[BUKATUA] Akordioa bukaturik dago",
     "terminarAcuerdo": "Akordioa bukatu", 
     "acuerdoTerminado": "Akordioa ezeztatu duzu",
     "acuerdo": "Akordioa",
@@ -227,7 +227,8 @@
     "decisionAcuerdoRechazar": "Ziur akordioa ukatu nahi duzula?",
     "askDeleteNotificacion": "Ziur abisua ezabatu nahi duzula? Akordio proposamen motako abisua bada ezeztatua izango da.",
     "valoracionRecibido": "Balorazio bat jaso duzu",
-    "comentario": "Iruzkina"
+    "comentario": "Iruzkina",
+    "nuevo": "Berria"
   },
   "formAnuncio":{
     "titulo": "Izenburua",
