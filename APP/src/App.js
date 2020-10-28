@@ -30,12 +30,13 @@ import i18next from 'i18next';
 import CookieConsent from './components/CookieConsent';
 import AvisoLegal from './screens/AvisoLegalScreen/avisoLegal';
 import Footer from './components/footer';
+import protocol from "./util/protocol";
 
 class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.socket = io(`https://${ipMaquina}:3002`, {
+    this.socket = io(`${protocol}://${ipMaquina}:3002`, {
       query: `deviceData=${JSON.stringify({
         isMobile,
         osName
