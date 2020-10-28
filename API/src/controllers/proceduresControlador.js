@@ -512,7 +512,7 @@ exports.patchCuidador = async (req, res, modelos) => {
     ubicaciones,
     telefonoMovil,
     imgContactB64,
-    avatarPreview,
+    imgAvatarB64,
   } = req.body;
   const { id } = req.params;
 
@@ -555,9 +555,9 @@ exports.patchCuidador = async (req, res, modelos) => {
 
   let codAvatar;
   let formData = Object.assign({}, req.body);
-  if (avatarPreview.length > 0) {
+  if (imgAvatarB64.length > 0) {
     codAvatar = getRandomString(20);
-    writeImage(codAvatar, avatarPreview);
+    writeImage(codAvatar, imgAvatarB64);
     formData.direcFoto = codAvatar;
   }
   let codContactImg;

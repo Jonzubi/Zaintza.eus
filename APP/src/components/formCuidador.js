@@ -662,7 +662,7 @@ class FormCuidador extends React.Component {
         fechaNacimiento: txtFechaNacimiento,
         sexo: txtSexo,
         imgContactB64: imgContactB64, //Los cambios son // Ahora mandare las imagenes en B64 a la API para guardarlo en un paso
-        avatarPreview: avatarPreview, //Estas dos lineas //
+        imgAvatarB64: imgAvatarB64, //Estas dos lineas //
         descripcion: txtDescripcion,
         ubicaciones: ubicaciones,
         publicoDisponible: publicoDisponible,
@@ -1536,7 +1536,7 @@ class FormCuidador extends React.Component {
                     onClick={() => this.handleGuardarCambios()}
                     type="button"
                     className="w-100 btn btn-success"
-                    disabled={!terminosAceptados || (isProfileView && isEditing)}
+                    disabled={(!isProfileView && !terminosAceptados)}
                   >
                     {isProfileView
                       ? trans("perfilCliente.guardarCambios")
