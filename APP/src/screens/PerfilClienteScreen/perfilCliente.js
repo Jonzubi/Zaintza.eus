@@ -3,7 +3,7 @@ import Avatar from "react-avatar-edit";
 import { connect } from "react-redux";
 import { changeFormContent } from "../../redux/actions/app";
 import { saveUserSession } from "../../redux/actions/user";
-import { trans } from "../../util/funciones";
+import { toBase64, trans } from "../../util/funciones";
 import ipMaquina from "../../util/ipMaquinaAPI";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faSave, faUser, faMobileAlt, faPhoneAlt } from "@fortawesome/free-solid-svg-icons";
@@ -11,6 +11,7 @@ import Axios from "../../util/axiosInstance";
 import cogoToast from "cogo-toast";
 import ClipLoader from "react-spinners/ClipLoader";
 import i18next from "i18next";
+import ContactImageUploader from "../../components/contactImageUploader";
 import protocol from '../../util/protocol';
 
 const mapStateToProps = state => {
@@ -42,7 +43,7 @@ class PerfilCliente extends React.Component {
     super(props);
 
     this.state = {
-      avatarPreview: "",
+      imgAvatar: null,
       isEditing: false,
       isLoading: false,
       txtNombre: this.props.nombre,
@@ -77,6 +78,7 @@ class PerfilCliente extends React.Component {
 
   async handleGuardarCambios() {
     const { email, contrasena, idUsuario } = this.props;
+    const { txtNombre, txtApellido1, txtApellido2, txtFijo, txtMovil, imgAvatar } = this.state;
     for (var clave in this.state) {
       if (
         (this.state[clave].length == 0 || !this.state[clave]) &&
@@ -101,13 +103,19 @@ class PerfilCliente extends React.Component {
       isLoading: true
     });
 
+    let imgAvatarB64 = "";
+
+    if (imgAvatar !== null) {
+      imgAvatarB64 = await toBase64(imgAvatar[0]);
+    }
+
     let formData = {
-      nombre: this.state.txtNombre,
-      apellido1: this.state.txtApellido1,
-      apellido2: this.state.txtApellido2,
-      telefonoMovil: this.state.txtMovil,
-      telefonoFijo: this.state.txtFijo,
-      avatarPreview : this.state.avatarPreview,
+      nombre: txtNombre,
+      apellido1: txtApellido1,
+      apellido2: txtApellido2,
+      telefonoMovil: txtMovil,
+      telefonoFijo: txtFijo,
+      imgAvatarB64,
       email,
       contrasena,
       idUsuario
@@ -167,6 +175,15 @@ class PerfilCliente extends React.Component {
     }
   }
 
+  onChangeAvatarImg = (picture) => {
+    if (picture.length > 1) {
+      picture.shift();
+    }
+    this.setState({
+      imgAvatar: picture,
+    });
+  };
+
   render() {
     return (
       <div className="p-5 d-flex flex-column">
@@ -179,21 +196,8 @@ class PerfilCliente extends React.Component {
               src={`${protocol}://${ipMaquina}:3001/api/image/${this.props.direcFoto}`}
             />
           ) : (
-            <Avatar
-              label="Aukeratu avatarra"
-              labelStyle={{
-                fontSize: "15px",
-                fontWeight: "bold",
-                cursor: "pointer",
-                width: "100%",
-                height: "100%"
-              }}
-              height={200}
-              width={200}
-              onCrop={this.onCrop}
-              onClose={this.onClose}
-              onBeforeFileLoad={this.onBeforeFileLoad}
-              src={this.state.avatarPreview}
+            <ContactImageUploader
+              onImageChoose={this.onChangeAvatarImg}
             />
           )}
         </div>

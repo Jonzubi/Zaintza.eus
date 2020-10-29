@@ -933,7 +933,7 @@ class Tabla extends React.Component {
                           </span>
                         </div>
                         <div className="card-body">
-                          <h5 className="card-title mt-2" itemProp="name">
+                          <h5 style={{ height: '50px', overflow: "hidden"}} className="card-title mt-2" itemProp="name">
                             {cuidador.cuidador.nombre +
                               " " +
                               cuidador.cuidador.apellido1}
@@ -941,7 +941,7 @@ class Tabla extends React.Component {
                           <p
                             className="card-text"
                             style={{
-                              maxHeight: "75px",
+                              height: "75px",
                               overflow: "hidden",
                               whiteSpace: "pre-line",
                             }}
