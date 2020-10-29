@@ -128,7 +128,8 @@
       "errorImagen": "Hay algún problema con la imagen",
       "registroCompletado": "Te has registrado",
       "darGracias": "Gracias por parte de Zaintza.eus",
-      "registrarse": "Registrarse"
+      "registrarse": "Registrarse",
+      "contrasenaMinima": "La contraseña debe contener al menos 6 caracteres"
     },
     "registerFormClientes": {
       "nombre": "Nombre",

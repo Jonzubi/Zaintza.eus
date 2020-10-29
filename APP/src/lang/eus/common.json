@@ -134,7 +134,8 @@
     "registroCompletado": "Izena eman duzu",
     "darGracias": "Eskerrik asko Zaintza.eus-en partez",
     "registrarse": "Izena eman",
-    "emailExistente": "Sartutako emailak kontu bat du jada Zaintza.eus webgunean"
+    "emailExistente": "Sartutako emailak kontu bat du jada Zaintza.eus webgunean",
+    "contrasenaMinima": "Pasahitzak 6 karaktere edo gehiago behar ditu"
   },
   "registerFormClientes": {
     "nombre": "Izena",

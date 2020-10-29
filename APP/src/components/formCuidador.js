@@ -479,6 +479,31 @@ class FormCuidador extends React.Component {
           });
         }
       }
+      
+      //Comprobamos que la contraseña tenga al menos 6 digitos (Solo en !isProfileView)
+      if (!isProfileView) {
+        const { txtContrasena } = this.state;
+        if (txtContrasena.length < 6) {
+          const { error } = this.state;
+          let auxError = { ...error };
+          auxError.txtContrasena = true;
+          this.setState({
+            error: auxError,
+          });
+          cogoToast.error(
+            <h5>
+              {trans("registerFormCuidadores.contrasenaMinima")}
+            </h5>
+          );
+          return;
+        } else if (this.state.error.txtContrasena === true) {
+          const { error } = this.state;
+          error.txtContrasena = false;
+          this.setState({
+            error: error,
+          }); 
+        }
+      }
 
       // La comprobacion genérica para los demás
       if (this.requiredStates.includes(clave)) {
