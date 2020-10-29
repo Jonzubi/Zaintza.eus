@@ -22,7 +22,8 @@
       "recordarme": "Recordarme",
       "iniciarSesion": "Entrar",
       "registrarse": "Registrarse",
-      "validarEmail": "Tienes que validar el email"
+      "validarEmail": "Tienes que validar el email",
+      "mantenerSesion": "Mantener sesión"
     },
     "notificaciones": {
       "sesionIniciada": "Sesión iniciada con éxito",

@@ -37,6 +37,7 @@ class LogInForm extends React.Component {
       txtEmail: window.localStorage.getItem("nombreUsuario") || "",
       txtContrasena: window.localStorage.getItem("password") || "",
       chkRecordarme: window.localStorage.getItem("nombreUsuario") !== null,
+      chkMantenerSesion: true,
       objUsuario: {},
       isLoading: false,
     };
@@ -48,11 +49,10 @@ class LogInForm extends React.Component {
   async handleLogIn(socket) {
     console.log(socket);
     const { changeLang, setMaxDistance, changeFormContent } = this.props;
-    const vEmail = this.state.txtEmail;
-    const vContrasena = this.state.txtContrasena;
-    var objFiltros = {
-      email: vEmail,
-      contrasena: vContrasena,
+    const { txtContrasena, txtEmail, chkMantenerSesion, chkRecordarme } = this.state;
+    const objFiltros = {
+      email: txtEmail,
+      contrasena: txtContrasena,
     };
 
     this.setState(
@@ -94,12 +94,18 @@ class LogInForm extends React.Component {
                 })
               );
 
-              if (this.state.chkRecordarme) {
-                window.localStorage.setItem("nombreUsuario", vEmail);
-                window.localStorage.setItem("password", vContrasena);
+              if (chkRecordarme) {
+                window.localStorage.setItem("nombreUsuario", txtEmail);
+                window.localStorage.setItem("password", txtContrasena);
               } else {
                 window.localStorage.removeItem("nombreUsuario");
                 window.localStorage.removeItem("password");
+              }
+
+              if (chkMantenerSesion) {
+                window.localStorage.setItem("mantenerSesion", JSON.stringify({ email: txtEmail, contrasena: txtContrasena }));
+              } else {
+                window.localStorage.removeItem("mantenerSesion");
               }
 
               if (resultado.data.idLangPred !== undefined) {
@@ -168,6 +174,14 @@ class LogInForm extends React.Component {
     });
   }
 
+  toogleChkMantenerSesion() {
+    const { chkMantenerSesion } = this.state;
+    const aux = !chkMantenerSesion;
+    this.setState({
+      chkMantenerSesion: aux,
+    });
+  }
+
   handleKeyDown = (e) => {
     if (e.key === "Enter") {
       this.handleLogIn(this.socket);
@@ -175,6 +189,7 @@ class LogInForm extends React.Component {
   };
 
   render() {
+    const { txtContrasena, txtEmail, chkMantenerSesion, chkRecordarme } = this.state;
     return (
       <SocketContext.Consumer>
         {(socket) => {
@@ -190,7 +205,7 @@ class LogInForm extends React.Component {
                 id="txtEmail"
                 aria-describedby="emailHelp"
                 label={i18next.t("loginForm.insertEmail")}
-                value={this.state.txtEmail}
+                value={txtEmail}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -206,7 +221,7 @@ class LogInForm extends React.Component {
                 type="password"
                 id="txtContrasena"
                 label={i18next.t("loginForm.holderContrasena")}
-                value={this.state.txtContrasena}
+                value={txtContrasena}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -223,8 +238,19 @@ class LogInForm extends React.Component {
                 <Checkbox
                   color="primary"
                   id="chkRecordarme"
-                  checked={this.state.chkRecordarme}
+                  checked={chkRecordarme}
                   onChange={() => this.toogleChkRecordarme()} />
+              </div>
+              <div
+                className="text-center">
+                <label htmlFor="chkMantenerSesion">
+                  {trans("loginForm.mantenerSesion")}
+                </label>
+                <Checkbox
+                  color="primary"
+                  id="chkMantenerSesion"
+                  checked={chkMantenerSesion}
+                  onChange={() => this.toogleChkMantenerSesion()} />
               </div>
 
               {this.state.isLoading ? (

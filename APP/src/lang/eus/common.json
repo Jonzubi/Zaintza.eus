@@ -23,7 +23,8 @@
     "recordarme": "Gogorarazi",
     "iniciarSesion": "Sartu",
     "registrarse": "Izena eman",
-    "validarEmail": "Emaila egiaztatu behar duzu, joan zure emailera"
+    "validarEmail": "Emaila egiaztatu behar duzu, joan zure emailera",
+    "mantenerSesion": "Saioa mantendu"
   },
   "notificaciones": {
     "sesionIniciada": "Saioa behar bezala hasi da",
