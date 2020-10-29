@@ -31,6 +31,12 @@ import CookieConsent from './components/CookieConsent';
 import AvisoLegal from './screens/AvisoLegalScreen/avisoLegal';
 import Footer from './components/footer';
 import protocol from "./util/protocol";
+import axios from "./util/axiosInstance";
+import moment from 'moment';
+import { trans } from './util/funciones';
+import { saveUserSession } from "./redux/actions/user";
+import { changeLang } from "./redux/actions/app";
+import { SetMaxDistance } from "./redux/actions/coords";
 
 class App extends React.Component {
 
@@ -67,6 +73,68 @@ class App extends React.Component {
     }, null, {
       enableHighAccuracy: true
     });
+    
+    const mantenerSesionData = window.localStorage.getItem("mantenerSesion")
+    if (mantenerSesionData !== null) {
+      this.mantenerSesionLogin(JSON.parse(mantenerSesionData));
+    }
+  }
+
+  mantenerSesionLogin = async (loginData) => {
+    const { lastLogin } = loginData;
+
+    // Si el ultimo login fue hace mas de una semana tiene que volver a iniciar sesion
+    if (moment().isAfter(moment(lastLogin).add(7, 'days'))) {
+      return;
+    }
+
+    const { saveUserSession, changeLang, setMaxDistance } = this.props;
+    const login = await axios.get(`${protocol}://${ipMaquina}:3001/api/procedures/getUsuarioConPerfil`, { params: loginData })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          const { bannedUntilDate } = err.response.data;
+          cogoToast.error(
+            <h5>{i18next.t('notificaciones.baneado', {
+              fecha: moment(bannedUntilDate).format('YYYY-MM-DD')
+            })}</h5>
+          );
+          return;
+        }
+        cogoToast.error(<h5>{trans("notificaciones.errorConexion")}</h5>);
+        return;
+      });
+    const usuario = login.data.idUsuario || login.data;
+    const idPerfil = usuario.idPerfil._id;
+    const idUsuario = usuario._id;
+
+    saveUserSession(
+      Object.assign({}, usuario.idPerfil, {
+        _id: idPerfil,
+        _idUsuario: idUsuario,
+        email: usuario.email,
+        tipoUsuario: usuario.tipoUsuario,
+        contrasena: usuario.contrasena,
+        idLangPred: login.data.idLangPred || "",
+      })
+    );
+
+    if (login.data.idLangPred !== undefined) {
+      i18next.changeLanguage(login.data.idLangPred);
+      changeLang(login.data.idLangPred);
+    }
+
+    if (login.data.maxDistance !== undefined) {
+      setMaxDistance(login.data.maxDistance);
+    }
+
+    this.socket.emit("login", {
+      idUsuario: idUsuario,
+    });
+
+    cogoToast.success(
+      <h5>{trans("notificaciones.sesionIniciada")}</h5>
+    );
+
   }
 
   //Abre o cierra el menu segun el estado actual
@@ -142,7 +210,10 @@ const mapDispatchToProps = dispatch => ({
   toogleMenuPerfil: (payload) => dispatch(toogleMenuPerfil(payload)),
   initializeUserSession: () => dispatch(initializeUserSession()),
   changeFormContent: (form) => dispatch(changeFormContent(form)),
-  resetMaxDistance: () => dispatch(ResetMaxDistance())
+  resetMaxDistance: () => dispatch(ResetMaxDistance()),
+  saveUserSession: (user) => dispatch(saveUserSession(user)),
+  changeLang: (payload) => dispatch(changeLang(payload)),
+  setMaxDistance: (payload) => dispatch(SetMaxDistance(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
