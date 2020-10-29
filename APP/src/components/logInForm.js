@@ -36,8 +36,7 @@ class LogInForm extends React.Component {
     this.state = {
       txtEmail: window.localStorage.getItem("nombreUsuario") || "",
       txtContrasena: window.localStorage.getItem("password") || "",
-      chkRecordarme:
-        window.localStorage.getItem("nombreUsuario") != null ? true : false,
+      chkRecordarme: window.localStorage.getItem("nombreUsuario") !== null,
       objUsuario: {},
       isLoading: false,
     };
