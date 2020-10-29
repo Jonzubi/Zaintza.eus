@@ -418,7 +418,7 @@ exports.postNewCliente = async (req, res, modelos) => {
     nombre,
     apellido1,
     apellido2,
-    avatarPreview,
+    imgAvatarB64,
     telefonoMovil,
     telefonoFijo,
     email,
@@ -450,9 +450,9 @@ exports.postNewCliente = async (req, res, modelos) => {
   }
 
   let codAvatar;
-  if (avatarPreview.length > 0) {
+  if (imgAvatarB64.length > 0) {
     codAvatar = getRandomString(20);
-    writeImage(codAvatar, avatarPreview);
+    writeImage(codAvatar, imgAvatarB64);
   }
 
   const modeloClientes = modelos.cliente;
@@ -593,7 +593,7 @@ exports.patchCuidador = async (req, res, modelos) => {
 exports.patchCliente = async (req, res, modelos) => {
   const {
     nombre,
-    avatarPreview,
+    imgAvatarB64,
     telefonoMovil,
     telefonoFijo,
     email,
@@ -627,9 +627,9 @@ exports.patchCliente = async (req, res, modelos) => {
 
   let codAvatar;
   let formData = Object.assign({}, req.body);
-  if (avatarPreview.length > 0) {
+  if (imgAvatarB64.length > 0) {
     codAvatar = getRandomString(20);
-    writeImage(codAvatar, avatarPreview);
+    writeImage(codAvatar, imgAvatarB64);
     formData.direcFoto = codAvatar;
   }
 

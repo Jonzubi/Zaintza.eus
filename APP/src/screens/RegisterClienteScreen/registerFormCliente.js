@@ -2,7 +2,7 @@ import React from "react";
 import Avatar from "react-avatar-edit";
 import cogoToast from "cogo-toast";
 import { connect } from "react-redux";
-import { trans, getRandomString, isValidEmail } from "../../util/funciones";
+import { trans, getRandomString, isValidEmail, toBase64 } from "../../util/funciones";
 import { saveUserSession } from "../../redux/actions/user";
 import { changeFormContent } from "../../redux/actions/app";
 import axios from "../../util/axiosInstance";
@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faAt, faKey, faMobileAlt, faPhoneAlt } from "@fortawesome/free-solid-svg-icons";
 import i18next from "i18next";
 import protocol from "../../util/protocol";
+import ContactImageUploader from "../../components/contactImageUploader";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -30,6 +31,7 @@ class RegisterFormCliente extends React.Component {
     super(props);
     this.state = {
       avatarPreview: "",
+      imgAvatar: null,
       txtNombre: "",
       txtApellido1: "",
       txtApellido2: "",
@@ -112,7 +114,7 @@ class RegisterFormCliente extends React.Component {
       }
     }
     
-    const { txtNombre, txtApellido1, txtApellido2, txtMovil, txtFijo, avatarPreview, txtEmail, txtContrasena} = this.state;
+    const { txtNombre, txtApellido1, txtApellido2, txtMovil, txtFijo, avatarPreview, txtEmail, txtContrasena, imgAvatar } = this.state;
 
     // Comprobamos que el email sea valido sintacticamente
     if(!isValidEmail(txtEmail)){
@@ -133,7 +135,13 @@ class RegisterFormCliente extends React.Component {
       return;
     }
 
-    this.setState({ isLoading: true });    
+    this.setState({ isLoading: true });
+    
+    let imgAvatarB64 = "";
+
+    if (imgAvatar !== null) {
+      imgAvatarB64 = await toBase64(imgAvatar[0]);
+    }
 
     const validationToken = getRandomString(30);
 
@@ -143,7 +151,7 @@ class RegisterFormCliente extends React.Component {
       apellido2: txtApellido2,
       telefonoMovil: txtMovil,
       telefonoFijo: txtFijo,
-      avatarPreview: avatarPreview,
+      imgAvatarB64: imgAvatarB64,
       email: txtEmail,
       contrasena: txtContrasena,
       validationToken
@@ -192,6 +200,15 @@ class RegisterFormCliente extends React.Component {
       terminosAceptados: !terminosAceptados
     });
   }
+
+  onChangeAvatarImg = (picture) => {
+    if (picture.length > 1) {
+      picture.shift();
+    }
+    this.setState({
+      imgAvatar: picture,
+    });
+  };
   
   render() {
     const { terminosAceptados } = this.state;
@@ -201,21 +218,8 @@ class RegisterFormCliente extends React.Component {
         {socket => (
           <div className="p-5 d-flex flex-column">
             <div className="d-flex justify-content-center align-items-center mb-2">
-              <Avatar
-                label="Aukeratu avatarra"
-                labelStyle={{
-                  fontSize: "15px",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  width: "100%",
-                  height: "100%"
-                }}
-                height={200}
-                width={200}
-                onCrop={this.onCrop}
-                onClose={this.onClose}
-                onBeforeFileLoad={this.onBeforeFileLoad}
-                src={this.state.avatarPreview}
+              <ContactImageUploader
+                onImageChoose={this.onChangeAvatarImg}
               />
             </div>
             <div className="row">
