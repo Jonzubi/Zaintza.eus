@@ -146,6 +146,8 @@ class MenuPerfil extends React.Component {
     resetMaxDistance();
     this.props.changeFormContent("tabla");
     this.props.toogleMenuPerfil(false);
+    // Elimina los posibles datos guardados para iniciar sesion automaticamente
+    window.localStorage.removeItem("mantenerSesion");
     gSocket.emit("logout", {
       idUsuario: idUsuario,
     });

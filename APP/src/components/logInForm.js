@@ -37,7 +37,6 @@ class LogInForm extends React.Component {
       txtEmail: window.localStorage.getItem("nombreUsuario") || "",
       txtContrasena: window.localStorage.getItem("password") || "",
       chkRecordarme: window.localStorage.getItem("nombreUsuario") !== null,
-      chkMantenerSesion: true,
       objUsuario: {},
       isLoading: false,
     };
@@ -49,7 +48,7 @@ class LogInForm extends React.Component {
   async handleLogIn(socket) {
     console.log(socket);
     const { changeLang, setMaxDistance, changeFormContent } = this.props;
-    const { txtContrasena, txtEmail, chkMantenerSesion, chkRecordarme } = this.state;
+    const { txtContrasena, txtEmail, chkRecordarme } = this.state;
     const objFiltros = {
       email: txtEmail,
       contrasena: txtContrasena,
@@ -102,11 +101,8 @@ class LogInForm extends React.Component {
                 window.localStorage.removeItem("password");
               }
 
-              if (chkMantenerSesion) {
-                window.localStorage.setItem("mantenerSesion", JSON.stringify({ email: txtEmail, contrasena: txtContrasena }));
-              } else {
-                window.localStorage.removeItem("mantenerSesion");
-              }
+              window.localStorage.setItem("mantenerSesion", JSON.stringify({ email: txtEmail, contrasena: txtContrasena, lastLogin: moment() }));
+
 
               if (resultado.data.idLangPred !== undefined) {
                 i18n.changeLanguage(resultado.data.idLangPred);
@@ -174,14 +170,6 @@ class LogInForm extends React.Component {
     });
   }
 
-  toogleChkMantenerSesion() {
-    const { chkMantenerSesion } = this.state;
-    const aux = !chkMantenerSesion;
-    this.setState({
-      chkMantenerSesion: aux,
-    });
-  }
-
   handleKeyDown = (e) => {
     if (e.key === "Enter") {
       this.handleLogIn(this.socket);
@@ -189,7 +177,7 @@ class LogInForm extends React.Component {
   };
 
   render() {
-    const { txtContrasena, txtEmail, chkMantenerSesion, chkRecordarme } = this.state;
+    const { txtContrasena, txtEmail, chkRecordarme } = this.state;
     return (
       <SocketContext.Consumer>
         {(socket) => {
@@ -240,17 +228,6 @@ class LogInForm extends React.Component {
                   id="chkRecordarme"
                   checked={chkRecordarme}
                   onChange={() => this.toogleChkRecordarme()} />
-              </div>
-              <div
-                className="text-center">
-                <label htmlFor="chkMantenerSesion">
-                  {trans("loginForm.mantenerSesion")}
-                </label>
-                <Checkbox
-                  color="primary"
-                  id="chkMantenerSesion"
-                  checked={chkMantenerSesion}
-                  onChange={() => this.toogleChkMantenerSesion()} />
               </div>
 
               {this.state.isLoading ? (
