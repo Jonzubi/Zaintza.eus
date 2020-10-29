@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --watch index.js"
+    "start": "cross-env NODE_ENV=production nodemon --watch index.js"
   },
   "author": "",
   "license": "ISC",
@@ -14,5 +14,8 @@
     "nodemon": "^2.0.2",
     "simple-node-logger": "^18.12.24",
     "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.2"
   }
 }
