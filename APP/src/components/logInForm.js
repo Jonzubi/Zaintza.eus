@@ -48,11 +48,10 @@ class LogInForm extends React.Component {
   async handleLogIn(socket) {
     console.log(socket);
     const { changeLang, setMaxDistance, changeFormContent } = this.props;
-    const vEmail = this.state.txtEmail;
-    const vContrasena = this.state.txtContrasena;
-    var objFiltros = {
-      email: vEmail,
-      contrasena: vContrasena,
+    const { txtContrasena, txtEmail, chkRecordarme } = this.state;
+    const objFiltros = {
+      email: txtEmail,
+      contrasena: txtContrasena,
     };
 
     this.setState(
@@ -94,13 +93,16 @@ class LogInForm extends React.Component {
                 })
               );
 
-              if (this.state.chkRecordarme) {
-                window.localStorage.setItem("nombreUsuario", vEmail);
-                window.localStorage.setItem("password", vContrasena);
+              if (chkRecordarme) {
+                window.localStorage.setItem("nombreUsuario", txtEmail);
+                window.localStorage.setItem("password", txtContrasena);
               } else {
                 window.localStorage.removeItem("nombreUsuario");
                 window.localStorage.removeItem("password");
               }
+
+              window.localStorage.setItem("mantenerSesion", JSON.stringify({ email: txtEmail, contrasena: txtContrasena, lastLogin: moment() }));
+
 
               if (resultado.data.idLangPred !== undefined) {
                 i18n.changeLanguage(resultado.data.idLangPred);
@@ -175,6 +177,7 @@ class LogInForm extends React.Component {
   };
 
   render() {
+    const { txtContrasena, txtEmail, chkRecordarme } = this.state;
     return (
       <SocketContext.Consumer>
         {(socket) => {
@@ -190,7 +193,7 @@ class LogInForm extends React.Component {
                 id="txtEmail"
                 aria-describedby="emailHelp"
                 label={i18next.t("loginForm.insertEmail")}
-                value={this.state.txtEmail}
+                value={txtEmail}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -206,7 +209,7 @@ class LogInForm extends React.Component {
                 type="password"
                 id="txtContrasena"
                 label={i18next.t("loginForm.holderContrasena")}
-                value={this.state.txtContrasena}
+                value={txtContrasena}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -223,7 +226,7 @@ class LogInForm extends React.Component {
                 <Checkbox
                   color="primary"
                   id="chkRecordarme"
-                  checked={this.state.chkRecordarme}
+                  checked={chkRecordarme}
                   onChange={() => this.toogleChkRecordarme()} />
               </div>
 
