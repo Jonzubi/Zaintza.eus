@@ -98,6 +98,29 @@ class RegisterFormCliente extends React.Component {
       if (clave === 'imgAvatar') {
         continue;
       }
+      if (clave === 'txtContrasena') {
+        const { txtContrasena } = this.state;
+        if (txtContrasena.length < 6) {
+          const { error } = this.state;
+          let auxError = { ...error };
+          auxError.txtContrasena = true;
+          this.setState({
+            error: auxError,
+          });
+          cogoToast.error(
+            <h5>
+              {trans("registerFormCuidadores.contrasenaMinima")}
+            </h5>
+          );
+          return;
+        } else if (this.state.error.txtContrasena === true) {
+          const { error } = this.state;
+          error.txtContrasena = false;
+          this.setState({
+            error: error,
+          }); 
+        }
+      }
       if (
         (this.state[clave].length == 0 || !this.state[clave]) &&
         this.requiredState.includes(clave)
@@ -114,6 +137,12 @@ class RegisterFormCliente extends React.Component {
           error: auxError
         });
         return;
+      } else if (this.state.error[clave] === true) {
+        let auxError = this.state.error;
+        auxError[clave] = false;
+        this.setState({
+          error: auxError
+        });
       }
     }
     
@@ -214,7 +243,7 @@ class RegisterFormCliente extends React.Component {
   };
   
   render() {
-    const { terminosAceptados } = this.state;
+    const { terminosAceptados, error } = this.state;
     const { nowLang, changeFormContent } = this.props;
     return (
       <SocketContext.Consumer>
@@ -239,7 +268,7 @@ class RegisterFormCliente extends React.Component {
                   onChange={this.handleInputChange}
                   type="text"
                   className={
-                    this.state.error.txtNombre
+                    error.txtNombre
                       ? "border border-danger form-control"
                       : "form-control"
                   }
@@ -294,7 +323,7 @@ class RegisterFormCliente extends React.Component {
                   onChange={this.handleInputChange}
                   type="email"
                   class={
-                    this.state.error.txtNombre
+                    error.txtEmail
                       ? "border border-danger form-control"
                       : "form-control"
                   }
@@ -317,7 +346,7 @@ class RegisterFormCliente extends React.Component {
                   onChange={this.handleInputChange}
                   type="password"
                   class={
-                    this.state.error.txtNombre
+                    error.txtContrasena
                       ? "border border-danger form-control"
                       : "form-control"
                   }
@@ -341,7 +370,7 @@ class RegisterFormCliente extends React.Component {
                   onChange={this.handleInputChange}
                   type="number"
                   class={
-                    this.state.error.txtNombre
+                    error.txtMovil
                       ? "border border-danger form-control"
                       : "form-control"
                   }
@@ -362,7 +391,7 @@ class RegisterFormCliente extends React.Component {
                   onChange={this.handleInputChange}
                   type="number"
                   class={
-                    this.state.error.txtFijo
+                    error.txtFijo
                       ? "border border-danger form-control"
                       : "form-control"
                   }
