@@ -80,6 +80,9 @@ class PerfilCliente extends React.Component {
     const { email, contrasena, idUsuario } = this.props;
     const { txtNombre, txtApellido1, txtApellido2, txtFijo, txtMovil, imgAvatar } = this.state;
     for (var clave in this.state) {
+      if (clave === 'imgAvatar') {
+        continue;
+      }
       if (
         (this.state[clave].length == 0 || !this.state[clave]) &&
         this.requiredState.includes(clave)

@@ -95,6 +95,9 @@ class RegisterFormCliente extends React.Component {
 
   async handleRegistrarse(socket) {
     for (var clave in this.state) {
+      if (clave === 'imgAvatar') {
+        continue;
+      }
       if (
         (this.state[clave].length == 0 || !this.state[clave]) &&
         this.requiredState.includes(clave)
