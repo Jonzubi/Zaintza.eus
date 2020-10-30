@@ -21,6 +21,7 @@ module.exports = conexion => {
     modelos.valoracion = require("../src/models/valoracion")(conexion);
     modelos.conexion = require('../src/models/conexion')(conexion);
     modelos.login = require('../src/models/logins')(conexion);
+    modelos.resetPasswordRequest = require('../src/models/resetPasswordRequest')(conexion);
 
     return modelos;
 }

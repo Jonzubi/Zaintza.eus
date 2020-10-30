@@ -84,6 +84,8 @@ module.exports = (app, modelos) => {
 
   app.route("/api/procedures/isUserBanned/:idPerfil").get((req, res) => proceduresControlador.isUserBanned(req, res, modelos));
 
+  app.route("/api/procedures/newResetPasswordRequest").post((req, res) => proceduresControlador.newResetPasswordRequest(req, res, modelos));
+
   app.route("/api/getLogo").get((req, res) => mainControlador.getLogo(req, res));
   
   app.route("/Inicio/").get(mainControlador.inicio);

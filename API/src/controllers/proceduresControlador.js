@@ -2090,3 +2090,30 @@ exports.isUserBanned = async (req, res, modelos) => {
     res.end();
   }
 }
+
+exports.newResetPasswordRequest = async (req, res, modelos) => {
+  const { email } = req.body;
+
+  const modeloUsuario = modelos.usuario;
+  const foundUser = await modeloUsuario.findOne({ email });
+
+  if (!foundUser) {
+    res.writeHead(400, headerResponse);
+    res.write('No user found');
+    res.end();
+    return;
+  }
+
+  const modeloResetPassword = modelos.resetPasswordRequest;
+  const validationToken = getRandomString(20);
+
+  const resetConfigurado = new modeloResetPassword({
+    email,
+    validationToken
+  });
+
+  await resetConfigurado.save();
+
+  res.writeHead(200, headerResponse);
+  res.end();
+}
