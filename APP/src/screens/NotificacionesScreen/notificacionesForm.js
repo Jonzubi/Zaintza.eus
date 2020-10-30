@@ -5,20 +5,15 @@ import { connect } from "react-redux";
 import { trans, arrayOfFalses, getTodayDate } from "../../util/funciones";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faEye,
-  faTrashAlt,
-  faEllipsisV,
   faComments,
   faFileSignature,
   faHome,
   faClock,
   faCheck,
   faTimes,
-  faExclamation,
   faAward,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
-import { Collapse } from "react-collapse";
 import cogoToast from "cogo-toast";
 import { setCountNotify } from "../../redux/actions/notifications";
 import SocketContext from "../../socketio/socket-context";
@@ -40,7 +35,7 @@ import {
   IconButton,
   Badge,
 } from "@material-ui/core";
-import { Visibility, Delete } from "@material-ui/icons";
+import { Delete } from "@material-ui/icons";
 import { colors } from "../../util/colors";
 import i18next from 'i18next';
 import protocol from '../../util/protocol';
@@ -56,7 +51,6 @@ class NotificacionesForm extends React.Component {
       jsonNotificaciones: [],
       notificacionesCollapseState: [],
       isLoading: true,
-      isOpenThreeDotLayer: [],
       showModalNotificacion: false,
       showModalDecision: false,
       showModalDeleteNotificacion: false,
@@ -138,7 +132,6 @@ class NotificacionesForm extends React.Component {
     let today = getTodayDate();
     const objToday = new Date();
     const acuerdo = notificacion.acuerdo;
-    let auxJsonNotif = this.state.jsonNotificaciones;
     //Squi estoy pillando el estado actual del acuerdo para comprobar que el acuerdo no se ha cancelado ya por el usuario.
     //Por ejemplo sui ha hecho una propuesta erronea
     let estadoAcuerdo = await axios.post(
@@ -229,11 +222,8 @@ class NotificacionesForm extends React.Component {
 
   handleDeleteNotificacionAfterDecision = async (notificacion) => {
     const {
-      countNotifies,
-      setCountNotify,
       email,
       contrasena,
-      tipoUsuario,
     } = this.props;
 
     await axios.patch(
@@ -299,35 +289,6 @@ class NotificacionesForm extends React.Component {
       () => this.refrescarDatos()
     );
   }
-
-  handleClickOptions = (index) => {
-    const { isOpenThreeDotLayer } = this.state;
-    let auxIsOpen = isOpenThreeDotLayer.slice();
-    if (!index) {
-      this.setState({
-        isOpenThreeDotLayer: arrayOfFalses(isOpenThreeDotLayer.length),
-      });
-    }
-    if (auxIsOpen[index]) {
-      auxIsOpen[index] = false;
-    } else {
-      auxIsOpen = arrayOfFalses(isOpenThreeDotLayer.length);
-      auxIsOpen[index] = true;
-    }
-    this.setState({
-      isOpenThreeDotLayer: auxIsOpen,
-    });
-  };
-
-  closeOpenedOptionsDiv = () => {
-    const { isOpenThreeDotLayer } = this.state;
-
-    if (isOpenThreeDotLayer.includes(true)) {
-      this.setState({
-        isOpenThreeDotLayer: arrayOfFalses(isOpenThreeDotLayer.length),
-      });
-    }
-  };
 
   getDetalleNotificacion = (notificacion) => {
     switch (notificacion.tipoNotificacion) {
@@ -399,7 +360,6 @@ class NotificacionesForm extends React.Component {
   render() {
     const {
       isLoading,
-      isOpenThreeDotLayer,
       showModalNotificacion,
       selectedNotificacion,
       showModalDecision,
@@ -410,7 +370,6 @@ class NotificacionesForm extends React.Component {
       <SocketContext.Consumer>
         {(socket) => (
           <div
-            onClick={() => this.closeOpenedOptionsDiv()}
             style={{
               minminHeight: "calc(100vh - 80px)",
             }}

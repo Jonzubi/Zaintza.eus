@@ -579,7 +579,7 @@ class Tabla extends React.Component {
     };
 
     Axios.post(
-      `http${protocol}://${ipMaquina}:3001/api/procedures/newAcuerdo`,
+      `${protocol}://${ipMaquina}:3001/api/procedures/newAcuerdo`,
       formData
     )
       .then((resultado) => {
