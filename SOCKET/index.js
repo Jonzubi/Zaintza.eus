@@ -1,8 +1,11 @@
 const app = require('express')();
 const fs = require('fs');
-const https = require('https');
-const http = require('http');
-const io = require('socket.io')(https);
+const https = require('https').createServer({
+    key: fs.readFileSync('./SSL/key.pem'),
+    cert: fs.readFileSync('./SSL/cert.pem')
+}, app);
+const http = require('http').createServer(app);
+const socketIO = require('socket.io');
 const port = 3002;
 const conexion = require('../API/util/bdConnection');
 const modelos = require('../API/util/requireAllModels')(conexion);
@@ -10,6 +13,8 @@ const { writeError } = require('./utils/funciones');
 
 let usuariosConectados = [];
 let usuariosLogueados = [];
+
+const io = process.env.NODE_ENV.includes("production") ? socketIO(https) : socketIO(http);
 
 io.on('connection', (socket) => {
     let deviceData = JSON.parse(socket.handshake.query.deviceData);
@@ -66,14 +71,11 @@ io.on('connection', (socket) => {
 });
 
 if (process.env.NODE_ENV.includes("production")) {
-    https.createServer({
-        key: fs.readFileSync('./SSL/key.pem'),
-        cert: fs.readFileSync('./SSL/cert.pem')
-    }, app).listen(port, () => {
+    https.listen(port, () => {
         console.log(`[SOCKET - HTTPS] Escuchando el puerto: ${port}`);
     });
 } else {
-    http.createServer(app).listen(port, () => {
+    http.listen(port, () => {
         console.log(`[SOCKET - HTTP] Escuchando el puerto: ${port}`);
     });
 }
