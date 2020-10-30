@@ -3,6 +3,7 @@ import { trans } from "../util/funciones";
 import { colors } from "../util/colors";
 import { useDispatch } from "react-redux";
 import { changeFormContent } from "../redux/actions/app";
+import moment from 'moment';
 import { isMobile } from 'react-device-detect';
 
 const Footer = () => {
@@ -23,6 +24,11 @@ const Footer = () => {
       }}
       className="d-flex flex-row align-items-center justify-content-center p-2 bg-white"
     >
+      <span
+        className="mr-1"
+      >
+        Copyright © ZAINTZA {moment().format('YYYY')}
+      </span>
       <span
         onClick={handleAvisoLegalClick}
         className="mr-1 footerLinks"
