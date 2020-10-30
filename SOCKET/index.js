@@ -1,9 +1,7 @@
 const app = require('express')();
 const fs = require('fs');
-const https = require('https').createServer({
-    key: fs.readFileSync('./SSL/key.pem'),
-    cert: fs.readFileSync('./SSL/cert.pem')
-}, app);
+const https = require('https');
+const http = require('http');
 const io = require('socket.io')(https);
 const port = 3002;
 const conexion = require('../API/util/bdConnection');
@@ -65,11 +63,20 @@ io.on('connection', (socket) => {
           }
         }
     })
-})
-
-https.listen(port, () => {
-    console.log(`[SOCKET] Escuchando el puerto: ${port}`);
 });
+
+if (process.env.NODE_ENV.includes("production")) {
+    https.createServer({
+        key: fs.readFileSync('./SSL/key.pem'),
+        cert: fs.readFileSync('./SSL/cert.pem')
+    }, app).listen(port, () => {
+        console.log(`[SOCKET - HTTPS] Escuchando el puerto: ${port}`);
+    });
+} else {
+    http.createServer(app).listen(port, () => {
+        console.log(`[SOCKET - HTTP] Escuchando el puerto: ${port}`);
+    });
+}
 
 const printDataOnConsole = () => {
     console.clear();
