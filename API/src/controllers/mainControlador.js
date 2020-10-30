@@ -258,6 +258,18 @@ exports.getImage = (req, res) => {
   });
 };
 
+exports.getLogo = (req, res) => {
+  let logoPath = "";
+  if (process.env.NODE_ENV.includes("production")) {
+    logoPath = "/var/www/Zaintza.eus/API/src/logo.png";
+  } else {
+    logoPath = path.join(__dirname, '/../assets/logo.png');
+  }
+  let stream = fs.createReadStream(logoPath);
+  res.setHeader("Content-Type", "image/png");
+  stream.pipe(res);
+}
+
 //Funcion para ver si el server esta en linea
 exports.inicio = function(req, res) {
   res.writeHead(200, headerResponse);
