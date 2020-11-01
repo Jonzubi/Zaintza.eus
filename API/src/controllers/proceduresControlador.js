@@ -11,6 +11,7 @@ const ipMaquina = require("../../util/ipMaquina");
 const handlebars = require("handlebars");
 const momentTimezone = require("moment-timezone");
 const moment = require('moment');
+const path = require('path');
 const { adminToken } = require('../../util/adminToken');
 const { coordsMunicipios } = require('../../util/municipiosCoords');
 
@@ -2115,5 +2116,70 @@ exports.newResetPasswordRequest = async (req, res, modelos) => {
   await resetConfigurado.save();
 
   res.writeHead(200, headerResponse);
+  res.end();
+}
+
+exports.formResetPassword = async (req, res, modelos) => {
+  const { validationToken } = req.query;
+
+  const modeloResetPassword = modelos.resetPasswordRequest;
+  const foundRequest = await modeloResetPassword.findOne({ validationToken });
+
+  if (!foundRequest) {
+    res.writeHead(400, headerResponse);
+    res.write('No request found');
+    res.end();
+    return;
+  }
+
+  if (moment().isAfter(moment(foundRequest.fechaRequest).add(1, 'days'))) {
+    res.writeHead(200, headerResponse);
+    res.write('Request caducado');
+    res.end();
+    return;
+  }
+
+  res.status(200).sendFile(path.join(__dirname, '../templates/formResetPassword.html'));
+}
+
+exports.resetPassword = async (req, res, modelos) => {
+  const { validationToken, password } = req.body;
+
+  const modeloResetPassword = modelos.resetPasswordRequest;
+  const foundRequest = await modeloResetPassword.findOne({ validationToken });
+
+  if (!foundRequest) {
+    res.writeHead(400, headerResponse);
+    res.write('No request found');
+    res.end();
+    return;
+  }
+
+  if (moment().isAfter(moment(foundRequest.fechaRequest).add(1, 'days'))) {
+    res.writeHead(400, headerResponse);
+    res.write('Request caducado');
+    res.end();
+    return;
+  }
+
+  if (!password) {
+    res.writeHead(400, headerResponse);
+    res.write('No password found');
+    res.end();
+    return;
+  }
+
+  if (password.length < 6) {
+    res.writeHead(400, headerResponse);
+    res.write('Password too weak');
+    res.end();
+    return;
+  }
+
+  const modeloUsuario = modelos.usuario;
+  await modeloUsuario.findOneAndUpdate({ email: foundRequest.email }, { contrasena: password });
+
+  res.writeHead(200, headerResponse);
+  res.write('Contraseña cambiada');
   res.end();
 }

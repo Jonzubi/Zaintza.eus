@@ -68,7 +68,7 @@ exports.sendResetPasswordEmail = async (req, res) => {
     res.end();
     return;
   } else {
-    if (moment().isAfter(moment(foundRequest.fechaRequest))) {
+    if (moment().isAfter(moment(foundRequest.fechaRequest).add(1, 'days'))) {
       res.writeHead(400, headerResponse);
       res.write('Request caducado');
       res.end();
@@ -78,11 +78,12 @@ exports.sendResetPasswordEmail = async (req, res) => {
     readHTMLFile("resetPassword", (err, html) => {
       const template = handlebars.compile(html);
       const htmlToSend = template({
-
+        validationToken: foundRequest.validationToken,
+        ipMaquina
       });
       const mailOptions = {
         from: fromEmail,
-        to: toEmail,
+        to: email,
         subject: "[Zaintza.eus] Pasahitza berrezarri",
         html: htmlToSend
       };
