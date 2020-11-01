@@ -2111,7 +2111,8 @@ exports.newResetPasswordRequest = async (req, res, modelos) => {
 
   const resetConfigurado = new modeloResetPassword({
     email,
-    validationToken
+    validationToken,
+    fechaRequest: moment().toDate()
   });
 
   await resetConfigurado.save();

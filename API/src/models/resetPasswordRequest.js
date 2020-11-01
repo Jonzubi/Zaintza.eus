@@ -8,7 +8,7 @@ module.exports = conexion => {
         },
         fechaRequest: {
             type: Date,
-            default: Date.now()
+            required: true
         },
         validationToken: {
             type: String,

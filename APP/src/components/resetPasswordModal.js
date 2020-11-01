@@ -88,7 +88,7 @@ const ResetPasswordModal = (props) => {
                 </DialogActions>
                 :
                 <div
-                    style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: 30 }}
+                    style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: 30, paddingBottom: 15 }}
                 >
                     <ClipLoader color={colors.green} />
                 </div>
