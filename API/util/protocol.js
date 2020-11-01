@@ -1,0 +1,1 @@
+module.exports = process.env.NODE_ENV.includes('production') ? "https" : "http";

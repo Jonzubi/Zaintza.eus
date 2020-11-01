@@ -1,7 +1,10 @@
 const fs = require("fs");
 const path = require('path');
 
-const templatesFolder = '/var/www/Zaintza.eus/API/src/templates/';
+let templatesFolder = '/var/www/Zaintza.eus/API/src/templates/';
+if (!process.env.NODE_ENV.includes('production')){
+  templatesFolder = path.join(__dirname, '../src/templates/');
+}
 exports.writeImage = (cod, b64) => {
   let idImage = cod;
   let imageBase64 = b64.split(",")[1];

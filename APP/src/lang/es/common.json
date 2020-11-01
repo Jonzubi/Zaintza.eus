@@ -23,7 +23,8 @@
       "iniciarSesion": "Entrar",
       "registrarse": "Registrarse",
       "validarEmail": "Tienes que validar el email",
-      "mantenerSesion": "Mantener sesión"
+      "mantenerSesion": "Mantener sesión",
+      "forgetPassword": "Olvidaste la contraseña?"
     },
     "notificaciones": {
       "sesionIniciada": "Sesión iniciada con éxito",
@@ -31,7 +32,9 @@
       "datosIncorrectos": "El nombre de usuario o contraseña es incorrecto",
       "errorConexion": "Hay problemas de conexión",
       "servidorNoDisponible": "El servidor no responde",
-      "baneado": "Has sido baneado hasta {{fecha}}"
+      "baneado": "Has sido baneado hasta {{fecha}}",
+      "emailNoExiste": "El email no existe",
+      "resetPasswordEmail": "El email para resetear la contraseña ha sido enviado"
     },
     "tablaCuidadores": {
       "noData": "No hay datos",
@@ -433,6 +436,12 @@
       "content": "Registrarse como cliente o como cuidador?",
       "comoCliente": "Cliente",
       "comoCuidador": "Cuidador"
+    },
+    "resetPasswordModal": {
+      "title": "Resetear contraseña",
+      "email": "Introduce tu email",
+      "cancel": "Cancelar",
+      "send": "Enviar"
     }
   }
   

@@ -8,6 +8,7 @@ const {
 } = require("../../util/funciones");
 const headerResponse = require("../../util/headerResponse");
 const ipMaquina = require("../../util/ipMaquina");
+const protocol = require('../../util/protocol');
 const handlebars = require("handlebars");
 const momentTimezone = require("moment-timezone");
 const moment = require('moment');
@@ -2139,7 +2140,22 @@ exports.formResetPassword = async (req, res, modelos) => {
     return;
   }
 
-  res.status(200).sendFile(path.join(__dirname, '../templates/formResetPassword.html'));
+  readHTMLFile('formResetPassword', (err, html) => {
+    if (!err) {
+      const template = handlebars.compile(html);
+      const htmlToSend = template({
+        ipMaquina,
+        protocol
+      });
+      res.status(200);
+      res.set('Content-Type', 'text/html');
+      res.send(htmlToSend);
+    } else {
+      res.writeHead(500, headerResponse);
+      res.write('HTML Compile error');
+      res.end();
+    }
+  });
 }
 
 exports.resetPassword = async (req, res, modelos) => {
