@@ -1,5 +1,9 @@
 const fs =require("fs");
-const templatesFolder = '/var/www/Zaintza.eus/SMTP/templates/';
+const path = require('path');
+let templatesFolder = '/var/www/Zaintza.eus/SMTP/templates/';
+if (process.env.NODE_ENV.includes('local')) {
+	templatesFolder = path.join(__dirname, '../templates/');
+}
 exports.readHTMLFile = (fileName, callback) => {
     fs.readFile(templatesFolder + fileName + ".html", {encoding: 'utf-8'}, function (err, html) {
         if (err) {

@@ -24,7 +24,8 @@
     "iniciarSesion": "Sartu",
     "registrarse": "Izena eman",
     "validarEmail": "Emaila egiaztatu behar duzu, joan zure emailera",
-    "mantenerSesion": "Saioa mantendu"
+    "mantenerSesion": "Saioa mantendu",
+    "forgetPassword": "Pasahitza ahaztu zaizu?"
   },
   "notificaciones": {
     "sesionIniciada": "Saioa behar bezala hasi da",
@@ -33,7 +34,9 @@
     "errorConexion": "Konektatzeko arazaoak daude...",
     "servidorNoDisponible": "Zerbitzariak ez du erantzuten",
     "errorGeneral":"Arazo bat gertatu da",
-    "baneado": "Sarrera debekatuta {{fecha}} arte"
+    "baneado": "Sarrera debekatuta {{fecha}} arte",
+    "emailNoExiste": "Emaila ez da existitzen",
+    "resetPasswordEmail": "Pasahitza berrezartzeko emaila bidali zaizu"
   },
   "tablaCuidadores": {
     "noData": "Ez dago daturik",
@@ -439,5 +442,11 @@
     "content": "Nola nahiko zenuke izena eman, guraso gisa ala zaintzaile gisa?",
     "comoCliente": "Bezero gisa",
     "comoCuidador": "Zaintzaile gisa"
+  },
+  "resetPasswordModal": {
+    "title": "Pasahitza berrezarri",
+    "email": "Sartu zure emaila",
+    "cancel": "Ezeztatu",
+    "send": "Bidali"
   }
 }

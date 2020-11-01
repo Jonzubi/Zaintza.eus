@@ -8,9 +8,11 @@ const {
 } = require("../../util/funciones");
 const headerResponse = require("../../util/headerResponse");
 const ipMaquina = require("../../util/ipMaquina");
+const protocol = require('../../util/protocol');
 const handlebars = require("handlebars");
 const momentTimezone = require("moment-timezone");
 const moment = require('moment');
+const path = require('path');
 const { adminToken } = require('../../util/adminToken');
 const { coordsMunicipios } = require('../../util/municipiosCoords');
 
@@ -2089,4 +2091,111 @@ exports.isUserBanned = async (req, res, modelos) => {
     res.write('false');
     res.end();
   }
+}
+
+exports.newResetPasswordRequest = async (req, res, modelos) => {
+  const { email } = req.body;
+
+  const modeloUsuario = modelos.usuario;
+  const foundUser = await modeloUsuario.findOne({ email });
+
+  if (!foundUser) {
+    res.writeHead(400, headerResponse);
+    res.write('No user found');
+    res.end();
+    return;
+  }
+
+  const modeloResetPassword = modelos.resetPasswordRequest;
+  const validationToken = getRandomString(20);
+
+  const resetConfigurado = new modeloResetPassword({
+    email,
+    validationToken
+  });
+
+  await resetConfigurado.save();
+
+  res.writeHead(200, headerResponse);
+  res.end();
+}
+
+exports.formResetPassword = async (req, res, modelos) => {
+  const { validationToken } = req.query;
+
+  const modeloResetPassword = modelos.resetPasswordRequest;
+  const foundRequest = await modeloResetPassword.findOne({ validationToken });
+
+  if (!foundRequest) {
+    res.writeHead(400, headerResponse);
+    res.write('No request found');
+    res.end();
+    return;
+  }
+
+  if (moment().isAfter(moment(foundRequest.fechaRequest).add(1, 'days'))) {
+    res.writeHead(200, headerResponse);
+    res.write('Request caducado');
+    res.end();
+    return;
+  }
+
+  readHTMLFile('formResetPassword', (err, html) => {
+    if (!err) {
+      const template = handlebars.compile(html);
+      const htmlToSend = template({
+        ipMaquina,
+        protocol
+      });
+      res.status(200);
+      res.set('Content-Type', 'text/html');
+      res.send(htmlToSend);
+    } else {
+      res.writeHead(500, headerResponse);
+      res.write('HTML Compile error');
+      res.end();
+    }
+  });
+}
+
+exports.resetPassword = async (req, res, modelos) => {
+  const { validationToken, password } = req.body;
+
+  const modeloResetPassword = modelos.resetPasswordRequest;
+  const foundRequest = await modeloResetPassword.findOne({ validationToken });
+
+  if (!foundRequest) {
+    res.writeHead(400, headerResponse);
+    res.write('No request found');
+    res.end();
+    return;
+  }
+
+  if (moment().isAfter(moment(foundRequest.fechaRequest).add(1, 'days'))) {
+    res.writeHead(400, headerResponse);
+    res.write('Request caducado');
+    res.end();
+    return;
+  }
+
+  if (!password) {
+    res.writeHead(400, headerResponse);
+    res.write('No password found');
+    res.end();
+    return;
+  }
+
+  if (password.length < 6) {
+    res.writeHead(400, headerResponse);
+    res.write('Password too weak');
+    res.end();
+    return;
+  }
+
+  const modeloUsuario = modelos.usuario;
+  await modeloUsuario.findOneAndUpdate({ email: foundRequest.email }, { contrasena: password });
+
+  res.writeHead(200, headerResponse);
+  res.write('Contraseña cambiada');
+  res.end();
 }

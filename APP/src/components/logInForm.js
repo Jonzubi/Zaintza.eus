@@ -18,6 +18,7 @@ import { Checkbox, InputAdornment, TextField } from '@material-ui/core';
 import { EmailRounded, Lock } from '@material-ui/icons';
 import { colors } from '../util/colors';
 import protocol from '../util/protocol';
+import ResetPasswordModal from '../components/resetPasswordModal';
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -37,6 +38,7 @@ class LogInForm extends React.Component {
       txtEmail: window.localStorage.getItem("nombreUsuario") || "",
       txtContrasena: window.localStorage.getItem("password") || "",
       chkRecordarme: window.localStorage.getItem("nombreUsuario") !== null,
+      showResetPasswordModal: false,
       objUsuario: {},
       isLoading: false,
     };
@@ -177,7 +179,7 @@ class LogInForm extends React.Component {
   };
 
   render() {
-    const { txtContrasena, txtEmail, chkRecordarme } = this.state;
+    const { txtContrasena, txtEmail, chkRecordarme, showResetPasswordModal } = this.state;
     return (
       <SocketContext.Consumer>
         {(socket) => {
@@ -259,6 +261,18 @@ class LogInForm extends React.Component {
                     </button>
                   </div>
                 )}
+
+              <span
+                onClick={() => this.setState({
+                  showResetPasswordModal: true
+                })}
+                className="text-primary mt-4 text-center"
+                style={{
+                  textDecoration: 'underline',
+                  cursor: 'pointer'
+                }}>{trans('loginForm.forgetPassword')}</span>
+              {showResetPasswordModal ? <ResetPasswordModal closeModal={() => this.setState({ showResetPasswordModal: false })} /> : null}
+
             </div>
           );
         }}
