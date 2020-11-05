@@ -79,7 +79,9 @@
       "eligeCategoria": "Elige una categoría",
       "anonimo": "Anónimo",
       "heLeidoTerminos": "He leído y acepto los",
-      "linkHeLeidoTerminos": "términos de uso"
+      "linkHeLeidoTerminos": "términos de uso",
+      "aplicarFiltro": "Aplicar filtro",
+      "restablecerFiltro": "Restablecer filtros"
     },
     "registerFormCuidadores": {
       "avatar": "Avatar",
