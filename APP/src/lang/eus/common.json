@@ -83,7 +83,9 @@
     "eligeCategoria": "Aukeratu kategoria",
     "anonimo": "Anonimoa",
     "heLeidoTerminos": "irakurri eta onartzen ditut",
-    "linkHeLeidoTerminos": "Erabilera baldintzak"
+    "linkHeLeidoTerminos": "Erabilera baldintzak",
+    "aplicarFiltro": "Aplikatu",
+    "restablecerFiltro": "Filtroak kendu"
   },
   "registerFormCuidadores": {
     "avatar": "Avatarra",

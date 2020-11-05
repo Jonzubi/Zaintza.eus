@@ -1574,7 +1574,7 @@ class Tabla extends React.Component {
                   onHide={() => this.setState({ showModalFilter: false })}
                 >
                   <ModalHeader closeButton>
-                    <h5>Filtrar</h5>
+                    <h5>{trans("tablaCuidadores.filtrar")}</h5>
                   </ModalHeader>
                   <ModalBody className="d-flex flex-column justify-content-between align-items-stretch">
                     <div>
@@ -1643,14 +1643,14 @@ class Tabla extends React.Component {
                         onClick={this.handleApplyFilters}
                         className="btn btn-success"
                       >
-                        Aplicar filtro
+                        {trans('tablaCuidadores.aplicarFiltro')}
                       </Button>
                       <Button
                         onClick={this.handleResetFilters}
                         disabled={!isFiltering}
                         className="btn btn-danger"
                       >
-                        Restablecer filtros
+                        {trans('tablaCuidadores.restablecerFiltro')}
                       </Button>
                     </div>
                   </ModalBody>
