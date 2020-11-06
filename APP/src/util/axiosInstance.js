@@ -1,6 +1,6 @@
 import axios from 'axios';
-import key from '../SSL/key.pem';
-import cert from '../SSL/cert.pem';
+import key from './etc/letsencrypt/live/www.zaintza.eus/privkey.pem';
+import cert from './etc/letsencrypt/live/www.zaintza.eus/cert.pem';
 
 const instance = axios.create({
   key: key,
