@@ -1,8 +1,8 @@
 const app = require('express')();
 const fs = require('fs');
 const https = require('https').createServer({
-    key: fs.readFileSync('./SSL/key.pem'),
-    cert: fs.readFileSync('./SSL/cert.pem')
+    key: fs.readFileSync('/etc/letsencrypt/live/www.zaintza.eus/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/www.zaintza.eus/cert.pem')
 }, app);
 const http = require('http').createServer(app);
 const socketIO = require('socket.io');

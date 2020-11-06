@@ -18,8 +18,8 @@ if (process.env.NODE_ENV.includes("production")) {
   https
     .createServer(
       {
-        key: fs.readFileSync("./SSL/key.pem"),
-        cert: fs.readFileSync("./SSL/cert.pem"),
+        key: fs.readFileSync("/etc/letsencrypt/live/www.zaintza.eus/privkey.pem"),
+        cert: fs.readFileSync("/etc/letsencrypt/live/www.zaintza.eus/cert.pem"),
       },
       app
     )
