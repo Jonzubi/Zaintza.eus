@@ -29,8 +29,8 @@ app.get("*", (req, res) => {
 })
 
 https.createServer({
-  key: fs.readFileSync('./src/SSL/key.pem'),
-  cert: fs.readFileSync('./src/SSL/cert.pem')
+  key: fs.readFileSync('/etc/letsencrypt/live/www.zaintza.eus/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/www.zaintza.eus/cert.pem')
 }, app).listen(443);
 
 http.createServer((req, res) => {
