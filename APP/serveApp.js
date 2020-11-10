@@ -30,7 +30,7 @@ app.get("*", (req, res) => {
 
 https.createServer({
   key: fs.readFileSync('/etc/letsencrypt/live/www.zaintza.eus/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/www.zaintza.eus/cert.pem')
+  cert: fs.readFileSync('/etc/letsencrypt/live/www.zaintza.eus/fullchain.pem')
 }, app).listen(443);
 
 http.createServer((req, res) => {
