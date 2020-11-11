@@ -378,7 +378,7 @@ class NotificacionesForm extends React.Component {
             {isLoading ? (
               <div
                 style={{
-                  minminHeight: "calc(100vh - 80px)",
+                  minHeight: "calc(100vh - 80px)",
                 }}
                 className="d-flex align-items-center justify-content-center"
               >
