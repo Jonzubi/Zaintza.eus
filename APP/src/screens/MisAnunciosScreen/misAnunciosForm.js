@@ -40,6 +40,9 @@ import {
 import { InsertChart, Create, Delete } from '@material-ui/icons';
 import { colors } from '../../util/colors';
 import protocol from '../../util/protocol';
+import NoMisAnuncios from '../../util/images/noMisAnuncios.svg'
+import { changeFormContent } from "../../redux/actions/app";
+
 class MisAnuncios extends React.Component {
   constructor(props) {
     super(props);
@@ -618,6 +621,7 @@ class MisAnuncios extends React.Component {
       isLoadingStatsModal,
       error
     } = this.state;
+    const { changeFormContent } = this.props;
     return (
       <div
         onClick={() => this.closeOpenedOptionsDiv()}
@@ -641,9 +645,25 @@ class MisAnuncios extends React.Component {
             }}
             className="d-flex align-items-center justify-content-center"
           >
-            <small className="text-danger">
-              {trans("misAnunciosForm.noData")}
-            </small>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column'
+              }}
+            >
+              <img src={NoMisAnuncios} height={150} />
+              <h3 className="mt-5 text-center">{trans("misAnunciosForm.noData")}</h3>
+              <button
+                onClick={() => {
+                  changeFormContent("formAnuncio");
+                }}
+                name="btnMisAnuncios"
+                type="button"
+                className="btn btn-success w-100 mt-5"
+              >
+                {trans("misAnunciosForm.crearAnuncio")}
+              </button>
+            </div>
           </div>
         ) : (
           <List>
@@ -981,4 +1001,8 @@ const mapStateToProps = (state) => ({
   nowLang: state.app.nowLang,
 });
 
-export default connect(mapStateToProps)(MisAnuncios);
+const mapDispatchToProps = dispatch => ({
+  changeFormContent: (form) => dispatch(changeFormContent(form)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(MisAnuncios);

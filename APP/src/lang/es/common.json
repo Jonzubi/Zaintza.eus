@@ -332,7 +332,8 @@
       "descripcionNoVacio": "Introduzca la descripcion del anuncio",
       "precioNoVacio": "Introduzca el precio del anuncio",
       "ubicacionesNoVacio": "Introduzca al menos una ubicación",
-      "horarioNoVacio": "Introduzca el horario deseado para el cuidado"
+      "horarioNoVacio": "Introduzca el horario deseado para el cuidado",
+      "crearAnuncio": "Crear anuncio"
     },
     "cuidadorStatsForm": {
       "visitasConLogin": "Visitas con login",
