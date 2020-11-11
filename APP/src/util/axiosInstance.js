@@ -1,12 +1,15 @@
-import axios from 'axios';
-import key from './etc/letsencrypt/live/www.zaintza.eus/privkey.pem';
-import cert from './etc/letsencrypt/live/www.zaintza.eus/fullchain.pem';
+import axios from "axios";
+console.log("PROCESS", process.env);
+let instance;
 
-const instance = axios.create({
-  key: key,
-  cert: cert,
-  passphrase: 'jonzaintza'
-});
+if (process.env.NODE_ENV !== "development") {
+  instance = axios.create({
+    key: "/etc/letsencrypt/live/www.zaintza.eus/privkey.pem",
+    cert: "/etc/letsencrypt/live/www.zaintza.eus/fullchain.pem",
+    passphrase: "jonzaintza",
+  });
+} else {
+  instance =axios.create();
+}
 
 export default instance;
-
