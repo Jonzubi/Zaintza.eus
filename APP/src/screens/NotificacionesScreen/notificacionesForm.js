@@ -400,7 +400,7 @@ class NotificacionesForm extends React.Component {
                   }}
                 >
                   <img src={NoNotification} height={150} />
-                  <h3 className="mt-5">{trans("notificacionesForm.noData")}</h3>
+                  <h3 className="mt-5 text-center">{trans("notificacionesForm.noData")}</h3>
                 </div>
                 
               </div>

@@ -34,6 +34,7 @@ import {
 import { Visibility, Delete } from "@material-ui/icons";
 import { colors } from "../../util/colors";
 import protocol from '../../util/protocol';
+import NoAcuerdo from '../../util/images/noAcuerdo.svg';
 
 const mapStateToProps = (state) => {
   return {
@@ -401,9 +402,15 @@ class AcuerdosForm extends React.Component {
                 }}
                 className="d-flex align-items-center justify-content-center"
               >
-                <small className="text-danger">
-                  {trans("acuerdosForm.noData")}
-                </small>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}
+                >
+                  <img src={NoAcuerdo} height={150} />
+                  <h3 className="mt-5 text-center">{trans("acuerdosForm.noData")}</h3>
+                </div>               
               </div>
             )}
             {selectedAcuerdo !== null ? (
