@@ -39,6 +39,7 @@ import { Delete } from "@material-ui/icons";
 import { colors } from "../../util/colors";
 import i18next from 'i18next';
 import protocol from '../../util/protocol';
+import NoNotification from '../../util/images/noNotifications.svg'
 
 class NotificacionesForm extends React.Component {
   componentDidMount() {
@@ -392,9 +393,16 @@ class NotificacionesForm extends React.Component {
                 }}
                 className="d-flex align-items-center justify-content-center"
               >
-                <small className="text-danger">
-                  {trans("notificacionesForm.noData")}
-                </small>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}
+                >
+                  <img src={NoNotification} height={150} />
+                  <h3 className="mt-5">{trans("notificacionesForm.noData")}</h3>
+                </div>
+                
               </div>
             )}
             {selectedNotificacion ? (
