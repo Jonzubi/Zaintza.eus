@@ -40,5 +40,6 @@ El proyecto de SEIM para Aplicación Web de 2º
 - Ley de **RGPD** (Basquekide): **242.00€**
 - VPS de **OVH Cloud** (Octubre): **11.13€**
 - VPS de **OVH Cloud** (Noviembre): **11.13€**
+- VPS de **OVH Cloud** (Diciembre): **11.13€**
 
-**TOTAL**: **961.81€**
+**TOTAL**: **972.94€**
