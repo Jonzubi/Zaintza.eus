@@ -442,8 +442,8 @@
         "txtInfoAdicional": "Datuen Babesari buruzko informazio osagarria eta zehatza gure egoitzan kontsulta dezakezu."
     },
     "modalRegistrarse": {
-        "titulo": "Izen ematea",
-        "content": "Nola nahiko zenuke izena eman, guraso gisa ala zaintzaile gisa?",
+        "titulo": "IZENA EMAN NAHI?",
+        "content": "Nola nahiko zenuke izena eman, bezero gisa ala zaintzaile gisa?",
         "comoCliente": "Bezero gisa",
         "comoCuidador": "Zaintzaile gisa"
     },

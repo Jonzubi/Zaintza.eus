@@ -37,6 +37,7 @@ import { trans } from './util/funciones';
 import { saveUserSession } from "./redux/actions/user";
 import { changeLang } from "./redux/actions/app";
 import { SetMaxDistance } from "./redux/actions/coords";
+import { toogleModal } from "./redux/actions/modalRegistrarse";
 
 class App extends React.Component {
 
@@ -64,7 +65,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const { setCoords } = this.props;
+    const { setCoords, toogleModal } = this.props;
     navigator.geolocation.getCurrentPosition((position) => {
       setCoords({
         latitud: position.coords.latitude,
@@ -77,6 +78,10 @@ class App extends React.Component {
     const mantenerSesionData = window.localStorage.getItem("mantenerSesion")
     if (mantenerSesionData !== null) {
       this.mantenerSesionLogin(JSON.parse(mantenerSesionData));
+    } else {
+      setTimeout(() => {
+        toogleModal(true);
+      }, 3000);
     }
   }
 
@@ -214,6 +219,7 @@ const mapDispatchToProps = dispatch => ({
   saveUserSession: (user) => dispatch(saveUserSession(user)),
   changeLang: (payload) => dispatch(changeLang(payload)),
   setMaxDistance: (payload) => dispatch(SetMaxDistance(payload)),
+  toogleModal: (payload) => dispatch(toogleModal(payload)) 
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
