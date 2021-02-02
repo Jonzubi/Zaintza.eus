@@ -41,5 +41,7 @@ El proyecto de SEIM para Aplicación Web de 2º
 - VPS de **OVH Cloud** (Octubre): **11.13€**
 - VPS de **OVH Cloud** (Noviembre): **11.13€**
 - VPS de **OVH Cloud** (Diciembre): **11.13€**
+- VPS de **OVH Cloud** (Enero): **11.13€**
+- VPS de **OVH Cloud** (Febrero): **11.13€**
 
-**TOTAL**: **972.94€**
+**TOTAL**: **995.20€**
