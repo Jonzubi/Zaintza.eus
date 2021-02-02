@@ -244,7 +244,7 @@ exports.getAnunciosConPerfil = async (req, res, modelos) => {
     .find(objFiltros, strColumnas, objOptions)
     .populate("idCliente");
   
-  const ifMaxDistance = maxDistance || 30;
+  const ifMaxDistance = maxDistance || 150;
   const resultadoConCoords = [];
   let resultadoSinCoords = [];
 
@@ -1759,7 +1759,7 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
     });
   }
 
-  const ifMaxDistance = maxDistance || 30;
+  const ifMaxDistance = maxDistance || 150;
   const resultadoConCoords = [];
 
   if (coords) {
