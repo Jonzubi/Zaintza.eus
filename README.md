@@ -1,6 +1,13 @@
 # ZAINTZA.EUS
 El proyecto de SEIM para Aplicación Web de 2º
 
+**Instrucciones para renovar Certbot**
+
+
+- `pm2 stop serveApp`
+- `certbot renew`
+- `pm2 restart serveApp`
+
 **Herramientas necesarias para descargar y ejecutar el proyecto:**
 
 - Npm
