@@ -36,7 +36,10 @@ if (process.env.NODE_ENV.includes("production")) {
   launchedServerType = 'HTTP';
 }
 
-const io = socketIO(launchedServer);
+const io = socketIO(launchedServer, {
+  origin: "https://www.zaintza.eus",
+  credentials: true
+});
 
 io.on("connection", (socket) => {
   let deviceData = JSON.parse(socket.handshake.query.deviceData);
