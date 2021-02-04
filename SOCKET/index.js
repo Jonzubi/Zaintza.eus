@@ -1,7 +1,7 @@
 const app = require("express")();
 const cors = require("cors");
 // Configuracion del CORS
-app.use(cors({ origin: 'https://www.zaintza.eus'));
+app.use(cors({ origin: 'https://www.zaintza.eus' }));
 const fs = require("fs");
 const https = require("https");
 const http = require("http").createServer(app);
