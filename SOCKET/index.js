@@ -1,6 +1,7 @@
 const app = require("express")();
 const cors = require("cors");
-app.use(cors());
+// Configuracion del CORS
+app.use(cors({ origin: true, credentials: true }));
 const fs = require("fs");
 const https = require("https");
 const http = require("http").createServer(app);
