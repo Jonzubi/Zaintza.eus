@@ -15,16 +15,8 @@ let usuariosConectados = [];
 let usuariosLogueados = [];
 
 const io = process.env.NODE_ENV.includes("production")
-  ? socketIO(https, {
-    cors: {
-      origin: "https://www.zaintza.eus",
-      methods: ["GET", "POST"],
-      credentials: true
-    }
-  })
-  : socketIO(http, {
-    cors: true
-  });
+  ? socketIO(https)
+  : socketIO(http);
 
 io.on("connection", (socket) => {
   let deviceData = JSON.parse(socket.handshake.query.deviceData);
