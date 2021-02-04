@@ -1,7 +1,7 @@
 const app = require("express")();
 const cors = require("cors");
 // Configuracion del CORS
-app.use(cors({ origin: 'https://www.zaintza.eus' }));
+app.use(cors());
 const fs = require("fs");
 const https = require("https");
 const http = require("http").createServer(app);
@@ -15,8 +15,16 @@ let usuariosConectados = [];
 let usuariosLogueados = [];
 
 const io = process.env.NODE_ENV.includes("production")
-  ? socketIO(https)
-  : socketIO(http);
+  ? socketIO(https, {
+    cors: {
+      origin: '*'
+    }
+  })
+  : socketIO(http, {
+    cors: {
+      origin: '*'
+    }
+  });
 
 io.on("connection", (socket) => {
   let deviceData = JSON.parse(socket.handshake.query.deviceData);
