@@ -1,7 +1,7 @@
 const app = require("express")();
 const cors = require("cors");
 // Configuracion del CORS
-app.use(cors());
+// app.use(cors());
 const fs = require("fs");
 const https = require("https");
 const http = require("http").createServer(app);
@@ -17,16 +17,12 @@ let usuariosLogueados = [];
 const io = process.env.NODE_ENV.includes("production")
   ? socketIO(https, {
     cors: {
-      origin: "https://www.zaintza.eus",
-      methods: ["GET", "POST"],
-      credentials: true
+      origin: '*'
     }
   })
   : socketIO(http, {
     cors: {
-      origin: "https://www.zaintza.eus",
-      methods: ["GET", "POST"],
-      credentials: true
+      origin: '*'
     }
   });
 
