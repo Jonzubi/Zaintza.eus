@@ -16,14 +16,10 @@ let usuariosLogueados = [];
 
 const io = process.env.NODE_ENV.includes("production")
   ? socketIO(https, {
-    cors: {
-      origin: '*'
-    }
+    cors: true
   })
   : socketIO(http, {
-    cors: {
-      origin: '*'
-    }
+    cors: true
   });
 
 io.on("connection", (socket) => {
