@@ -16,7 +16,10 @@ let usuariosLogueados = [];
 
 const io = process.env.NODE_ENV.includes("production")
   ? socketIO(https, {
-    cors: true
+      cors: {
+        origin: "https://www.zaintza.eus",
+        credentials: true
+      }
   })
   : socketIO(http, {
     cors: true
