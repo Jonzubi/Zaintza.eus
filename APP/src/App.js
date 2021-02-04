@@ -44,6 +44,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.socket = io(`${protocol}://${ipMaquina}:3002`, {
+      withCredentials: true,
       query: `deviceData=${JSON.stringify({
         isMobile,
         osName
