@@ -37,7 +37,7 @@ if (process.env.NODE_ENV.includes("production")) {
 }
 
 const io = socketIO(launchedServer, {
-  origin: "https://www.zaintza.eus",
+  origin: true,
   credentials: true
 });
 
