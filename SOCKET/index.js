@@ -1,7 +1,7 @@
 const app = require("express")();
 const cors = require("cors");
 // Configuracion del CORS
-app.use(cors({ origin: 'https://www.zaintza.eus' }));
+app.use(cors());
 const fs = require("fs");
 const https = require("https");
 const http = require("http").createServer(app);
@@ -36,9 +36,7 @@ if (process.env.NODE_ENV.includes("production")) {
   launchedServerType = 'HTTP';
 }
 
-const io = socketIO(launchedServer, {
-  origin: true
-});
+const io = socketIO(launchedServer);
 
 io.on("connection", (socket) => {
   let deviceData = JSON.parse(socket.handshake.query.deviceData);
