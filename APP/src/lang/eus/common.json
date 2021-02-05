@@ -158,6 +158,9 @@
         "registrarse": "Izena eman",
         "darGracias": "Eskerrik asko Zaintza.eus-en partez"
     },
+    "registerFormCommon": {
+        "emailEnviado": "Email bat bidali zaizu zure kontua egiaztatzeko"
+    },
     "perfilCliente": {
         "nombre": "Izena",
         "holderNombre": "Izena...",

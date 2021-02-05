@@ -152,6 +152,9 @@
       "registrarse": "Registrarse",
       "darGracias": "Gracias por parte de Zaintza.eus"
     },
+    "registerFormCommon": {
+      "emailEnviado": "Se te ha enviado un email para confirmar la cuenta"
+    },
     "perfilCliente": {
       "nombre": "Nombre",
       "holderNombre": "Nombre...",

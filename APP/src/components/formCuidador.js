@@ -679,6 +679,9 @@ class FormCuidador extends React.Component {
           </small>
         </div>
       );
+      cogoToast.info(
+        <h5>{trans('registerFormCommon.emailEnviado')}</h5>
+      )
     } else {
       let formData = {
         nombre: txtNombre,

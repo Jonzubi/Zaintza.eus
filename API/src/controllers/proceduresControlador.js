@@ -1748,7 +1748,11 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
   for (let index in cuidadores) {
     const usuario = await modeloUsuarios.findOne({
       idPerfil: cuidadores[index]._id,
+      validado: true
     });
+    // Usuario será null si el usuario no está validado, en ese caso no hay que devolver la informacion
+    if (usuario === null)
+      continue;
     const idUsuario = usuario._id;
     const valoraciones = await modeloValoraciones.find({
       idUsuario,

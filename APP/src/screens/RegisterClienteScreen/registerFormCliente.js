@@ -223,6 +223,10 @@ class RegisterFormCliente extends React.Component {
         </small>
       </div>
     );
+    cogoToast.info(
+      <h5>{trans('registerFormCommon.emailEnviado')}</h5>
+    )
+    
     this.props.changeFormContent("tabla");
   }
 
