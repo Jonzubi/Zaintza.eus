@@ -36,74 +36,78 @@ if (process.env.NODE_ENV.includes("production")) {
   launchedServerType = 'HTTP';
 }
 
-//const io = socketIO(launchedServer);
-//
-//io.on("connection", (socket) => {
-//  let deviceData = JSON.parse(socket.handshake.query.deviceData);
-//  registrarConexion(socket, deviceData, "IN");
-//
-//  usuariosConectados.push({
-//    socketId: socket.id,
-//  });
-//  printDataOnConsole();
-//
-//  socket.on("login", (loggedData) => {
-//    registrarLogin(socket.id, loggedData.idUsuario, "IN");
-//    usuariosLogueados.push(Object.assign({ socketId: socket.id }, loggedData));
-//    io.to(`${socket.id}`).emit("notifyReceived");
-//    printDataOnConsole();
-//  });
-//
-//  socket.on("logout", ({ idUsuario }) => {
-//    registrarLogin(socket.id, idUsuario, "OUT");
-//    usuariosLogueados = usuariosLogueados.filter(
-//      (item) => item.idUsuario !== idUsuario
-//    );
-//    printDataOnConsole();
-//  });
-//
-//  socket.on("notify", ({ idUsuario }) => {
-//    const usertToNotify = usuariosLogueados.filter(
-//      (item) => item.idUsuario === idUsuario.toString()
-//    )[0];
-//    if (usertToNotify !== undefined) {
-//      io.to(`${usertToNotify.socketId}`).emit("notifyReceived");
-//    } else {
-//      console.log(
-//        "[Evento Notify] Destinatario no encontrado\nIdUsuarioMandado:" +
-//          idUsuario
-//      );
-//    }
-//  });
-//
-//  socket.on("disconnect", () => {
-//    registrarConexion(socket, deviceData, "OUT");
-//    usuariosConectados = usuariosConectados.filter(
-//      (item) => item.socketId !== socket.id
-//    );
-//    usuariosLogueados = usuariosLogueados.filter(
-//      (item) => item.socketId !== socket.id
-//    );
-//    printDataOnConsole();
-//  });
-//
-//  socket.on("kickBanned", async ({ idPerfil, banDays }) => {
-//    writeError({ idPerfil, banDays });
-//    const modeloUsuario = modelos.usuario;
-//    const foundUser = await modeloUsuario.findOne({
-//      idPerfil,
-//    });
-//
-//    if (foundUser !== null) {
-//      const kickUser = usuariosLogueados.find(
-//        (ul) => ul.idUsuario === foundUser._id.toString()
-//      );
-//      if (kickUser !== undefined) {
-//        io.to(`${kickUser.socketId}`).emit("banned", banDays);
-//      }
-//    }
-//  });
-//});
+const io = socketIO(launchedServer, {
+  cors: {
+    origin: '*'
+  }
+});
+
+io.on("connection", (socket) => {
+  let deviceData = JSON.parse(socket.handshake.query.deviceData);
+  registrarConexion(socket, deviceData, "IN");
+
+  usuariosConectados.push({
+    socketId: socket.id,
+  });
+  printDataOnConsole();
+
+  socket.on("login", (loggedData) => {
+    registrarLogin(socket.id, loggedData.idUsuario, "IN");
+    usuariosLogueados.push(Object.assign({ socketId: socket.id }, loggedData));
+    io.to(`${socket.id}`).emit("notifyReceived");
+    printDataOnConsole();
+  });
+
+  socket.on("logout", ({ idUsuario }) => {
+    registrarLogin(socket.id, idUsuario, "OUT");
+    usuariosLogueados = usuariosLogueados.filter(
+      (item) => item.idUsuario !== idUsuario
+    );
+    printDataOnConsole();
+  });
+
+  socket.on("notify", ({ idUsuario }) => {
+    const usertToNotify = usuariosLogueados.filter(
+      (item) => item.idUsuario === idUsuario.toString()
+    )[0];
+    if (usertToNotify !== undefined) {
+      io.to(`${usertToNotify.socketId}`).emit("notifyReceived");
+    } else {
+      console.log(
+        "[Evento Notify] Destinatario no encontrado\nIdUsuarioMandado:" +
+          idUsuario
+      );
+    }
+  });
+
+  socket.on("disconnect", () => {
+    registrarConexion(socket, deviceData, "OUT");
+    usuariosConectados = usuariosConectados.filter(
+      (item) => item.socketId !== socket.id
+    );
+    usuariosLogueados = usuariosLogueados.filter(
+      (item) => item.socketId !== socket.id
+    );
+    printDataOnConsole();
+  });
+
+  socket.on("kickBanned", async ({ idPerfil, banDays }) => {
+    writeError({ idPerfil, banDays });
+    const modeloUsuario = modelos.usuario;
+    const foundUser = await modeloUsuario.findOne({
+      idPerfil,
+    });
+
+    if (foundUser !== null) {
+      const kickUser = usuariosLogueados.find(
+        (ul) => ul.idUsuario === foundUser._id.toString()
+      );
+      if (kickUser !== undefined) {
+        io.to(`${kickUser.socketId}`).emit("banned", banDays);
+      }
+    }
+  });
+});
 
 launchedServer.listen(port, () => {
   console.log(`[SOCKET - ${launchedServerType}] Escuchando el puerto: ${port}`);
