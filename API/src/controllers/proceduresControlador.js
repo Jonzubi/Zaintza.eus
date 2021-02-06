@@ -1750,7 +1750,7 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
     // Usuario filter es para el filtro del usuario. Si le paso todos desde ZaintzaAdmin me mostrará todos los cuidadores,
     // si no le paso solo los validados, ya que estará llamando desde Zaintza.eus
     let usuarioFilter;
-    if (todos === 1) {
+    if (parseInt(todos) === 1) {
       usuarioFilter = {
         idPerfil: cuidadores[index]._id
       }
