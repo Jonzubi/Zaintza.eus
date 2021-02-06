@@ -1746,20 +1746,20 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
   const modeloUsuarios = modelos.usuario;
   const modeloValoraciones = modelos.valoracion;
 
-  // Usuario filter es para el filtro del usuario. Si le paso aToken desde ZaintzaAdmin me mostrará todos los cuidadores,
-  // si no le paso solo los validados, ya que estará llamando desde Zaintza.eus
-  let usuarioFilter;
-  if (aToken === adminToken) {
-    usuarioFilter = {
-      idPerfil: cuidadores[index]._id
-    }
-  } else {
-    usuarioFilter = {
-      idPerfil: cuidadores[index]._id,
-      validado: true
-    }
-  }
   for (let index in cuidadores) {
+    // Usuario filter es para el filtro del usuario. Si le paso aToken desde ZaintzaAdmin me mostrará todos los cuidadores,
+    // si no le paso solo los validados, ya que estará llamando desde Zaintza.eus
+    let usuarioFilter;
+    if (aToken === adminToken) {
+      usuarioFilter = {
+        idPerfil: cuidadores[index]._id
+      }
+    } else {
+      usuarioFilter = {
+        idPerfil: cuidadores[index]._id,
+        validado: true
+      }
+    }
     const usuario = await modeloUsuarios.findOne(usuarioFilter);
     // Usuario será null si el usuario no está validado, en ese caso no hay que devolver la informacion
     if (usuario === null)
