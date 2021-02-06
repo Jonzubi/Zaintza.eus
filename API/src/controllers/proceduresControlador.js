@@ -1713,7 +1713,7 @@ exports.getCuidadorVisitas = async (req, res, modelos) => {
 };
 
 exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
-  const { requiredCards, filterUbicacion, filterCategoria, coords, maxDistance, aToken } = req.query;
+  const { requiredCards, filterUbicacion, filterCategoria, coords, maxDistance, todos } = req.query;
   const modeloCuidadores = modelos.cuidador;
   const resultado = [];
   let cuidadoresFilter = {
@@ -1747,10 +1747,10 @@ exports.getCuidadoresConValoraciones = async (req, res, modelos) => {
   const modeloValoraciones = modelos.valoracion;
 
   for (let index in cuidadores) {
-    // Usuario filter es para el filtro del usuario. Si le paso aToken desde ZaintzaAdmin me mostrará todos los cuidadores,
+    // Usuario filter es para el filtro del usuario. Si le paso todos desde ZaintzaAdmin me mostrará todos los cuidadores,
     // si no le paso solo los validados, ya que estará llamando desde Zaintza.eus
     let usuarioFilter;
-    if (aToken === adminToken) {
+    if (todos === 1) {
       usuarioFilter = {
         idPerfil: cuidadores[index]._id
       }
