@@ -58,6 +58,43 @@ exports.sendRegisterEmail = (req, res) => {
   }
 };
 
+exports.reSendRegisterEmail = async (req, res) => {
+  const { idPerfil, nombre, apellido1, apellido2 } = req.body;
+  const modeloUsuarios = modelos.usuario;
+  const foundUsuario = await modeloUsuarios.findOne({ idPerfil });
+  if (foundUsuario !== null)
+  {
+    readHTMLFile("verification", (err, html) => {
+      const template = handlebars.compile(html);
+      const htmlToSend = template({
+        nombre: nombre,
+        apellido: `${apellido1} ${apellido2}`,
+        validationToken: foundUsuario.validationToken,
+        ipMaquina,
+        protocol
+      });
+      const mailOptions = {
+        from: fromEmail,
+        to: foundUsuario.email,
+        subject: "[Zaintza.eus] Egiaztatu kontua",
+        html: htmlToSend
+      };
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+          res.writeHead(500, headerResponse);
+          res.end();
+        } else {
+          console.log("Email sent: " + info.response);
+          res.writeHead(200, headerResponse);
+          res.end();
+        }
+      });
+    });
+  }
+}
+
 exports.sendResetPasswordEmail = async (req, res) => {
   const { email } = req.body;
 
