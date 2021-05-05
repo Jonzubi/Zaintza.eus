@@ -4,9 +4,9 @@ El proyecto de SEIM para Aplicación Web de 2º
 **Instrucciones para renovar Certbot**
 
 
-- `pm2 stop serveApp`
+- `pm2 stop APP`
 - `certbot renew`
-- `pm2 restart serveApp`
+- `pm2 restart all`
 
 **Herramientas necesarias para descargar y ejecutar el proyecto:**
 
