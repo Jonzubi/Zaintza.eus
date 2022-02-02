@@ -12,7 +12,7 @@ const MyGoogleLogin = ({ onSuccess, onFailure }) => {
     
     return (
         <GoogleLogin
-        clientId=""
+        clientId="1028885794620-71epbcb0u0k7fe6ia2h2ojmb0ebm8rd8.apps.googleusercontent.com"
         buttonText="Login / Registrarse"
         onSuccess={onSuccess}
         onFailure={onFailure}
