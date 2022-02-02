@@ -19,6 +19,7 @@ import { EmailRounded, Lock } from '@material-ui/icons';
 import { colors } from '../util/colors';
 import protocol from '../util/protocol';
 import ResetPasswordModal from '../components/resetPasswordModal';
+import MyGoogleLogin from "./MyGoogleLogin";
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -272,7 +273,8 @@ class LogInForm extends React.Component {
                   cursor: 'pointer'
                 }}>{trans('loginForm.forgetPassword')}</span>
               {showResetPasswordModal ? <ResetPasswordModal closeModal={() => this.setState({ showResetPasswordModal: false })} /> : null}
-
+              <span className="mt-4" />
+              <MyGoogleLogin />
             </div>
           );
         }}
