@@ -25,7 +25,8 @@
         "registrarse": "Izena eman",
         "validarEmail": "Emaila egiaztatu behar duzu, joan zure emailera",
         "mantenerSesion": "Saioa mantendu",
-        "forgetPassword": "Pasahitza ahaztu zaizu?"
+        "forgetPassword": "Pasahitza ahaztu zaizu?",
+        "googleLogin": "Google bidez sartu"
     },
     "notificaciones": {
         "sesionIniciada": "Saioa behar bezala hasi da",

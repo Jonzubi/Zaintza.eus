@@ -24,7 +24,8 @@
       "registrarse": "Registrarse",
       "validarEmail": "Tienes que validar el email",
       "mantenerSesion": "Mantener sesión",
-      "forgetPassword": "Olvidaste la contraseña?"
+      "forgetPassword": "Olvidaste la contraseña?",
+      "googleLogin": "Entrar con Google"
     },
     "notificaciones": {
       "sesionIniciada": "Sesión iniciada con éxito",
