@@ -61,5 +61,6 @@ El proyecto de SEIM para Aplicación Web de 2º
 - VPS de **OVH Cloud** (Diciembre): **11.13€**
 - VPS de **OVH Cloud** (Enero): **11.13€**
 - VPS de **OVH Cloud** (Febrero): **11.13€**
+- Renovación del dominio **Zaintza.eus**: **29.03€**
 
-**TOTAL**: **1.117,63€**
+**TOTAL**: **1.146,66€**
