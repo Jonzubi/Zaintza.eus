@@ -251,7 +251,7 @@ class LogInForm extends React.Component {
                     <div className="col-2"></div>
                     <button
                       onClick={() => {
-                        this.props.toogleModal(true);
+                        this.props.changeFormContent("registroUsuario");
                         this.props.toogleMenuPerfil(false);
                       }}
                       name="btnRegistrar"

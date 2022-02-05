@@ -18,6 +18,7 @@
       "insertEmail": "Inserta tu correo...",
       "insertContrasena": "Inserta tu contraseña...",
       "contrasena": "Contraseña",
+      "contrasenaRepetir": "Repetir contraseña",
       "holderContrasena": "Contraseña...",
       "recordarme": "Recordarme",
       "iniciarSesion": "Entrar",
@@ -25,7 +26,8 @@
       "validarEmail": "Tienes que validar el email",
       "mantenerSesion": "Mantener sesión",
       "forgetPassword": "Olvidaste la contraseña?",
-      "googleLogin": "Entrar con Google"
+      "googleLogin": "Entrar con Google",
+      "contrasenaNoCoincide": "Las contraseñas no coinciden"
     },
     "notificaciones": {
       "sesionIniciada": "Sesión iniciada con éxito",

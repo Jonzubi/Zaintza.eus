@@ -6,6 +6,7 @@ import SlideTab from "./components/slideTab";
 import { isMobile, osName } from 'react-device-detect';
 import RegisterFormCuidador from "./screens/RegisterCuidadorScreen/registerFormCuidador";
 import RegisterFormCliente from "./screens/RegisterClienteScreen/registerFormCliente";
+import RegisterFormUsuario from "./screens/RegisterUsuarioScreen/registerFormUsuario";
 import PerfilCuidador from "./screens/PerfilCuidadorScreen/perfilCuidador";
 import PerfilCliente from "./screens/PerfilClienteScreen/perfilCliente";
 import ModalRegistrarse from "./components/modalRegistrarse";
@@ -151,6 +152,8 @@ class App extends React.Component {
         return <RegisterFormCuidador />;
       case "registrarCliente":
         return <RegisterFormCliente />;
+      case "registroUsuario":
+        return <RegisterFormUsuario />;
       case "perfilCuidador":
         return <PerfilCuidador />;
       case "perfilCliente":

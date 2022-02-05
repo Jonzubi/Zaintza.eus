@@ -19,6 +19,7 @@
         "insertEmail": "Sartu zure emaila...",
         "insertContrasena": "Sartu zure pasahitza...",
         "contrasena": "Pasahitza",
+        "contrasenaRepetir": "Errepikatu pasahitza",
         "holderContrasena": "Pasahitza...",
         "recordarme": "Gogorarazi",
         "iniciarSesion": "Sartu",
@@ -26,7 +27,8 @@
         "validarEmail": "Emaila egiaztatu behar duzu, joan zure emailera",
         "mantenerSesion": "Saioa mantendu",
         "forgetPassword": "Pasahitza ahaztu zaizu?",
-        "googleLogin": "Google bidez sartu"
+        "googleLogin": "Google bidez sartu",
+        "contrasenaNoCoincide": "Pasahitzak ez dira berdinak"
     },
     "notificaciones": {
         "sesionIniciada": "Saioa behar bezala hasi da",
