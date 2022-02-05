@@ -17,8 +17,8 @@
     "handlebars": "^4.7.7",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.28",
-    "mongoose": "^5.8.6",
-    "nodemon": "^1.19.2",
+    "mongoose": "^6.2.0",
+    "nodemon": "^2.0.15",
     "socket.io": "^2.4.1"
   },
   "devDependencies": {
