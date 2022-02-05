@@ -4,6 +4,7 @@ import { InputAdornment, TextField } from '@material-ui/core';
 import { EmailRounded, Lock } from '@material-ui/icons';
 import { colors } from '../../util/colors';
 import { trans } from "../../util/funciones";
+import cogoToast from "cogo-toast";
 
 const RegisterFormUsuario = () => {
     const [email, setEmail] = useState('');
@@ -19,7 +20,9 @@ const RegisterFormUsuario = () => {
     const handleRegister = () => {
         console.log({email, password, passwordConfirm});
         if (password !== passwordConfirm) {
-            alert('Las contraseñas no coinciden');
+            cogoToast.warn(
+                trans("loginForm.contrasenaNoCoincide")
+            );
             return;
         }
     }
