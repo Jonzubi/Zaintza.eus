@@ -103,7 +103,7 @@ const RegisterFormUsuario = () => {
     }
 
     return (
-        <div className="p-5 d-flex flex-column align-items-center justify-content-center" style={{
+        <div className="d-flex flex-column align-items-center justify-content-center" style={{
             minHeight: 'calc(100vh - 104px)'
         }}>
 
