@@ -11,6 +11,8 @@ import ipMaquina from "../../util/ipMaquinaAPI";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHandHoldingHeart, faHandshake } from "@fortawesome/free-solid-svg-icons";
+import { connect, useDispatch } from "react-redux";
+import { changeFormContent, changeLang } from "../../redux/actions/app";
 
 const RegisterFormUsuario = () => {
     const [email, setEmail] = useState('');
@@ -21,6 +23,7 @@ const RegisterFormUsuario = () => {
     const [errorEmail, setErrorEmail] = useState(false);
     const [errorPassword, setErrorPassword] = useState(false);
     const [errorEntidad, setErrorEntidad] = useState(false);
+    const dispatch = useDispatch();
 
     const ChooseEntity = ({ nombreEntidad, icono, onSelectEntidad, selectedOn, error }) => {
         return (
@@ -96,10 +99,9 @@ const RegisterFormUsuario = () => {
             return;
         }
 
-        cogoToast.success(
-            trans("registerFormClientes.registroCompletado")
-        );
+        cogoToast.info(<h5>{trans('registerFormCommon.emailEnviado')}</h5>);
         setIsLoading(false);
+        dispatch(changeFormContent('tabla'));
     }
 
     return (
