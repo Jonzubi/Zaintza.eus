@@ -457,7 +457,9 @@
       "send": "Enviar"
     },
     "registerFormUsuario": {
-      "queEres": "¿Qué eres?"
+      "queEres": "¿Qué eres?",
+      "soyCuidador": "Cuidador",
+      "soyCliente": "Cliente"
     }
   }
   

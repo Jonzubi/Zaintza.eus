@@ -464,6 +464,8 @@
         "send": "Bidali"
     },
     "registerFormUsuario": {
-        "queEres": "Zer zara?"
+        "queEres": "Zer zara?",
+        "soyCuidador": "Zaintzailea",
+        "soyCliente": "Bezeroa"
     }
 }

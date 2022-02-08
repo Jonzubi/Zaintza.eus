@@ -26,7 +26,7 @@ const RegisterFormUsuario = () => {
         return (
             <div onClick={onSelectEntidad} style={{ backgroundColor: entidad === selectedOn ? colors.green : colors.white, borderRadius: 7, cursor: 'pointer', border: error ? `1px solid ${colors.red}` : '' }} className="d-flex flex-column align-items-center p-3">
                 <FontAwesomeIcon size="2x" icon={icono} className="" style={{ color: entidad === selectedOn ? colors.white : colors.green }} />
-                <h5 style={{ color: entidad === selectedOn ? colors.white : colors.black }} className="mt-2">{nombreEntidad}</h5>
+                <h5 style={{ color: entidad === selectedOn ? colors.white : colors.black }} className="mt-2">{trans(nombreEntidad)}</h5>
             </div>);
     }
 
@@ -170,14 +170,14 @@ const RegisterFormUsuario = () => {
                     <div className="mt-4 w-100 d-flex flex-row justify-content-around">
                         <ChooseEntity
                             onSelectEntidad={() => setEntidad('Cuidador')}
-                            nombreEntidad={"Zaintzailea"}
+                            nombreEntidad={"registerFormUsuario.soyCuidador"}
                             icono={faHandHoldingHeart}
                             selectedOn={"Cuidador"}
                             error={errorEntidad}
                         />
                         <ChooseEntity
                             onSelectEntidad={() => setEntidad('Cliente')}
-                            nombreEntidad={"Bezeroa"}
+                            nombreEntidad={"registerFormUsuario.soyCliente"}
                             icono={faHandshake}
                             selectedOn={"Cliente"}
                             error={errorEntidad}
