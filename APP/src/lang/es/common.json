@@ -350,7 +350,11 @@
       "invalidEmail": "El email introducido no es correcto",
       "tooBigImage": "La imagen introducida es demasiado grande (10MB max.)",
       "tooBig": "es demasiado grande",
-      "wrongFormat": "no tiene el formato correcto"
+      "wrongFormat": "no tiene el formato correcto",
+      "errorGeneral": "Ha ocurrido un error, inténtelo de nuevo más tarde",
+      "contrasenaNoCoincide": "Las contraseñas no coinciden",
+      "emailExiste": "El email introducido ya existe",
+      "contrasenaMinima": "La contraseña debe contener al menos 6 caracteres"
     },
     "customImageUploader": {
       "maxMegaBytes": "Máximo: 10MB",
@@ -451,6 +455,9 @@
       "email": "Introduce tu email",
       "cancel": "Cancelar",
       "send": "Enviar"
+    },
+    "registerFormUsuario": {
+      "queEres": "¿Qué eres?"
     }
   }
   

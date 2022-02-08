@@ -1,33 +1,34 @@
+const { getRandomString } = require("../../util/funciones");
+
 module.exports = conexion => {
   const Schema = conexion.Schema;
 
   var usuario = new Schema({
     email: {
       type: String,
-      required: true,
-      unique: true
+      unique: true,
+      required: true
     },
     contrasena: {
       type: String,
-      required: true
     },
     tipoUsuario: {
       type: String,
-      required: true,
-      enum: ['Cliente', 'Cuidador']
+      enum: ['Cliente', 'Cuidador'],
+      required: true
     },
     idPerfil: {
       type: String,
-      required: true,
-      refPath: 'tipoUsuario'
+      refPath: 'tipoUsuario',
+      required: true
     },
     validado: {
       type: Boolean,
-      required: true
+      default: false
     },
     validationToken: {
       type: String,
-      required: true
+      default: getRandomString(30)
     },
     bannedUntilDate: {
       type: Date,

@@ -358,7 +358,11 @@
         "invalidEmail": "Sartutako emaila ez da zuzena",
         "tooBigImage": "Sartutako irudia handiegia da (10MB Max.)",
         "tooBig": "handiegia da",
-        "wrongFormat": "ez du formatu zuzena"
+        "wrongFormat": "ez du formatu zuzena",
+        "errorGeneral": "Errore bat gertatu da, saiatu berriro geroago",
+        "contrasenaNoCoincide": "Pasahitzak ez dira berdinak",
+        "emailExiste": "Sartutako emaila existitzen da",
+        "contrasenaMinima": "Pasahitzak gutxienez 6 karaktere izan behar ditu"
     },
     "customImageUploader": {
         "maxMegaBytes": "Gehienez: 10MB",
@@ -458,5 +462,8 @@
         "email": "Sartu zure emaila",
         "cancel": "Ezeztatu",
         "send": "Bidali"
+    },
+    "registerFormUsuario": {
+        "queEres": "Zer zara?"
     }
 }
