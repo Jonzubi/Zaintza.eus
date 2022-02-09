@@ -14,17 +14,11 @@ const MyGoogleLogin = () => {
         dispatch(changeFormContent("tabla"));
         dispatch(toogleMenuPerfil(false));
     };
-
-    const onFailureGoogle = () => {
-        cogoToast.error(<h5>{trans('commonErrors.googleError')}</h5>);
-    };
     
     return (
         <GoogleLogin
             clientId="1028885794620-71epbcb0u0k7fe6ia2h2ojmb0ebm8rd8.apps.googleusercontent.com"
             onSuccess={onSuccessGoogle}
-            onFailure={onFailureGoogle}
-            cookiePolicy={"single_host_origin"}
             render={renderProps => (<GoogleButton onClick={renderProps.onClick} label={trans('loginForm.googleLogin')} />)}
         />
     );
