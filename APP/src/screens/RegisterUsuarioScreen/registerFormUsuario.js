@@ -9,11 +9,11 @@ import Axios from "axios";
 import protocol from "../../util/protocol";
 import ipMaquina from "../../util/ipMaquinaAPI";
 import ClipLoader from "react-spinners/ClipLoader";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHandHoldingHeart, faHandshake } from "@fortawesome/free-solid-svg-icons";
-import { connect, useDispatch, useSelector } from "react-redux";
-import { changeFormContent, changeLang } from "../../redux/actions/app";
+import { useDispatch, useSelector } from "react-redux";
+import { changeFormContent } from "../../redux/actions/app";
 import MyGoogleLogin from "../../components/MyGoogleLogin";
+import ChooseEntity from "../../components/ChooseEntity";
 
 const RegisterFormUsuario = () => {
     const [email, setEmail] = useState('');
@@ -28,13 +28,7 @@ const RegisterFormUsuario = () => {
     const dispatch = useDispatch();
     const nowLang = useSelector((state) => state.app.nowLang);
 
-    const ChooseEntity = ({ nombreEntidad, icono, onSelectEntidad, selectedOn, error }) => {
-        return (
-            <div onClick={onSelectEntidad} style={{ backgroundColor: entidad === selectedOn ? colors.green : colors.white, borderRadius: 7, cursor: 'pointer', border: error ? `1px solid ${colors.red}` : '' }} className="d-flex flex-column align-items-center p-3">
-                <FontAwesomeIcon size="2x" icon={icono} className="" style={{ color: entidad === selectedOn ? colors.white : colors.green }} />
-                <h5 style={{ color: entidad === selectedOn ? colors.white : colors.black }} className="mt-2">{trans(nombreEntidad)}</h5>
-            </div>);
-    }
+    
 
     const TerminosDeUso = () => (
         <div className="mt-4 d-flex flex-row align-items-center">
@@ -221,13 +215,15 @@ const RegisterFormUsuario = () => {
                     <h4>{trans('registerFormUsuario.queEres')}</h4>
                     <div className="mt-4 w-100 d-flex flex-row justify-content-around">
                         <ChooseEntity
-                            onSelectEntidad={() => setEntidad('Cuidador')}
+                            entidad={entidad}
+                            onSelectEntidad={() => {console.log("HH"); setEntidad('Cuidador')}}
                             nombreEntidad={"registerFormUsuario.soyCuidador"}
                             icono={faHandHoldingHeart}
                             selectedOn={"Cuidador"}
                             error={errorEntidad}
                         />
                         <ChooseEntity
+                            entidad={entidad}
                             onSelectEntidad={() => setEntidad('Cliente')}
                             nombreEntidad={"registerFormUsuario.soyCliente"}
                             icono={faHandshake}
