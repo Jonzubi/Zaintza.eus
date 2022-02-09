@@ -11,7 +11,7 @@ import ipMaquina from "../../util/ipMaquinaAPI";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHandHoldingHeart, faHandshake } from "@fortawesome/free-solid-svg-icons";
-import { connect, useDispatch } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { changeFormContent, changeLang } from "../../redux/actions/app";
 
 const RegisterFormUsuario = () => {
@@ -25,6 +25,7 @@ const RegisterFormUsuario = () => {
     const [errorEntidad, setErrorEntidad] = useState(false);
     const [terminosAceptados, setTerminosAceptados] = useState(false);
     const dispatch = useDispatch();
+    const nowLang = useSelector((state) => state.app.nowLang);
 
     const ChooseEntity = ({ nombreEntidad, icono, onSelectEntidad, selectedOn, error }) => {
         return (
@@ -33,6 +34,52 @@ const RegisterFormUsuario = () => {
                 <h5 style={{ color: entidad === selectedOn ? colors.white : colors.black }} className="mt-2">{trans(nombreEntidad)}</h5>
             </div>);
     }
+
+    const TerminosDeUso = () => (
+        <div className="mt-3 d-flex flex-row align-items-center">
+            <input
+                type="checkbox"
+                style={{ cursor: 'pointer' }}
+                className="mr-1 pointer"
+                checked={terminosAceptados}
+                onClick={() => setTerminosAceptados(!terminosAceptados)}
+                id="isPublic"
+            />
+            <>
+                {nowLang !== 'es' ?
+                    <>
+                        <span
+                            onClick={() => dispatch(changeFormContent("avisoLegal"))}
+                            style={{
+                                color: "blue",
+                                textDecoration: "underline",
+                                cursor: "pointer",
+                            }}
+                            className="mr-1"
+                        >
+                            {trans("tablaCuidadores.linkHeLeidoTerminos")}
+                        </span>
+                        <span>{trans("tablaCuidadores.heLeidoTerminos")}</span>
+                    </>
+                    :
+                    <>
+                        <span>{trans("tablaCuidadores.heLeidoTerminos")}</span>
+                        <span
+                            onClick={() => dispatch(changeFormContent("avisoLegal"))}
+                            style={{
+                                color: "blue",
+                                textDecoration: "underline",
+                                cursor: "pointer",
+                            }}
+                            className="ml-1"
+                        >
+                            {trans("tablaCuidadores.linkHeLeidoTerminos")}
+                        </span>
+                    </>
+                }
+            </>
+        </div>
+    );
 
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
@@ -187,30 +234,7 @@ const RegisterFormUsuario = () => {
                         />
                     </div>
                 </div>
-                <div className="mt-3 d-flex flex-row align-items-center">
-                    <input
-                        type="checkbox"
-                        style={{ cursor: 'pointer' }}
-                        className="mr-1 pointer"
-                        checked={terminosAceptados}
-                        onClick={() => setTerminosAceptados(!terminosAceptados)}
-                        id="isPublic"
-                    />
-                    <>
-                        <span
-                            onClick={() => dispatch(changeFormContent("avisoLegal"))}
-                            style={{
-                                color: "blue",
-                                textDecoration: "underline",
-                                cursor: "pointer",
-                            }}
-                            className="mr-1"
-                        >
-                            {trans("tablaCuidadores.linkHeLeidoTerminos")}
-                        </span>
-                        <span>{trans("tablaCuidadores.heLeidoTerminos")}</span>
-                    </>
-                </div>
+                <TerminosDeUso />
                 {!isLoading ?
                     <button
                         disabled={!terminosAceptados}
