@@ -161,8 +161,9 @@ const RegisterFormUsuario = () => {
             <div
                 className="d-flex flex-column mt-5 p-5"
                 style={{ boxShadow: '0 .5rem 1rem rgba(0,0,0,.15)' }}>
-
-                <img className="mb-5" width={256} height={125} src={Logo} alt="logo" />
+                <div className="d-flex justify-content-center">
+                    <img className="mb-5" width={256} height={125} src={Logo} alt="logo" />
+                </div>
                 <TextField
                     onKeyDown={handleKeyDown}
                     onChange={(e) => setEmail(e.target.value)}
