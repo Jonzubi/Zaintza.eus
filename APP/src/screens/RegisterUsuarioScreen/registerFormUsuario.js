@@ -23,6 +23,7 @@ const RegisterFormUsuario = () => {
     const [errorEmail, setErrorEmail] = useState(false);
     const [errorPassword, setErrorPassword] = useState(false);
     const [errorEntidad, setErrorEntidad] = useState(false);
+    const [terminosAceptados, setTerminosAceptados] = useState(false);
     const dispatch = useDispatch();
 
     const ChooseEntity = ({ nombreEntidad, icono, onSelectEntidad, selectedOn, error }) => {
@@ -44,7 +45,7 @@ const RegisterFormUsuario = () => {
         setErrorPassword(false);
         setErrorEntidad(false);
         setIsLoading(true);
-        
+
         if (!isValidEmail(email)) {
             setErrorEmail(true);
             setIsLoading(false);
@@ -58,13 +59,13 @@ const RegisterFormUsuario = () => {
             return;
         }
 
-        if (password !== passwordConfirm){
+        if (password !== passwordConfirm) {
             setErrorPassword(true);
             setIsLoading(false);
             return;
         }
 
-        if (entidad === ''){
+        if (entidad === '') {
             setErrorEntidad(true);
             setIsLoading(false);
             return;
@@ -186,9 +187,33 @@ const RegisterFormUsuario = () => {
                         />
                     </div>
                 </div>
-
+                <div className="mt-3 d-flex flex-row align-items-center">
+                    <input
+                        type="checkbox"
+                        style={{ cursor: 'pointer' }}
+                        className="mr-1 pointer"
+                        checked={terminosAceptados}
+                        onClick={() => setTerminosAceptados(!terminosAceptados)}
+                        id="isPublic"
+                    />
+                    <>
+                        <span
+                            onClick={() => dispatch(changeFormContent("avisoLegal"))}
+                            style={{
+                                color: "blue",
+                                textDecoration: "underline",
+                                cursor: "pointer",
+                            }}
+                            className="mr-1"
+                        >
+                            {trans("tablaCuidadores.linkHeLeidoTerminos")}
+                        </span>
+                        <span>{trans("tablaCuidadores.heLeidoTerminos")}</span>
+                    </>
+                </div>
                 {!isLoading ?
                     <button
+                        disabled={!terminosAceptados}
                         onClick={handleRegister}
                         name="btnRegistrar"
                         type="button"
