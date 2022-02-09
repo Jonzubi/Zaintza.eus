@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHandHoldingHeart, faHandshake } from "@fortawesome/free-solid-svg-icons";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { changeFormContent, changeLang } from "../../redux/actions/app";
+import MyGoogleLogin from "../../components/MyGoogleLogin";
 
 const RegisterFormUsuario = () => {
     const [email, setEmail] = useState('');
@@ -36,7 +37,7 @@ const RegisterFormUsuario = () => {
     }
 
     const TerminosDeUso = () => (
-        <div className="mt-3 d-flex flex-row align-items-center">
+        <div className="mt-4 d-flex flex-row align-items-center">
             <input
                 type="checkbox"
                 style={{ cursor: 'pointer' }}
@@ -235,17 +236,21 @@ const RegisterFormUsuario = () => {
                     </div>
                 </div>
                 <TerminosDeUso />
+                <span className="mt-4" />
+                <div className="d-flex justify-content-center">
+                    <MyGoogleLogin />
+                </div>
                 {!isLoading ?
                     <button
                         disabled={!terminosAceptados}
                         onClick={handleRegister}
                         name="btnRegistrar"
                         type="button"
-                        className="btn btn-success flex-fill mt-5"
+                        className="btn btn-success flex-fill mt-4"
                     >
                         {trans("loginForm.registrarse")}
                     </button>
-                    : <div className="text-center mt-5"><ClipLoader color="#28a745" />
+                    : <div className="text-center mt-4"><ClipLoader color="#28a745" />
                     </div>}
             </div>
         </div>
