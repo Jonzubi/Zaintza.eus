@@ -187,7 +187,7 @@ class LogInForm extends React.Component {
           this.socket = socket;
           return (
             <div
-              className="d-flex flex-column mt-5 p-5"
+              className="d-flex flex-column align-items-center mt-5 p-5"
               style={{ boxShadow: '0 .5rem 1rem rgba(0,0,0,.15)' }}>
               <TextField
                 onKeyDown={this.handleKeyDown}
