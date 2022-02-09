@@ -2262,11 +2262,16 @@ exports.postNewUsuario = async (req, res, modelos) => {
     idPerfil: insertedEntidad._id
   }).save();
 
+  const modeloAjustes = modelos.ajustes;
+  const insertedAjustes = await modeloAjustes({
+    idUsuario: insertedUsuario._id
+  }).save();
+
   res.writeHead(200, headerResponse);
   res.write(
     JSON.stringify({
       idUsuario: insertedUsuario._id,
-      idPerfil: insertedEntidad._id
+      idPerfil: insertedEntidad._id,
     })
   );
   res.end();
