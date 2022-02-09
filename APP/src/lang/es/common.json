@@ -354,7 +354,8 @@
       "errorGeneral": "Ha ocurrido un error, inténtelo de nuevo más tarde",
       "contrasenaNoCoincide": "Las contraseñas no coinciden",
       "emailExiste": "El email introducido ya existe",
-      "contrasenaMinima": "La contraseña debe contener al menos 6 caracteres"
+      "contrasenaMinima": "La contraseña debe contener al menos 6 caracteres",
+      "googleError": "Ha ocurrido un error al conectar con Google, inténtelo de nuevo más tarde"
     },
     "customImageUploader": {
       "maxMegaBytes": "Máximo: 10MB",

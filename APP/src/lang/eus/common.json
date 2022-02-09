@@ -362,7 +362,8 @@
         "errorGeneral": "Errore bat gertatu da, saiatu berriro geroago",
         "contrasenaNoCoincide": "Pasahitzak ez dira berdinak",
         "emailExiste": "Sartutako emaila existitzen da",
-        "contrasenaMinima": "Pasahitzak gutxienez 6 karaktere izan behar ditu"
+        "contrasenaMinima": "Pasahitzak gutxienez 6 karaktere izan behar ditu",
+        "googleError": "Errore bat gertatu da Google-eko autentifikazioan, saiatu berriro geroago"
     },
     "customImageUploader": {
         "maxMegaBytes": "Gehienez: 10MB",

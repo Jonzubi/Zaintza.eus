@@ -2,14 +2,21 @@ import React from "react";
 import { GoogleLogin } from "react-google-login";
 import { trans } from "../util/funciones";
 import GoogleButton from 'react-google-button'
+import { useDispatch } from 'react-redux';
+import { changeFormContent } from "../redux/actions/app";
+import { toogleMenuPerfil } from "../redux/actions/menuPerfil";
+import cogoToast from "cogo-toast";
 
 const MyGoogleLogin = () => {
+    const dispatch = useDispatch();
     const onSuccessGoogle = (response) => {
         console.log(response);
+        dispatch(changeFormContent("tabla"));
+        dispatch(toogleMenuPerfil(false));
     };
 
-    const onFailureGoogle = (response) => {
-        console.log(response);
+    const onFailureGoogle = () => {
+        cogoToast.error(<h5>{trans('commonErrors.googleError')}</h5>);
     };
     
     return (
