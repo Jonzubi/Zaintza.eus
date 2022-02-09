@@ -39,6 +39,7 @@ import { saveUserSession } from "./redux/actions/user";
 import { changeLang } from "./redux/actions/app";
 import { SetMaxDistance } from "./redux/actions/coords";
 import { toogleModal } from "./redux/actions/modalRegistrarse";
+import ModalElegirEntidad from "./components/modalElegirEntidad";
 
 class App extends React.Component {
 
@@ -201,6 +202,7 @@ class App extends React.Component {
               <AppContent />
             </div>            
             <ModalRegistrarse />
+            <ModalElegirEntidad />
             <Footer />
           </div>
         </div>

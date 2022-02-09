@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { changeFormContent } from "../../redux/actions/app";
 import MyGoogleLogin from "../../components/MyGoogleLogin";
 import ChooseEntity from "../../components/ChooseEntity";
+import TerminosDeUso from "../../components/TerminosDeUso";
 
 const RegisterFormUsuario = () => {
     const [email, setEmail] = useState('');
@@ -27,54 +28,6 @@ const RegisterFormUsuario = () => {
     const [terminosAceptados, setTerminosAceptados] = useState(false);
     const dispatch = useDispatch();
     const nowLang = useSelector((state) => state.app.nowLang);
-
-    
-
-    const TerminosDeUso = () => (
-        <div className="mt-4 d-flex flex-row align-items-center">
-            <input
-                type="checkbox"
-                style={{ cursor: 'pointer' }}
-                className="mr-1 pointer"
-                checked={terminosAceptados}
-                onClick={() => setTerminosAceptados(!terminosAceptados)}
-                id="isPublic"
-            />
-            <>
-                {nowLang !== 'es' ?
-                    <>
-                        <span
-                            onClick={() => dispatch(changeFormContent("avisoLegal"))}
-                            style={{
-                                color: "blue",
-                                textDecoration: "underline",
-                                cursor: "pointer",
-                            }}
-                            className="mr-1"
-                        >
-                            {trans("tablaCuidadores.linkHeLeidoTerminos")}
-                        </span>
-                        <span>{trans("tablaCuidadores.heLeidoTerminos")}</span>
-                    </>
-                    :
-                    <>
-                        <span>{trans("tablaCuidadores.heLeidoTerminos")}</span>
-                        <span
-                            onClick={() => dispatch(changeFormContent("avisoLegal"))}
-                            style={{
-                                color: "blue",
-                                textDecoration: "underline",
-                                cursor: "pointer",
-                            }}
-                            className="ml-1"
-                        >
-                            {trans("tablaCuidadores.linkHeLeidoTerminos")}
-                        </span>
-                    </>
-                }
-            </>
-        </div>
-    );
 
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
@@ -232,7 +185,10 @@ const RegisterFormUsuario = () => {
                         />
                     </div>
                 </div>
-                <TerminosDeUso />
+                <TerminosDeUso
+                    terminosAceptados={terminosAceptados}
+                    setTerminosAceptados={() => setTerminosAceptados(!terminosAceptados)}
+                />
                 <span className="mt-4" />
                 <div className="d-flex justify-content-center">
                     <MyGoogleLogin />
