@@ -461,6 +461,10 @@
       "queEres": "¿Qué eres?",
       "soyCuidador": "Cuidador",
       "soyCliente": "Cliente"
+    },
+    "modalEntidad": {
+      "titulo": "Bienvenido a Zaintza.eus!",
+      "content": "Registrarse como cuidador o como cliente?"
     }
   }
   

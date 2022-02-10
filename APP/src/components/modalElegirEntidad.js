@@ -1,13 +1,17 @@
 import React from "react";
-import { Slide, Dialog, DialogTitle } from "@material-ui/core";
+import { Slide, Dialog, DialogTitle, DialogContent } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
-import { toogleModal } from "../redux/actions/modalRegistrarse";
+import { toogleModal, toogleModalEntidad } from "../redux/actions/modalRegistrarse";
 import { trans } from '../util/funciones';
 import "./styles/modalRegistrarse.css";
 import { faHandHoldingHeart, faHandshake } from "@fortawesome/free-solid-svg-icons";
 import ChooseEntity from "./ChooseEntity";
 import ClipLoader from "react-spinners/ClipLoader";
 import TerminosDeUso from "./TerminosDeUso";
+import protocol from "../util/protocol";
+import ipMaquinaAPI from "../util/ipMaquinaAPI";
+import cogoToast from "cogo-toast";
+import axios from "../util/axiosInstance";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -20,9 +24,31 @@ const ModalElegirEntidad = () => {
   const [terminosAceptados, setTerminosAceptados] = React.useState(false);
   const dispatch = useDispatch();
   const showModal = useSelector(state => state.modalRegistrarse.showModalEntidad);
+  const email = useSelector(state => state.user.email);
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
+    setIsLoading(true);
+    if (entidad === "") {
+      setErrorEntidad(true);
+      setIsLoading(false);
+      return;
+    }
+    let errorInReq = false;
+    await axios.post(`${protocol}://${ipMaquinaAPI}:3001/api/procedures/postNewUsuarioWithGoogle`, {
+      email,
+      entidad
+    }).catch(err => {
+      errorInReq = true;
+    });
 
+    if (errorInReq) {
+      cogoToast.error(<h5>{trans('commonErrors.errorGeneral')}</h5>)
+      setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(false);
+    dispatch(toogleModalEntidad(false));
   };
 
   return (
@@ -30,28 +56,32 @@ const ModalElegirEntidad = () => {
       open={showModal}
       TransitionComponent={Transition}
       keepMounted
-      onClose={() => dispatch(toogleModal(false))}
+      onClose={() => dispatch(toogleModalEntidad(false))}
       aria-labelledby="alert-dialog-slide-title"
       aria-describedby="alert-dialog-slide-description"
     >
-      <DialogTitle>{trans('registerFormUsuario.queEres')}</DialogTitle>
-      <div className="mt-4 w-100 d-flex flex-row justify-content-around">
-        <ChooseEntity
-          entidad={entidad}
-          onSelectEntidad={() => setEntidad('Cuidador')}
-          nombreEntidad={"registerFormUsuario.soyCuidador"}
-          icono={faHandHoldingHeart}
-          selectedOn={"Cuidador"}
-          error={errorEntidad}
-        />
-        <ChooseEntity
-          entidad={entidad}
-          onSelectEntidad={() => setEntidad('Cliente')}
-          nombreEntidad={"registerFormUsuario.soyCliente"}
-          icono={faHandshake}
-          selectedOn={"Cliente"}
-          error={errorEntidad}
-        />
+      <DialogTitle>{trans('modalEntidad.titulo')}</DialogTitle>
+      <DialogContent>{trans('modalEntidad.content')}</DialogContent>
+      <div className="mt-4 w-100 d-flex flex-column align-items-center p-5">
+        <div className="w-100 d-flex flex-row justify-content-around">
+          <ChooseEntity
+            entidad={entidad}
+            onSelectEntidad={() => setEntidad('Cuidador')}
+            nombreEntidad={"registerFormUsuario.soyCuidador"}
+            icono={faHandHoldingHeart}
+            selectedOn={"Cuidador"}
+            error={errorEntidad}
+          />
+          <ChooseEntity
+            entidad={entidad}
+            onSelectEntidad={() => setEntidad('Cliente')}
+            nombreEntidad={"registerFormUsuario.soyCliente"}
+            icono={faHandshake}
+            selectedOn={"Cliente"}
+            error={errorEntidad}
+          />
+        </div>
+
         <TerminosDeUso
           terminosAceptados={terminosAceptados}
           setTerminosAceptados={() => setTerminosAceptados(!terminosAceptados)}

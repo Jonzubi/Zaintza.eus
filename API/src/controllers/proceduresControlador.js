@@ -2225,6 +2225,7 @@ exports.postNewUsuario = async (req, res, modelos) => {
 
   if (
     typeof email == "undefined" ||
+    typeof contrasena == "undefined" ||
     typeof entidad == "undefined"
   ) {
     res.writeHead(500, headerResponse);
@@ -2263,6 +2264,66 @@ exports.postNewUsuario = async (req, res, modelos) => {
   }).save();
 
   const modeloAjustes = modelos.ajustes;
+  const insertedAjustes = await modeloAjustes({
+    idUsuario: insertedUsuario._id
+  }).save();
+
+  res.writeHead(200, headerResponse);
+  res.write(
+    JSON.stringify({
+      idUsuario: insertedUsuario._id,
+      idPerfil: insertedEntidad._id,
+    })
+  );
+  res.end();
+};
+
+exports.postNewUsuarioWithGoogle = async (req, res, modelos) => {
+  const {
+    email,
+    entidad
+  } = req.body;
+
+  if (
+    typeof email == "undefined" ||
+    typeof entidad == "undefined"
+  ) {
+    res.writeHead(500, headerResponse);
+    res.write("Parametros incorrectos");
+    res.end();
+    return;
+  }
+
+  // Comprobamos que el email no existe
+  const modeloUsuario = modelos.usuario;
+  const emailEncontrado = await modeloUsuario.findOne({ email });
+
+  if (emailEncontrado !== null) {
+    res.writeHead(405, headerResponse);
+    res.write("Email existente");
+    res.end();
+    return;
+  }
+
+  if (entidad !== "Cuidador" && entidad !== "Cliente") {
+    res.writeHead(405, headerResponse);
+    res.write("Entidad incorrecta");
+    res.end();
+    return;
+  }
+
+  const modeloEntidad = entidad === "Cuidador" ? modelos.cuidador : modelos.cliente;
+  const insertedEntidad = await modeloEntidad({}).save();
+
+  const modeloUsuarios = modelos.usuario;
+  const insertedUsuario = await modeloUsuarios({
+    email: email,
+    tipoUsuario: entidad,
+    idPerfil: insertedEntidad._id,
+    validado: true
+  }).save();
+
+  const modeloAjustes = modelos.ajuste;
   const insertedAjustes = await modeloAjustes({
     idUsuario: insertedUsuario._id
   }).save();

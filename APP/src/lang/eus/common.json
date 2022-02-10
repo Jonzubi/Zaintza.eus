@@ -468,5 +468,9 @@
         "queEres": "Zer zara?",
         "soyCuidador": "Zaintzailea",
         "soyCliente": "Bezeroa"
+    },
+    "modalEntidad": {
+        "titulo": "Ongi etorri Zaintza.eus-era!",
+        "content": "Zaintzaile gisa edo bezero gisa erregistratu nahi duzu?"
     }
 }

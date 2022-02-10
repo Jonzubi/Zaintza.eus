@@ -22,6 +22,8 @@ module.exports = (app, modelos) => {
 
   app.route("/api/procedures/postNewUsuario").post((req, res) => proceduresControlador.postNewUsuario(req, res, modelos));
 
+  app.route("/api/procedures/postNewUsuarioWithGoogle").post((req, res) => proceduresControlador.postNewUsuarioWithGoogle(req, res, modelos));
+
   app.route("/api/procedures/postAnuncio").post((req, res) => proceduresControlador.postAnuncio(req, res, modelos));
 
   app.route("/api/procedures/postPropuestaAcuerdo").post((req, res) => proceduresControlador.postPropuestaAcuerdo(req, res, modelos));
