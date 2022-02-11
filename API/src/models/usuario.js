@@ -33,7 +33,11 @@ module.exports = conexion => {
     bannedUntilDate: {
       type: Date,
       default: Date.now()
-    }
+    },
+    registeredByGoogle: {
+      type: Boolean,
+      default: false
+    },
   });
 
   return conexion.model("Usuario", usuario, "Usuarios");

@@ -63,10 +63,10 @@ class LogInForm extends React.Component {
       },
       () => {
         axios
-          .get(
+          .post(
             `${protocol}://${ipMaquina}:3001/api/procedures/getUsuarioConPerfil`,
             {
-              params: objFiltros,
+              ...objFiltros
             }
           )
           .then((resultado) => {
@@ -274,7 +274,7 @@ class LogInForm extends React.Component {
                 }}>{trans('loginForm.forgetPassword')}</span>
               {showResetPasswordModal ? <ResetPasswordModal closeModal={() => this.setState({ showResetPasswordModal: false })} /> : null}
               <span className="mt-4" />
-              <MyGoogleLogin />
+              <MyGoogleLogin socket={socket} />
             </div>
           );
         }}

@@ -96,7 +96,7 @@ class App extends React.Component {
     }
 
     const { saveUserSession, changeLang, setMaxDistance } = this.props;
-    const login = await axios.get(`${protocol}://${ipMaquina}:3001/api/procedures/getUsuarioConPerfil`, { params: loginData })
+    const login = await axios.post(`${protocol}://${ipMaquina}:3001/api/procedures/getUsuarioConPerfil`, { ...loginData })
       .catch((err) => {
         if (err.response.status === 401) {
           const { bannedUntilDate } = err.response.data;

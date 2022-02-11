@@ -12,7 +12,7 @@ module.exports = (app, modelos) => {
 
   app.route("/api/procedures/getNotificacionesConUsuarios").post((req, res) => proceduresControlador.getNotificacionesConUsuarios(req, res, modelos));
 
-  app.route("/api/procedures/getUsuarioConPerfil").get((req, res) => proceduresControlador.getUsuarioConPerfil(req, res, modelos));
+  app.route("/api/procedures/getUsuarioConPerfil").post((req, res) => proceduresControlador.getUsuarioConPerfil(req, res, modelos));
 
   app.route("/api/procedures/getAnunciosConPerfil").get((req, res) => proceduresControlador.getAnunciosConPerfil(req, res, modelos));
 

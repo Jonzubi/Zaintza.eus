@@ -4,7 +4,8 @@ const {
   getTodayDate,
   caesarShift,
   readHTMLFile,
-  shuffleArray
+  shuffleArray,
+  verifyGoogleToken
 } = require("../../util/funciones");
 const headerResponse = require("../../util/headerResponse");
 const ipMaquina = require("../../util/ipMaquina");
@@ -158,9 +159,9 @@ exports.getNotificacionesConUsuarios = async (req, res, modelos) => {
 };
 
 exports.getUsuarioConPerfil = async (req, res, modelos) => {
-  const { email, contrasena } = req.query;
+  const { email, contrasena, tokenId } = req.body;
 
-  if (typeof email == "undefined" || typeof contrasena == "undefined") {
+  if (typeof email == "undefined") {
     res.writeHead(500, headerResponse);
     res.write("Parametros incorrectos");
     res.end();
@@ -171,10 +172,22 @@ exports.getUsuarioConPerfil = async (req, res, modelos) => {
   const modeloAjuste = modelos.ajuste;
   const filtros = {
     email: email,
-    contrasena: contrasena,
   };
 
   const usu = await modeloUsuario.findOne(filtros);
+  if (usu.registeredByGoogle)
+  {
+    // Verificar que el token sea correcto
+    const googleVerify = await verifyGoogleToken(tokenId).catch((err) => {
+      console.log(err);
+      res.writeHead(500, headerResponse);
+      res.write(JSON.stringify(err));
+      res.end();
+      return;
+    });
+  }
+  if (!usu.registeredByGoogle && usu.contrasena !== contrasena)
+    usu = null;
   if (usu !== null) {
     const ajus = await modeloAjuste.findOne({ idUsuario: usu._id });
     if (ajus !== null) {
@@ -2281,7 +2294,8 @@ exports.postNewUsuario = async (req, res, modelos) => {
 exports.postNewUsuarioWithGoogle = async (req, res, modelos) => {
   const {
     email,
-    entidad
+    entidad,
+    direcFoto
   } = req.body;
 
   if (
@@ -2313,14 +2327,17 @@ exports.postNewUsuarioWithGoogle = async (req, res, modelos) => {
   }
 
   const modeloEntidad = entidad === "Cuidador" ? modelos.cuidador : modelos.cliente;
-  const insertedEntidad = await modeloEntidad({}).save();
+  const insertedEntidad = await modeloEntidad({
+    direcFoto
+  }).save();
 
   const modeloUsuarios = modelos.usuario;
   const insertedUsuario = await modeloUsuarios({
     email: email,
     tipoUsuario: entidad,
     idPerfil: insertedEntidad._id,
-    validado: true
+    validado: true,
+    registeredByGoogle: true
   }).save();
 
   const modeloAjustes = modelos.ajuste;

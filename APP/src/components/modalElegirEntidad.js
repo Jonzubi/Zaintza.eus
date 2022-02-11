@@ -25,6 +25,7 @@ const ModalElegirEntidad = () => {
   const dispatch = useDispatch();
   const showModal = useSelector(state => state.modalRegistrarse.showModalEntidad);
   const email = useSelector(state => state.user.email);
+  const direcFoto = useSelector(state => state.user.direcFoto);
 
   const handleRegister = async () => {
     setIsLoading(true);
@@ -36,7 +37,8 @@ const ModalElegirEntidad = () => {
     let errorInReq = false;
     await axios.post(`${protocol}://${ipMaquinaAPI}:3001/api/procedures/postNewUsuarioWithGoogle`, {
       email,
-      entidad
+      entidad,
+      direcFoto,
     }).catch(err => {
       errorInReq = true;
     });
