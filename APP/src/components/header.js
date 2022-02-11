@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUserCircle,
@@ -35,7 +35,7 @@ const MapStateToProps = (state) => {
   };
 };
 
-class Header extends React.Component {
+class Header extends Component {
   getAvatar() {
     return this.props.direcFoto == "" ? (
       <FontAwesomeIcon
@@ -47,11 +47,18 @@ class Header extends React.Component {
     ) : (
       <Avatar
         name={this.props.nombre + " " + this.props.apellido1}
-        src={`${protocol}://${ipMaquina}:3001/api/image/${this.props.direcFoto}?isAvatar=true`}
+        src={`${this.getAvatarSrc()}`}
         onClick={() => this.props.toogleMenuPerfil(true)}
         style={{ cursor: "pointer"}}
       />
     );
+  }
+
+  getAvatarSrc = () => {
+    if (this.props.direcFoto.includes("https://"))
+      return this.props.direcFoto;
+    
+    return `${protocol}://${ipMaquina}:3001/api/image/${this.props.direcFoto}?isAvatar=true`;
   }
 
   handleBellClick = () => {
