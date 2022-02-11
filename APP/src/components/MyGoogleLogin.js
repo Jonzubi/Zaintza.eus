@@ -25,8 +25,19 @@ const MyGoogleLogin = () => {
             dispatch(toogleModalEntidad(true));
             dispatch(toogleModal(false));
             dispatch(toogleMenuPerfil(false));
-            dispatch(saveUserSession({ email }))
+            dispatch(saveUserSession({ email, direcFoto:  response.profileObj.imageUrl }));
+            return;
+        } else {
+            console.log(response);
         }
+
+        
+
+        // const usuario = axios.get(`${protocol}://${ipMaquina}:3001/api/procedures/getUsuarioConPerfil`,
+        //   {
+        //     params: objFiltros,
+        //   }
+        // )
     };
 
     return (
