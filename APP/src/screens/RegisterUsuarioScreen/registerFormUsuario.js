@@ -15,6 +15,7 @@ import { changeFormContent } from "../../redux/actions/app";
 import MyGoogleLogin from "../../components/MyGoogleLogin";
 import ChooseEntity from "../../components/ChooseEntity";
 import TerminosDeUso from "../../components/TerminosDeUso";
+import SocketContext from "../../socketio/socket-context";
 
 const RegisterFormUsuario = () => {
     const [email, setEmail] = useState('');
@@ -101,112 +102,119 @@ const RegisterFormUsuario = () => {
     }
 
     return (
-        <div className="d-flex flex-column align-items-center justify-content-center" style={{
-            minHeight: 'calc(100vh - 104px)'
-        }}>
+        <SocketContext.Consumer>
+            {
+                (socket) => (
+                    <div className="d-flex flex-column align-items-center justify-content-center" style={{
+                        minHeight: 'calc(100vh - 104px)'
+                    }}>
 
-            <div
-                className="d-flex flex-column mt-5 p-5"
-                style={{ boxShadow: '0 .5rem 1rem rgba(0,0,0,.15)' }}>
-                <div className="d-flex justify-content-center">
-                    <img className="mb-5" width={256} height={125} src={Logo} alt="logo" />
-                </div>
-                <TextField
-                    onKeyDown={handleKeyDown}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="mt-4"
-                    error={errorEmail}
-                    helperText={trans('commonErrors.invalidEmail')}
-                    id="txtEmail"
-                    aria-describedby="emailHelp"
-                    label={trans("loginForm.insertEmail")}
-                    value={email}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <EmailRounded style={{ fill: colors.green }} />
-                            </InputAdornment>
-                        )
-                    }}
-                />
-                <TextField
-                    onKeyDown={handleKeyDown}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="mt-4"
-                    type="password"
-                    error={errorPassword}
-                    helperText={trans('commonErrors.contrasenaNoCoincide')}
-                    id="txtContrasena"
-                    label={trans("loginForm.contrasena")}
-                    value={password}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <Lock style={{ fill: colors.green }} />
-                            </InputAdornment>
-                        )
-                    }}
-                />
-                <TextField
-                    onKeyDown={handleKeyDown}
-                    onChange={(e) => setPasswordConfirm(e.target.value)}
-                    className="mt-4"
-                    type="password"
-                    error={errorPassword}
-                    id="txtContrasenaConfirmar"
-                    label={trans("loginForm.contrasenaRepetir")}
-                    value={passwordConfirm}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <Lock style={{ fill: colors.green }} />
-                            </InputAdornment>
-                        )
-                    }}
-                />
-                <div className="mt-4 d-flex flex-column align-items-center">
-                    <h4>{trans('registerFormUsuario.queEres')}</h4>
-                    <div className="mt-4 w-100 d-flex flex-row justify-content-around">
-                        <ChooseEntity
-                            entidad={entidad}
-                            onSelectEntidad={() => {console.log("HH"); setEntidad('Cuidador')}}
-                            nombreEntidad={"registerFormUsuario.soyCuidador"}
-                            icono={faHandHoldingHeart}
-                            selectedOn={"Cuidador"}
-                            error={errorEntidad}
-                        />
-                        <ChooseEntity
-                            entidad={entidad}
-                            onSelectEntidad={() => setEntidad('Cliente')}
-                            nombreEntidad={"registerFormUsuario.soyCliente"}
-                            icono={faHandshake}
-                            selectedOn={"Cliente"}
-                            error={errorEntidad}
-                        />
+                        <div
+                            className="d-flex flex-column mt-5 p-5"
+                            style={{ boxShadow: '0 .5rem 1rem rgba(0,0,0,.15)' }}>
+                            <div className="d-flex justify-content-center">
+                                <img className="mb-5" width={256} height={125} src={Logo} alt="logo" />
+                            </div>
+                            <TextField
+                                onKeyDown={handleKeyDown}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="mt-4"
+                                error={errorEmail}
+                                helperText={trans('commonErrors.invalidEmail')}
+                                id="txtEmail"
+                                aria-describedby="emailHelp"
+                                label={trans("loginForm.insertEmail")}
+                                value={email}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <EmailRounded style={{ fill: colors.green }} />
+                                        </InputAdornment>
+                                    )
+                                }}
+                            />
+                            <TextField
+                                onKeyDown={handleKeyDown}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="mt-4"
+                                type="password"
+                                error={errorPassword}
+                                helperText={trans('commonErrors.contrasenaNoCoincide')}
+                                id="txtContrasena"
+                                label={trans("loginForm.contrasena")}
+                                value={password}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <Lock style={{ fill: colors.green }} />
+                                        </InputAdornment>
+                                    )
+                                }}
+                            />
+                            <TextField
+                                onKeyDown={handleKeyDown}
+                                onChange={(e) => setPasswordConfirm(e.target.value)}
+                                className="mt-4"
+                                type="password"
+                                error={errorPassword}
+                                id="txtContrasenaConfirmar"
+                                label={trans("loginForm.contrasenaRepetir")}
+                                value={passwordConfirm}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <Lock style={{ fill: colors.green }} />
+                                        </InputAdornment>
+                                    )
+                                }}
+                            />
+                            <div className="mt-4 d-flex flex-column align-items-center">
+                                <h4>{trans('registerFormUsuario.queEres')}</h4>
+                                <div className="mt-4 w-100 d-flex flex-row justify-content-around">
+                                    <ChooseEntity
+                                        entidad={entidad}
+                                        onSelectEntidad={() => { console.log("HH"); setEntidad('Cuidador') }}
+                                        nombreEntidad={"registerFormUsuario.soyCuidador"}
+                                        icono={faHandHoldingHeart}
+                                        selectedOn={"Cuidador"}
+                                        error={errorEntidad}
+                                    />
+                                    <ChooseEntity
+                                        entidad={entidad}
+                                        onSelectEntidad={() => setEntidad('Cliente')}
+                                        nombreEntidad={"registerFormUsuario.soyCliente"}
+                                        icono={faHandshake}
+                                        selectedOn={"Cliente"}
+                                        error={errorEntidad}
+                                    />
+                                </div>
+                            </div>
+                            <TerminosDeUso
+                                terminosAceptados={terminosAceptados}
+                                setTerminosAceptados={() => setTerminosAceptados(!terminosAceptados)}
+                            />
+                            <span className="mt-4" />
+                            <div className="d-flex justify-content-center">
+                                <MyGoogleLogin socket={socket} />
+                            </div>
+                            {!isLoading ?
+                                <button
+                                    disabled={!terminosAceptados}
+                                    onClick={handleRegister}
+                                    name="btnRegistrar"
+                                    type="button"
+                                    className="btn btn-success flex-fill mt-4"
+                                >
+                                    {trans("loginForm.registrarse")}
+                                </button>
+                                : <div className="text-center mt-4"><ClipLoader color="#28a745" />
+                                </div>}
+                        </div>
                     </div>
-                </div>
-                <TerminosDeUso
-                    terminosAceptados={terminosAceptados}
-                    setTerminosAceptados={() => setTerminosAceptados(!terminosAceptados)}
-                />
-                <span className="mt-4" />
-                <div className="d-flex justify-content-center">
-                    <MyGoogleLogin />
-                </div>
-                {!isLoading ?
-                    <button
-                        disabled={!terminosAceptados}
-                        onClick={handleRegister}
-                        name="btnRegistrar"
-                        type="button"
-                        className="btn btn-success flex-fill mt-4"
-                    >
-                        {trans("loginForm.registrarse")}
-                    </button>
-                    : <div className="text-center mt-4"><ClipLoader color="#28a745" />
-                    </div>}
-            </div>
-        </div>
+                )
+
+            }
+        </SocketContext.Consumer>
     );
 };
 
