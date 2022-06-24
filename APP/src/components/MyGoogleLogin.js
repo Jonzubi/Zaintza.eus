@@ -26,7 +26,7 @@ const MyGoogleLogin = ({ socket }) => {
         if (emailExistente.data !== "True") {
             // El email no existe, se debe crear el usuario
             dispatch(toogleModalEntidad(true));
-            dispatch(saveUserSession({ email, direcFoto: response.profileObj.imageUrl }));
+            dispatch(saveUserSession({ email, direcFoto: response.profileObj.imageUrl, tokenId: response.tokenId }));
         } else {
             const tokenId = response.tokenId;
             const resultado = await axios.post(`${protocol}://${ipMaquinaAPI}:3001/api/procedures/getUsuarioConPerfil`,
