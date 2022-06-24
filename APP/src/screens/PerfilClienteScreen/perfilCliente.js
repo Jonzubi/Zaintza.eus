@@ -187,6 +187,13 @@ class PerfilCliente extends React.Component {
     });
   };
 
+  getAvatarSrc = () => {
+    if (this.props.direcFoto.includes("https://"))
+      return this.props.direcFoto;
+    
+    return `${protocol}://${ipMaquina}:3001/api/image/${this.props.direcFoto}?isAvatar=true`;
+  }
+
   render() {
     return (
       <div className="p-5 d-flex flex-column">
@@ -196,7 +203,7 @@ class PerfilCliente extends React.Component {
               alt="Avatar perfil"
               height={200}
               width={200}
-              src={`${protocol}://${ipMaquina}:3001/api/image/${this.props.direcFoto}`}
+              src={this.getAvatarSrc()}
             />
           ) : (
             <ContactImageUploader
