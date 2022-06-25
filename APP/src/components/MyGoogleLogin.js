@@ -46,6 +46,7 @@ const MyGoogleLogin = ({ socket }) => {
                 _id: idPerfil,
                 _idUsuario: idUsuario,
                 email: usuario.email,
+                contrasena: usuario.contrasena,
                 tipoUsuario: usuario.tipoUsuario,
                 contrasena: usuario.contrasena,
                 idLangPred: resultado.data.idLangPred || "",

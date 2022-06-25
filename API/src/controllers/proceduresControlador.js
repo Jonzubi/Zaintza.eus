@@ -2334,6 +2334,7 @@ exports.postNewUsuarioWithGoogle = async (req, res, modelos) => {
   const modeloUsuarios = modelos.usuario;
   const insertedUsuario = await modeloUsuarios({
     email: email,
+    contrasena: getRandomString(15),
     tipoUsuario: entidad,
     idPerfil: insertedEntidad._id,
     validado: true,
