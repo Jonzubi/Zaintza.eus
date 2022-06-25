@@ -6,6 +6,7 @@ import SlideTab from "./components/slideTab";
 import { isMobile, osName } from 'react-device-detect';
 import RegisterFormCuidador from "./screens/RegisterCuidadorScreen/registerFormCuidador";
 import RegisterFormCliente from "./screens/RegisterClienteScreen/registerFormCliente";
+import RegisterFormUsuario from "./screens/RegisterUsuarioScreen/registerFormUsuario";
 import PerfilCuidador from "./screens/PerfilCuidadorScreen/perfilCuidador";
 import PerfilCliente from "./screens/PerfilClienteScreen/perfilCliente";
 import ModalRegistrarse from "./components/modalRegistrarse";
@@ -38,6 +39,7 @@ import { saveUserSession } from "./redux/actions/user";
 import { changeLang } from "./redux/actions/app";
 import { SetMaxDistance } from "./redux/actions/coords";
 import { toogleModal } from "./redux/actions/modalRegistrarse";
+import ModalElegirEntidad from "./components/modalElegirEntidad";
 
 class App extends React.Component {
 
@@ -94,7 +96,7 @@ class App extends React.Component {
     }
 
     const { saveUserSession, changeLang, setMaxDistance } = this.props;
-    const login = await axios.get(`${protocol}://${ipMaquina}:3001/api/procedures/getUsuarioConPerfil`, { params: loginData })
+    const login = await axios.post(`${protocol}://${ipMaquina}:3001/api/procedures/getUsuarioConPerfil`, { ...loginData })
       .catch((err) => {
         if (err.response.status === 401) {
           const { bannedUntilDate } = err.response.data;
@@ -151,6 +153,8 @@ class App extends React.Component {
         return <RegisterFormCuidador />;
       case "registrarCliente":
         return <RegisterFormCliente />;
+      case "registroUsuario":
+        return <RegisterFormUsuario />;
       case "perfilCuidador":
         return <PerfilCuidador />;
       case "perfilCliente":
@@ -198,6 +202,7 @@ class App extends React.Component {
               <AppContent />
             </div>            
             <ModalRegistrarse />
+            <ModalElegirEntidad />
             <Footer />
           </div>
         </div>

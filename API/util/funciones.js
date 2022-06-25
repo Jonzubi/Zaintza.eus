@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require('path');
+const {OAuth2Client} = require('google-auth-library');
 
 let templatesFolder = '/var/www/Zaintza.eus/API/src/templates/';
 if (!process.env.NODE_ENV.includes('production')){
@@ -143,4 +144,15 @@ exports.getRandomString = length => {
     }
 
     return array;
+  }
+
+  exports.verifyGoogleToken = async (tokenId) => {
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+    const ticket = await client.verifyIdToken({
+      idToken: tokenId,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
+    const payload = ticket.getPayload();
+    const userid = payload['sub'];
+    return userid;
   }

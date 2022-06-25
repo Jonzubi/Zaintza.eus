@@ -1,20 +1,30 @@
 module.exports = conexion => {
   const Schema = conexion.Schema;
   var cliente = new Schema({
-    direcFoto: String,
+    direcFoto: {
+      type: String,
+      default: ""
+    },
     nombre: {
       type: String,
-      required: true
+      default: ""
     },
     telefonoMovil: {
       type: String,
-      required: true
+      default: ""
     },
     telefonoFijo: {
-      type: String
+      type: String,
+      default: ""
     },
-    apellido1: String,
-    apellido2: String
+    apellido1: {
+      type: String,
+      default: ""
+    },
+    apellido2: {
+      type: String,
+      default: ""
+    }
   });
   return conexion.model("Cliente", cliente, "Clientes");
 };

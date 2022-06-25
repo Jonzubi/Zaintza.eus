@@ -278,7 +278,7 @@ class MenuPerfil extends React.Component {
           }}
           className={
             !tipoUsuario
-              ? "d-flex flex-column h-100 p-5"
+              ? "d-flex flex-column h-100 p-4 p-sm-5"
               : "d-flex flex-column h-100"
           }
         >

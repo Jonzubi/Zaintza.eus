@@ -19,13 +19,16 @@
         "insertEmail": "Sartu zure emaila...",
         "insertContrasena": "Sartu zure pasahitza...",
         "contrasena": "Pasahitza",
+        "contrasenaRepetir": "Errepikatu pasahitza",
         "holderContrasena": "Pasahitza...",
         "recordarme": "Gogorarazi",
         "iniciarSesion": "Sartu",
         "registrarse": "Izena eman",
         "validarEmail": "Emaila egiaztatu behar duzu, joan zure emailera",
         "mantenerSesion": "Saioa mantendu",
-        "forgetPassword": "Pasahitza ahaztu zaizu?"
+        "forgetPassword": "Pasahitza ahaztu zaizu?",
+        "googleLogin": "Google bidez sartu",
+        "contrasenaNoCoincide": "Pasahitzak ez dira berdinak"
     },
     "notificaciones": {
         "sesionIniciada": "Saioa behar bezala hasi da",
@@ -355,7 +358,12 @@
         "invalidEmail": "Sartutako emaila ez da zuzena",
         "tooBigImage": "Sartutako irudia handiegia da (10MB Max.)",
         "tooBig": "handiegia da",
-        "wrongFormat": "ez du formatu zuzena"
+        "wrongFormat": "ez du formatu zuzena",
+        "errorGeneral": "Errore bat gertatu da, saiatu berriro geroago",
+        "contrasenaNoCoincide": "Pasahitzak ez dira berdinak",
+        "emailExiste": "Sartutako emaila existitzen da",
+        "contrasenaMinima": "Pasahitzak gutxienez 6 karaktere izan behar ditu",
+        "googleError": "Errore bat gertatu da Google-eko autentifikazioan, saiatu berriro geroago"
     },
     "customImageUploader": {
         "maxMegaBytes": "Gehienez: 10MB",
@@ -455,5 +463,14 @@
         "email": "Sartu zure emaila",
         "cancel": "Ezeztatu",
         "send": "Bidali"
+    },
+    "registerFormUsuario": {
+        "queEres": "Zer zara?",
+        "soyCuidador": "Zaintzailea",
+        "soyCliente": "Bezeroa"
+    },
+    "modalEntidad": {
+        "titulo": "Ongi etorri Zaintza.eus-era!",
+        "content": "Zaintzaile gisa edo bezero gisa erregistratu nahi duzu?"
     }
 }

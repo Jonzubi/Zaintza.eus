@@ -22,7 +22,8 @@ const initialState = {
   diasDisponible: {},
   valoracionMedia: "",
   tipoUsuario: "",
-  idLangPred: ""
+  idLangPred: "",
+  tokenId: "" // Google Token
 };
 
 function reducer(state = initialState, action) {
@@ -50,7 +51,8 @@ function reducer(state = initialState, action) {
         diasDisponible: action.payload.diasDisponible || state.diasDisponible,
         valoracionMedia: action.payload.valoracionMedia || state.valoracionMedia, 
         tipoUsuario: action.payload.tipoUsuario || state.tipoUsuario,
-        idLangPred: action.payload.idLangPred || state.idLangPred
+        idLangPred: action.payload.idLangPred || state.idLangPred,
+        tokenId: action.payload.tokenId || state.tokenId
       });
     case INITIALIZE_USER:
         return Object.assign({},state, initialState);

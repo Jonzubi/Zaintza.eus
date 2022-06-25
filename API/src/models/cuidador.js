@@ -4,30 +4,39 @@ module.exports = conexion => {
   var cuidador = new Schema({
     nombre: {
       type: String,
-      required: true
+      default: ""
     },
-    apellido1: String,
-    apellido2: String,
+    apellido1: {
+      type: String,
+      default: ""
+    },
+    apellido2: {
+      type: String,
+      default: ""
+    },
     fechaNacimiento: {
       type: String,
-      required: true
+      default: ""
     },
     sexo: {
       type: String,
-      required: true
+      default: ""
     },
-    direcFoto: String,
+    direcFoto: {
+      type: String,
+      default: ""
+    },
     direcFotoContacto: {
       type: String,
-      required: true
+      default: ""
     },
     descripcion: {
       type: String,
-      required: true
+      default: ""
     },
     ubicaciones: {
       type: [String],
-      required: true
+      default: []
     },
     publicoDisponible: {
       nino: Boolean,
@@ -36,12 +45,16 @@ module.exports = conexion => {
     },
     telefonoMovil: {
       type: String,
-      required: true
+      default: ""
     },
     telefonoFijo: {
-      type: String
+      type: String,
+      default: ""
     },
-    isPublic: Boolean,
+    isPublic: {
+      type: Boolean,
+      default: false
+    },
     precioPorPublico: {
       nino: String,
       terceraEdad: String,

@@ -12,13 +12,17 @@ module.exports = (app, modelos) => {
 
   app.route("/api/procedures/getNotificacionesConUsuarios").post((req, res) => proceduresControlador.getNotificacionesConUsuarios(req, res, modelos));
 
-  app.route("/api/procedures/getUsuarioConPerfil").get((req, res) => proceduresControlador.getUsuarioConPerfil(req, res, modelos));
+  app.route("/api/procedures/getUsuarioConPerfil").post((req, res) => proceduresControlador.getUsuarioConPerfil(req, res, modelos));
 
   app.route("/api/procedures/getAnunciosConPerfil").get((req, res) => proceduresControlador.getAnunciosConPerfil(req, res, modelos));
 
   app.route("/api/procedures/postNewCuidador").post((req, res) => proceduresControlador.postNewCuidador(req, res, modelos));
 
   app.route("/api/procedures/postNewCliente").post((req, res) => proceduresControlador.postNewCliente(req, res, modelos));
+
+  app.route("/api/procedures/postNewUsuario").post((req, res) => proceduresControlador.postNewUsuario(req, res, modelos));
+
+  app.route("/api/procedures/postNewUsuarioWithGoogle").post((req, res) => proceduresControlador.postNewUsuarioWithGoogle(req, res, modelos));
 
   app.route("/api/procedures/postAnuncio").post((req, res) => proceduresControlador.postAnuncio(req, res, modelos));
 
