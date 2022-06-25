@@ -174,20 +174,21 @@ exports.getUsuarioConPerfil = async (req, res, modelos) => {
     email: email,
   };
 
-  const usu = await modeloUsuario.findOne(filtros);
-  if (usu.registeredByGoogle)
-  {
-    // Verificar que el token sea correcto
-    const googleVerify = await verifyGoogleToken(tokenId).catch((err) => {
-      console.log(err);
-      res.writeHead(500, headerResponse);
-      res.write(JSON.stringify(err));
-      res.end();
-      return;
-    });
+  let usu = await modeloUsuario.findOne(filtros);
+  if (usu !== null) {
+    let verifyError = false;
+    if (usu.registeredByGoogle)
+    {
+      // Verificar que el token sea correcto
+      const googleVerify = await verifyGoogleToken(tokenId).catch((err) => {
+        verifyError = true;
+      });
+    }
+    if (!usu.registeredByGoogle && usu.contrasena !== contrasena)
+      usu = null;
+    if (verifyError)
+      usu = null;
   }
-  if (!usu.registeredByGoogle && usu.contrasena !== contrasena)
-    usu = null;
   if (usu !== null) {
     const ajus = await modeloAjuste.findOne({ idUsuario: usu._id });
     if (ajus !== null) {
