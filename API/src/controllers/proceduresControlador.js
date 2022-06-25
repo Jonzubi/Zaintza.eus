@@ -184,7 +184,7 @@ exports.getUsuarioConPerfil = async (req, res, modelos) => {
         verifyError = true;
       });
     }
-    if (!usu.registeredByGoogle && usu.contrasena !== contrasena)
+    if (!usu.registeredByGoogle && tokenId === undefined && usu.contrasena !== contrasena)
       usu = null;
     if (verifyError)
       usu = null;
@@ -2277,7 +2277,7 @@ exports.postNewUsuario = async (req, res, modelos) => {
     idPerfil: insertedEntidad._id
   }).save();
 
-  const modeloAjustes = modelos.ajustes;
+  const modeloAjustes = modelos.ajuste;
   const insertedAjustes = await modeloAjustes({
     idUsuario: insertedUsuario._id
   }).save();
