@@ -230,7 +230,7 @@ class PerfilCliente extends React.Component {
               disabled={this.state.isEditing ? null : "disabled"}
               id="txtNombre"
               aria-describedby="txtNombreHelp"
-              placeholder={i18next.t('prefilCliente.holderNombre')}
+              placeholder={i18next.t('perfilCliente.holderNombre')}
               value={this.state.txtNombre}
             />
           </div>
