@@ -13,8 +13,6 @@ if (!process.env.NODE_ENV.includes("production")) {
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true
 });
 
 module.exports = mongoose;

@@ -8,7 +8,8 @@ module.exports = (conexion) => {
             ref: 'Usuario'
         },
         idLangPred: {
-            type: String
+            type: String,
+            default: 'eus'
         },
         maxDistance: {
             type: Number,

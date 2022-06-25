@@ -18,13 +18,16 @@
       "insertEmail": "Inserta tu correo...",
       "insertContrasena": "Inserta tu contraseña...",
       "contrasena": "Contraseña",
+      "contrasenaRepetir": "Repetir contraseña",
       "holderContrasena": "Contraseña...",
       "recordarme": "Recordarme",
       "iniciarSesion": "Entrar",
       "registrarse": "Registrarse",
       "validarEmail": "Tienes que validar el email",
       "mantenerSesion": "Mantener sesión",
-      "forgetPassword": "Olvidaste la contraseña?"
+      "forgetPassword": "Olvidaste la contraseña?",
+      "googleLogin": "Entrar con Google",
+      "contrasenaNoCoincide": "Las contraseñas no coinciden"
     },
     "notificaciones": {
       "sesionIniciada": "Sesión iniciada con éxito",
@@ -347,7 +350,12 @@
       "invalidEmail": "El email introducido no es correcto",
       "tooBigImage": "La imagen introducida es demasiado grande (10MB max.)",
       "tooBig": "es demasiado grande",
-      "wrongFormat": "no tiene el formato correcto"
+      "wrongFormat": "no tiene el formato correcto",
+      "errorGeneral": "Ha ocurrido un error, inténtelo de nuevo más tarde",
+      "contrasenaNoCoincide": "Las contraseñas no coinciden",
+      "emailExiste": "El email introducido ya existe",
+      "contrasenaMinima": "La contraseña debe contener al menos 6 caracteres",
+      "googleError": "Ha ocurrido un error al conectar con Google, inténtelo de nuevo más tarde"
     },
     "customImageUploader": {
       "maxMegaBytes": "Máximo: 10MB",
@@ -448,6 +456,15 @@
       "email": "Introduce tu email",
       "cancel": "Cancelar",
       "send": "Enviar"
+    },
+    "registerFormUsuario": {
+      "queEres": "¿Qué eres?",
+      "soyCuidador": "Cuidador",
+      "soyCliente": "Cliente"
+    },
+    "modalEntidad": {
+      "titulo": "Bienvenido a Zaintza.eus!",
+      "content": "Registrarse como cuidador o como cliente?"
     }
   }
   

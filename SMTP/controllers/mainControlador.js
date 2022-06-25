@@ -20,15 +20,21 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-exports.sendRegisterEmail = (req, res) => {
-  const { toEmail, nombre, apellido, validationToken } = req.body;
+exports.sendRegisterEmail = async (req, res) => {
+  const { toEmail } = req.body;
   if (toEmail) {
+    const modeloUsuarios = modelos.usuario;
+    const foundUsuario = await modeloUsuarios.findOne({ email: toEmail });
+    if (foundUsuario == null)
+    {
+      console.log("[SMTP] No user found with email: " + toEmail);
+      return;
+    }
+    
     readHTMLFile("verification", (err, html) => {
       const template = handlebars.compile(html);
       const htmlToSend = template({
-        nombre,
-        apellido,
-        validationToken: caesarShift(validationToken, 10),
+        validationToken: foundUsuario.validationToken,
         ipMaquina,
         protocol
       });

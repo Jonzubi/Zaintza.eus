@@ -4,7 +4,8 @@ const {
   getTodayDate,
   caesarShift,
   readHTMLFile,
-  shuffleArray
+  shuffleArray,
+  verifyGoogleToken
 } = require("../../util/funciones");
 const headerResponse = require("../../util/headerResponse");
 const ipMaquina = require("../../util/ipMaquina");
@@ -158,9 +159,9 @@ exports.getNotificacionesConUsuarios = async (req, res, modelos) => {
 };
 
 exports.getUsuarioConPerfil = async (req, res, modelos) => {
-  const { email, contrasena } = req.query;
+  const { email, contrasena, tokenId } = req.body;
 
-  if (typeof email == "undefined" || typeof contrasena == "undefined") {
+  if (typeof email == "undefined") {
     res.writeHead(500, headerResponse);
     res.write("Parametros incorrectos");
     res.end();
@@ -171,10 +172,23 @@ exports.getUsuarioConPerfil = async (req, res, modelos) => {
   const modeloAjuste = modelos.ajuste;
   const filtros = {
     email: email,
-    contrasena: contrasena,
   };
 
-  const usu = await modeloUsuario.findOne(filtros);
+  let usu = await modeloUsuario.findOne(filtros);
+  if (usu !== null) {
+    let verifyError = false;
+    if (usu.registeredByGoogle)
+    {
+      // Verificar que el token sea correcto
+      const googleVerify = await verifyGoogleToken(tokenId).catch((err) => {
+        verifyError = true;
+      });
+    }
+    if (!usu.registeredByGoogle && tokenId === undefined && usu.contrasena !== contrasena)
+      usu = null;
+    if (verifyError)
+      usu = null;
+  }
   if (usu !== null) {
     const ajus = await modeloAjuste.findOne({ idUsuario: usu._id });
     if (ajus !== null) {
@@ -2215,3 +2229,130 @@ exports.resetPassword = async (req, res, modelos) => {
   res.write('Contraseña cambiada');
   res.end();
 }
+
+exports.postNewUsuario = async (req, res, modelos) => {
+  const {
+    email,
+    contrasena,
+    entidad
+  } = req.body;
+
+  if (
+    typeof email == "undefined" ||
+    typeof contrasena == "undefined" ||
+    typeof entidad == "undefined"
+  ) {
+    res.writeHead(500, headerResponse);
+    res.write("Parametros incorrectos");
+    res.end();
+    return;
+  }
+
+  // Comprobamos que el email no existe
+  const modeloUsuario = modelos.usuario;
+  const emailEncontrado = await modeloUsuario.findOne({ email });
+
+  if (emailEncontrado !== null) {
+    res.writeHead(405, headerResponse);
+    res.write("Email existente");
+    res.end();
+    return;
+  }
+
+  if (entidad !== "Cuidador" && entidad !== "Cliente") {
+    res.writeHead(405, headerResponse);
+    res.write("Entidad incorrecta");
+    res.end();
+    return;
+  }
+
+  const modeloEntidad = entidad === "Cuidador" ? modelos.cuidador : modelos.cliente;
+  const insertedEntidad = await modeloEntidad({}).save();
+
+  const modeloUsuarios = modelos.usuario;
+  const insertedUsuario = await modeloUsuarios({
+    email: email,
+    contrasena: contrasena,
+    tipoUsuario: entidad,
+    idPerfil: insertedEntidad._id
+  }).save();
+
+  const modeloAjustes = modelos.ajuste;
+  const insertedAjustes = await modeloAjustes({
+    idUsuario: insertedUsuario._id
+  }).save();
+
+  res.writeHead(200, headerResponse);
+  res.write(
+    JSON.stringify({
+      idUsuario: insertedUsuario._id,
+      idPerfil: insertedEntidad._id,
+    })
+  );
+  res.end();
+};
+
+exports.postNewUsuarioWithGoogle = async (req, res, modelos) => {
+  const {
+    email,
+    entidad,
+    direcFoto
+  } = req.body;
+
+  if (
+    typeof email == "undefined" ||
+    typeof entidad == "undefined"
+  ) {
+    res.writeHead(500, headerResponse);
+    res.write("Parametros incorrectos");
+    res.end();
+    return;
+  }
+
+  // Comprobamos que el email no existe
+  const modeloUsuario = modelos.usuario;
+  const emailEncontrado = await modeloUsuario.findOne({ email });
+
+  if (emailEncontrado !== null) {
+    res.writeHead(405, headerResponse);
+    res.write("Email existente");
+    res.end();
+    return;
+  }
+
+  if (entidad !== "Cuidador" && entidad !== "Cliente") {
+    res.writeHead(405, headerResponse);
+    res.write("Entidad incorrecta");
+    res.end();
+    return;
+  }
+
+  const modeloEntidad = entidad === "Cuidador" ? modelos.cuidador : modelos.cliente;
+  const insertedEntidad = await modeloEntidad({
+    direcFoto
+  }).save();
+
+  const modeloUsuarios = modelos.usuario;
+  const insertedUsuario = await modeloUsuarios({
+    email: email,
+    contrasena: getRandomString(15),
+    tipoUsuario: entidad,
+    idPerfil: insertedEntidad._id,
+    validado: true,
+    registeredByGoogle: true
+  }).save();
+
+  const modeloAjustes = modelos.ajuste;
+  const insertedAjustes = await modeloAjustes({
+    idUsuario: insertedUsuario._id
+  }).save();
+
+  res.writeHead(200, headerResponse);
+  res.write(
+    JSON.stringify({
+      idUsuario: insertedUsuario._id,
+      idPerfil: insertedEntidad._id,
+    })
+  );
+  res.end();
+};

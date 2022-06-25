@@ -19,6 +19,7 @@ import { EmailRounded, Lock } from '@material-ui/icons';
 import { colors } from '../util/colors';
 import protocol from '../util/protocol';
 import ResetPasswordModal from '../components/resetPasswordModal';
+import MyGoogleLogin from "./MyGoogleLogin";
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -62,10 +63,10 @@ class LogInForm extends React.Component {
       },
       () => {
         axios
-          .get(
+          .post(
             `${protocol}://${ipMaquina}:3001/api/procedures/getUsuarioConPerfil`,
             {
-              params: objFiltros,
+              ...objFiltros
             }
           )
           .then((resultado) => {
@@ -186,7 +187,7 @@ class LogInForm extends React.Component {
           this.socket = socket;
           return (
             <div
-              className="d-flex flex-column mt-5 p-5"
+              className="d-flex flex-column align-items-center mt-5 p-5"
               style={{ boxShadow: '0 .5rem 1rem rgba(0,0,0,.15)' }}>
               <TextField
                 onKeyDown={this.handleKeyDown}
@@ -250,7 +251,7 @@ class LogInForm extends React.Component {
                     <div className="col-2"></div>
                     <button
                       onClick={() => {
-                        this.props.toogleModal(true);
+                        this.props.changeFormContent("registroUsuario");
                         this.props.toogleMenuPerfil(false);
                       }}
                       name="btnRegistrar"
@@ -272,7 +273,8 @@ class LogInForm extends React.Component {
                   cursor: 'pointer'
                 }}>{trans('loginForm.forgetPassword')}</span>
               {showResetPasswordModal ? <ResetPasswordModal closeModal={() => this.setState({ showResetPasswordModal: false })} /> : null}
-
+              <span className="mt-4" />
+              <MyGoogleLogin socket={socket} />
             </div>
           );
         }}
