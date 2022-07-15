@@ -1,6 +1,5 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CookieConsent from "react-cookie-consent";
 import i18next from "i18next";
 import { changeFormContent } from '../redux/actions/app';
 import { colors } from "../util/colors";
@@ -13,7 +12,7 @@ const AceptarCookies = () => {
     dispatch(changeFormContent('avisoLegal'))
   }
   return (
-    <CookieConsent
+    <div
       location="bottom"
       buttonText={i18next.t("cookies.aceptar")}
       declineButtonText={i18next.t("cookies.denegar")}
@@ -34,7 +33,7 @@ const AceptarCookies = () => {
       <a href="#" className="alert-link text-white" onClick={openAvisoLegal}>
         {i18next.t("cookies.linkAvisoLegal")}
       </a>
-    </CookieConsent>
+    </div>
   );
 };
 
